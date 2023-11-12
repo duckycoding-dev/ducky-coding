@@ -1,3 +1,12 @@
+# next-intl temporary patch
+In every page and layout you need to use
+```
+unstable_setRequestLocale(locale);
+```
+for making next-intl work with SSG until it gets patched
+
+---
+---
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
 ## Getting Started
