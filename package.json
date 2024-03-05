@@ -1,24 +1,17 @@
 {
-  "name": "ducky-coding",
-  "private": true,
+  "name": "",
+  "type": "module",
+  "version": "0.0.1",
   "scripts": {
-    "build": "turbo build",
-    "dev": "turbo dev",
-    "lint": "turbo lint",
-    "format": "prettier --write \"**/*.{ts,tsx,md}\""
+    "dev": "astro dev",
+    "start": "astro dev",
+    "build": "astro check && astro build",
+    "preview": "astro preview",
+    "astro": "astro"
   },
-  "devDependencies": {
-    "@repo/eslint-config": "*",
-    "@repo/typescript-config": "*",
-    "prettier": "^3.2.5",
-    "turbo": "latest"
-  },
-  "engines": {
-    "node": ">=18"
-  },
-  "packageManager": "npm@10.2.4",
-  "workspaces": [
-    "apps/*",
-    "packages/*"
-  ]
+  "dependencies": {
+    "astro": "^4.4.11",
+    "@astrojs/check": "^0.5.6",
+    "typescript": "^5.3.3"
+  }
 }
