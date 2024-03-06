@@ -1,0 +1,31 @@
+{
+  "name": "@ducky-coding/utils",
+  "version": "0.0.0",
+  "description": "Utility functions shared between all the different packages",
+  "keywords": [
+    "utils",
+    "functions"
+  ],
+  "author": "DuckyCoding <duckycoding.dev@gmail.com>",
+  "homepage": "https://github.com/duckycoding-dev/ducky-coding#readme",
+  "license": "MIT",
+  "main": "dist/utils.js",
+  "types": "dist/utils.d.ts",
+  "directories": {
+    "lib": "src",
+    "test": "__tests__"
+  },
+  "files": [
+    "dist"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/duckycoding-dev/ducky-coding.git"
+  },
+  "scripts": {
+    "test": "node ./__tests__/utils.test.js"
+  },
+  "bugs": {
+    "url": "https://github.com/duckycoding-dev/ducky-coding/issues"
+  }
+}

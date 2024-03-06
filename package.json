@@ -1,17 +1,29 @@
 {
-  "name": "",
-  "type": "module",
   "version": "0.0.1",
-  "scripts": {
-    "dev": "astro dev",
-    "start": "astro dev",
-    "build": "astro check && astro build",
-    "preview": "astro preview",
-    "astro": "astro"
+  "name": "@ducky-coding/root",
+  "private": true,
+  "license": "MIT",
+  "workspaces": [
+    "packages/*"
+  ],
+  "keywords": [
+    "duckycoding",
+    "webdev",
+    "monorepo",
+    "root"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/duckycoding-dev/ducky-coding.git"
   },
-  "dependencies": {
-    "astro": "^4.4.11",
-    "@astrojs/check": "^0.5.6",
-    "typescript": "^5.3.3"
-  }
+  "bugs": {
+    "url": "https://github.com/duckycoding-dev/ducky-coding/issues"
+  },
+  "devDependencies": {
+    "lerna": "^8.1.2",
+    "typescript": "^5.3.3",
+    "nx": "18.0.7"
+  },
+  "author": "DuckyCoding <duckycoding.dev@gmail.com>",
+  "description": "Monorepo for developing and managing Ducky Codings's website and other packages"
 }

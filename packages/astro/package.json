@@ -1,0 +1,39 @@
+{
+  "name": "@ducky-coding/astro",
+  "type": "module",
+  "version": "0.0.1",
+  "description": "Package containing mainly the frontend code written in Astro JS",
+  "scripts": {
+    "dev": "astro dev",
+    "start": "astro dev",
+    "build": "astro check && astro build",
+    "preview": "astro preview",
+    "astro": "astro"
+  },
+  "dependencies": {
+    "astro": "^4.4.13",
+    "@astrojs/check": "^0.5.6",
+    "typescript": "^5.3.3"
+  },  
+  "keywords": [
+    "astro"
+  ],
+  "author": "DuckyCoding <duckycoding.dev@gmail.com>",
+  "homepage": "https://github.com/duckycoding-dev/ducky-coding#readme",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/duckycoding-dev/ducky-coding.git"
+  },
+  "bugs": {
+    "url": "https://github.com/duckycoding-dev/ducky-coding/issues"
+  },
+  "main": "dist/index.html",
+  "directories": {
+    "lib": "src",
+    "test": "__tests__"
+  },
+  "files": [
+    ".dist"
+  ]
+}
