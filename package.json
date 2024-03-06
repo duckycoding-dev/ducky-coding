@@ -1,6 +1,8 @@
 {
   "version": "0.0.1",
   "name": "@ducky-coding/root",
+  "author": "DuckyCoding <duckycoding.dev@gmail.com>",
+  "description": "Monorepo for developing and managing Ducky Codings's website and other packages",
   "private": true,
   "license": "MIT",
   "workspaces": [
@@ -21,9 +23,20 @@
   },
   "devDependencies": {
     "lerna": "^8.1.2",
-    "typescript": "^5.3.3",
-    "nx": "18.0.7"
+    "nx": "18.0.7",
+    "typescript": "^5.3.3"
   },
-  "author": "DuckyCoding <duckycoding.dev@gmail.com>",
-  "description": "Monorepo for developing and managing Ducky Codings's website and other packages"
+  "scripts": {
+    "dev": "npx lerna run dev",
+    "dev:astro": "npx lerna run dev --scope=@ducky-coding/astro",
+    "build": "npx lerna run build",
+    "build:astro": "npx lerna run build --scope=@ducky-coding/astro",
+    "build:types": "npx lerna run build --scope=@ducky-coding/types",
+    "build:utils": "npx lerna run build --scope=@ducky-coding/utils",
+    "start": "npx lerna run start",
+    "start:astro": "npx lerna run start --scope=@ducky-coding/astro"
+  },
+  "dependencies": {
+    "zod": "^3.22.4"
+  }
 }

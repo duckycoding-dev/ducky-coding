@@ -10,7 +10,7 @@
   "author": "DuckyCoding <duckycoding.dev@gmail.com>",
   "homepage": "https://github.com/duckycoding-dev/ducky-coding#readme",
   "license": "MIT",
-  "main": "dist/types.js",
+  "main": ".dist/types.js",
   "types": "dist/types.d.ts",
   "directories": {
     "lib": "src",
@@ -19,14 +19,16 @@
   "files": [
     "dist"
   ],
+  "bugs": {
+    "url": "https://github.com/duckycoding-dev/ducky-coding/issues"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/duckycoding-dev/ducky-coding.git"
   },
   "scripts": {
-    "test": "node ./__tests__/types.test.js"
-  },
-  "bugs": {
-    "url": "https://github.com/duckycoding-dev/ducky-coding/issues"
+    "test": "node ./__tests__/types.test.js",
+    "build": "tsc",
+    "dev": "tsc -w"
   }
 }
