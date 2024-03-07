@@ -28,13 +28,13 @@
   },
   "scripts": {
     "dev": "npx lerna run dev",
-    "dev:astro": "npx lerna run dev --scope=@ducky-coding/astro",
+    "dev:astro": "npx lerna run dev --scope=@ducky-coding/astro-app",
     "build": "npx lerna run build",
-    "build:astro": "npx lerna run build --scope=@ducky-coding/astro",
+    "build:astro": "npx lerna run build --scope=@ducky-coding/astro-app",
     "build:types": "npx lerna run build --scope=@ducky-coding/types",
     "build:utils": "npx lerna run build --scope=@ducky-coding/utils",
     "start": "npx lerna run start",
-    "start:astro": "npx lerna run start --scope=@ducky-coding/astro"
+    "start:astro": "npx lerna run start --scope=@ducky-coding/astro-app"
   },
   "dependencies": {
     "zod": "^3.22.4"

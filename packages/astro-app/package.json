@@ -1,5 +1,5 @@
 {
-  "name": "@ducky-coding/astro",
+  "name": "@ducky-coding/astro-app",
   "type": "module",
   "version": "0.0.1",
   "description": "Package containing mainly the frontend code written in Astro JS",
