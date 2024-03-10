@@ -22,9 +22,16 @@
     "url": "https://github.com/duckycoding-dev/ducky-coding/issues"
   },
   "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^6.21.0",
+    "eslint": "^8.57.0",
+    "eslint-config-standard-with-typescript": "^43.0.1",
+    "eslint-plugin-import": "^2.29.1",
+    "eslint-plugin-n": "^16.6.2",
+    "eslint-plugin-promise": "^6.1.1",
     "lerna": "^8.1.2",
     "nx": "18.0.7",
-    "typescript": "^5.3.3"
+    "prettier": "3.2.5",
+    "typescript": "^5.4.2"
   },
   "scripts": {
     "dev": "npx lerna run dev",
