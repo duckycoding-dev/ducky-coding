@@ -32,4 +32,6 @@ Since ESlint might depend on the type of code you are writing (different framewo
 (example: https://github.com/eslint/eslint/discussions/16960#discussioncomment-5212286)\
 In the root directory run ```npm init @eslint/config``` to create a basic ESlint config file.\
 
+Add Airbnb base linter configs ```npm i eslint-config-airbnb-base``` and add ```"extends": "airbnb-base"``` to your .eslintrc.json
+
 

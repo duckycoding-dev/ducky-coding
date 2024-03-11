@@ -1,0 +1,22 @@
+{
+  "editor.autoClosingBrackets": "always",
+  "editor.autoClosingComments": "always",
+  "editor.autoClosingDelete": "always",
+  "editor.autoClosingQuotes": "always",
+  "editor.bracketPairColorization.enabled": true,
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.formatOnSave": true,
+  "editor.formatOnSaveMode": "file",
+  "editor.hover.above": true,
+  "editor.hover.enabled": true,
+  "editor.hover.delay": 100,
+  "editor.inlineSuggest.enabled": true,
+  "editor.inlayHints.enabled": "on",
+  "editor.links": true,
+  "editor.matchBrackets": "always",
+  "editor.mouseWheelZoom": true,
+  "editor.parameterHints.enabled": true,
+  "editor.stickyScroll.enabled": true,
+  "editor.stickyScroll.defaultModel": "foldingProviderModel",
+  "editor.tabCompletion": "on"
+}
