@@ -1,7 +1,4 @@
 {
-  //=========================================
-  //================ EDITOR =================
-  //=========================================
   "breadcrumbs.enabled": true,
   "editor.autoClosingBrackets": "always",
   "editor.autoClosingComments": "always",
@@ -24,19 +21,12 @@
   "editor.stickyScroll.defaultModel": "foldingProviderModel",
   "editor.tabCompletion": "on"
   
-  //=========================================
-  //================== CSS ==================
-  //=========================================
   "css.completion.completePropertyWithSemicolon": true,
   "css.hover.documentation": true,
   "css.hover.references": true,
   "css.format.spaceAroundSelectorSeparator": true,
   "css.lint.propertyIgnoredDueToDisplay": "warning",
 
-
-  //=========================================
-  //================= HTML ==================
-  //=========================================
   "html.autoClosingTags": true,
   "html.format.indentInnerHtml": true,
   "html.format.wrapLineLength": 0,
