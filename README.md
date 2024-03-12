@@ -25,13 +25,14 @@ Node packages from NPM can be installed both inside the root of the monorepo, ma
 
 ## Prettier
 ```npm install --save-dev --save-exact prettier```\
-Create in the root of the monorepo a .prettierrc.json file for setting up Prettier's configuration options.
+Create in the root of the monorepo a .prettierrc.json file for setting up Prettier's configuration options.\
+Setup the file as preferred.
 
 ## ESlint
-Since ESlint might depend on the type of code you are writing (different frameworks used, typescript, pure js, css, etc) we can have a default .eslintrc.json file in the root directory and then extend its configs with a specific .eslintrc.json file for each package.\
-(example: https://github.com/eslint/eslint/discussions/16960#discussioncomment-5212286)\
-In the root directory run ```npm init @eslint/config``` to create a basic ESlint config file.\
+Since ESlint might depend on the type of code you are writing (different frameworks used, typescript, pure js, css, etc) we can have a default eslint.config.js file in the root directory and then extend its configs with a specific eslint.config.js file for each package.\
+In the root directory run ```npm install --save-dev eslint``` and create a basic eslint.config.js file.\
+Setup the file as preferred (documentation for new esling.config.js files: https://eslint.org/docs/latest/use/configure/configuration-files-new)\
 
-Add Airbnb base linter configs ```npm i eslint-config-airbnb-base``` and add ```"extends": "airbnb-base"``` to your .eslintrc.json
+TODO and TOCHECK: Add prettier plugin and Airbnb base linter configs ```npm i eslint-config-airbnb-base``` and add ```"extends": "airbnb-base"``` to your .eslintrc.json
 
 
