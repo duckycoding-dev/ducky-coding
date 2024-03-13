@@ -1,9 +1,9 @@
 {
   "breadcrumbs.enabled": true,
-  "editor.autoClosingBrackets": "always",
-  "editor.autoClosingComments": "always",
   "editor.autoClosingDelete": "always",
-  "editor.autoClosingQuotes": "always",
+  "editor.autoClosingBrackets": "beforeWhitespace",
+  "editor.autoClosingComments": "beforeWhitespace",
+  "editor.autoClosingQuotes": "beforeWhitespace",
   "editor.bracketPairColorization.enabled": true,
   "editor.defaultFormatter": "esbenp.prettier-vscode",
   "editor.formatOnSave": true,
@@ -19,8 +19,8 @@
   "editor.parameterHints.enabled": true,
   "editor.stickyScroll.enabled": true,
   "editor.stickyScroll.defaultModel": "foldingProviderModel",
-  "editor.tabCompletion": "on"
-  
+  "editor.tabCompletion": "on",
+
   "css.completion.completePropertyWithSemicolon": true,
   "css.hover.documentation": true,
   "css.hover.references": true,
@@ -32,4 +32,6 @@
   "html.format.wrapLineLength": 0,
   "html.hover.references": true,
   "html.hover.documentation": true,
+
+  "eslint.experimental.useFlatConfig": true
 }

@@ -1,14 +1,9 @@
 {
   "extends": "../../tsconfig.json",
-  "include": [
-    "./src"
-  ],
+  "include": ["./**/*.ts", "./**/*.js", "./.*.js"],
   "compilerOptions": {
     "outDir": "dist",
     "declarationDir": "dist",
-    "lib": [
-      "esnext",
-      "dom"
-    ]
+    "lib": ["esnext", "dom"]
   }
 }
