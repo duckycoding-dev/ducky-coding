@@ -23,10 +23,10 @@ export default [
 
   eslintPluginPrettierRecommended,
   {
-    ignores: ['**/*.test.js', '**/*/dist/**/js'],
+    ignores: ['**/*/dist/**/*.js', '**/*/dist/**/*.d.ts'],
   },
   {
-    files: ['**/*.js', '*.js'],
+    files: ['**/*.js', '*.js', '**/*.ts', '*.ts', '**/*.astro'],
     rules: {
       semi: 'error',
       'no-unused-vars': 'warn',
