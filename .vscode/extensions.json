@@ -1,0 +1,21 @@
+{
+  "recommendations": [
+    "formulahendry.auto-close-tag",
+    "formulahendry.auto-rename-tag",
+    "clinyong.vscode-css-modules",
+    "albert.tabout",
+    "maptz.camelcasenav",
+    "ritwickdey.liveserv",
+    "eamodio.gitlens",
+    "adpyke.codesnap",
+    "unifiedjs.vscode-mdx",
+    "bradlc.vscode-tailwindcss",
+    "astro-build.astro-vscode",
+    "meganrogge.template-string-converter",
+    "xabikos.javascriptsnippets",
+    "vscode-icons-team.vscode-icons",
+    "oderwat.indent-rainbow",
+    "dbaeumer.vscode-eslint",
+    "esbenp.prettier-vscode",
+  ]
+}
