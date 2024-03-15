@@ -44,9 +44,11 @@ Install the VSCode extension and edit VSCode settings to make it run on save: wi
 
 Readings:
 
-- https://eslint.org/blog/2022/08/new-config-system-part-1/
-- https://eslint.org/blog/2022/08/new-config-system-part-2/
--
+- Official eslint blog articles: 
+  - https://eslint.org/blog/2022/08/new-config-system-part-1/
+  - https://eslint.org/blog/2022/08/new-config-system-part-2/
+- Good article about differences between .eslintrc (default) and eslint.config.js (flat config):
+  - https://www.raulmelo.me/en/blog/migration-eslint-to-flat-config
 
 ESlint job is to lint code: this means finding poorly written code that don't follow the defined guidelines (ours or recommended or from others (for example, Airbnb's guidelines))\
 Since ESlint might depend on the type of code you are writing (different frameworks used, typescript, pure js, css, etc) we can have a default generic eslint.config.js file in the root directory and then extend its configs with a specific eslint.config.js file for each package.\
@@ -59,16 +61,17 @@ Docs for Flat config: https://eslint.org/docs/latest/use/configure/configuration
 
 Install Typescript's and Airbnb's plugins by running
 
+typescript-eslint docs: https://typescript-eslint.io/packages/typescript-eslint
 ```
 npm install --save-dev
   eslint-config-airbnb-typescript
-  @typescript-eslint/eslint-plugin
-  @typescript-eslint/parser
+  typescript-eslint
 ```
 
 Install the VSCode extension to see the warnings and errors directly inside the code editor: without extension you would need to run the CLI commands to lint the code.
 
 **_TODO_** and **_TO CHECK_**: Add prettier plugin and Airbnb base linter configs `npm i eslint-config-airbnb-base` and add `"extends": "airbnb-base"` to your .eslintrc.json
+Airbnb's base ruleset: https://github.com/airbnb/javascript/tree/master/packages/eslint-config-airbnb-base/rules
 
 ## Prettier for ESlint
 
