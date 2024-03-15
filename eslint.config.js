@@ -1,4 +1,4 @@
-// Good article about differences between .eslintrc (default) and eslint.config.js (flat config): 
+// Good article about differences between .eslintrc (default) and eslint.config.js (flat config):
 // https://www.raulmelo.me/en/blog/migration-eslint-to-flat-config
 
 // You can either use the standandard default export with the following
@@ -15,7 +15,6 @@
 import tseslint from 'typescript-eslint';
 import eslintPluginPrettierRecommended from 'eslint-plugin-prettier/recommended';
 
-
 // ===== START: Fallback for configs that don't yet support Flat Config =====
 import { FlatCompat } from '@eslint/eslintrc';
 import path from 'path';
@@ -29,8 +28,7 @@ const compat = new FlatCompat({
   baseDirectory: dirname, // optional; default: process.cwd()
   resolvePluginsRelativeTo: dirname, // optional
 });
-// ===== END: Fallback for configs that don't yet support Flat Config =====
-
+// ===== END: Fallback for configs that don't support Flat Config yet =====
 
 export default tseslint.config(
   // eslint.configs.recommended,
@@ -44,7 +42,19 @@ export default tseslint.config(
     files: ['**/*.js', '*.js', '**/*.ts', '*.ts', '**/*.astro'],
     rules: {
       semi: 'error',
-      // 'import/no-extraneous-dependencies': 'off',
+      // enable external packages imports
+      'import/no-extraneous-dependencies': [
+        'error',
+        {
+          includeInternal: true,
+          includeTypes: true,
+          devDependencies: true,
+          peerDependencies: true,
+          optionalDependencies: true,
+          bundledDependencies: true,
+          packageDir: './',
+        },
+      ],
     },
   },
 );

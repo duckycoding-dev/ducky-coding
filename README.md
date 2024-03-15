@@ -1,6 +1,6 @@
 # How was this project initiated:
 
-## Lerna and NX:
+## Lerna, Typescript and NX:
 
 - `npx lerna init`
 - `npm i typescript --save-dev`
@@ -44,41 +44,46 @@ Install the VSCode extension and edit VSCode settings to make it run on save: wi
 
 Readings:
 
-- Official eslint blog articles: 
+- Official eslint blog articles:
   - https://eslint.org/blog/2022/08/new-config-system-part-1/
   - https://eslint.org/blog/2022/08/new-config-system-part-2/
 - Good article about differences between .eslintrc (default) and eslint.config.js (flat config):
   - https://www.raulmelo.me/en/blog/migration-eslint-to-flat-config
 
-ESlint job is to lint code: this means finding poorly written code that don't follow the defined guidelines (ours or recommended or from others (for example, Airbnb's guidelines))\
-Since ESlint might depend on the type of code you are writing (different frameworks used, typescript, pure js, css, etc) we can have a default generic eslint.config.js file in the root directory and then extend its configs with a specific eslint.config.js file for each package.\
-In the root directory run `npm install --save-dev eslint` and create a basic eslint.config.js file.
+ESlint job is to lint code: this means finding poorly written code / dangerous code that don't follow the defined guidelines (ours or recommended or from others (for example, Airbnb's guidelines))\
+Install the VSCode extension to see the warnings and errors directly inside the code editor: without extension you would need to run the CLI commands to lint the code.
+
+In the root directory run `npm install --save-dev eslint` and create a basic eslint.config.js file.\
+Since ESlint might depend on the type of code you are writing (different frameworks used, typescript, pure js, css, etc) we can have a default generic eslint.config.js file in the root directory and then extend its configs with a specific eslint.config.js file for each package.
 
 **_ATTENTION-1!_** In order to use import/export expressions inside the eslint.config.js it's required to set `"type": "module"` in the package.json or use ".mjs" instead of ".js".\
-**_ATTENTION-2!_** As of 03/13/2024 Flat config is still experimental: in order to use it in VSCode enable the following rule by setting it to true: `"eslint.experimental.useFlatConfig": true`\
+**_ATTENTION-2!_** As of 03/15/2024 Flat config is still experimental, it will become stable with eslint@9.0: in order to use it in VSCode, enable the following rule by setting it to true: `"eslint.experimental.useFlatConfig": true`\
 Setup the file as preferred\
-Docs for Flat config: https://eslint.org/docs/latest/use/configure/configuration-files-new\
+Docs for Flat config: https://eslint.org/docs/latest/use/configure/configuration-files-new
 
-Install Typescript's and Airbnb's plugins by running
+Install Airbnb's rules and typescript-eslint tooling (this one enables ESlint to be used with Typescript code) by running
 
-typescript-eslint docs: https://typescript-eslint.io/packages/typescript-eslint
 ```
 npm install --save-dev
-  eslint-config-airbnb-typescript
+  eslint-config-airbnb-base
   typescript-eslint
 ```
 
-Install the VSCode extension to see the warnings and errors directly inside the code editor: without extension you would need to run the CLI commands to lint the code.
+Airbnb's base configs ruleset: https://github.com/airbnb/javascript/tree/master/packages/eslint-config-airbnb-base/rules \
+typescript-eslint official installation guide and docs: https://typescript-eslint.io/packages/typescript-eslint/
 
-**_TODO_** and **_TO CHECK_**: Add prettier plugin and Airbnb base linter configs `npm i eslint-config-airbnb-base` and add `"extends": "airbnb-base"` to your .eslintrc.json
-Airbnb's base ruleset: https://github.com/airbnb/javascript/tree/master/packages/eslint-config-airbnb-base/rules
+**_ATTENTION-3!_** As of 03/15/2024 Airbnb's base configs don't support Flat config.\
+Also run `npm install @eslint/eslintrc --save-dev`: this contains a method that lets you use legacy linting configurations from providers that haven't updated their configurations the new Flat config yet: https://www.npmjs.com/package/@eslint/eslintrc \
+
+Check the `eslint.config.js` file to see how Airbnb's legacy configs have been used and how typescript-eslint `config()` method was to wrap the default export to provide typing and intellisense: instead of using this method you could also use the following JSDoc statement instead `/** @type {import('eslint').Linter.FlatConfig[]} */`
 
 ## Prettier for ESlint
 
 We might want to be warned when some of our code is not following the rules we defined for our Prettier formatter: in order to do this, we can have ESlint include Prettier's configuration when linting our files.
 
 In order to use Prettier's configurations, first of all, run `npm install --save-dev eslint-plugin-prettier eslint-config-prettier`: this installs the packages that contain the plugin and the config.\
-Import the prettier plugin by adding it to the flat config eslint configuration file by importing it with `import eslintPluginPrettierRecommended from 'eslint-plugin-prettier/recommended';` and adding`eslintPluginPrettierRecommended` as the last element of the exported array: this will apply _eslint-plugin-prettier_, which will also apply _eslint-config-prettier_ automatically: the PLUGIN lets ESlint use Prettier's configurations for linting, whereas the CONFIG specifies the different rules and overrides previously defined rules, including the default ESlint ones (that's why it's needed to be placed as last, since ESlint configs are cascading).\
-**_(NEED TO CHECK IF IT'S TRUE)_** You can actually add some custom objects after the Prettier plugin to override some rules or to add more!
+Import the prettier plugin by adding it to the flat config eslint configuration file by importing it with `import eslintPluginPrettierRecommended from 'eslint-plugin-prettier/recommended';` and adding`eslintPluginPrettierRecommended` as the last element of the exported array: this will apply _eslint-plugin-prettier_, which will also apply _eslint-config-prettier_ automatically: the PLUGIN lets ESlint use Prettier's configurations for linting, whereas the CONFIG specifies the different rules and overrides previously defined rules, including the default ESlint ones if they overlap (that's why it's needed to be placed as last, since ESlint configs are cascading).\
+
+You can actually add some other custom objects after the Prettier plugin to override some ESlint rule or to add even more!
 
 Official installation guide: https://github.com/prettier/eslint-plugin-prettier
