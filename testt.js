@@ -1,3 +1,4 @@
 const y = () => {
-  const z = "cia"
+  let z = 'cia';
+  z = 0;
 };

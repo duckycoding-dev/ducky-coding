@@ -31,15 +31,25 @@ const compat = new FlatCompat({
 // ===== END: Fallback for configs that don't support Flat Config yet =====
 
 export default tseslint.config(
-  // eslint.configs.recommended,
-  ...tseslint.configs.recommended,
-  ...compat.extends('airbnb-base'),
-  eslintPluginPrettierRecommended,
+  // ignore all files inside distribution folders
   {
-    ignores: ['**/*/dist/**/*.js', '**/*/dist/**/*.d.ts'],
-  },
-  {
+    ignores: ['**/*/dist/**/*.js', '**/*/dist/**/*.d.ts', '**/*/build/**/*.js', '**/*/build/**/*.d.ts'],
     files: ['**/*.js', '*.js', '**/*.ts', '*.ts', '**/*.astro'],
+  },
+  // airbnb recommended linting rules
+  ...compat.extends('airbnb-base'),
+  // prettier recommended linting rules and prettierrc configs
+  eslintPluginPrettierRecommended,
+  // recommended linting configs from tseslint (maybe overridden later by "manual" tselint configs with plugin and languageOptions)
+  ...tseslint.configs.strict,
+  // disable type-aware linting on JS files
+  {
+    files: ['**/*.js'],
+    ...tseslint.configs.disableTypeChecked,
+  },
+
+  // own custom rules
+  {
     rules: {
       semi: 'error',
       // enable external packages imports
@@ -55,6 +65,7 @@ export default tseslint.config(
           packageDir: './',
         },
       ],
+      'import/no-unresolved': 'off',
     },
   },
 );
