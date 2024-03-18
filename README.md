@@ -75,7 +75,7 @@ typescript-eslint official installation guide and docs: https://typescript-eslin
 **_ATTENTION-3!_** As of 03/15/2024 Airbnb's base configs don't support Flat config.\
 Also run `npm install @eslint/eslintrc --save-dev`: this contains a method that lets you use legacy linting configurations from providers that haven't updated their configurations the new Flat config yet: https://www.npmjs.com/package/@eslint/eslintrc \
 
-Check the `eslint.config.js` file to see how Airbnb's legacy configs have been used and how typescript-eslint `config()` method was to wrap the default export to provide typing and intellisense: instead of using this method you could also use the following JSDoc statement instead `/** @type {import('eslint').Linter.FlatConfig[]} */`
+Check the `eslint.config.js` file to see how Airbnb's legacy configs have been used and how typescript-eslint `config()` method was to wrap the default export to provide typing and intellisense: instead of using this method you could also use the following JSDoc statement with the normal default export `/** @type {import('eslint').Linter.FlatConfig[]} */`
 
 ## Prettier for ESlint
 

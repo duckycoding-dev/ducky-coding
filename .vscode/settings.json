@@ -33,5 +33,7 @@
   "html.hover.references": true,
   "html.hover.documentation": true,
 
+  "typescript.preferences.quoteStyle": "single",
+
   "eslint.experimental.useFlatConfig": true
 }
