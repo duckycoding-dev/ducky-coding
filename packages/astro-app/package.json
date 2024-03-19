@@ -3,13 +3,6 @@
   "type": "module",
   "version": "0.0.1",
   "description": "Package containing mainly the frontend code written in Astro JS",
-  "dependencies": {
-    "@astrojs/check": "^0.5.6",
-    "@ducky-coding/types": "*",
-    "@ducky-coding/utils": "*",
-    "astro": "^4.5.6",
-    "typescript": "^5.3.3"
-  },
   "keywords": [
     "astro"
   ],
@@ -37,5 +30,13 @@
     "build": "astro check && astro build",
     "preview": "astro preview",
     "astro": "astro"
+  },
+  "dependencies": {
+    "@astrojs/check": "^0.5.6",
+    "@astrojs/tailwind": "^5.1.0",
+    "@ducky-coding/types": "*",
+    "@ducky-coding/utils": "*",
+    "astro": "^4.5.6",
+    "typescript": "^5.3.3"
   }
 }
