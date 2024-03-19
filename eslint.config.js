@@ -38,8 +38,6 @@ export default tseslint.config(
   },
   // airbnb recommended linting rules
   ...compat.extends('airbnb-base'),
-  // prettier recommended linting rules and prettierrc configs
-  eslintPluginPrettierRecommended,
   // recommended linting configs from tseslint (maybe overridden later by "manual" tselint configs with plugin and languageOptions)
   ...tseslint.configs.strict,
   // disable type-aware linting on JS files
@@ -47,24 +45,14 @@ export default tseslint.config(
     files: ['**/*.js'],
     ...tseslint.configs.disableTypeChecked,
   },
-
+  // prettier recommended linting rules and prettierrc configs
+  eslintPluginPrettierRecommended,
   // own custom rules
   {
     rules: {
       semi: 'error',
       // enable external packages imports
-      'import/no-extraneous-dependencies': [
-        'error',
-        {
-          includeInternal: true,
-          includeTypes: true,
-          devDependencies: true,
-          peerDependencies: true,
-          optionalDependencies: true,
-          bundledDependencies: true,
-          packageDir: './',
-        },
-      ],
+      'import/no-extraneous-dependencies': ['off'],
       'import/no-unresolved': 'off',
     },
   },
