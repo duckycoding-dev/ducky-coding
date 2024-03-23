@@ -1,4 +1,5 @@
 import { defineConfig } from 'astro/config';
+import mdx from '@astrojs/mdx';
 // properties without "--DEFAULT--" either use a setting decided by me or/and didn't have a default value
 
 // https://astro.build/config
@@ -24,12 +25,14 @@ export default defineConfig({
     // serverEntry: , // TODO, not sure how to use it
   },
   server: ({ command }) => ({
-    port: command === 'dev' ? '4321' : '1234',
+    port: command === 'dev' ? 4321 : 1234,
     host: command === 'dev' ? false : '192.168.12.34', // exposes port on local ip address in preview mode
     open: true,
     headers: {}, // --DEFAULT--
   }),
-  devToolbar: true, // --DEFAULT--
+  devToolbar: {
+    enabled: true,
+  }, // --DEFAULT--
   prefetch: {
     prefetchAll: true,
     defaultStrategy: 'hover', // --DEFAULT--
@@ -58,13 +61,12 @@ export default defineConfig({
     defaultLocale: 'en',
     locales: ['en', 'it'],
     fallback: {
-      en: 'it', // when english page is missing, redirects to /it
       it: 'en', // when italian page is missing, redirects to /en
       // if no fallback is found, pages return 404
     },
     routing: {
       prefixDefaultLocale: false, // --DEFAULT-- TODO: need to check if this allows for english for both cases .../en/about and .../about, or only for the latter
-      redirectToDefaultLocale: false, // this only works with prefixDefaultLocale set to true: if that's the case, this way we can have a different homepage, for example for asking the user to select the language they want to use
+      // redirectToDefaultLocale: false, // this only works with prefixDefaultLocale set to true: if that's the case, having this set to false we can have a different homepage, for example for asking the user to select the language they want to use
     },
   },
   vite: {
@@ -82,4 +84,5 @@ export default defineConfig({
       sourcemap: true,
     },
   }, // add Vite configs TODO
+  integrations: [mdx()],
 });
