@@ -1,5 +1,6 @@
 import { defineConfig } from 'astro/config';
 import mdx from '@astrojs/mdx';
+import db from '@astrojs/db';
 // properties without "--DEFAULT--" either use a setting decided by me or/and didn't have a default value
 
 // https://astro.build/config
@@ -84,5 +85,5 @@ export default defineConfig({
       sourcemap: true,
     },
   }, // add Vite configs TODO
-  integrations: [mdx()],
+  integrations: [mdx(), db()],
 });
