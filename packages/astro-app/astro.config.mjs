@@ -1,5 +1,4 @@
 import { defineConfig } from 'astro/config';
-
 // properties without "--DEFAULT--" either use a setting decided by me or/and didn't have a default value
 
 // https://astro.build/config
@@ -68,5 +67,19 @@ export default defineConfig({
       redirectToDefaultLocale: false, // this only works with prefixDefaultLocale set to true: if that's the case, this way we can have a different homepage, for example for asking the user to select the language they want to use
     },
   },
-  vite: {}, // add Vite configs TODO
+  vite: {
+    css: {
+      transformer: 'lightningcss',
+      devSourcemap: true,
+      lightningcss: {
+        cssModules: {
+          dashedIdents: false,
+        },
+      },
+    },
+    build: {
+      cssMinify: 'lightningcss',
+      sourcemap: true,
+    },
+  }, // add Vite configs TODO
 });
