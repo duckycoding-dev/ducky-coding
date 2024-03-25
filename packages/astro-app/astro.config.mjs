@@ -1,6 +1,7 @@
 import { defineConfig } from 'astro/config';
 import mdx from '@astrojs/mdx';
 import db from '@astrojs/db';
+import tailwind from '@astrojs/tailwind';
 // properties without "--DEFAULT--" either use a setting decided by me or/and didn't have a default value
 
 // https://astro.build/config
@@ -72,9 +73,10 @@ export default defineConfig({
   },
   vite: {
     css: {
-      transformer: 'lightningcss',
+      // transformer: 'lightningcss', //TODO: uncomment this when moving to Tailwind v4.0: Tailwind v3 needs PostCSS to work (which is the default in Vite configs)
       devSourcemap: true,
       lightningcss: {
+        // This one is left uncommented because it has no effect if transformer is not se to lightning CSS
         cssModules: {
           dashedIdents: false,
         },
@@ -85,5 +87,5 @@ export default defineConfig({
       sourcemap: true,
     },
   }, // add Vite configs TODO
-  integrations: [mdx(), db()],
+  integrations: [mdx(), db(), tailwind()],
 });
