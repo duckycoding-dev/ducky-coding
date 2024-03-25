@@ -39,6 +39,7 @@
     "@ducky-coding/types": "*",
     "@ducky-coding/utils": "*",
     "astro": "^4.5.6",
+    "tailwindcss": "^3.4.1",
     "typescript": "^5.3.3"
   }
 }
