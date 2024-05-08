@@ -1,0 +1,45 @@
+/* https://www.digitalocean.com/community/tutorials/css-css-grid-holy-grail-layout */
+
+body {
+  display: flex;
+  flex-direction: column;
+
+  height: 100dvh;
+}
+
+header {
+  grid-area: header;
+}
+
+nav {
+  grid-area: nav;
+  margin-left: 0.5rem;
+}
+
+main {
+  grid-area: content;
+}
+
+aside {
+  grid-area: side;
+  margin-right: 0.5rem;
+}
+
+footer {
+  grid-area: footer;
+}
+
+@media (width >= 768px) {
+  body {
+    display: grid;
+
+    grid-template-areas:
+      'header header header'
+      'nav content side'
+      'footer footer footer';
+
+    grid-template-columns: 200px 1fr 200px;
+    grid-template-rows: auto 1fr auto;
+    grid-gap: 10px;
+  }
+}

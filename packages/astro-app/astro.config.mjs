@@ -33,7 +33,7 @@ export default defineConfig({
     headers: {}, // --DEFAULT--
   }),
   devToolbar: {
-    enabled: true,
+    enabled: false,
   }, // --DEFAULT--
   prefetch: {
     prefetchAll: true,

@@ -1,18 +1,15 @@
 ---
 import {type ButtonProps, Button} from '@components/Button';
-
+import { BaseHtml } from '@layouts/BaseHtml';
+import { Footer } from '@layouts/Footer';
+import { Header } from '@layouts/Header';
+import { MainContent } from '@layouts/MainContent';
 ---
 
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro</title>
-	</head>
-	<body>
-		<h1 class="text-4xl bg-red-300">Astro</h1>
-		<Button size={'medium'} intent={'secondary'} class="rotate-90" >Ciao</Button>
-	</body>
-</html>
+<BaseHtml title='document title'>
+	<Header />
+	<MainContent>
+		<Button size={'small'} intent={'primary'}>Ciao</Button>
+	</MainContent>
+	<Footer />
+</BaseHtml>

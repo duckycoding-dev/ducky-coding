@@ -1,0 +1,26 @@
+---
+import type { HTMLAttributes } from 'astro/types';
+import { BaseHead } from '@layouts/BaseHead';
+
+export interface Props extends HTMLAttributes<"html"> {
+  title: string;
+}
+import './style.module.css';
+
+const {title, class: className, ...props} = Astro.props;
+---
+
+<!DOCTYPE html>
+<html lang="en" title={title} class="h-dvh">
+  <head>
+    <meta charset="utf-8">
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+		<meta name="generator" content={Astro.generator} />
+
+    <BaseHead title={title}/>
+  </head>
+  <body>
+    <slot /> <!-- your content is injected here -->  
+  </body>
+</html>

@@ -1,0 +1,10 @@
+---
+import type { HTMLAttributes } from 'astro/types';
+
+export interface Props extends HTMLAttributes<"meta"> {}
+const {title, class: className, ...props} = Astro.props;
+
+---
+
+<title>{title}</title>
+{/* Other meta tags */}
