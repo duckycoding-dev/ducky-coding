@@ -1,15 +1,8 @@
 ---
 import {type ButtonProps, Button} from '@components/Button';
-import { BaseHtml } from '@layouts/BaseHtml';
-import { Footer } from '@layouts/Footer';
-import { Header } from '@layouts/Header';
-import { MainContent } from '@layouts/MainContent';
+import { HolyGrailLayout } from '@layouts/HolyGrailLayout';
 ---
 
-<BaseHtml title='document title'>
-	<Header />
-	<MainContent>
-		<Button size={'small'} intent={'primary'}>Ciao</Button>
-	</MainContent>
-	<Footer />
-</BaseHtml>
+<HolyGrailLayout>
+	<Button size={'small'} intent={'primary'}>Ciao</Button>	
+</HolyGrailLayout>

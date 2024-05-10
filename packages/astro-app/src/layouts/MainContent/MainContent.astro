@@ -6,6 +6,6 @@ export interface Props extends HTMLAttributes<"main"> {}
 const {class: className, ...props} = Astro.props;
 ---
 
-<main class="grow">
-  <slot /> <!-- your content is injected here -->  
+<main class="[grid-area:main-content] grow">
+  <slot /> <!-- your content is injected here -->
 </main>

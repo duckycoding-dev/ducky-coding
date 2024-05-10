@@ -1,0 +1,14 @@
+---
+import { BaseHtml } from '@layouts/BaseHtml';
+import { Footer } from '@layouts/Footer';
+import { Header } from '@layouts/Header';
+import { MainContent } from '@layouts/MainContent';
+---
+
+<BaseHtml title='document title'>
+	<Header />
+	<MainContent>
+    <slot /> <!-- your content is injected here -->
+	</MainContent>
+	<Footer />
+</BaseHtml>

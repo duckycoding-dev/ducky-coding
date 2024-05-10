@@ -20,7 +20,7 @@ const {title, class: className, ...props} = Astro.props;
 
     <BaseHead title={title}/>
   </head>
-  <body>
+  <body class=`h-full`>
     <slot /> <!-- your content is injected here -->  
   </body>
 </html>

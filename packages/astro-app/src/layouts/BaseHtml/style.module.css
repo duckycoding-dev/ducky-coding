@@ -3,30 +3,6 @@
 body {
   display: flex;
   flex-direction: column;
-
-  height: 100dvh;
-}
-
-header {
-  grid-area: header;
-}
-
-nav {
-  grid-area: nav;
-  margin-left: 0.5rem;
-}
-
-main {
-  grid-area: content;
-}
-
-aside {
-  grid-area: side;
-  margin-right: 0.5rem;
-}
-
-footer {
-  grid-area: footer;
 }
 
 @media (width >= 768px) {
@@ -35,11 +11,23 @@ footer {
 
     grid-template-areas:
       'header header header'
-      'nav content side'
+      'side-left main-content side-right'
       'footer footer footer';
 
     grid-template-columns: 200px 1fr 200px;
     grid-template-rows: auto 1fr auto;
-    grid-gap: 10px;
+    column-gap: 10px;
+  }
+
+  /* will need to make a component for this, when decided what to use it for (maybe ads or navigation?) */
+  .aside--left {
+    grid-area: side-left;
+    margin-left: 0.5rem;
+  }
+
+  /* will need to make a component for this, when decided what to use it for (maybe ads or navigation?) */
+  .aside--right {
+    grid-area: side-right;
+    margin-right: 0.5rem;
   }
 }

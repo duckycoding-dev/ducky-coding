@@ -6,6 +6,6 @@ export interface Props extends HTMLAttributes<"header"> {}
 const {class: className, ...props} = Astro.props;
 ---
 
-<header>
+<header class="[grid-area:header]">
 	<h1 class="text-4xl bg-red-300">Astro - Header</h1>  
 </header>

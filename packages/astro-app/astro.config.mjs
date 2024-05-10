@@ -29,7 +29,7 @@ export default defineConfig({
   server: ({ command }) => ({
     port: command === 'dev' ? 4321 : 1234,
     host: command === 'dev' ? false : '192.168.12.34', // exposes port on local ip address in preview mode
-    open: true,
+    open: false,
     headers: {}, // --DEFAULT--
   }),
   devToolbar: {
