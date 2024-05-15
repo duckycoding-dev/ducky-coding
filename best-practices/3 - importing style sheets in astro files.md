@@ -1,4 +1,4 @@
-## "import 'style.module.css'" vs "import styles from 'style.module.css'"
+### "import 'style.module.css'" vs "import styles from 'style.module.css'"
 
 - `import style.module.css` will apply the css file "as is", without renaming anything, by importing it in the source code
 - `import styles from style.module.css` will allow to access classes declared in the css file: using classes like this will allow the css modules compiler to hash the class names in order to make them scoped to the component in which are imported and used\

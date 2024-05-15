@@ -1,7 +1,9 @@
 ---
 import type { HTMLAttributes } from 'astro/types';
 
-export interface Props extends HTMLAttributes<"main"> {}
+export interface MainContentProps {};
+
+interface Props extends MainContentProps, HTMLAttributes<"main"> {};
 
 const {class: className, ...props} = Astro.props;
 ---

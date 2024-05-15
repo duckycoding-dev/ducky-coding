@@ -1,11 +1,19 @@
 ---
-import { BaseHtml } from '@layouts/BaseHtml';
+import { BaseHtml, type BaseHtmlProps } from '@layouts/BaseHtml';
 import { Footer } from '@layouts/Footer';
 import { Header } from '@layouts/Header';
 import { MainContent } from '@layouts/MainContent';
+import type { HTMLAttributes } from 'astro/types';
+
+export type HolyGrailLayoutProps = BaseHtmlProps;
+
+interface Props extends HolyGrailLayoutProps, HTMLAttributes<'html'>{};
+
+const props = Astro.props;
+const slot = props.slot || undefined
 ---
 
-<BaseHtml title='document title'>
+<BaseHtml {...props} slot={slot}>
 	<Header />
 	<MainContent>
     <slot /> <!-- your content is injected here -->

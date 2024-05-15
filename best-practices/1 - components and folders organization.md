@@ -14,7 +14,7 @@ ComponentName.ts (.astro) is where the component, db table, etc,... itself is de
 The index.ts file imports the component and reexports it immediately like so:
 
 ```
-export { ComponentName } from './ComponentName';
+export { default as ComponentName } from './ComponentName.astro';
 ```
 
-This way we can import it in other files without having to double type both the folder name and the file name: this makes it much cleaner
+This way we can import it in other files without having to write both the folder name and the file name: this makes it much cleaner
