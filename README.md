@@ -40,6 +40,30 @@ Install the VSCode extension and edit VSCode settings to make it run on save: wi
 "editor.formatOnSave": true,
 ```
 
+### Prettier config for Astro files
+
+Astro-tips guide: https://astro-tips.dev/tips/prettier/ \
+We can setup Prettier to work on .astro files by installing prettier-pluging-astro: run `npm install --save-dev prettier-plugin-astro`.\
+Then edit the `prettier.config.js` by adding the following
+
+```
+plugins: ['prettier-plugin-astro']
+overrides: [
+    {
+      files: '**/+.astro',
+      options: {
+        parser: 'astro',
+      },
+    },
+  ],
+```
+
+### Prettier config for Tailwindcss
+
+Astro-tips guide: https://astro-tips.dev/tips/prettier/ \
+We can also install a prettier plugin that automatically sorts tailwind classes for us: run `npm install --save-dev prettier-plugin-tailwindcss`.\
+Then edit the `prettier.config.js` by adding `'prettier-plugin-tailwindcss'` to the `plugins` array.
+
 ## ESlint with "Flat config" system
 
 Readings:
