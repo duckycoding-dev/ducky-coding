@@ -33,7 +33,7 @@ const compat = new FlatCompat({
 export default tseslint.config(
   // ignore all files inside distribution folders
   {
-    ignores: ['**/*/dist/**/*.js', '**/*/dist/**/*.d.ts', '**/*/build/**/*.js', '**/*/build/**/*.d.ts'],
+    ignores: ['**/*/dist/**/*.js', '**/*/dist/**/*.d.ts', '**/*/build/**/*.js', '**/*/build/**/*.d.ts', '**/.vscode/**/*'],
     files: ['**/*.js', '*.js', '**/*.ts', '*.ts', '**/*.astro'],
   },
   // airbnb recommended linting rules
@@ -57,6 +57,18 @@ export default tseslint.config(
       'import/prefer-default-export': 'off',
       'import/extensions': 'off',
       '@typescript-eslint/no-unused-vars': 'warn',
+      'max-len': [
+        // https://eslint.org/docs/latest/rules/max-len
+        'error',
+        {
+          code: 140, // this value should match what's defined in prettier.config.js's printWidth
+          comments: 140,
+          ignoreComments: true,
+          ignoreUrls: true,
+          ignoreStrings: true,
+          ignoreTemplateLiterals: true,
+        },
+      ],
     },
   },
 );

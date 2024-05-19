@@ -2,7 +2,7 @@
 const config = {
   useTabs: false,
   tabWidth: 2,
-  printWidth: 120,
+  printWidth: 140,
   semi: true,
   singleQuote: true,
   jsxSingleQuote: true,
@@ -13,6 +13,7 @@ const config = {
   trailingComma: 'all',
   singleAttributePerLine: false,
   plugins: ['prettier-plugin-astro', 'prettier-plugin-tailwindcss'],
+  bracketSameLine: false,
   overrides: [
     {
       files: '**/+.astro',
