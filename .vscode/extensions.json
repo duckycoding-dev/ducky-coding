@@ -17,5 +17,6 @@
     "oderwat.indent-rainbow",
     "dbaeumer.vscode-eslint",
     "esbenp.prettier-vscode",
+    "rhangai.file-template"
   ]
 }
