@@ -1,0 +1,14 @@
+---
+import { Link } from '@components/Link';
+import type { HTMLAttributes } from 'astro/types';
+
+export interface NavbarProps {}
+
+interface Props extends NavbarProps, HTMLAttributes<'nav'> {}
+---
+
+<nav>
+  <Link id='abc' href={'/'} variant={'primary'}>Home</Link>
+  <Link href={'/about'} variant={'primary'}>About me</Link>
+  <Link href={'/socials'} variant={'secondary'}>Socials</Link>
+</nav>

@@ -87,5 +87,5 @@ export default defineConfig({
       sourcemap: true,
     },
   }, // add Vite configs TODO
-  integrations: [mdx(), db(), tailwind()],
+  integrations: [mdx(), db(), tailwind({ applyBaseStyles: false })],
 });

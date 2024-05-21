@@ -11,15 +11,15 @@ In our index.ts file we will then re export the Component's own type just like w
 
 ### Example
 
-```
-index.ts
+```js
+// index.ts
 
 export { type ComponentNameProps } from './ComponentName.astro';
 export { default as ComponentName } from './ComponentName.astro';
 ```
 
-```
-Button.astro
+```js
+// Button.astro
 
 export type ButtonProps = VariantProps<typeof buttonVariants>;
 interface Props extends ButtonProps, HTMLAttributes<"button"> {}

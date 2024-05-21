@@ -61,8 +61,8 @@ export default tseslint.config(
         // https://eslint.org/docs/latest/rules/max-len
         'error',
         {
-          code: 140, // this value should match what's defined in prettier.config.js's printWidth
-          comments: 140,
+          code: 80, // this value should match what's defined in prettier.config.js's printWidth
+          comments: 80,
           ignoreComments: true,
           ignoreUrls: true,
           ignoreStrings: true,

@@ -2,7 +2,7 @@
 const config = {
   useTabs: false,
   tabWidth: 2,
-  printWidth: 140,
+  printWidth: 80,
   semi: true,
   singleQuote: true,
   jsxSingleQuote: true,

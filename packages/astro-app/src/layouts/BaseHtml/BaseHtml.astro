@@ -2,26 +2,32 @@
 import type { HTMLAttributes } from 'astro/types';
 import { BaseHead } from '@layouts/BaseHead';
 
-import './style.module.css';
+import '../../styles/global.css';
+import './BaseHtml.style.module.css';
 
-export interface BaseHtmlProps {};
+export type CSSTheme = 'default' | 'dark-theme';
 
-interface Props extends BaseHtmlProps, HTMLAttributes<'html'>{};
+export interface BaseHtmlProps {
+  theme?: CSSTheme;
+}
 
-const {title, ...props} = Astro.props;
+interface Props extends BaseHtmlProps, HTMLAttributes<'html'> {}
+
+const { theme = 'default', title, ...props } = Astro.props;
 ---
 
-<!DOCTYPE html>
-<html lang="en" title={title} class="h-dvh" {...props}>
+<!doctype html>
+<html data-theme={theme} lang='en' title={title} class='h-dvh' {...props}>
   <head>
-    <meta charset="utf-8">
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-		<meta name="generator" content={Astro.generator} />
+    <meta charset='utf-8' />
+    <link rel='icon' type='image/svg+xml' href='/favicon.svg' />
+    <meta name='viewport' content='width=device-width, initial-scale=1' />
+    <meta name='generator' content={Astro.generator} />
 
-    <BaseHead title={title ? `${title} - DuckyCoding` : 'DuckyCoding'}/>
+    <BaseHead title={title ? `${title} - DuckyCoding` : 'DuckyCoding'} />
   </head>
   <body class=`h-full`>
-    <slot /> <!-- your content is injected here -->  
+    <slot />
+    <!-- your content is injected here -->
   </body>
 </html>

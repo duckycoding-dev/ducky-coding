@@ -1,13 +1,15 @@
 ---
+import { Navbar } from '@components/Navbar';
 import type { HTMLAttributes } from 'astro/types';
 
 export interface HeaderProps {}
 
-interface Props extends HeaderProps, HTMLAttributes<"header"> {}
+interface Props extends HeaderProps, HTMLAttributes<'header'> {}
 
-const {class: className, ...props} = Astro.props;
+const { class: className, ...props } = Astro.props;
 ---
 
-<header class="[grid-area:header]">
-	<h1 class="text-4xl bg-red-300">Astro - Header</h1>  
+<header class='[grid-area:header]'>
+  <Navbar />
+  <h1 class='bg-red-300 text-4xl'>Astro - Header</h1>
 </header>

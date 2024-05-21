@@ -1,0 +1,15 @@
+/* Quick guide for theming using Tailwind and custom theme css files: https://canopas.com/the-ultimate-guide-to-crafting-tailwind-css-themes-b43491843ebb */
+@layer base {
+  html,
+  html[data-theme='default'] {
+    --color-primary: #fff;
+    --color-secondary: #909090;
+    --color-success: #6ccade;
+    --color-danger: #8a170b;
+    --color-info: #ffffff;
+    --color-label: #ffffff0d;
+
+    --font-primary: 3rem;
+    --font-label: 2rem;
+  }
+}
