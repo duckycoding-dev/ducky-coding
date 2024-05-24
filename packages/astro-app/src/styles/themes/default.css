@@ -1,15 +1,20 @@
 /* Quick guide for theming using Tailwind and custom theme css files: https://canopas.com/the-ultimate-guide-to-crafting-tailwind-css-themes-b43491843ebb */
-@layer base {
-  html,
-  html[data-theme='default'] {
-    --color-primary: #fff;
-    --color-secondary: #909090;
-    --color-success: #6ccade;
-    --color-danger: #8a170b;
-    --color-info: #ffffff;
-    --color-label: #ffffff0d;
+html,
+html[data-theme='default'] {
+  --color-primary: #7bdff2;
+  --color-secondary: #fe5ddd;
 
-    --font-primary: 3rem;
-    --font-label: 2rem;
-  }
+  --color-accent: #b2f7ef;
+  --color-accent2: #f2b5d4;
+  --color-accent3: #f7d6e0;
+
+  --color-success: #399e5a;
+  --color-warning: #ffe347;
+  --color-danger: #791409;
+
+  --color-info: #f42c04;
+  --color-label: #6457a6;
+
+  --font-primary: 3rem;
+  --font-label: 2rem;
 }
