@@ -29,6 +29,45 @@ const secondaryColor = {
   900: 'var(--color-secondary-900)',
 };
 
+const accentColor = {
+  DEFAULT: 'var(--color-accent)',
+  100: 'var(--color-accent-100)',
+  200: 'var(--color-accent-200)',
+  300: 'var(--color-accent-300)',
+  400: 'var(--color-accent-400)',
+  500: 'var(--color-accent-500)',
+  600: 'var(--color-accent-600)',
+  700: 'var(--color-accent-700)',
+  800: 'var(--color-accent-800)',
+  900: 'var(--color-accent-900)',
+};
+
+const accentColor2 = {
+  DEFAULT: 'var(--color-accent2)',
+  100: 'var(--color-accent2-100)',
+  200: 'var(--color-accent2-200)',
+  300: 'var(--color-accent2-300)',
+  400: 'var(--color-accent2-400)',
+  500: 'var(--color-accent2-500)',
+  600: 'var(--color-accent2-600)',
+  700: 'var(--color-accent2-700)',
+  800: 'var(--color-accent2-800)',
+  900: 'var(--color-accent2-900)',
+};
+
+const accentColor3 = {
+  DEFAULT: 'var(--color-accent3)',
+  100: 'var(--color-accent3-100)',
+  200: 'var(--color-accent3-200)',
+  300: 'var(--color-accent3-300)',
+  400: 'var(--color-accent3-400)',
+  500: 'var(--color-accent3-500)',
+  600: 'var(--color-accent3-600)',
+  700: 'var(--color-accent3-700)',
+  800: 'var(--color-accent3-800)',
+  900: 'var(--color-accent3-900)',
+};
+
 export default {
   content: ['./src/**/*.{astro,html,js,jsx,md,mdx,svelte,ts,tsx,vue}'],
   theme: {
@@ -41,42 +80,9 @@ export default {
       colors: {
         primary: primaryColor,
         secondary: secondaryColor,
-        accent: {
-          DEFAULT: 'var(--color-accent)',
-          100: 'var(--color-accent-100)',
-          200: 'var(--color-accent-200)',
-          300: 'var(--color-accent-300)',
-          400: 'var(--color-accent-400)',
-          500: 'var(--color-accent-500)',
-          600: 'var(--color-accent-600)',
-          700: 'var(--color-accent-700)',
-          800: 'var(--color-accent-800)',
-          900: 'var(--color-accent-900)',
-        },
-        accent2: {
-          DEFAULT: 'var(--color-accent2)',
-          100: 'var(--color-accent2-100)',
-          200: 'var(--color-accent2-200)',
-          300: 'var(--color-accent2-300)',
-          400: 'var(--color-accent2-400)',
-          500: 'var(--color-accent2-500)',
-          600: 'var(--color-accent2-600)',
-          700: 'var(--color-accent2-700)',
-          800: 'var(--color-accent2-800)',
-          900: 'var(--color-accent2-900)',
-        },
-        accent3: {
-          DEFAULT: 'var(--color-accent3)',
-          100: 'var(--color-accent3-100)',
-          200: 'var(--color-accent3-200)',
-          300: 'var(--color-accent3-300)',
-          400: 'var(--color-accent3-400)',
-          500: 'var(--color-accent3-500)',
-          600: 'var(--color-accent3-600)',
-          700: 'var(--color-accent3-700)',
-          800: 'var(--color-accent3-800)',
-          900: 'var(--color-accent3-900)',
-        },
+        accent: accentColor,
+        accent2: accentColor2,
+        accent3: accentColor3,
         success: 'var(--color-success)',
         warning: 'var(--color-warning)',
         danger: 'var(--color-danger)',
@@ -87,6 +93,19 @@ export default {
         secondary: primaryColor,
       },
     },
+    screens: {
+      sm: '480px',
+      md: '768px',
+      lg: '976px',
+      xl: '1440px',
+    },
+    // borderRadius: { // this is the example from tailwind's docs: maybe we'll need something like this for border radius consistency
+    //   none: '0',
+    //   sm: '.125rem',
+    //   DEFAULT: '.25rem',
+    //   lg: '.5rem',
+    //   full: '9999px',
+    // },
   },
   plugins: [],
 };
