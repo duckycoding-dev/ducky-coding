@@ -1,14 +1,18 @@
 ---
 import { Link } from '@components/Link';
 import type { HTMLAttributes } from 'astro/types';
+import { cn } from '../../utils/cn';
 
 export interface NavbarProps {}
 
 interface Props extends NavbarProps, HTMLAttributes<'nav'> {}
+
+const { class: className, ...props } = Astro.props;
 ---
 
-<nav>
-  <Link id='abc' href={'/'} variant={'primary'}>Home</Link>
-  <Link href={'/about'} variant={'primary'}>About me</Link>
-  <Link href={'/socials'} variant={'secondary'}>Socials</Link>
+<nav class={cn('md:flex md:flex-row items-center', className)} {...props}>
+  <Link id='abc' href={'/'} variant={'unstyled'}>Unstyled</Link>
+  <Link id='abc' href={'/'}>Home</Link>
+  <Link href={'/about'} variant={'outlined'}>About me</Link>
+  <Link href={'/socials'} variant={'contained'} size={'medium'}>Socials</Link>
 </nav>

@@ -1,5 +1,3 @@
-/** @type {import('tailwindcss').Config} */
-
 // tailwind custom variables are not applying when editing classes in the developer tools? remember that if a class
 // is not used tailwind will purge it from the css file on load in dev and on build in production!!
 
@@ -68,6 +66,7 @@ const accentColor3 = {
   900: 'var(--color-accent3-900)',
 };
 
+/** @type {import('tailwindcss').Config} */
 export default {
   content: ['./src/**/*.{astro,html,js,jsx,md,mdx,svelte,ts,tsx,vue}'],
   theme: {
