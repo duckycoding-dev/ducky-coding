@@ -1,17 +1,18 @@
 ---
 import type { HTMLAttributes } from 'astro/types';
 import { cva, type VariantProps } from 'class-variance-authority';
+import { cn } from 'src/utils/cn';
 
-const toggleSwitchVariants = cva('', {
+const toggleSwitchVariants = cva('switch relative inline-block', {
   variants: {
     variant: {
-      round: [],
+      round: ['[&>span]:before:rounded-full [&>span]:rounded-full'],
       square: [],
     },
     size: {
-      small: ['text-sm'],
-      medium: ['text-base'],
-      large: ['text-lg'],
+      small: ['h-6 w-10 [&>span]:before:w-4'],
+      medium: ['h-9 w-14 [&>span]:before:w-7'],
+      large: ['h-11 w-20 [&>span]:before:w-9'],
     },
   },
   compoundVariants: [],
@@ -22,75 +23,29 @@ export type ToggleSwitchProps = HTMLAttributes<'label'> &
 
 interface Props extends ToggleSwitchProps {}
 
-const props = Astro.props;
+const { variant = 'round', size = 'medium', class: className } = Astro.props;
+let spanVariant;
+
+switch (size) {
+  case 'small':
+    spanVariant = 'peer-checked:before:translate-x-4';
+    break;
+  case 'medium':
+    spanVariant = 'peer-checked:before:translate-x-5';
+    break;
+  case 'large':
+    spanVariant = 'peer-checked:before:translate-x-9';
+    break;
+}
 ---
 
-<label class='switch relative inline-block'>
-  <input type='checkbox' class='h-0 w-0 opacity-0' />
-  <span class='slider round'></span>
+<label class={cn(toggleSwitchVariants({ variant, size }), className)}>
+  <input type='checkbox' class='peer absolute h-0 w-0 opacity-0' />
+  <span
+    class=`slider bg-accent-900 peer-checked:bg-accent border-comic before:border-comic before:border-secondary border-secondary absolute h-full w-full cursor-pointer duration-200 before:absolute before:aspect-square before:translate-x-1 before:translate-y-0.5 before:bg-white before:duration-200 peer-checked:before:translate-y-0.5 ${spanVariant}`
+  ></span>
 </label>
 
 <script></script>
 
-<style>
-  /* The switch - the box around the slider */
-  .switch {
-    width: 60px;
-    height: 34px;
-  }
-
-  /* Hide default HTML checkbox */
-  .switch input {
-    opacity: 0;
-    width: 0;
-    height: 0;
-  }
-
-  /* The slider */
-  .slider {
-    position: absolute;
-    cursor: pointer;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: #ccc;
-    -webkit-transition: 0.4s;
-    transition: 0.4s;
-  }
-
-  .slider:before {
-    position: absolute;
-    content: '';
-    height: 26px;
-    width: 26px;
-    left: 4px;
-    bottom: 4px;
-    background-color: white;
-    -webkit-transition: 0.4s;
-    transition: 0.4s;
-  }
-
-  input:checked + .slider {
-    background-color: #2196f3;
-  }
-
-  input:focus + .slider {
-    box-shadow: 0 0 1px #2196f3;
-  }
-
-  input:checked + .slider:before {
-    -webkit-transform: translateX(26px);
-    -ms-transform: translateX(26px);
-    transform: translateX(26px);
-  }
-
-  /* Rounded sliders */
-  .slider.round {
-    border-radius: 34px;
-  }
-
-  .slider.round:before {
-    border-radius: 50%;
-  }
-</style>
+<style></style>

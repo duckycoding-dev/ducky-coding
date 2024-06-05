@@ -1,9 +1,9 @@
 {
   "breadcrumbs.enabled": true,
   "editor.autoClosingDelete": "never",
-  "editor.autoClosingBrackets": "never",
+  "editor.autoClosingBrackets": "beforeWhitespace",
   "editor.autoClosingComments": "never",
-  "editor.autoClosingQuotes": "never",
+  "editor.autoClosingQuotes": "beforeWhitespace",
   "editor.bracketPairColorization.enabled": true,
   "editor.defaultFormatter": "esbenp.prettier-vscode",
   "editor.formatOnSave": true,

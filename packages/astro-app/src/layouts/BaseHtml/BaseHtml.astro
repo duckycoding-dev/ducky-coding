@@ -17,7 +17,13 @@ const { theme = 'default', title, ...props } = Astro.props;
 ---
 
 <!doctype html>
-<html data-theme={theme} lang='en' title={title} class='h-dvh' {...props}>
+<html
+  data-theme={theme}
+  lang='en'
+  title={title}
+  class='bg-primary h-dvh'
+  {...props}
+>
   <head>
     <meta charset='utf-8' />
     <link rel='icon' type='image/svg+xml' href='/favicon.svg' />
