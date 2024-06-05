@@ -1,7 +1,8 @@
 ---
-import { Button } from '../components/Button';
-import { Link } from '../components/Link';
 import { HolyGrailLayout } from '../layouts/HolyGrailLayout';
+import { Link } from '../components/Link';
+import { Button } from '../components/Button';
+import { ToggleSwitch } from '../components/ToggleSwitch';
 ---
 
 <HolyGrailLayout>
@@ -36,6 +37,12 @@ import { HolyGrailLayout } from '../layouts/HolyGrailLayout';
           <Button id='button4' variant={'contained'} size={'medium'}
             >Contained</Button
           >
+        </td>
+      </tr>
+      <tr>
+        <td><p>{'<ToggleSwitch>'}</p></td>
+        <td>
+          <ToggleSwitch />
         </td>
       </tr>
     </tbody>
