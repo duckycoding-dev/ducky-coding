@@ -3,7 +3,7 @@ import type { HTMLAttributes } from 'astro/types';
 import { cva, type VariantProps } from 'class-variance-authority';
 import { cn } from 'src/utils/cn';
 
-const linkVariants = cva('link', {
+const linkVariants = cva('', {
   variants: {
     variant: {
       default: [
@@ -11,6 +11,7 @@ const linkVariants = cva('link', {
         'text-accent',
         'bg-transparent',
         'hover:text-accent-700',
+        'focus:text-accent-700',
         'relative',
         'border-transparent',
         'before:content-[""]',
@@ -27,7 +28,9 @@ const linkVariants = cva('link', {
         'before:left-0',
         'before:-bottom-0.5',
         'hover:before:origin-left',
+        'focus:before:origin-left',
         'hover:before:scale-x-100',
+        'focus:before:scale-x-100',
       ],
       contained: [
         'inline-block',
@@ -45,11 +48,17 @@ const linkVariants = cva('link', {
         '-translate-y-0.5',
         'transition-all',
         'hover:bg-accent-700',
+        'focus:bg-accent-700',
         'hover:border-transparent',
+        'focus:border-transparent',
         'hover:translate-x-0',
+        'focus:translate-x-0',
         'hover:translate-y-0',
+        'focus:translate-y-0',
         'hover:scale-95',
+        'focus:scale-95',
         'hover:shadow-none',
+        'focus:shadow-none',
       ],
       outlined: [
         'inline-flex',
@@ -65,7 +74,9 @@ const linkVariants = cva('link', {
         'transition-all',
         'overflow-hidden',
         'hover:text-primary',
+        'focus:text-primary',
         'hover:border-secondary',
+        'focus:border-secondary',
         'before:content-[""]',
         'before:absolute',
         'before:h-full',
@@ -77,6 +88,7 @@ const linkVariants = cva('link', {
         'before:ease-in-out',
         'before:-translate-x-full',
         'hover:before:-translate-x-4',
+        'focus:before:-translate-x-4',
       ],
       unstyled: [],
     },

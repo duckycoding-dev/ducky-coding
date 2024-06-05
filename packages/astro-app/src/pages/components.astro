@@ -1,0 +1,87 @@
+---
+import { Button } from '../components/Button';
+import { Link } from '../components/Link';
+import { HolyGrailLayout } from '../layouts/HolyGrailLayout';
+---
+
+<HolyGrailLayout>
+  <table>
+    <thead class='bg-accent'>
+      <tr>
+        <th class='font-semibold'><p>Component</p></th>
+        <th class='font-semibold'><p>Variants</p></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><p>{'<Link>'}</p></td>
+        <td>
+          <Link id='link1' href={'/'} variant={'unstyled'}>Unstyled</Link>
+          <Link id='link2' href={'/'}>Default</Link>
+          <Link id='link3' href={'/about'} variant={'outlined'}>Outlined</Link>
+          <Link
+            id='link4'
+            href={'/socials'}
+            variant={'contained'}
+            size={'medium'}>Contained</Link
+          >
+        </td>
+      </tr>
+      <tr>
+        <td><p>{'<Button>'}</p></td>
+        <td>
+          <Button id='button1' variant={'unstyled'}>Unstyled</Button>
+          <Button id='button2'>Default</Button>
+          <Button id='button3' variant={'outlined'}>Outlined</Button>
+          <Button id='button4' variant={'contained'} size={'medium'}
+            >Contained</Button
+          >
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</HolyGrailLayout>
+
+<style>
+  table,
+  thead,
+  tbody {
+    border: 2px solid black;
+    display: block;
+  }
+
+  tr {
+    display: flex;
+    flex-direction: row;
+    align-items: stretch;
+  }
+
+  tbody tr:not(:last-child) {
+    border-bottom: 2px solid black;
+  }
+
+  tr > :first-child {
+    width: 10rem;
+    max-width: 10rem;
+    padding-inline: 2rem;
+    font-weight: 600;
+    border-right: 2px solid black;
+    display: grid;
+    justify-content: start;
+    align-items: center;
+  }
+
+  th,
+  td {
+    padding-block: 1rem;
+    display: flex;
+    flex-direction: row;
+    flex-shrink: 0;
+    flex-grow: 1;
+    gap: 1rem;
+    justify-content: space-around;
+    align-items: center;
+    flex-wrap: wrap;
+    width: min-content;
+  }
+</style>

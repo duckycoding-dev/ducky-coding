@@ -7,16 +7,17 @@ import type { HTMLAttributes } from 'astro/types';
 
 export type HolyGrailLayoutProps = BaseHtmlProps;
 
-interface Props extends HolyGrailLayoutProps, HTMLAttributes<'html'>{};
+interface Props extends HolyGrailLayoutProps, HTMLAttributes<'html'> {}
 
 const props = Astro.props;
-const slot = props.slot || undefined
+const slot = props.slot || undefined;
 ---
 
 <BaseHtml {...props} slot={slot}>
-	<Header />
-	<MainContent>
-    <slot /> <!-- your content is injected here -->
-	</MainContent>
-	<Footer />
+  <Header />
+  <MainContent class='px-4 py-8'>
+    <slot />
+    <!-- your content is injected here -->
+  </MainContent>
+  <Footer />
 </BaseHtml>

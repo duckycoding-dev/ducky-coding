@@ -3,35 +3,116 @@ import type { HTMLAttributes } from 'astro/types';
 import { cva, type VariantProps } from 'class-variance-authority';
 import { cn } from 'src/utils/cn';
 
-const buttonVariants = cva('button', {
+const buttonVariants = cva('', {
   variants: {
     variant: {
-      primary: [
-        'bg-blue-500',
-        'text-white',
+      default: [
+        'inline-block',
+        'text-accent',
+        'font-semibold',
+        'rounded-md',
+        'border-2',
+        'border-solid',
         'border-transparent',
-        'hover:bg-blue-600',
+        'transition-all',
+        'hover:text-accent-700',
+        'focus:text-accent-700',
+        'hover:border-accent-700',
+        'focus:border-accent-700',
       ],
-      secondary: [
-        'bg-white',
-        'text-gray-800',
-        'border-gray-400',
-        'hover:bg-gray-100',
+      contained: [
+        'inline-block',
+        'text-primary',
+        'font-semibold',
+        'bg-accent',
+        'rounded-md',
+        'border-2',
+        'border-solid',
+        'border-secondary',
+        'shadow-md',
+        'shadow-[0.1rem_0.1rem_0rem_0.1rem]',
+        'shadow-secondary',
+        '-translate-x-0.5',
+        '-translate-y-0.5',
+        'transition-all',
+        'hover:bg-accent-700',
+        'focus:bg-accent-700',
+        'hover:border-transparent',
+        'focus:border-transparent',
+        'hover:translate-x-0',
+        'focus:translate-x-0',
+        'hover:translate-y-0',
+        'focus:translate-y-0',
+        'hover:scale-95',
+        'focus:scale-95',
+        'hover:shadow-none',
+        'focus:shadow-none',
       ],
+      outlined: [
+        'inline-flex',
+        'items-center',
+        'relative',
+        'text-accent',
+        'font-semibold',
+        'bg-transparent',
+        'rounded-md',
+        'border-2',
+        'border-solid',
+        'border-accent',
+        'transition-all',
+        'overflow-hidden',
+        'hover:text-primary',
+        'focus:text-primary',
+        'hover:border-secondary',
+        'focus:border-secondary',
+        'before:content-[""]',
+        'before:absolute',
+        'before:h-full',
+        'before:w-full',
+        'before:-z-10',
+        'before:bg-accent-700',
+        'before:transition-transform',
+        'before:duration-[0.15s]',
+        'before:ease-in-out',
+        'before:-translate-x-full',
+        'hover:before:-translate-x-4',
+        'focus:before:-translate-x-4',
+      ],
+      unstyled: [],
     },
     size: {
-      small: ['text-sm', 'py-1', 'px-2'],
-      medium: ['text-base', 'py-2', 'px-4'],
+      small: ['text-sm'],
+      medium: ['text-base'],
     },
   },
   compoundVariants: [
-    { variant: 'primary', size: 'medium', class: 'uppercase' },
+    {
+      variant: ['default', 'contained', 'outlined'],
+      size: 'small',
+      class: 'py-1 px-2',
+    },
+    {
+      variant: ['default', 'contained', 'outlined'],
+      size: 'medium',
+      class: 'py-2 px-4',
+    },
+    {
+      variant: ['outlined'],
+      size: 'medium',
+      class: 'before:-translate-x-[calc(100%+0.5rem)]',
+    },
+    {
+      variant: ['outlined'],
+      size: 'medium',
+      class: 'before:-translate-x-[calc(100%+1rem)]',
+    },
   ],
 });
 
-export type ButtonProps = VariantProps<typeof buttonVariants>;
+export type ButtonProps = HTMLAttributes<'button'> &
+  VariantProps<typeof buttonVariants>;
 
-interface Props extends ButtonProps, HTMLAttributes<'button'> {}
+interface Props extends ButtonProps {}
 
 /**
  * For Astro components, we recommend setting your defaultVariants within
@@ -39,7 +120,7 @@ interface Props extends ButtonProps, HTMLAttributes<'button'> {}
  */
 const {
   class: className,
-  variant = 'primary',
+  variant = 'default',
   size = 'medium',
   ...props
 } = Astro.props;

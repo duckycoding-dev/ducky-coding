@@ -1,13 +1,15 @@
 ---
 import type { HTMLAttributes } from 'astro/types';
+import { cn } from '../../utils/cn';
 
-export interface MainContentProps {};
+export interface MainContentProps {}
 
-interface Props extends MainContentProps, HTMLAttributes<"main"> {};
+interface Props extends MainContentProps, HTMLAttributes<'main'> {}
 
-const {class: className, ...props} = Astro.props;
+const { class: className, ...props } = Astro.props;
 ---
 
-<main class="[grid-area:main-content] grow">
-  <slot /> <!-- your content is injected here -->
+<main class={cn('[grid-area:main-content] grow', className)}>
+  <slot />
+  <!-- your content is injected here -->
 </main>
