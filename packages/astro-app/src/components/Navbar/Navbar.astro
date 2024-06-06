@@ -2,17 +2,56 @@
 import { Link } from '@components/Link';
 import type { HTMLAttributes } from 'astro/types';
 import { cn } from '../../utils/cn';
+import { cva, type VariantProps } from 'class-variance-authority';
+import DuckyCodingLogo from '@assets/images/DuckyCoding_logo.png';
+import { Image } from 'astro:assets';
 
-export interface NavbarProps {}
+const navbarVariants = cva('', {
+  variants: {
+    direction: {
+      horizontal: 'flex',
+      vertical: '',
+    },
+    logoContainer: {
+      default: '',
+    },
+    profileContainer: {
+      default: '',
+    },
+  },
+  defaultVariants: {
+    direction: 'horizontal',
+    logoContainer: 'default',
+    profileContainer: 'default',
+  },
+  compoundVariants: [],
+});
+
+export type NavbarProps = HTMLAttributes<'a'> &
+  VariantProps<typeof navbarVariants>;
+interface Props extends NavbarProps {}
 
 interface Props extends NavbarProps, HTMLAttributes<'nav'> {}
 
-const { class: className, ...props } = Astro.props;
+const {
+  direction,
+  logoContainer,
+  profileContainer,
+  class: className,
+  ...props
+} = Astro.props;
 ---
 
-<nav class={cn('md:flex md:flex-row items-center', className)} {...props}>
-  <!-- <Link id='abc' href={'/'} variant={'unstyled'}>Unstyled</Link>
-  <Link id='abc' href={'/'}>Home</Link>
-  <Link href={'/about'} variant={'outlined'}>About me</Link>
-  <Link href={'/socials'} variant={'contained'} size={'medium'}>Socials</Link> -->
+<!-- not working ☹️ -->
+<Image alt={'DuckyCoding logo using astro Image'} src={DuckyCodingLogo} />
+<!-- working 🤔 -->
+<img alt={'DuckyCoding logo'} src={DuckyCodingLogo.src} />
+
+<nav class={cn(navbarVariants({ direction }), className)} {...props}>
+  <div class={cn(navbarVariants({ logoContainer }))}></div>
+  <div class={cn(navbarVariants({ profileContainer }))}>
+    <Link id='abc' href={'/'}>Home</Link>
+    <Link href={'/about'}>About me</Link>
+    <Link href={'/socials'} size={'medium'}>Socials</Link>
+  </div>
 </nav>
