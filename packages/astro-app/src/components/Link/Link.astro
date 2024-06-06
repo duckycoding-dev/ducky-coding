@@ -94,6 +94,10 @@ const linkVariants = cva('', {
       medium: ['text-base'],
     },
   },
+  defaultVariants: {
+    variant: 'default',
+    size: 'medium',
+  },
   compoundVariants: [
     { variant: ['contained', 'outlined'], size: 'small', class: 'py-1 px-2' },
     { variant: ['contained', 'outlined'], size: 'medium', class: 'py-2 px-4' },
@@ -117,13 +121,7 @@ interface Props extends LinkProps {}
  * For Astro components, we recommend setting your defaultVariants within
  * Astro.props (which are `undefined` by default)
  */
-const {
-  class: className,
-  variant = 'default',
-  size = 'medium',
-  href,
-  ...props
-} = Astro.props;
+const { class: className, variant, size, href, ...props } = Astro.props;
 ---
 
 <a

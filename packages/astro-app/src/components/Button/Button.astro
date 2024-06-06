@@ -81,6 +81,10 @@ const buttonVariants = cva('', {
       medium: ['text-base'],
     },
   },
+  defaultVariants: {
+    variant: 'default',
+    size: 'medium',
+  },
   compoundVariants: [
     {
       variant: ['default', 'contained', 'outlined'],
@@ -114,12 +118,7 @@ interface Props extends ButtonProps {}
  * For Astro components, we recommend setting your defaultVariants within
  * Astro.props (which are `undefined` by default)
  */
-const {
-  class: className,
-  variant = 'default',
-  size = 'medium',
-  ...props
-} = Astro.props;
+const { class: className, variant, size, ...props } = Astro.props;
 ---
 
 <button class={cn(buttonVariants({ variant, size }), className)} {...props}>

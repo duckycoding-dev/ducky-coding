@@ -3,49 +3,53 @@ import type { HTMLAttributes } from 'astro/types';
 import { cva, type VariantProps } from 'class-variance-authority';
 import { cn } from 'src/utils/cn';
 
-const toggleSwitchVariants = cva('switch relative inline-block', {
+const toggleSwitchVariants = cva('relative inline-block', {
   variants: {
     variant: {
-      round: ['[&>span]:before:rounded-full [&>span]:rounded-full'],
-      square: [],
+      round: '[&>span]:before:rounded-full [&>span]:rounded-full',
+      square: '',
     },
     size: {
-      small: ['h-6 w-10 [&>span]:before:w-4'],
-      medium: ['h-9 w-14 [&>span]:before:w-7'],
-      large: ['h-11 w-20 [&>span]:before:w-9'],
+      small: ['h-6 w-10'],
+      medium: ['h-9 w-14'],
+      large: ['h-11 w-20'],
     },
+  },
+  defaultVariants: {
+    variant: 'round',
+    size: 'medium',
   },
   compoundVariants: [],
 });
+
+const innerSpanVariants = cva(
+  'slider bg-accent-900 peer-checked:bg-accent border-comic before:border-comic before:border-secondary border-secondary absolute h-full w-full cursor-pointer duration-200 before:absolute before:aspect-square before:translate-x-1 before:translate-y-0.5 before:bg-white before:duration-200 peer-checked:before:translate-y-0.5',
+  {
+    variants: {
+      size: {
+        small: 'before:w-4 peer-checked:before:translate-x-4',
+        medium: 'before:w-7 peer-checked:before:translate-x-5',
+        large: 'before:w-9 peer-checked:before:translate-x-9',
+      },
+    },
+    defaultVariants: {
+      size: 'medium',
+    },
+    compoundVariants: [],
+  },
+);
 
 export type ToggleSwitchProps = HTMLAttributes<'label'> &
   VariantProps<typeof toggleSwitchVariants>;
 
 interface Props extends ToggleSwitchProps {}
 
-const { variant = 'round', size = 'medium', class: className } = Astro.props;
-let spanVariant;
-
-switch (size) {
-  case 'small':
-    spanVariant = 'peer-checked:before:translate-x-4';
-    break;
-  case 'medium':
-    spanVariant = 'peer-checked:before:translate-x-5';
-    break;
-  case 'large':
-    spanVariant = 'peer-checked:before:translate-x-9';
-    break;
-}
+const { variant, size, class: className } = Astro.props;
 ---
 
 <label class={cn(toggleSwitchVariants({ variant, size }), className)}>
   <input type='checkbox' class='peer absolute h-0 w-0 opacity-0' />
-  <span
-    class=`slider bg-accent-900 peer-checked:bg-accent border-comic before:border-comic before:border-secondary border-secondary absolute h-full w-full cursor-pointer duration-200 before:absolute before:aspect-square before:translate-x-1 before:translate-y-0.5 before:bg-white before:duration-200 peer-checked:before:translate-y-0.5 ${spanVariant}`
-  ></span>
+  <span class={cn(innerSpanVariants({ size }))}></span>
 </label>
 
 <script></script>
-
-<style></style>
