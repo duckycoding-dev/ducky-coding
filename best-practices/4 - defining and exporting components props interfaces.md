@@ -22,7 +22,7 @@ export { default as ComponentName } from './ComponentName.astro';
 // Button.astro
 
 export type ButtonProps = VariantProps<typeof buttonVariants>;
-interface Props extends ButtonProps, HTMLAttributes<"button"> {}
+interface Props extends HTMLAttributes<"button">, ButtonProps {}
 ```
 
 See how the custom type (in this example ButtonProps) defines only the attributes that are needed for our specific component (taken from CVA utility in this case) and is then used by the Props type together with other generic attributes (HTMLAttributes<"button"> since the component is a button and we want all the props defined in the basic HTML <button>)

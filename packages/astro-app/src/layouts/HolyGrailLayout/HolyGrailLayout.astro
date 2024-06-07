@@ -7,13 +7,12 @@ import type { HTMLAttributes } from 'astro/types';
 
 export type HolyGrailLayoutProps = BaseHtmlProps;
 
-interface Props extends HolyGrailLayoutProps, HTMLAttributes<'html'> {}
+interface Props extends HTMLAttributes<'html'>, HolyGrailLayoutProps {}
 
 const props = Astro.props;
-const slot = props.slot || undefined;
 ---
 
-<BaseHtml {...props} slot={slot}>
+<BaseHtml {...props}>
   <Header />
   <MainContent class='px-4 py-8'>
     <slot />

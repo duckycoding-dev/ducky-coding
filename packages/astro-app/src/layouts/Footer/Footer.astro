@@ -1,13 +1,13 @@
 ---
 import type { HTMLAttributes } from 'astro/types';
 
-export interface FooterProps {};
+export interface FooterProps {}
 
-interface Props extends FooterProps, HTMLAttributes<"footer"> {}
+interface Props extends HTMLAttributes<'footer'>, FooterProps {}
 
-const {class: className, ...props} = Astro.props;
+const { class: className, ...props } = Astro.props;
 ---
 
-<footer class="[grid-area:footer]">
-	<h1 class="text-4xl bg-red-300">Footer</h1>  
+<footer class='[grid-area:footer]'>
+  <h1 class='bg-red-300 text-4xl'>Footer</h1>
 </footer>

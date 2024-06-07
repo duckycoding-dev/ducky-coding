@@ -47,10 +47,9 @@ const buttonVariants = cva('', {
   ],
 });
 
-export type ButtonProps = HTMLAttributes<'button'> &
-  VariantProps<typeof buttonVariants>;
+export type ButtonProps = VariantProps<typeof buttonVariants>;
 
-interface Props extends ButtonProps {}
+interface Props extends HTMLAttributes<'button'>, ButtonProps {}
 
 /**
  * For Astro components, we recommend setting your defaultVariants within

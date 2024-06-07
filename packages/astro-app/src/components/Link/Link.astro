@@ -39,8 +39,8 @@ const linkVariants = cva('', {
   ],
 });
 
-export type LinkProps = HTMLAttributes<'a'> & VariantProps<typeof linkVariants>;
-interface Props extends LinkProps {}
+export type LinkProps = VariantProps<typeof linkVariants>;
+interface Props extends HTMLAttributes<'a'>, LinkProps {}
 
 /**
  * For Astro components, we recommend setting your defaultVariants within

@@ -4,7 +4,7 @@ import { cn } from '../../utils/cn';
 
 export interface MainContentProps {}
 
-interface Props extends MainContentProps, HTMLAttributes<'main'> {}
+interface Props extends HTMLAttributes<'main'>, MainContentProps {}
 
 const { class: className, ...props } = Astro.props;
 ---

@@ -11,7 +11,7 @@ export interface BaseHtmlProps {
   theme?: CSSTheme;
 }
 
-interface Props extends BaseHtmlProps, HTMLAttributes<'html'> {}
+interface Props extends HTMLAttributes<'html'>, BaseHtmlProps {}
 
 const { theme = 'default', title, ...props } = Astro.props;
 ---

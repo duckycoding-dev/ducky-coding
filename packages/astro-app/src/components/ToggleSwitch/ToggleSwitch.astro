@@ -39,10 +39,9 @@ const innerSpanVariants = cva(
   },
 );
 
-export type ToggleSwitchProps = HTMLAttributes<'label'> &
-  VariantProps<typeof toggleSwitchVariants>;
+export type ToggleSwitchProps = VariantProps<typeof toggleSwitchVariants>;
 
-interface Props extends ToggleSwitchProps {}
+interface Props extends HTMLAttributes<'label'>, ToggleSwitchProps {}
 
 const { variant, size, class: className } = Astro.props;
 ---

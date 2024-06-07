@@ -2,56 +2,37 @@
 import { Link } from '@components/Link';
 import type { HTMLAttributes } from 'astro/types';
 import { cn } from '../../utils/cn';
-import { cva, type VariantProps } from 'class-variance-authority';
 import DuckyCodingLogo from '@assets/images/DuckyCoding_logo.png';
 import { Image } from 'astro:assets';
 
-const navbarVariants = cva('', {
-  variants: {
-    direction: {
-      horizontal: 'flex',
-      vertical: '',
-    },
-    logoContainer: {
-      default: '',
-    },
-    profileContainer: {
-      default: '',
-    },
-  },
-  defaultVariants: {
-    direction: 'horizontal',
-    logoContainer: 'default',
-    profileContainer: 'default',
-  },
-  compoundVariants: [],
-});
+export interface NavbarProps {}
 
-export type NavbarProps = HTMLAttributes<'a'> &
-  VariantProps<typeof navbarVariants>;
-interface Props extends NavbarProps {}
+interface Props extends HTMLAttributes<'nav'>, NavbarProps {}
 
-interface Props extends NavbarProps, HTMLAttributes<'nav'> {}
-
-const {
-  direction,
-  logoContainer,
-  profileContainer,
-  class: className,
-  ...props
-} = Astro.props;
+const { class: className, ...props } = Astro.props;
 ---
 
-<!-- not working ☹️ -->
-<Image alt={'DuckyCoding logo using astro Image'} src={DuckyCodingLogo} />
-<!-- working 🤔 -->
-<img alt={'DuckyCoding logo'} src={DuckyCodingLogo.src} />
-
-<nav class={cn(navbarVariants({ direction }), className)} {...props}>
-  <div class={cn(navbarVariants({ logoContainer }))}></div>
-  <div class={cn(navbarVariants({ profileContainer }))}>
-    <Link id='abc' href={'/'}>Home</Link>
-    <Link href={'/about'}>About me</Link>
-    <Link href={'/socials'} size={'medium'}>Socials</Link>
+<nav
+  class={cn(
+    'bg-secondary fixed md:block h-dvh w-full flex flex-col md:h-auto md:flex-row md:items-center px-8 py-8 md:py-4 max-w-96 gap-y-4',
+    className,
+  )}
+  {...props}
+>
+  <div class='justify-s flex items-center justify-start gap-4 font-semibold'>
+    <Image
+      alt={'DuckyCoding logo using astro Image'}
+      src={DuckyCodingLogo}
+      width={50}
+    />
+    <p class='text-secondary text-3xl'>DuckyCoding</p>
   </div>
+  <div class='grid gap-4 md:ml-auto'>
+    <Link id='abc' href={'/'} class={'text-3xl md:text-base'}>Home</Link>
+    <Link href={'/about'} class={'text-3xl md:text-base'}>About me</Link>
+    <Link href={'/socials'} size={'medium'} class={'text-3xl md:text-base'}
+      >Socials</Link
+    >
+  </div>
+  <div class=''></div>
 </nav>

@@ -10,7 +10,7 @@ export default defineConfig({
   publicDir: './public', // --DEFAULT--
   srcDir: './src', // --DEFAULT--
   outDir: './dist', // --DEFAULT--
-  base: './',
+  base: '/',
   trailingSlash: 'ignore', // --DEFAULT--
   output: 'static',
   cacheDir: './.astro',
