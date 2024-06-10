@@ -14,17 +14,13 @@ const { class: className, ...props } = Astro.props;
 
 <nav
   class={cn(
-    'bg-primary-700 fixed md:static h-dvh w-full flex flex-col md:h-auto md:flex-row gap-x-8 md:items-center px-8 py-8 md:py-4 max-w-96 md:max-w-full gap-y-4 border-comic border-secondary',
+    'bg-primary-700 top-0 left-0 md:top-0 md:left-0 fixed md:static h-dvh w-full flex flex-col md:h-auto md:flex-row gap-x-8 md:items-center px-8 md:px-0 py-8 md:py-4 max-w-96 md:max-w-full gap-y-4 border-comic border-secondary md:border-none',
     className,
   )}
   {...props}
 >
-  <div class='flex items-center justify-start gap-4 font-semibold'>
-    <Image
-      alt={'DuckyCoding logo using astro Image'}
-      src={DuckyCodingLogo}
-      width={50}
-    />
+  <div class='flex items-center justify-start gap-4 font-semibold md:hidden'>
+    <Image alt={'DuckyCoding logo'} src={DuckyCodingLogo} width={50} />
     <p class='text-primary text-3xl md:hidden lg:block'>DuckyCoding</p>
   </div>
   <div class='flex h-full flex-col gap-4 md:ml-auto md:flex-row'>
@@ -43,12 +39,8 @@ const { class: className, ...props } = Astro.props;
       class={'text-3xl md:text-base text-primary font-medium'}>Socials</Link
     >
   </div>
-  <div class='mt-auto flex items-center gap-4 text-2xl'>
-    <Image
-      alt={'DuckyCoding logo using astro Image'}
-      src={DuckyCodingLogo}
-      width={50}
-    />
+  <div class='mt-auto flex items-center gap-4 text-2xl md:hidden'>
+    <Image alt={'DuckyCoding logo'} src={DuckyCodingLogo} width={50} />
     <span class='md:hidden'>User_name</span>
   </div>
 </nav>

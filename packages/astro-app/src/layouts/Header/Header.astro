@@ -1,6 +1,9 @@
 ---
 import { Navbar } from '@components/Navbar';
 import type { HTMLAttributes } from 'astro/types';
+import { Image } from 'astro:assets';
+import DuckyCodingLogo from '@assets/images/DuckyCoding_logo.png';
+import { Link } from '../../components/Link';
 
 export interface HeaderProps {}
 
@@ -9,7 +12,19 @@ interface Props extends HTMLAttributes<'header'>, HeaderProps {}
 const { class: className, ...props } = Astro.props;
 ---
 
-<header class='[grid-area:header]'>
-  <Navbar />
-  <h1 class='bg-red-300 text-4xl'>Astro - Header</h1>
+<header
+  class='bg-primary-700 border-comic border-secondary flex items-center gap-x-8 px-8 py-4 [grid-area:header]'
+>
+  <Link
+    href='/'
+    variant='unstyled'
+    class='flex items-center justify-start gap-4 font-semibold'
+  >
+    <Image alt={'DuckyCoding logo'} src={DuckyCodingLogo} width={50} />
+    <p class='text-primary text-3xl md:hidden lg:block'>DuckyCoding</p>
+  </Link>
+  <Navbar class='md:ml-auto' />
+  <div class='flex items-center gap-4 text-2xl'>
+    <Image alt={'DuckyCoding logo'} src={DuckyCodingLogo} width={50} />
+  </div>
 </header>
