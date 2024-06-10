@@ -1,0 +1,58 @@
+---
+import { Link } from '@components/Link';
+import type { HTMLAttributes } from 'astro/types';
+import { cn } from '../../utils/cn';
+import DuckyCodingLogo from '@assets/images/DuckyCoding_logo.png';
+import { Image } from 'astro:assets';
+import { HamburgerToggle } from '@components/HamburgerToggle';
+
+export interface NavbarProps {}
+
+interface Props extends HTMLAttributes<'nav'>, NavbarProps {}
+
+const { class: className, ...props } = Astro.props;
+---
+
+<nav
+  class={cn(
+    'flex bg-primary-700 top-0 left-0 md:top-0 md:left-0 fixed md:static h-dvh w-full flex-col md:h-auto md:flex-row gap-x-8 md:items-center px-8 md:px-0 py-8 md:py-4 max-w-96 gap-y-4 border-comic border-secondary md:border-none md:justify-end',
+    className,
+  )}
+  {...props}
+>
+  <div class='flex items-center justify-start gap-4 font-semibold md:hidden'>
+    <Image alt={'DuckyCoding logo'} src={DuckyCodingLogo} width={50} />
+    <p class='text-primary text-3xl md:hidden lg:block'>DuckyCoding</p>
+  </div>
+  <div class='flex h-full flex-col gap-4 md:flex-row'>
+    <Link
+      id='abc'
+      href={'/'}
+      class={'text-3xl md:text-base text-primary font-medium'}>Home</Link
+    >
+    <Link
+      href={'/about'}
+      class={'text-3xl md:text-base text-primary font-medium'}>About me</Link
+    >
+    <Link
+      href={'/socials'}
+      size={'medium'}
+      class={'text-3xl md:text-base text-primary font-medium'}>Socials</Link
+    >
+  </div>
+  <div class='mt-auto flex items-center gap-4 text-2xl md:hidden'>
+    <Image alt={'DuckyCoding logo'} src={DuckyCodingLogo} width={50} />
+    <span class='md:hidden'>User_name</span>
+  </div>
+</nav>
+
+<style>
+  .toggle:has(div:has(input:checked)) ~ nav {
+    background-color: red;
+    transform: scale(150%);
+  }
+
+  nav {
+    backdrop-filter: blur(10px);
+  }
+</style>
