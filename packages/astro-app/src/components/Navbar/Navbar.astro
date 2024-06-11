@@ -13,11 +13,12 @@ interface Props extends HTMLAttributes<'nav'>, NavbarProps {}
 const { class: className, ...props } = Astro.props;
 ---
 
-<HamburgerToggle class='peer'>
-  <nav
+<nav class='absolute left-0'>
+  <HamburgerToggle class='peer z-50 md:hidden' />
+  <div
     id='menu'
     class={cn(
-      'bg-primary-700 top-0 left-0 md:top-0 md:left-0 fixed md:static h-dvh w-full flex flex-col md:h-auto md:flex-row gap-x-8 md:items-center px-8 md:px-0 py-8 md:py-4 max-w-96 gap-y-4 border-comic border-secondary md:border-none md:justify-end peer-[:hover]:scale-50',
+      'bg-primary-700 top-0 left-0 md:top-0 md:left-0 fixed md:static h-dvh w-full flex flex-col md:h-auto md:flex-row gap-x-8 md:items-center px-8 md:px-0 py-8 md:py-4 max-w-96 gap-y-4 border-comic border-secondary md:border-none md:justify-end peer-checked:-translate-x-full',
       className,
     )}
     {...props}
@@ -53,14 +54,5 @@ const { class: className, ...props } = Astro.props;
       <Image alt={'DuckyCoding logo'} src={DuckyCodingLogo} width={50} />
       <span class='md:hidden'>User_name</span>
     </div>
-  </nav>
-</HamburgerToggle>
-
-<style>
-  nav {
-    backdrop-filter: blur(10px);
-  }
-  #menu {
-    transition: transform 0.5s cubic-bezier(0.77, 0.2, 0.05, 1);
-  }
-</style>
+  </div>
+</nav>
