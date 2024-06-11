@@ -16,39 +16,40 @@ const { class: className, ...props } = Astro.props;
 <header
   class='bg-primary-700 border-comic border-secondary sticky flex items-center justify-between gap-x-8 px-8 py-4 [grid-area:header]'
 >
-  <HamburgerToggle class='z-5000 peer shrink-0 md:hidden' />
-  <Link
-    href='/'
-    variant='unstyled'
-    class='flex grow items-center justify-center gap-4 font-semibold md:justify-start'
-    id='logo'
-  >
+  <HamburgerToggle class='peer shrink-0 md:hidden' />
+  <div class='mx-auto md:mx-0'>
+    <Link href='/' variant='unstyled' class='md:justify-start' id='logo'>
+      <Image
+        alt={'DuckyCoding logo'}
+        src={DuckyCodingLogo}
+        width={50}
+        class='max-w-none'
+      />
+    </Link>
+  </div>
+  <Navbar
+    id='navbar'
+    class='fixed overflow-hidden transition-transform peer-checked:flex peer-checked:translate-x-0 peer-[:not(checked)]:-translate-x-full md:ml-auto md:peer-[:not(checked)]:translate-x-0'
+  />
+  <div class='flex items-center gap-4 text-2xl'>
     <Image
       alt={'DuckyCoding logo'}
       src={DuckyCodingLogo}
       width={50}
       class='max-w-none'
     />
-    <span id='logo-text' class='text-primary text-3xl md:hidden lg:block'
-      >DuckyCoding</span
-    >
-  </Link>
-  <Navbar
-    class='peer-checked:hidden peer-checked:-translate-x-full md:ml-auto md:peer-checked:flex md:peer-checked:translate-x-0'
-  />
-  <div class='flex shrink-0 items-center gap-4 text-2xl'>
-    <Image alt={'DuckyCoding logo'} src={DuckyCodingLogo} width={50} />
   </div>
 </header>
 
 <style>
-  #logo {
-    container-type: inline-size;
-    container-name: logo;
+  #navbar {
+    transform: translateX(100px);
+    transition-duration: 1s;
+    transition-property: all;
+    transition-timing-function: cubic-bezier();
   }
-  @container logo (width < 250px) {
-    #logo-text {
-      display: none;
-    }
+
+  #logo:checked {
+    transform: translateX(1000px);
   }
 </style>
