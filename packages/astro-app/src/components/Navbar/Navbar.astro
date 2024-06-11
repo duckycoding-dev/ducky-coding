@@ -4,7 +4,6 @@ import type { HTMLAttributes } from 'astro/types';
 import { cn } from '../../utils/cn';
 import DuckyCodingLogo from '@assets/images/DuckyCoding_logo.png';
 import { Image } from 'astro:assets';
-import { HamburgerToggle } from '@components/HamburgerToggle';
 
 export interface NavbarProps {}
 
@@ -13,46 +12,57 @@ interface Props extends HTMLAttributes<'nav'>, NavbarProps {}
 const { class: className, ...props } = Astro.props;
 ---
 
-<nav class='absolute left-0'>
-  <HamburgerToggle class='peer z-50 md:hidden' />
+<nav
+  id='menu'
+  class={cn(
+    'bg-primary-700 top-0 left-0 md:top-0 md:left-0 fixed md:static h-dvh w-full flex flex-col md:h-auto md:flex-row gap-x-8 md:items-center px-8 md:px-0 pb-8 pt-20 md:py-0 max-w-96 gap-y-4 border-comic border-secondary md:border-none md:justify-end',
+    className,
+  )}
+  {...props}
+>
   <div
-    id='menu'
-    class={cn(
-      'bg-primary-700 top-0 left-0 md:top-0 md:left-0 fixed md:static h-dvh w-full flex flex-col md:h-auto md:flex-row gap-x-8 md:items-center px-8 md:px-0 py-8 md:py-4 max-w-96 gap-y-4 border-comic border-secondary md:border-none md:justify-end peer-checked:-translate-x-full',
-      className,
-    )}
-    {...props}
+    class='flex shrink-0 items-center justify-start gap-4 font-semibold md:hidden'
   >
-    <div class='flex items-center justify-start gap-4 font-semibold md:hidden'>
-      <Image alt={'DuckyCoding logo'} src={DuckyCodingLogo} width={50} />
-      <p class='text-primary text-3xl md:hidden lg:block'>DuckyCoding</p>
-    </div>
-    <ul class='flex h-full flex-col gap-4 md:flex-row'>
-      <li>
-        <Link
-          id='abc'
-          href={'/'}
-          class={'text-3xl md:text-base text-primary font-medium'}>Home</Link
-        >
-      </li>
-      <li>
-        <Link
-          href={'/about'}
-          class={'text-3xl md:text-base text-primary font-medium'}
-          >About me</Link
-        >
-      </li>
-      <li>
-        <Link
-          href={'/socials'}
-          size={'medium'}
-          class={'text-3xl md:text-base text-primary font-medium'}>Socials</Link
-        >
-      </li>
-    </ul>
-    <div class='mt-auto flex items-center gap-4 text-2xl md:hidden'>
-      <Image alt={'DuckyCoding logo'} src={DuckyCodingLogo} width={50} />
-      <span class='md:hidden'>User_name</span>
-    </div>
+    <Image
+      alt={'DuckyCoding logo'}
+      src={DuckyCodingLogo}
+      width={50}
+      class='max-w-none'
+    />
+    <p class='text-primary text-3xl md:hidden lg:block'>DuckyCoding</p>
+  </div>
+  <ul class='flex h-full flex-col gap-4 md:flex-row'>
+    <li>
+      <Link
+        id='abc'
+        href={'/'}
+        class={'text-3xl md:text-base text-primary font-medium'}>Home</Link
+      >
+    </li>
+    <li>
+      <Link
+        href={'/about'}
+        class={'text-3xl md:text-base text-primary font-medium'}>About me</Link
+      >
+    </li>
+    <li>
+      <Link
+        href={'/socials'}
+        size={'medium'}
+        class={'text-3xl md:text-base text-primary font-medium'}>Socials</Link
+      >
+    </li>
+    <li>
+      <Link
+        href={'/components'}
+        size={'medium'}
+        class={'text-3xl md:text-base text-primary font-medium'}
+        >Components</Link
+      >
+    </li>
+  </ul>
+  <div class='mt-auto flex items-center gap-4 text-2xl md:hidden'>
+    <Image alt={'DuckyCoding logo'} src={DuckyCodingLogo} width={50} />
+    <span class='md:hidden'>User_name</span>
   </div>
 </nav>

@@ -25,20 +25,20 @@ const { variant, size, class: className } = Astro.props;
 <input
   id='hamburgerCheckbox'
   type='checkbox'
-  class={cn('block h-0 w-0 opacity-0 cursor-pointer', className)}
+  class={cn('absolute block h-0 w-0 opacity-0 cursor-pointer', className)}
 />
-<label for='hamburgerCheckbox' class={cn(className)}
-  ><span class='relative'></span></label
+<label
+  for='hamburgerCheckbox'
+  class={cn('flex cursor-pointer items-center justify-center', className)}
 >
+  <span class='relative'></span>
+</label>
 
 <style>
   label {
     z-index: 1000;
     width: 40px;
     aspect-ratio: 1;
-    display: flex;
-    align-items: center;
-    justify-content: center;
   }
   span,
   span::before,
