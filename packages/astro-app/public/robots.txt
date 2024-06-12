@@ -1,0 +1,4 @@
+User-agent: *
+Disallow: /
+
+Sitemap: https://duckycoding.dev/sitemap.xml

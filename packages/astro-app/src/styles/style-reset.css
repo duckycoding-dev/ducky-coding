@@ -32,11 +32,6 @@ ul[role='list'] ol[role='list'] {
   scroll-padding-top: 2rem;
 }
 
-/* Set core body defaults */
-html,
-body {
-  height: 100%;
-}
 body {
   text-rendering: optimizeSpeed;
   /* line-height: 1.5; not sure why this is set*/
