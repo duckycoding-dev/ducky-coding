@@ -7,6 +7,7 @@ import tailwind from '@astrojs/tailwind';
 // https://astro.build/config
 export default defineConfig({
   // Resolves to the "./public" directory, relative to this config file
+  site: 'https://duckycoding.dev',
   publicDir: './public', // --DEFAULT--
   srcDir: './src', // --DEFAULT--
   outDir: './dist', // --DEFAULT--
