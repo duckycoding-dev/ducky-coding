@@ -8,6 +8,11 @@ interface Props extends HTMLAttributes<'footer'>, FooterProps {}
 const { class: className, ...props } = Astro.props;
 ---
 
-<footer class='[grid-area:footer]'>
-  <h1 class='bg-red-300 text-4xl'>Footer</h1>
+<footer
+  class='bg-primary-700 border-comic border-secondary flex flex-col items-stretch gap-8 px-8 py-8 [grid-area:footer] md:flex-row'
+>
+  <section class='min-h-8 w-full bg-red-300'>
+    <p class='text-center md:text-start'>Stay in touch</p>
+  </section>
+  <section class='min-h-12 w-full bg-red-700'></section>
 </footer>
