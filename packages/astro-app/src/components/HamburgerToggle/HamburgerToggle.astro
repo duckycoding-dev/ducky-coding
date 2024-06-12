@@ -45,6 +45,7 @@ const { variant, class: className } = Astro.props;
   id='hamburgerCheckbox'
   type='checkbox'
   class={cn('absolute h-0 w-0 opacity-0 cursor-pointer', className)}
+  aria-label={Astro.props['aria-label'] ?? 'side navigation menu toggle'}
 />
 <label
   for='hamburgerCheckbox'

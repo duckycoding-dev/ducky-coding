@@ -46,7 +46,10 @@ interface Props extends HTMLAttributes<'label'>, ToggleSwitchProps {}
 const { variant, size, class: className } = Astro.props;
 ---
 
-<label class={cn(toggleSwitchVariants({ variant, size }), className)}>
+<label
+  class={cn(toggleSwitchVariants({ variant, size }), className)}
+  aria-label={Astro.props['aria-label'] ?? 'toggle switch'}
+>
   <input type='checkbox' class='peer absolute h-0 w-0 opacity-0' />
   <span class={cn(innerSpanVariants({ size }))}></span>
 </label>
