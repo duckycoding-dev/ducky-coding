@@ -50,7 +50,7 @@ const { theme = 'default', title, ...props } = Astro.props;
 
     <BaseHead title={title ? `${title} - DuckyCoding` : 'DuckyCoding'} />
   </head>
-  <body class=`h-full`>
+  <body class=`min-h-full`>
     <slot />
     <!-- your content is injected here -->
   </body>
