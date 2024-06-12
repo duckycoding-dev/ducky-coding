@@ -15,7 +15,7 @@ const { class: className, ...props } = Astro.props;
 <nav
   id='menu'
   class={cn(
-    'bg-primary-700 top-0 left-0 md:top-0 md:left-0 fixed md:static h-dvh w-full flex flex-col md:h-auto md:flex-row gap-x-8 md:items-center px-8 md:px-0 pb-8 pt-20 md:py-3 max-w-96 gap-y-4 border-comic border-secondary md:border-none md:justify-end',
+    'bg-primary-700 top-0 left-0 md:top-0 md:left-0 fixed md:static h-dvh w-full flex flex-col md:h-auto md:flex-row gap-x-8 md:items-center px-8 md:px-0 pb-8 pt-20 md:py-3 max-w-96 gap-y-4 border-comic border-secondary md:border-none md:justify-end z-[10000]',
     className,
   )}
   {...props}
