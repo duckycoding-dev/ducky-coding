@@ -9,7 +9,12 @@ interface Props extends HTMLAttributes<'main'>, MainContentProps {}
 const { class: className, ...props } = Astro.props;
 ---
 
-<main class={cn('[grid-area:main-content] grow', className)}>
+<main
+  class={cn(
+    '[grid-area:main-content] grow max-w-7xl justify-self-center',
+    className,
+  )}
+>
   <slot />
   <p>
     Lorem ipsum dolor sit amet consectetur adipisicing elit. Amet placeat quos
