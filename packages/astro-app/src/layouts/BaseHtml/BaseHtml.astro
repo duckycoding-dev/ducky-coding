@@ -17,13 +17,7 @@ const { theme = 'default', title, ...props } = Astro.props;
 ---
 
 <!doctype html>
-<html
-  data-theme={theme}
-  lang='en'
-  title={title}
-  class='bg-primary h-auto min-h-dvh'
-  {...props}
->
+<html data-theme={theme} lang='en' title={title} class='bg-primary' {...props}>
   <head>
     <meta charset='utf-8' />
     <link
@@ -50,7 +44,7 @@ const { theme = 'default', title, ...props } = Astro.props;
 
     <BaseHead title={title ? `${title} - DuckyCoding` : 'DuckyCoding'} />
   </head>
-  <body class=`min-h-full`>
+  <body class=`min-h-dvh`>
     <slot />
   </body>
 </html>
