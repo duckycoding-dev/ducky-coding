@@ -17,7 +17,11 @@ const { class: className, ...props } = Astro.props;
   class='bg-primary-700 border-comic border-secondary sticky top-0 z-10 py-4 [grid-area:header]'
 >
   <div class='mx-auto flex max-w-7xl items-center justify-between gap-x-8 px-8'>
-    <HamburgerToggle class='peer z-10 shrink-0 md:hidden' />
+    <HamburgerToggle
+      title='toggle navigation menu'
+      aria-label='toggle navigation menu'
+      class='peer z-10 shrink-0 md:hidden'
+    />
     <div class='mx-auto md:mx-0'>
       <Link href='/' variant='unstyled' class='md:justify-start' id='logo'>
         <Image
