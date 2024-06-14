@@ -50,6 +50,7 @@ const { variant, class: className } = Astro.props;
 <label
   for='hamburgerCheckbox'
   class={cn(hamburgerToggleVariants({ variant }), className)}
+  aria-hidden='true'
 >
   <span class={cn(spanVariants({ variant }))}></span>
   <span class={cn(spanVariants({ variant }))}></span>
