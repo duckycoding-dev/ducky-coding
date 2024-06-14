@@ -7,5 +7,7 @@ interface Props extends HTMLAttributes<'meta'>, BaseHeadProps {}
 const { title, class: className, ...props } = Astro.props;
 ---
 
+<link rel='sitemap' href='/sitemap-index.xml' />
+<link rel='manifest' href='/site.webmanifest' />
 <title>{title}</title>
 {/* Other meta tags */}

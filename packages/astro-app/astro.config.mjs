@@ -2,6 +2,7 @@ import { defineConfig } from 'astro/config';
 import mdx from '@astrojs/mdx';
 import db from '@astrojs/db';
 import tailwind from '@astrojs/tailwind';
+import sitemap from '@astrojs/sitemap';
 import icon from 'astro-icon';
 // properties without "--DEFAULT--" either use a setting decided by me or/and didn't have a default value
 
@@ -93,6 +94,7 @@ export default defineConfig({
     mdx(),
     db(),
     tailwind({ applyBaseStyles: false }),
+    sitemap(),
     icon({
       iconDir: 'src/assets/icons', // user svgs stored in this path instead of src/icons
     }),
