@@ -41,17 +41,20 @@ interface Props extends HTMLAttributes<'input'>, HamburgerToggleProps {}
 const { variant, class: className } = Astro.props;
 ---
 
+{
+  /* by setting aria-hidden true on the label, we avoid screen readers from reading the title twice, since it's the same between the label and the input */
+}
 <input
   id='hamburgerCheckbox'
   type='checkbox'
   class={cn('absolute h-0 w-0 opacity-0 cursor-pointer', className)}
-  title={Astro.props.title ?? 'title'}
-  name={Astro.props.title ?? 'name'}
+  title={Astro.props.title ?? 'hamburger toggle title'}
 />
 <label
   for='hamburgerCheckbox'
   class={cn(hamburgerToggleVariants({ variant }), className)}
-  aria-labelledby='hamburgerCheckbox'
+  title={Astro.props.title ?? 'hamburger toggle label title'}
+  aria-hidden='true'
 >
   <span class={cn(spanVariants({ variant }))}></span>
   <span class={cn(spanVariants({ variant }))}></span>
