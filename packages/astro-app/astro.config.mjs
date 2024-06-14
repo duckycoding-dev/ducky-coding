@@ -2,6 +2,7 @@ import { defineConfig } from 'astro/config';
 import mdx from '@astrojs/mdx';
 import db from '@astrojs/db';
 import tailwind from '@astrojs/tailwind';
+import icon from 'astro-icon';
 // properties without "--DEFAULT--" either use a setting decided by me or/and didn't have a default value
 
 // https://astro.build/config
@@ -88,5 +89,12 @@ export default defineConfig({
       sourcemap: true,
     },
   }, // add Vite configs TODO
-  integrations: [mdx(), db(), tailwind({ applyBaseStyles: false })],
+  integrations: [
+    mdx(),
+    db(),
+    tailwind({ applyBaseStyles: false }),
+    icon({
+      iconDir: 'src/assets/icons', // user svgs stored in this path instead of src/icons
+    }),
+  ],
 });
