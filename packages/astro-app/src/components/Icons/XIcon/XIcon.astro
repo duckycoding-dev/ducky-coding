@@ -1,0 +1,16 @@
+---
+import GenericIcon from '../GenericIcon.astro';
+import type { CustomIconProps } from '../';
+
+type Props = CustomIconProps;
+const { name, title, size, width, height, ...props } = Astro.props;
+---
+
+<GenericIcon
+  name={name ?? 'ph:x-logo'}
+  title={title ?? 'X.com'}
+  size={size}
+  width={width}
+  height={height}
+  {...props}
+/>

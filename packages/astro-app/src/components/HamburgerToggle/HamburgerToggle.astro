@@ -38,19 +38,19 @@ export type HamburgerToggleProps = VariantProps<typeof hamburgerToggleVariants>;
 
 interface Props extends HTMLAttributes<'input'>, HamburgerToggleProps {}
 
-const { variant, class: className } = Astro.props;
+const { variant, class: className, id: inputId } = Astro.props;
 ---
 
 <input
-  id='hamburgerCheckbox'
+  id={inputId}
   type='checkbox'
   class={cn('absolute h-0 w-0 opacity-0 cursor-pointer', className)}
   title={Astro.props.title ?? 'hamburger toggle'}
 />
 <label
-  for='hamburgerCheckbox'
+  for={inputId}
+  aria-labelledby={inputId}
   class={cn(hamburgerToggleVariants({ variant }), className)}
-  aria-labelledby='hamburgerCheckbox'
 >
   <span class={cn(spanVariants({ variant }))}></span>
   <span class={cn(spanVariants({ variant }))}></span>

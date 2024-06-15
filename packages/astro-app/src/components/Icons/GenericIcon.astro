@@ -1,0 +1,47 @@
+---
+import type { HTMLAttributes } from 'astro/types';
+import { Icon } from 'astro-icon/components';
+import { cva, type VariantProps } from 'class-variance-authority';
+
+const genericIconVariants = cva('', {
+  variants: {
+    variant: {
+      small: 25,
+      medium: 50,
+      large: 100,
+    },
+  },
+  defaultVariants: {
+    variant: 'medium',
+  },
+  compoundVariants: [],
+});
+
+export type GenericIconVariantsProps = VariantProps<typeof genericIconVariants>;
+
+export interface GenericIconProps
+  extends HTMLAttributes<'svg'>,
+    GenericIconVariantsProps {
+  name: string;
+  title: string;
+  'is:inline'?: boolean;
+  size?: number;
+  width?: number;
+  height?: number;
+}
+
+type Props = GenericIconProps;
+
+const { variant, size, width, height, ...props } = Astro.props;
+
+let customSize =
+  size || Number(genericIconVariants({ variant: variant })) || undefined;
+if (width && height) customSize = undefined;
+---
+
+<Icon
+  size={customSize}
+  width={width || Number(genericIconVariants({ variant: variant })) || 0}
+  height={height || Number(genericIconVariants({ variant: variant })) || 0}
+  {...props}
+/>

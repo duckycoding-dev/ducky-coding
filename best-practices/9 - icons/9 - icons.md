@@ -7,3 +7,58 @@ For example, `Phosphor` has the new Twitter logo (X) icon, whereas `MDI` does no
 
 These two icon sets (and other in the future in case), are installed via `@icony-json` npm package.\
 To install one package it's as simple as typing `npm install @iconify-json/NAME_OR_ABBREVIATION_OF_THE_ICON_SET_YOU_WANT`: you can find all the icon sets at [iconify.design](https://iconify.design/)
+
+**_BE CAREFUL_**, if using server side rendering, or hybrid rendering, every icon of the assets will be imported in the final build.
+To avoid this, customize `astro.config.mjs` by including only the used icons, like done in the following example:
+
+```js
+/* astro.config.mjs */
+
+export default defineConfig({
+...
+  integrations: [
+    icon({
+      include: {
+        // Include only three `mdi` icons in the bundle
+        mdi: ['account', 'account-plus', 'account-minus'],
+        // Include all `uis` icons
+        uis: ['*']
+      }
+    })
+  ]
+});
+```
+
+
+#TODO: explain custom icon components
+#TODO: explain custom icon components
+#TODO: explain custom icon components
+#TODO: explain custom icon components
+#TODO: explain custom icon components
+#TODO: explain custom icon components
+#TODO: explain custom icon components
+#TODO: explain custom icon components
+#TODO: explain custom icon components
+#TODO: explain custom icon components
+#TODO: explain custom icon components
+#TODO: explain custom icon components
+#TODO: explain custom icon components
+#TODO: explain custom icon components
+#TODO: explain custom icon components
+#TODO: explain custom icon components
+#TODO: explain custom icon components
+#TODO: explain custom icon components
+#TODO: explain custom icon components
+#TODO: explain custom icon components
+#TODO: explain custom icon components
+#TODO: explain custom icon components
+#TODO: explain custom icon components
+#TODO: explain custom icon components
+#TODO: explain custom icon components
+#TODO: explain custom icon components
+#TODO: explain custom icon components
+#TODO: explain custom icon components
+#TODO: explain custom icon components
+#TODO: explain custom icon components
+#TODO: explain custom icon components
+#TODO: explain custom icon components
