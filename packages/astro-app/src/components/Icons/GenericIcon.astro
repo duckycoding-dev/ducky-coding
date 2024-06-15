@@ -14,12 +14,12 @@ const genericIconVariants = cva('', {
   defaultVariants: {
     variant: 'medium',
   },
-  compoundVariants: [],
 });
 
 export type GenericIconVariantsProps = VariantProps<typeof genericIconVariants>;
+
 export type AstroIconDimensions =
-  | {
+  | ({
       size: number;
       width?: undefined;
       height?: undefined;
@@ -35,30 +35,29 @@ export type AstroIconDimensions =
       size?: undefined;
       width?: undefined;
       height?: undefined;
-    } & Pick<GenericIconVariantsProps, 'variant'>);
+    } & Pick<GenericIconVariantsProps, 'variant'>));
 
-export interface AstroIconNamingProps {
+export interface AstroIconBasicProps {
   name: string;
   title: string;
   'is:inline'?: boolean;
 }
 
 export type GenericIconProps = HTMLAttributes<'svg'> &
-  AstroIconNamingProps &
+  AstroIconBasicProps &
   AstroIconDimensions;
 
 type Props = GenericIconProps;
 
 const { variant, size, width, height, ...props } = Astro.props;
 
-let customSize =
-  size || Number(genericIconVariants({ variant: variant })) || undefined;
+let customSize = size || Number(genericIconVariants({ variant })) || undefined;
 if (width && height) customSize = undefined;
 ---
 
 <Icon
   size={customSize}
-  width={width || Number(genericIconVariants({ variant: variant })) || 0}
-  height={height || Number(genericIconVariants({ variant: variant })) || 0}
+  width={width || Number(genericIconVariants({ variant })) || 0}
+  height={height || Number(genericIconVariants({ variant })) || 0}
   {...props}
 />

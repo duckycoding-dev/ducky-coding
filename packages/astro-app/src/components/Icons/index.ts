@@ -1,13 +1,13 @@
 import type { HTMLAttributes } from 'astro/types';
 import type {
   AstroIconDimensions,
-  AstroIconNamingProps,
+  AstroIconBasicProps,
   GenericIconVariantsProps,
 } from './GenericIcon.astro';
 
 export type CustomIconProps = HTMLAttributes<'svg'> &
   GenericIconVariantsProps &
-  Partial<AstroIconNamingProps> &
+  Partial<AstroIconBasicProps> &
   AstroIconDimensions;
 
 export { GitHubIcon } from './GitHubIcon';

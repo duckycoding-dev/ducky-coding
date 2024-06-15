@@ -16,7 +16,7 @@ const config = {
   bracketSameLine: false,
   overrides: [
     {
-      files: '**/+.astro',
+      files: '**/*.astro',
       options: {
         parser: 'astro',
       },
