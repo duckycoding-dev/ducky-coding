@@ -6,11 +6,4 @@ type Props = CustomIconProps;
 const { name, title, size, width, height, ...props } = Astro.props;
 ---
 
-<GenericIcon
-  name={name ?? ''}
-  title={title ?? ''}
-  size={size}
-  width={width}
-  height={height}
-  {...props}
-/>
+<GenericIcon name={name ?? ''} title={title ?? ''} {...props} />
