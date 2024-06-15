@@ -18,17 +18,34 @@ const genericIconVariants = cva('', {
 });
 
 export type GenericIconVariantsProps = VariantProps<typeof genericIconVariants>;
+export type AstroIconDimensions =
+  | {
+      size: number;
+      width?: undefined;
+      height?: undefined;
+      variant?: undefined;
+    }
+  | {
+      size?: undefined;
+      width: number;
+      height: number;
+      variant?: undefined;
+    }
+  | ({
+      size?: undefined;
+      width?: undefined;
+      height?: undefined;
+    } & Pick<GenericIconVariantsProps, 'variant'>);
 
-export interface GenericIconProps
-  extends HTMLAttributes<'svg'>,
-    GenericIconVariantsProps {
+export interface AstroIconNamingProps {
   name: string;
   title: string;
   'is:inline'?: boolean;
-  size?: number;
-  width?: number;
-  height?: number;
 }
+
+export type GenericIconProps = HTMLAttributes<'svg'> &
+  AstroIconNamingProps &
+  AstroIconDimensions;
 
 type Props = GenericIconProps;
 

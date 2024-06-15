@@ -22,8 +22,14 @@ const { class: className, ...props } = Astro.props;
       title='navigation menu toggle'
       class='peer z-10 shrink-0 md:hidden'
     />
-    <div class='mx-auto md:mx-0'>
-      <Link href='/' variant='unstyled' class='md:justify-start' id='logo'>
+    <div class='mx-auto md:mx-0' aria-hidden>
+      <Link
+        href='/'
+        variant='unstyled'
+        class='md:justify-start'
+        id='logo'
+        tabindex={-1}
+      >
         <Image
           alt={'DuckyCoding logo'}
           src={DuckyCodingLogo}
