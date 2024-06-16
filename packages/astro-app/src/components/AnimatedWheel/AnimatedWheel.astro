@@ -5,6 +5,7 @@ import { StackOverflowIcon } from '@components/Icons/StackOverflowIcon';
 import { RedditIcon } from '@components/Icons/RedditIcon';
 import { TikTokIcon } from '@components/Icons/TikTokIcon';
 import { YouTubeIcon } from '@components/Icons/YouTubeIcon';
+import type { HTMLAttributes } from 'astro/types';
 
 export type AnimatedWheelProps = {
   iconSize: number;
@@ -12,11 +13,10 @@ export type AnimatedWheelProps = {
   iconBackgroundColor?: string;
   perspective?: number;
   spinDuration?: number;
-  width?: string;
   wheelRadius?: string | number;
 };
 
-type Props = AnimatedWheelProps;
+interface Props extends HTMLAttributes<'div'>, AnimatedWheelProps {}
 
 const {
   iconSize,
@@ -24,13 +24,13 @@ const {
   iconBackgroundColor = 'transparent',
   perspective = 1000,
   spinDuration = 5,
-  width = '100%',
   wheelRadius = iconSize,
+  class: className,
 } = Astro.props;
 ---
 
-<!-- <div class='banner'> -->
-<div class='slider max-w-72' style='--quantity: 7'>
+<!-- <div class:list={['banner', className]}> -->
+<div class=`slider ${className}` style='--quantity: 7'>
   <div class='item' style='--position: 1'>
     <span></span>
     <Link href='https://github.com/duckycoding-dev' variant={'unstyled'}>
@@ -89,7 +89,6 @@ const {
     wheelDegreeInclination: `${wheelDegreeInclination}deg`,
     perspective: `${perspective}px`,
     spinDuration: `${spinDuration}s`,
-    width: width,
     wheelRadius:
       typeof wheelRadius === 'string' ? wheelRadius : `${wheelRadius}px`,
   }}
@@ -98,7 +97,6 @@ const {
     width: 100%;
     height: 100%;
     position: relative;
-    /* overflow: hidden; */
   }
 
   .slider:focus-within,
@@ -107,11 +105,9 @@ const {
   }
 
   .slider {
-    /* position: absolute; */
-    /* top: 10%; */
+    position: relative;
+    z-index: 2;
     height: var(--iconSize);
-    width: var(--width);
-    left: calc(50% - var(--width) / 2); /*half of width*/
     will-change: transform;
     transform-style: preserve-3d;
     transform: perspective(var(--perspective));
