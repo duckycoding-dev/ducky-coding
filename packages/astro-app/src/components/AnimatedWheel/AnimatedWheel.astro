@@ -1,0 +1,165 @@
+---
+import { Link } from '@components/Link';
+import { GitHubIcon, XIcon, InstagramIcon } from '@components/Icons';
+import { StackOverflowIcon } from '@components/Icons/StackOverflowIcon';
+import { RedditIcon } from '@components/Icons/RedditIcon';
+import { TikTokIcon } from '@components/Icons/TikTokIcon';
+import { YouTubeIcon } from '@components/Icons/YouTubeIcon';
+
+export type AnimatedWheelProps = {
+  iconSize: number;
+  wheelDegreeInclination?: number;
+  iconBackgroundColor?: string;
+  perspective?: number;
+  spinDuration?: number;
+  width?: string;
+  wheelRadius?: string | number;
+};
+
+type Props = AnimatedWheelProps;
+
+const {
+  iconSize,
+  wheelDegreeInclination = 0,
+  iconBackgroundColor = 'transparent',
+  perspective = 1000,
+  spinDuration = 5,
+  width = '100%',
+  wheelRadius = iconSize,
+} = Astro.props;
+---
+
+<!-- <div class='banner'> -->
+<div class='slider max-w-72' style='--quantity: 7'>
+  <div class='item' style='--position: 1'>
+    <span></span>
+    <Link href='https://github.com/duckycoding-dev' variant={'unstyled'}>
+      <GitHubIcon size={iconSize} />
+    </Link>
+  </div>
+  <div class='item' style='--position: 2'>
+    <span></span>
+    <Link href='https://x.com/ducky_coding' variant={'unstyled'}>
+      <XIcon size={iconSize} />
+    </Link>
+  </div>
+  <div class='item' style='--position: 3'>
+    <span></span>
+    <Link href='https://www.instagram.com/ducky.coding/' variant={'unstyled'}>
+      <InstagramIcon size={iconSize} />
+    </Link>
+  </div>
+  <div class='item' style='--position: 4'>
+    <span></span>
+    <Link
+      href='https://stackoverflow.com/users/23628435/ducky-coding'
+      variant={'unstyled'}
+    >
+      <StackOverflowIcon size={iconSize} />
+    </Link>
+  </div>
+  <div class='item' style='--position: 5'>
+    <span></span>
+    <Link
+      href='https://www.reddit.com/user/DuckyCodingDev/'
+      variant={'unstyled'}
+    >
+      <RedditIcon size={iconSize} />
+    </Link>
+  </div>
+  <div class='item' style='--position: 6'>
+    <span></span>
+    <Link href='https://www.tiktok.com/@ducky.coding' variant={'unstyled'}>
+      <TikTokIcon size={iconSize} />
+    </Link>
+  </div>
+  <div class='item' style='--position: 7'>
+    <span></span>
+    <Link href='https://www.youtube.com/@ducky.coding' variant={'unstyled'}>
+      <YouTubeIcon size={iconSize} />
+    </Link>
+  </div>
+</div>
+<!-- </div> -->
+
+<style
+  define:vars={{
+    iconSize: `${iconSize}px`,
+    iconBackgroundColor,
+    wheelDegreeInclination: `${wheelDegreeInclination}deg`,
+    perspective: `${perspective}px`,
+    spinDuration: `${spinDuration}s`,
+    width: width,
+    wheelRadius:
+      typeof wheelRadius === 'string' ? wheelRadius : `${wheelRadius}px`,
+  }}
+>
+  .banner {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    /* overflow: hidden; */
+  }
+
+  .slider:focus-within,
+  .slider:hover {
+    animation-play-state: paused;
+  }
+
+  .slider {
+    /* position: absolute; */
+    /* top: 10%; */
+    height: var(--iconSize);
+    width: var(--width);
+    left: calc(50% - var(--width) / 2); /*half of width*/
+    will-change: transform;
+    transform-style: preserve-3d;
+    transform: perspective(var(--perspective));
+    animation: autoRotate var(--spinDuration) linear infinite running;
+  }
+
+  @keyframes autoRotate {
+    from {
+      transform: perspective(var(--perspective))
+        rotateX(var(--wheelDegreeInclination)) rotateY(0deg);
+    }
+    to {
+      transform: perspective(var(--perspective))
+        rotateX(var(--wheelDegreeInclination)) rotateY(360deg);
+    }
+  }
+
+  .item {
+    display: grid;
+    position: absolute;
+    inset: 0 0 0 0;
+    will-change: transform;
+    transform: rotateY(
+        calc((var(--position) - 1) * (360 / var(--quantity)) * 1deg)
+      )
+      translateZ(var(--wheelRadius));
+    transform-style: preserve-3d;
+  }
+
+  .item > a {
+    grid-column: 1;
+    grid-row: 1;
+    overflow: hidden;
+    width: fit-content;
+  }
+
+  .item > span {
+    grid-column: 1;
+    grid-row: 1;
+    overflow: hidden;
+    background-color: var(--iconBackgroundColor);
+    width: var(--iconSize);
+    transform: translateZ(-0.1px);
+  }
+  svg {
+    position: relative;
+    background-color: var(--iconBackgroundColor);
+  }
+  a {
+  }
+</style>
