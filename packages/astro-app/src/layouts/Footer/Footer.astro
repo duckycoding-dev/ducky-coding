@@ -1,8 +1,6 @@
 ---
 import type { HTMLAttributes } from 'astro/types';
 import { AnimatedWheel } from '@components/AnimatedWheel';
-import resolveConfig from 'tailwindcss/resolveConfig';
-import tailwindConfig from 'tailwind.config.mjs';
 
 export interface FooterProps {}
 
@@ -28,6 +26,7 @@ const { class: className, ...props } = Astro.props;
           iconBackgroundColor={'var(--color-primary-700)'}
           wheelDegreeInclination={-5}
           class='w-full'
+          wheelType='circle'
         />
       </div>
     </section>

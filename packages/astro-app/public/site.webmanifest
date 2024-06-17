@@ -1,6 +1,6 @@
 {
-  "name": "",
-  "short_name": "",
+  "name": "DuckyCoding",
+  "short_name": "DuckyCoding",
   "icons": [
     {
       "src": "images/android-chrome-192x192.png",
@@ -15,5 +15,14 @@
   ],
   "theme_color": "#ff3de9",
   "background_color": "#f4f0fa",
-  "display": "standalone"
+  "display": "standalone",
+  "start_url": ".",
+  "shortcuts": {
+    "name": "Custom components",
+    "url": "/components",
+    "description": "Page containing a list of components created by DuckyCoding"
+  },
+  "description": "DuckyCoding's blog",
+  "id": "DuckyCodingPWA",
+  "orientation": "portrait-primary"
 }

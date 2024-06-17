@@ -14,6 +14,7 @@ export type AnimatedWheelProps = {
   perspective?: number;
   spinDuration?: number;
   wheelRadius?: string | number;
+  wheelType?: 'circle' | 'spiral';
 };
 
 interface Props extends HTMLAttributes<'div'>, AnimatedWheelProps {}
@@ -21,15 +22,15 @@ interface Props extends HTMLAttributes<'div'>, AnimatedWheelProps {}
 const {
   iconSize,
   wheelDegreeInclination = 0,
+  wheelRadius = iconSize,
+  wheelType = 'circle',
   iconBackgroundColor = 'transparent',
   perspective = 1000,
   spinDuration = 5,
-  wheelRadius = iconSize,
   class: className,
 } = Astro.props;
 ---
 
-<!-- <div class:list={['banner', className]}> -->
 <div class=`slider ${className}` style='--quantity: 7'>
   <div class='item' style='--position: 1'>
     <span></span>
@@ -80,7 +81,6 @@ const {
     </Link>
   </div>
 </div>
-<!-- </div> -->
 
 <style
   define:vars={{
@@ -91,14 +91,9 @@ const {
     spinDuration: `${spinDuration}s`,
     wheelRadius:
       typeof wheelRadius === 'string' ? wheelRadius : `${wheelRadius}px`,
+    wheelType: wheelType === 'circle' ? 'grid' : 'block',
   }}
 >
-  .banner {
-    width: 100%;
-    height: 100%;
-    position: relative;
-  }
-
   .slider:focus-within,
   .slider:hover {
     animation-play-state: paused;
@@ -106,8 +101,7 @@ const {
 
   .slider {
     position: relative;
-    z-index: 2;
-    height: var(--iconSize);
+    display: var(--wheelType);
     will-change: transform;
     transform-style: preserve-3d;
     transform: perspective(var(--perspective));
@@ -127,7 +121,8 @@ const {
 
   .item {
     display: grid;
-    position: absolute;
+    grid-column: 1;
+    grid-row: 1;
     inset: 0 0 0 0;
     will-change: transform;
     transform: rotateY(
