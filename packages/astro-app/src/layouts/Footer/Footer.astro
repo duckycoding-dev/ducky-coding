@@ -1,6 +1,8 @@
 ---
 import type { HTMLAttributes } from 'astro/types';
 import { AnimatedWheel } from '@components/AnimatedWheel';
+import { Link } from '@components/Link';
+import { DuckIcon } from '@components/Icons/DuckIcon';
 
 export interface FooterProps {}
 
@@ -13,23 +15,69 @@ const { class: className, ...props } = Astro.props;
   class='bg-primary-700 border-comic border-secondary py-8 [grid-area:footer]'
 >
   <div
-    class='mx-auto flex w-full max-w-7xl flex-col items-stretch gap-8 px-8 md:flex-row'
+    class='mx-auto grid w-full max-w-7xl items-stretch gap-8 px-8 md:grid-cols-3'
   >
-    <section class='bg-primary-700 min-h-8 w-full'>
+    <section class='bg-primary-700 min-h-8 w-full md:col-span-2'>
       <h2 class='text-center text-2xl font-extrabold md:text-start'>
         Stay in touch
       </h2>
-      <div class='flex justify-center pb-12 pt-4'>
+      <div class='flex justify-center px-8 pb-6 pt-8 md:pb-12'>
         <AnimatedWheel
-          iconSize={50}
+          itemSize={50}
           spinDuration={10}
-          iconBackgroundColor={'var(--color-primary-700)'}
+          itemBackgroundColor={'var(--color-primary-700)'}
+          itemBacksideColor={'var(--color-primary-800)'}
+          itemRadius='50%'
           wheelDegreeInclination={-5}
           class='w-full'
           wheelType='circle'
         />
       </div>
     </section>
-    <section class='min-h-12 w-full bg-red-700'></section>
+    <nav class='flex min-h-12 w-full justify-center md:justify-end'>
+      <ul class='flex h-full flex-col gap-4'>
+        <li>
+          <Link
+            href={'/'}
+            class={'text-xl md:text-base text-primary font-medium w-full flex items-center gap-4 '}
+          >
+            <DuckIcon variant={'small'} class='inline' />
+            Home
+          </Link>
+        </li>
+        <li>
+          <Link
+            href={'/about'}
+            class={'text-xl md:text-base text-primary font-medium w-full flex items-center gap-4'}
+          >
+            <DuckIcon variant={'small'} class='inline' />
+            About me
+          </Link>
+        </li>
+        <li>
+          <Link
+            href={'/socials'}
+            size={'medium'}
+            class={'text-xl md:text-base text-primary font-medium w-full flex items-center gap-4'}
+          >
+            <DuckIcon variant={'small'} class='inline' />
+            Socials
+          </Link>
+        </li>
+        <li>
+          <Link
+            href={'/components'}
+            size={'medium'}
+            class={'text-xl md:text-base text-primary font-medium w-full flex items-center gap-4'}
+          >
+            <DuckIcon variant={'small'} class='inline' />
+            Components
+          </Link>
+        </li>
+      </ul>
+    </nav>
+    <section class='flex justify-center md:col-span-full'>
+      <small>Copyright &copy; 2024 - DuckyCoding - All Rights Reserved</small>
+    </section>
   </div>
 </footer>

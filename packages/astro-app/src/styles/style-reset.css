@@ -43,8 +43,6 @@ picture,
 video,
 canvas,
 svg {
-  max-width: 100%;
-  display: block;
   height: auto;
   font-style: italic; /* this is useful for alt texts when images are not loaded */
 }

@@ -8,9 +8,11 @@ import { YouTubeIcon } from '@components/Icons/YouTubeIcon';
 import type { HTMLAttributes } from 'astro/types';
 
 export type AnimatedWheelProps = {
-  iconSize: number;
+  itemSize: number;
   wheelDegreeInclination?: number;
-  iconBackgroundColor?: string;
+  itemBackgroundColor?: string;
+  itemBacksideColor?: string;
+  itemRadius?: `${number}%` | `${number}px`;
   perspective?: number;
   spinDuration?: number;
   wheelRadius?: string | number;
@@ -20,11 +22,13 @@ export type AnimatedWheelProps = {
 interface Props extends HTMLAttributes<'div'>, AnimatedWheelProps {}
 
 const {
-  iconSize,
+  itemSize,
   wheelDegreeInclination = 0,
-  wheelRadius = iconSize,
+  wheelRadius = itemSize,
   wheelType = 'circle',
-  iconBackgroundColor = 'transparent',
+  itemBackgroundColor = 'transparent',
+  itemBacksideColor = 'transparent',
+  itemRadius,
   perspective = 1000,
   spinDuration = 5,
   class: className,
@@ -35,19 +39,19 @@ const {
   <div class='item' style='--position: 1'>
     <span></span>
     <Link href='https://github.com/duckycoding-dev' variant={'unstyled'}>
-      <GitHubIcon size={iconSize} />
+      <GitHubIcon size={itemSize} />
     </Link>
   </div>
   <div class='item' style='--position: 2'>
     <span></span>
     <Link href='https://x.com/ducky_coding' variant={'unstyled'}>
-      <XIcon size={iconSize} />
+      <XIcon size={itemSize} />
     </Link>
   </div>
   <div class='item' style='--position: 3'>
     <span></span>
     <Link href='https://www.instagram.com/ducky.coding/' variant={'unstyled'}>
-      <InstagramIcon size={iconSize} />
+      <InstagramIcon size={itemSize} />
     </Link>
   </div>
   <div class='item' style='--position: 4'>
@@ -56,7 +60,7 @@ const {
       href='https://stackoverflow.com/users/23628435/ducky-coding'
       variant={'unstyled'}
     >
-      <StackOverflowIcon size={iconSize} />
+      <StackOverflowIcon size={itemSize} />
     </Link>
   </div>
   <div class='item' style='--position: 5'>
@@ -65,27 +69,29 @@ const {
       href='https://www.reddit.com/user/DuckyCodingDev/'
       variant={'unstyled'}
     >
-      <RedditIcon size={iconSize} />
+      <RedditIcon size={itemSize} />
     </Link>
   </div>
   <div class='item' style='--position: 6'>
     <span></span>
     <Link href='https://www.tiktok.com/@ducky.coding' variant={'unstyled'}>
-      <TikTokIcon size={iconSize} />
+      <TikTokIcon size={itemSize} />
     </Link>
   </div>
   <div class='item' style='--position: 7'>
     <span></span>
     <Link href='https://www.youtube.com/@ducky.coding' variant={'unstyled'}>
-      <YouTubeIcon size={iconSize} />
+      <YouTubeIcon size={itemSize} />
     </Link>
   </div>
 </div>
 
 <style
   define:vars={{
-    iconSize: `${iconSize}px`,
-    iconBackgroundColor,
+    itemSize: `${itemSize}px`,
+    itemBackgroundColor,
+    itemBacksideColor,
+    itemRadius: `${itemRadius}`,
     wheelDegreeInclination: `${wheelDegreeInclination}deg`,
     perspective: `${perspective}px`,
     spinDuration: `${spinDuration}s`,
@@ -120,6 +126,7 @@ const {
   }
 
   .item {
+    border-radius: 50%;
     display: grid;
     grid-column: 1;
     grid-row: 1;
@@ -133,6 +140,7 @@ const {
   }
 
   .item > a {
+    border-radius: var(--itemRadius);
     grid-column: 1;
     grid-row: 1;
     overflow: hidden;
@@ -140,17 +148,16 @@ const {
   }
 
   .item > span {
+    border-radius: var(--itemRadius);
     grid-column: 1;
     grid-row: 1;
     overflow: hidden;
-    background-color: var(--iconBackgroundColor);
-    width: var(--iconSize);
+    background-color: var(--itemBacksideColor);
+    width: var(--itemSize);
     transform: translateZ(-0.1px);
   }
   svg {
     position: relative;
-    background-color: var(--iconBackgroundColor);
-  }
-  a {
+    background-color: var(--itemBackgroundColor);
   }
 </style>
