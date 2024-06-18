@@ -22,7 +22,7 @@ const { class: className, ...props } = Astro.props;
       title='navigation menu toggle'
       class='peer z-10 shrink-0 md:hidden'
     />
-    <div class='mx-auto md:mx-0' aria-hidden>
+    <div class='mx-auto md:mx-0' aria-hidden='true'>
       <Link
         href='/'
         variant='unstyled'
@@ -34,6 +34,7 @@ const { class: className, ...props } = Astro.props;
           alt={'DuckyCoding logo'}
           src={DuckyCodingLogo}
           width={50}
+          densities={[1.5, 2]}
           class='max-w-none'
         />
       </Link>
@@ -47,6 +48,7 @@ const { class: className, ...props } = Astro.props;
         alt={'DuckyCoding logo'}
         src={DuckyCodingLogo}
         width={50}
+        densities={[1.5, 2]}
         class='max-w-none'
       />
     </div>
