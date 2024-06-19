@@ -2,7 +2,19 @@
 import { HolyGrailLayout } from '@layouts/HolyGrailLayout';
 ---
 
-<HolyGrailLayout>
+<HolyGrailLayout
+  metaTags={[
+    {
+      content:
+        "Welcome to DuckyCoding's blog: web development articles and guides at your fingertips.",
+      name: 'description',
+    },
+    {
+      content: 'DuckyCoding, web development, astro, fullstack',
+      name: 'keywords',
+    },
+  ]}
+>
   <h1 class='pb-8 text-center text-4xl font-extrabold'>Welcome to my blog</h1>
   <p>
     Lorem ipsum, dolor sit amet consectetur adipisicing elit. Nobis, magnam

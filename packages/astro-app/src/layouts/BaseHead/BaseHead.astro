@@ -1,26 +1,20 @@
 ---
 import type { HTMLAttributes } from 'astro/types';
 
-export interface BaseHeadProps {}
+export interface BaseHeadProps {
+  metaTags: HTMLAttributes<'meta'>[];
+}
 
-interface Props extends HTMLAttributes<'meta'>, BaseHeadProps {}
-const { title, class: className, ...props } = Astro.props;
+type Props = BaseHeadProps;
+const { metaTags } = Astro.props;
 ---
 
 <link rel='sitemap' href='/sitemap-index.xml' />
 <link rel='manifest' href='/site.webmanifest' />
 <meta name='theme-color' content='#ff3de9' />
-<meta
-  name='description'
-  content="Welcome to DuckyCoding's blog: web development articles and guides at your fingertips."
-/>
-<meta
-  name='tag'
-  content="Welcome to DuckyCoding's blog: web development articles and guides at your fingertips."
-/>
-<meta
-  name='”keywords”'
-  content='DuckyCoding, web development, astro, fullstack'
-/>
-<title>{title}</title>
+{
+  metaTags.map((metaTagProps) => {
+    return <meta {...metaTagProps} />;
+  })
+}
 {/* Other meta tags */}

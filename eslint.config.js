@@ -33,7 +33,13 @@ const compat = new FlatCompat({
 export default tseslint.config(
   // ignore all files inside distribution folders
   {
-    ignores: ['**/*/dist/**/*.js', '**/*/dist/**/*.d.ts', '**/*/build/**/*.js', '**/*/build/**/*.d.ts', '**/.vscode/**/*'],
+    ignores: [
+      '**/*/dist/**/*.js',
+      '**/*/dist/**/*.d.ts',
+      '**/*/build/**/*.js',
+      '**/*/build/**/*.d.ts',
+      '**/.vscode/**/*',
+    ],
     files: ['**/*.js', '*.js', '**/*.ts', '*.ts', '**/*.astro'],
   },
   // airbnb recommended linting rules
