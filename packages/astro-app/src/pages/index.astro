@@ -3,17 +3,18 @@ import { HolyGrailLayout } from '@layouts/HolyGrailLayout';
 ---
 
 <HolyGrailLayout
-  metaTags={[
-    {
-      content:
-        "Welcome to DuckyCoding's blog: web development articles and guides at your fingertips.",
-      name: 'description',
+  seoProps={{
+    description:
+      "Welcome to DuckyCoding's blog: web development articles and guides at your fingertips.",
+    extend: {
+      meta: [
+        {
+          content: 'DuckyCoding, web development, astro, fullstack',
+          name: 'keywords',
+        },
+      ],
     },
-    {
-      content: 'DuckyCoding, web development, astro, fullstack',
-      name: 'keywords',
-    },
-  ]}
+  }}
 >
   <h1 class='pb-8 text-center text-4xl font-extrabold'>Welcome to my blog</h1>
   <p>

@@ -13,7 +13,7 @@ export interface BaseHtmlProps extends BaseHeadProps {
 
 interface Props extends HTMLAttributes<'html'>, BaseHtmlProps {}
 
-const { theme = 'default', title, metaTags, ...props } = Astro.props;
+const { theme = 'default', title, seoProps, ...props } = Astro.props;
 ---
 
 <!doctype html>
@@ -42,7 +42,7 @@ const { theme = 'default', title, metaTags, ...props } = Astro.props;
   <meta name='viewport' content='width=device-width, initial-scale=1' />
   <meta name='generator' content={Astro.generator} />
 
-  <BaseHead metaTags={metaTags} />
+  <BaseHead seoProps={seoProps} />
 
   <body class=`min-h-dvh`>
     <slot />

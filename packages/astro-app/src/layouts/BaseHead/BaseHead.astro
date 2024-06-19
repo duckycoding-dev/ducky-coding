@@ -1,20 +1,19 @@
 ---
 import type { HTMLAttributes } from 'astro/types';
+import type { SEOProps } from 'astro-seo';
+import { SEO } from 'astro-seo';
 
-export interface BaseHeadProps {
-  metaTags: HTMLAttributes<'meta'>[];
-}
+export type BaseHeadProps = {
+  seoProps: SEOProps;
+};
 
 type Props = BaseHeadProps;
-const { metaTags } = Astro.props;
+const { seoProps } = Astro.props;
 ---
 
 <link rel='sitemap' href='/sitemap-index.xml' />
 <link rel='manifest' href='/site.webmanifest' />
 <meta name='theme-color' content='#ff3de9' />
-{
-  metaTags.map((metaTagProps) => {
-    return <meta {...metaTagProps} />;
-  })
-}
+<SEO {...seoProps} />
+
 {/* Other meta tags */}
