@@ -15,10 +15,10 @@ const { class: className, ...props }: Props = Astro.props;
 ---
 
 <header
-  class={(cn(
+  class={cn(
     'bg-primary-700 border-comic border-secondary sticky top-0 z-10 py-4 [grid-area:header]',
-  ),
-  className)}
+    className,
+  )}
   {...props}
 >
   <div class='mx-auto flex max-w-7xl items-center justify-between gap-x-8 px-8'>
