@@ -53,7 +53,7 @@ export type GenericIconProps = HTMLAttributes<'svg'> &
 
 type Props = GenericIconProps;
 
-const { variant, size, width, height, ...props } = Astro.props;
+const { variant, size, width, height, ...props }: Props = Astro.props;
 
 let customSize = size || Number(genericIconVariants({ variant })) || undefined;
 if (width && height) customSize = undefined;

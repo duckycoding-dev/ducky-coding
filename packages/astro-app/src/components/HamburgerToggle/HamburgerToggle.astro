@@ -1,7 +1,7 @@
 ---
 import type { HTMLAttributes } from 'astro/types';
 import { cva, type VariantProps } from 'class-variance-authority';
-import { cn } from 'src/utils/cn';
+import { cn } from '@utils/cn';
 
 const hamburgerToggleVariants = cva(
   'flex flex-col cursor-pointer z-[1000] aspect-square justify-center',
@@ -38,7 +38,7 @@ export type HamburgerToggleProps = VariantProps<typeof hamburgerToggleVariants>;
 
 interface Props extends HTMLAttributes<'input'>, HamburgerToggleProps {}
 
-const { variant, class: className, id: inputId } = Astro.props;
+const { variant, class: className, id: inputId }: Props = Astro.props;
 ---
 
 <input

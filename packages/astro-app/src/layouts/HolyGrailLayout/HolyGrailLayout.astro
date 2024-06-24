@@ -9,7 +9,7 @@ export type HolyGrailLayoutProps = BaseHtmlProps;
 
 interface Props extends HTMLAttributes<'html'>, HolyGrailLayoutProps {}
 
-const props = Astro.props;
+const { ...props }: Props = Astro;
 ---
 
 <BaseHtml {...props}>

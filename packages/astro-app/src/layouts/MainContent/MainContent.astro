@@ -1,12 +1,12 @@
 ---
 import type { HTMLAttributes } from 'astro/types';
-import { cn } from '../../utils/cn';
+import { cn } from '@utils/cn';
 
 export interface MainContentProps {}
 
 interface Props extends HTMLAttributes<'main'>, MainContentProps {}
 
-const { class: className, ...props } = Astro.props;
+const { class: className, ...props }: Props = Astro.props;
 ---
 
 <main
@@ -14,6 +14,7 @@ const { class: className, ...props } = Astro.props;
     '[grid-area:main-content] grow max-w-7xl justify-self-center',
     className,
   )}
+  {...props}
 >
   <slot />
 </main>

@@ -14,6 +14,7 @@
 // https://typescript-eslint.io/packages/typescript-eslint#config
 import tseslint from 'typescript-eslint';
 import eslintPluginPrettierRecommended from 'eslint-plugin-prettier/recommended';
+import eslintPluginAstro from 'eslint-plugin-astro';
 
 // ===== START: Fallback for configs that don't yet support Flat Config =====
 import { FlatCompat } from '@eslint/eslintrc';
@@ -54,6 +55,7 @@ export default tseslint.config(
   // prettier recommended linting rules and prettierrc configs
   eslintPluginPrettierRecommended,
   // own custom rules
+  ...eslintPluginAstro.configs.recommended,
   {
     rules: {
       semi: 'error',

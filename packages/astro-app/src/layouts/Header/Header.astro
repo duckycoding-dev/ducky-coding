@@ -3,18 +3,23 @@ import { Navbar } from '@components/Navbar';
 import type { HTMLAttributes } from 'astro/types';
 import { Image } from 'astro:assets';
 import DuckyCodingLogo from '@assets/images/DuckyCoding_logo.png';
-import { Link } from '../../components/Link';
 import { HamburgerToggle } from '@components/HamburgerToggle';
+import { Link } from '@components/Link';
+import { cn } from '@utils/cn';
 
 export interface HeaderProps {}
 
 interface Props extends HTMLAttributes<'header'>, HeaderProps {}
 
-const { class: className, ...props } = Astro.props;
+const { class: className, ...props }: Props = Astro.props;
 ---
 
 <header
-  class='bg-primary-700 border-comic border-secondary sticky top-0 z-10 py-4 [grid-area:header]'
+  class={(cn(
+    'bg-primary-700 border-comic border-secondary sticky top-0 z-10 py-4 [grid-area:header]',
+  ),
+  className)}
+  {...props}
 >
   <div class='mx-auto flex max-w-7xl items-center justify-between gap-x-8 px-8'>
     <HamburgerToggle

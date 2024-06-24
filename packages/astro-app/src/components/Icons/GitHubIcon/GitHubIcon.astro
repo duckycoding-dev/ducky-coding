@@ -1,9 +1,9 @@
 ---
 import GenericIcon from '../GenericIcon.astro';
-import type { CustomIconProps } from '../';
+import type { CustomIconProps } from '..';
 
 type Props = CustomIconProps;
-const { name, title, ...props } = Astro.props;
+const { name, title, ...props }: Props = Astro.props;
 ---
 
 <GenericIcon name={name ?? 'mdi:github'} title={title ?? 'GitHub'} {...props} />

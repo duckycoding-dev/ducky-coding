@@ -2,4 +2,6 @@
 export interface {{name}}Props {};
 
 interface Props extends {{name}}Props {}
+
+const { ...props }: Props = Astro.props;
 ---

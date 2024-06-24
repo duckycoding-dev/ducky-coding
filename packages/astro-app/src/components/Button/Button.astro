@@ -1,7 +1,7 @@
 ---
 import type { HTMLAttributes } from 'astro/types';
 import { cva, type VariantProps } from 'class-variance-authority';
-import { cn } from 'src/utils/cn';
+import { cn } from '@utils/cn';
 
 const buttonVariants = cva('', {
   variants: {
@@ -56,7 +56,7 @@ interface Props extends HTMLAttributes<'button'>, ButtonProps {}
  * For Astro components, we recommend setting your defaultVariants within
  * Astro.props (which are `undefined` by default)
  */
-const { class: className, variant, size, ...props } = Astro.props;
+const { class: className, variant, size, ...props }: Props = Astro.props;
 ---
 
 <button class={cn(buttonVariants({ variant, size }), className)} {...props}>

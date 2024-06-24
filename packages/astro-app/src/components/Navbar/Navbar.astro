@@ -1,7 +1,7 @@
 ---
 import { Link } from '@components/Link';
 import type { HTMLAttributes } from 'astro/types';
-import { cn } from '../../utils/cn';
+import { cn } from '@utils/cn';
 import DuckyCodingLogo from '@assets/images/DuckyCoding_logo.png';
 import { Image } from 'astro:assets';
 
@@ -9,7 +9,7 @@ export interface NavbarProps {}
 
 interface Props extends HTMLAttributes<'nav'>, NavbarProps {}
 
-const { class: className, ...props } = Astro.props;
+const { class: className, ...props }: Props = Astro.props;
 ---
 
 <nav

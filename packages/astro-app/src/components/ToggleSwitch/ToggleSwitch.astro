@@ -1,7 +1,7 @@
 ---
 import type { HTMLAttributes } from 'astro/types';
 import { cva, type VariantProps } from 'class-variance-authority';
-import { cn } from 'src/utils/cn';
+import { cn } from '@utils/cn';
 
 const toggleSwitchVariants = cva('relative inline-block', {
   variants: {
@@ -43,7 +43,7 @@ export type ToggleSwitchProps = VariantProps<typeof toggleSwitchVariants>;
 
 interface Props extends HTMLAttributes<'label'>, ToggleSwitchProps {}
 
-const { variant, size, class: className } = Astro.props;
+const { variant, size, class: className }: Props = Astro.props;
 ---
 
 <label

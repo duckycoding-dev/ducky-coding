@@ -1,7 +1,7 @@
 ---
 import type { HTMLAttributes } from 'astro/types';
 import { cva, type VariantProps } from 'class-variance-authority';
-import { cn } from 'src/utils/cn';
+import { cn } from '@utils/cn';
 
 const linkVariants = cva('', {
   variants: {
@@ -47,7 +47,7 @@ interface Props extends HTMLAttributes<'a'>, LinkProps {}
  * For Astro components, we recommend setting your defaultVariants within
  * Astro.props (which are `undefined` by default)
  */
-const { class: className, variant, size, href, ...props } = Astro.props;
+const { class: className, variant, size, href, ...props }: Props = Astro.props;
 const currentPath = Astro.url.pathname;
 ---
 

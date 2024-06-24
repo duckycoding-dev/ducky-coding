@@ -1,5 +1,4 @@
 ---
-import type { HTMLAttributes } from 'astro/types';
 import type { SEOProps } from 'astro-seo';
 import { SEO } from 'astro-seo';
 
@@ -8,7 +7,7 @@ export type BaseHeadProps = {
 };
 
 type Props = BaseHeadProps;
-const { seoProps } = Astro.props;
+const { seoProps }: Props = Astro.props;
 ---
 
 <link rel='sitemap' href='/sitemap-index.xml' />

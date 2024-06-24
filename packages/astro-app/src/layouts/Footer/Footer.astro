@@ -3,16 +3,21 @@ import type { HTMLAttributes } from 'astro/types';
 import { AnimatedWheel } from '@components/AnimatedWheel';
 import { Link } from '@components/Link';
 import { DuckIcon } from '@components/Icons/DuckIcon';
+import { cn } from '@utils/cn';
 
 export interface FooterProps {}
 
 interface Props extends HTMLAttributes<'footer'>, FooterProps {}
 
-const { class: className, ...props } = Astro.props;
+const { class: className, ...props }: Props = Astro.props;
 ---
 
 <footer
-  class='bg-primary-700 border-comic border-secondary py-8 [grid-area:footer]'
+  class={cn(
+    'bg-primary-700 border-comic border-secondary py-8 [grid-area:footer]',
+    className,
+  )}
+  {...props}
 >
   <div
     class='mx-auto grid w-full max-w-7xl items-stretch gap-8 px-8 md:grid-cols-3'
