@@ -19,6 +19,8 @@ export type AnimatedWheelProps = {
   spinDuration?: number;
   wheelRadius?: string | number;
   wheelType?: 'circle' | 'spiral';
+  flat?: boolean; // if true, the .slider wrapper becomes display grid, styled in a certain way
+  flatStyle?: 'row' | 'column';
 };
 
 interface Props extends HTMLAttributes<'div'>, AnimatedWheelProps {}
@@ -33,11 +35,12 @@ const {
   itemRadius,
   perspective = 1000,
   spinDuration = 5,
+  flat = false,
   class: className,
 }: Props = Astro.props;
 ---
 
-<div class=`slider ${className}` style='--quantity: 7'>
+<div class=`slider ${flat ? 'flat' : ''} ${className}` style='--quantity: 7'>
   <div class='item' style='--position: 1'>
     <span></span>
     <Link href='https://github.com/duckycoding-dev' variant={'unstyled'}>
@@ -116,6 +119,15 @@ const {
     animation: autoRotate var(--spinDuration) linear infinite running;
   }
 
+  .flat.slider {
+    transform: none;
+    animation: none;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(50px, 1fr));
+    justify-items: center;
+    gap: 1rem;
+  }
+
   @keyframes autoRotate {
     from {
       transform: perspective(var(--perspective))
@@ -141,6 +153,12 @@ const {
     transform-style: preserve-3d;
   }
 
+  .flat .item {
+    grid-column: unset;
+    grid-row: unset;
+    transform: none;
+  }
+
   .item > a {
     border-radius: var(--itemRadius);
     grid-column: 1;
@@ -161,5 +179,22 @@ const {
   svg {
     position: relative;
     background-color: var(--itemBackgroundColor);
+  }
+
+  @media (prefers-reduced-motion) {
+    .item {
+      grid-column: unset;
+      grid-row: unset;
+      transform: none;
+    }
+
+    .slider {
+      transform: none;
+      animation: none;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(50px, 1fr));
+      gap: 1rem;
+      justify-items: center;
+    }
   }
 </style>

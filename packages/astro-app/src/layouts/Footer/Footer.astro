@@ -22,11 +22,11 @@ const { class: className, ...props }: Props = Astro.props;
   <div
     class='mx-auto grid w-full max-w-7xl items-stretch gap-8 px-8 md:grid-cols-3'
   >
-    <section class='bg-primary-700 min-h-8 w-full md:col-span-2'>
+    <section class='bg-primary-700 min-h-8 w-full px-8 md:col-span-2'>
       <h2 class='text-center text-2xl font-extrabold md:text-start'>
         Stay in touch
       </h2>
-      <div class='flex justify-center px-8 pb-6 pt-8 md:pb-12'>
+      <div class='flex justify-center pb-6 pt-8 md:pb-12'>
         <AnimatedWheel
           itemSize={50}
           spinDuration={10}
@@ -39,7 +39,12 @@ const { class: className, ...props }: Props = Astro.props;
         />
       </div>
     </section>
-    <nav class='flex min-h-12 w-full justify-center md:justify-end'>
+    <nav
+      class='flex min-h-12 w-full flex-col items-center justify-center gap-8 md:justify-end'
+    >
+      <h2 class='text-center text-2xl font-extrabold md:text-start'>
+        Quick links
+      </h2>
       <ul class='flex h-full flex-col gap-4'>
         <li>
           <Link
