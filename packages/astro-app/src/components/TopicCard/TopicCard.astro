@@ -1,0 +1,50 @@
+---
+import { Card } from '@components/Card';
+import { Link } from '@components/Link';
+import { Tag } from '@components/Tag';
+import { cn } from '@utils/cn';
+import type { HTMLAttributes } from 'astro/types';
+
+export interface TopicCardProps extends HTMLAttributes<'a'> {
+  titleBackgroundColor?: string;
+  imageSrc?: string;
+  title: string;
+}
+
+interface Props extends TopicCardProps {}
+
+const {
+  titleBackgroundColor = 'transparent',
+  class: className,
+  imageSrc,
+  title,
+  ...props
+}: Props = Astro.props;
+---
+
+<Link variant='unstyled' href='/' class={cn('', className)} {...props}>
+  <Card class='flex h-full flex-col'>
+    {/*need to replace img with Image*/}
+    <img
+      src={imageSrc}
+      alt='Random image'
+      class='aspect-square w-full object-cover'
+    />
+    <h2
+      class='border-secondary border-4 border-x-0 p-2.5 text-center text-xl font-black'
+    >
+      {title}
+    </h2>
+    <div class='flex grow flex-wrap content-start gap-1 p-2.5'>
+      <Tag>Tag1</Tag>
+      <Tag>Tag2</Tag>
+      <Tag>Tag3</Tag>
+    </div>
+  </Card>
+</Link>
+
+<style define:vars={{ titleBackgroundColor }}>
+  h2 {
+    background-color: var(--titleBackgroundColor);
+  }
+</style>

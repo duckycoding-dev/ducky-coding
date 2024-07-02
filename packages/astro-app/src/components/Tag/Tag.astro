@@ -1,0 +1,20 @@
+---
+import { cn } from '@utils/cn';
+import type { HTMLAttributes } from 'astro/types';
+
+export interface TagProps {}
+
+interface Props extends HTMLAttributes<'div'>, TagProps {}
+
+const { slot, class: className, ...props }: Props = Astro.props;
+---
+
+<div
+  class={cn(
+    'text-primary border-comic border-secondary rounded-3xl px-3 py-1 font-bold',
+    className,
+  )}
+  {...props}
+>
+  <slot />
+</div>

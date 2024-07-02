@@ -14,7 +14,7 @@ body {
       'side-left main-content side-right'
       'footer footer footer';
 
-    grid-template-columns: min-content 1fr min-content;
+    grid-template-columns: minmax(0, 1fr) 1280px minmax(0, 1fr);
     grid-template-rows: auto 1fr auto;
     column-gap: 10px;
   }
@@ -29,5 +29,16 @@ body {
   .aside--right {
     grid-area: side-right;
     margin-right: 0.5rem;
+  }
+}
+
+@media (max-width: 1280px) {
+  body {
+    grid-template-columns: 0 1fr 0;
+  }
+
+  .aside--left,
+  .aside--right {
+    display: none;
   }
 }

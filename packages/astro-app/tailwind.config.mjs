@@ -93,6 +93,8 @@ export default {
       },
       boxShadow: {
         comic: '0.1rem 0.1rem 0rem 0.1rem',
+        'comic-lg': '0.3rem 0.3rem 0rem 0.1rem',
+        'comic-xl': '0.5rem 0.65rem 0rem 0.1rem',
         'comic-pressed': '-0.1rem -0.075rem 0rem 0.1rem',
       },
       borderWidth: {

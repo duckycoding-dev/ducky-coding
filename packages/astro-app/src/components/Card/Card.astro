@@ -1,0 +1,20 @@
+---
+import { cn } from '@utils/cn';
+import type { HTMLAttributes } from 'astro/types';
+
+export interface CardProps {}
+
+interface Props extends HTMLAttributes<'div'>, CardProps {}
+
+const { slot, class: className, ...props }: Props = Astro.props;
+---
+
+<div
+  class={cn(
+    'border-comic border-secondary shadow-comic-lg hover:shadow-comic-xl focus active:shadow-comic overflow-hidden rounded-xl transition-all duration-300 hover:-translate-y-1 active:translate-y-0.5',
+    className,
+  )}
+  {...props}
+>
+  <slot />
+</div>
