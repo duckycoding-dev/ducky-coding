@@ -6,7 +6,7 @@ export interface TagProps {}
 
 interface Props extends HTMLAttributes<'div'>, TagProps {}
 
-const { slot, class: className, ...props }: Props = Astro.props;
+const { class: className, ...props }: Props = Astro.props;
 ---
 
 <div

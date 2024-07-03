@@ -1,5 +1,4 @@
 ---
-import { Link } from '@components/Link';
 import { TopicCard } from '@components/TopicCard';
 import { HolyGrailLayout } from '@layouts/HolyGrailLayout';
 ---
@@ -23,19 +22,27 @@ import { HolyGrailLayout } from '@layouts/HolyGrailLayout';
   <div class='grid-container grid grid-cols-1 gap-5'>
     <TopicCard
       imageSrc='https://picsum.photos/300/200?random=1'
+      imageAlt='image alt attribute'
       title='Astro'
     />
     <TopicCard
       imageSrc='https://picsum.photos/300/200?random=1'
+      imageAlt='image alt attribute'
       title='React'
     />
     <TopicCard
       imageSrc='https://picsum.photos/300/200?random=1'
+      imageAlt='image alt attribute'
       title='Angular'
     />
-    <TopicCard imageSrc='https://picsum.photos/300/200?random=1' title='Vue' />
     <TopicCard
       imageSrc='https://picsum.photos/300/200?random=1'
+      imageAlt='image alt attribute'
+      title='Vue'
+    />
+    <TopicCard
+      imageSrc='https://picsum.photos/300/200?random=1'
+      imageAlt='image alt attribute'
       title='Title with a long text that goes on multiple lines'
     />
   </div>
@@ -50,7 +57,7 @@ import { HolyGrailLayout } from '@layouts/HolyGrailLayout';
 
   @media (width >= 768px) {
     .grid-container {
-      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
     }
   }
 </style>

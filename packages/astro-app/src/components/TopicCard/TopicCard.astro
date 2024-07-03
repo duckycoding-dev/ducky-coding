@@ -4,37 +4,74 @@ import { Link } from '@components/Link';
 import { Tag } from '@components/Tag';
 import { cn } from '@utils/cn';
 import type { HTMLAttributes } from 'astro/types';
+import { Image } from 'astro:assets';
 
-export interface TopicCardProps extends HTMLAttributes<'a'> {
-  titleBackgroundColor?: string;
-  imageSrc?: string;
-  title: string;
-}
+export type TopicCardProps = HTMLAttributes<'a'> &
+  (
+    | {
+        title: string;
+        titleBackgroundColor?: `#${string}` | 'transparent';
+        imageSrc?: undefined;
+        imageAlt?: undefined;
+        loading?: undefined;
+        decoding?: undefined;
+      }
+    | {
+        title?: undefined;
+        titleBackgroundColor?: undefined;
+        imageSrc: string;
+        imageAlt: string;
+        loading?: 'eager' | 'lazy';
+        decoding?: 'async' | 'auto' | 'sync';
+      }
+    | {
+        title: string;
+        titleBackgroundColor?: `#${string}` | 'transparent';
+        imageSrc: string;
+        imageAlt: string;
+        loading?: 'eager' | 'lazy';
+        decoding?: 'async' | 'auto' | 'sync';
+      }
+  );
 
-interface Props extends TopicCardProps {}
+type Props = TopicCardProps;
 
 const {
-  titleBackgroundColor = 'transparent',
-  class: className,
-  imageSrc,
   title,
+  class: className,
+  titleBackgroundColor = 'transparent',
+  decoding = 'auto',
+  loading = 'eager',
+  imageSrc,
+  imageAlt,
   ...props
 }: Props = Astro.props;
 ---
 
 <Link variant='unstyled' href='/' class={cn('', className)} {...props}>
   <Card class='flex h-full flex-col'>
-    {/*need to replace img with Image*/}
-    <img
-      src={imageSrc}
-      alt='Random image'
-      class='aspect-square w-full object-cover'
-    />
-    <h2
-      class='border-secondary border-4 border-x-0 p-2.5 text-center text-xl font-black'
-    >
-      {title}
-    </h2>
+    {/* need to replace img with Image */}
+    {
+      imageSrc ? (
+        <Image
+          src={imageSrc}
+          alt={imageAlt}
+          loading={loading}
+          decoding={decoding}
+          class='aspect-square w-full object-cover'
+          width={200}
+          height={200}
+          densities={[1.5, 2]}
+        />
+      ) : null
+    }
+    {
+      title ? (
+        <h2 class='border-secondary border-4 border-x-0 p-2.5 text-center text-xl font-black'>
+          {title}
+        </h2>
+      ) : null
+    }
     <div class='flex grow flex-wrap content-start gap-1 p-2.5'>
       <Tag>Tag1</Tag>
       <Tag>Tag2</Tag>
