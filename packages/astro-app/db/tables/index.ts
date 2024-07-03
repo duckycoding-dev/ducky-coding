@@ -1,7 +1,11 @@
 import { ExampleTable } from './ExampleTable';
+import { TopicTagsTable } from './TopicTags';
+import { TopicsTable } from './Topics';
 
 export const allDefinedTables = {
   ExampleTable,
+  TopicsTable,
+  TopicTagsTable,
 };
 
 /*
