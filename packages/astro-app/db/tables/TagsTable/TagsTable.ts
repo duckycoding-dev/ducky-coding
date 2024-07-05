@@ -1,6 +1,6 @@
 import { column, defineTable } from 'astro:db';
 
-export const TopicTagsTable = defineTable({
+export const TagsTable = defineTable({
   columns: {
     name: column.text({ primaryKey: true, unique: true }),
   },
