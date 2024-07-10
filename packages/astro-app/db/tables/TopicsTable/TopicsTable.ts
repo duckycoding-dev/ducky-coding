@@ -6,9 +6,13 @@ export const TopicsTable = defineTable({
     title: column.text({
       primaryKey: true,
       unique: true,
-      references: () => TagsTable.columns.name,
+      optional: false,
     }),
     imageSrc: column.text(),
     imageAlt: column.text(),
   },
+  foreignKeys: {
+    columns: ['title']
+    references: () => TagsTable.columns.name,
+  }
 });

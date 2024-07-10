@@ -17,7 +17,7 @@ export default async function seed() {
 
   await db.insert(TopicsTable).values([
     {
-      title: 'Astro',
+      title: 'X',
       imageSrc:
         'packages/astro-app/src/assets/images/topics/astro-icon-light-gradient.png',
       imageAlt: 'Astro logo',

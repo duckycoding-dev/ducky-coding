@@ -1,4 +1,5 @@
 import { column, defineTable } from 'astro:db';
+import { optional } from 'zod';
 
 export const TagsTable = defineTable({
   columns: {
