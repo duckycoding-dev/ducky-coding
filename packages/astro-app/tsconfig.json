@@ -9,7 +9,9 @@
       "@content/*": ["src/content/*"],
       "@utils/*": ["src/utils/*"],
       "@styles/*": ["src/styles/*"],
-      "@assets/*": ["src/assets/*"]
+      "@assets/*": ["src/assets/*"],
+      "@services/*": ["src/services/*"],
+      "@db/*": ["db/*"]
     },
     "verbatimModuleSyntax": true,
     "declaration": false, //set this to false, else I get the error (1): don't need many .ts files in the astro package anyways, so it's not a big problem to not have d.ts files

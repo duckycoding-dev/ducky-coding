@@ -1,7 +1,6 @@
 ---
 import { Card } from '@components/Card';
 import { Link } from '@components/Link';
-import { Tag } from '@components/Tag';
 import { cn } from '@utils/cn';
 import type { HTMLAttributes } from 'astro/types';
 import { Image } from 'astro:assets';
@@ -72,11 +71,6 @@ const {
         </h2>
       ) : null
     }
-    <div class='flex grow flex-wrap content-start gap-1 p-2.5'>
-      <Tag>Tag1</Tag>
-      <Tag>Tag2</Tag>
-      <Tag>Tag3</Tag>
-    </div>
   </Card>
 </Link>
 

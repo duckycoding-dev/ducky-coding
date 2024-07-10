@@ -1,7 +1,31 @@
 ---
 import { TopicCard } from '@components/TopicCard';
 import { HolyGrailLayout } from '@layouts/HolyGrailLayout';
+import { TopicsService } from '@services/db/topics/TopicsService';
+import type { ImageGlob } from '@ducky-coding/types';
+
+const topics = await TopicsService.getAll();
+// Process topics and match with images
+const images: ImageGlob[] = await Astro.glob(
+  '/src/assets/images/**/*.{jpeg,jpg,png,gif}',
+);
+
+const processedTopics = topics.map((topic) => {
+  let matchedImage;
+  const imageToFind = topic.imageFilename;
+  if (imageToFind) {
+    matchedImage = images.find((img) => img.default.src.includes(imageToFind));
+  }
+  return {
+    ...topic,
+    imageSrc: matchedImage ? matchedImage.default : null,
+  };
+});
 ---
+
+{
+  /* not sure why I can't just pass a ImageMetaData type to TopicsCard even if I add it as a possible type for src */
+}
 
 <HolyGrailLayout
   title='Topics'
@@ -20,30 +44,23 @@ import { HolyGrailLayout } from '@layouts/HolyGrailLayout';
 >
   <h1 class='pb-8 text-center text-4xl font-extrabold'>Topics</h1>
   <div class='grid-container grid grid-cols-1 gap-5'>
+    {
+      processedTopics.map((topic) =>
+        topic.imageSrc ? (
+          <TopicCard
+            imageSrc={topic.imageSrc as unknown as string}
+            imageAlt={topic.imageAlt ?? 'topic'}
+            title={topic.title}
+          />
+        ) : (
+          <p>Image not found for {topic.title}</p>
+        ),
+      )
+    }
     <TopicCard
       imageSrc='https://picsum.photos/300/200?random=1'
       imageAlt='image alt attribute'
       title='Astro'
-    />
-    <TopicCard
-      imageSrc='https://picsum.photos/300/200?random=1'
-      imageAlt='image alt attribute'
-      title='React'
-    />
-    <TopicCard
-      imageSrc='https://picsum.photos/300/200?random=1'
-      imageAlt='image alt attribute'
-      title='Angular'
-    />
-    <TopicCard
-      imageSrc='https://picsum.photos/300/200?random=1'
-      imageAlt='image alt attribute'
-      title='Vue'
-    />
-    <TopicCard
-      imageSrc='https://picsum.photos/300/200?random=1'
-      imageAlt='image alt attribute'
-      title='Title with a long text that goes on multiple lines'
     />
   </div>
 </HolyGrailLayout>

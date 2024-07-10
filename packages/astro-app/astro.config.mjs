@@ -15,7 +15,7 @@ export default defineConfig({
   outDir: './dist', // --DEFAULT--
   base: '/',
   trailingSlash: 'ignore', // --DEFAULT--
-  output: 'static',
+  output: 'server',
   cacheDir: './.astro',
   compressHTML: true, // could be set to false in development using env variables
   scopedStyleStrategy: 'attribute', // --DEFAULT--

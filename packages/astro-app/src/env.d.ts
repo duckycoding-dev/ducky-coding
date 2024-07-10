@@ -12,6 +12,7 @@
 interface ImportMetaEnv {
   // env variables declared inside the .env file
   // REMEMBER: only variables prefixed with PUBLIC_ are available on the client side
+  PUBLIC_BASE_SITE_URL: string;
 }
 
 interface ImportMeta {

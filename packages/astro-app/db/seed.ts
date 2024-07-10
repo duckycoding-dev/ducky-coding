@@ -7,6 +7,7 @@ export default async function seed() {
     .insert(TagsTable)
     .values([
       { name: 'Astro' },
+      { name: 'React' },
       { name: 'Frontend' },
       { name: 'Backend' },
       { name: 'Web dev' },
@@ -17,10 +18,14 @@ export default async function seed() {
 
   await db.insert(TopicsTable).values([
     {
-      title: 'X',
-      imageSrc:
-        'packages/astro-app/src/assets/images/topics/astro-icon-light-gradient.png',
+      title: 'Astro',
+      imageFilename: 'src/assets/images/topics/astro-icon-light-gradient.png',
       imageAlt: 'Astro logo',
+    },
+    {
+      title: 'React',
+      imageFilename: 'src/assets/images/topics/react-logo.png',
+      imageAlt: 'React logo',
     },
   ]);
 }

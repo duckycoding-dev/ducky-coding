@@ -8,11 +8,22 @@ export const TopicsTable = defineTable({
       unique: true,
       optional: false,
     }),
-    imageSrc: column.text(),
+    imageFilename: column.text(),
     imageAlt: column.text(),
   },
-  foreignKeys: {
-    columns: ['title']
-    references: () => TagsTable.columns.name,
-  }
+  foreignKeys: [
+    {
+      columns: ['title'],
+      references: () => TagsTable.columns.name,
+    },
+  ],
 });
+
+export type Topic = {
+  title: string;
+  imageFilename?: string;
+  imageAlt?: string;
+};
+
+// Type for inserting new topics (in this case, it's the same as Topic)
+export type InsertTopic = Topic;
