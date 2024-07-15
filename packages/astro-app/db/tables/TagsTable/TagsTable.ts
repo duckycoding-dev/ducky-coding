@@ -1,7 +1,5 @@
-import { column, defineTable } from 'astro:db';
+import { sqliteTable, text } from 'drizzle-orm/sqlite-core';
 
-export const TagsTable = defineTable({
-  columns: {
-    name: column.text({ primaryKey: true, unique: true }),
-  },
+export const TagsTable = sqliteTable('Tags', {
+  name: text('name').primaryKey().unique().notNull(),
 });

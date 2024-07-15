@@ -1,9 +1,9 @@
 import { defineConfig } from 'astro/config';
 import mdx from '@astrojs/mdx';
-import db from '@astrojs/db';
 import tailwind from '@astrojs/tailwind';
 import sitemap from '@astrojs/sitemap';
 import icon from 'astro-icon';
+// import db from '@astrojs/db';
 // properties without "--DEFAULT--" either use a setting decided by me or/and didn't have a default value
 
 // https://astro.build/config
@@ -15,7 +15,7 @@ export default defineConfig({
   outDir: './dist', // --DEFAULT--
   base: '/',
   trailingSlash: 'ignore', // --DEFAULT--
-  output: 'server',
+  output: 'hybrid',
   cacheDir: './.astro',
   compressHTML: true, // could be set to false in development using env variables
   scopedStyleStrategy: 'attribute', // --DEFAULT--
@@ -92,11 +92,14 @@ export default defineConfig({
   }, // add Vite configs TODO
   integrations: [
     mdx(),
-    db(),
+    // db(),
     tailwind({ applyBaseStyles: false }),
     sitemap(),
     icon({
       iconDir: 'src/assets/icons', // user svgs stored in this path instead of src/icons
     }),
   ],
+  experimental: {
+    actions: true,
+  },
 });

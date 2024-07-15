@@ -1,9 +1,10 @@
 import type { APIRoute } from 'astro';
-import { db, TopicsTable } from 'astro:db';
+import { TopicsTable } from '@db/tables/TopicsTable/TopicsTable';
+import { db } from '@db/client';
 
 export const GET: APIRoute = async ({ request }) => {
   try {
-    const topics = await db.select().from(TopicsTable);
+    const topics = await db.select().from(TopicsTable).all();
     return new Response(JSON.stringify(topics), {
       status: 200,
       headers: {

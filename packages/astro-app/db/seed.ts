@@ -1,6 +1,6 @@
-import { db, TopicsTable, TagsTable } from 'astro:db';
+import { db } from './client';
+import { TagsTable, TopicsTable } from './tables';
 
-// https://astro.build/db/seed
 export default async function seed() {
   // TODO
   await db
@@ -29,3 +29,5 @@ export default async function seed() {
     },
   ]);
 }
+
+seed();

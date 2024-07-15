@@ -1,22 +1,14 @@
-import { column, defineTable } from 'astro:db';
-import { TagsTable } from '../TagsTable';
+import { text, sqliteTable } from 'drizzle-orm/sqlite-core';
+import { TagsTable } from '@db/tables/TagsTable';
 
-export const TopicsTable = defineTable({
-  columns: {
-    title: column.text({
-      primaryKey: true,
-      unique: true,
-      optional: false,
-    }),
-    imageFilename: column.text(),
-    imageAlt: column.text(),
-  },
-  foreignKeys: [
-    {
-      columns: ['title'],
-      references: () => TagsTable.columns.name,
-    },
-  ],
+export const TopicsTable = sqliteTable('Topics', {
+  title: text('title')
+    .primaryKey()
+    .unique()
+    .notNull()
+    .references(() => TagsTable.name),
+  imageFilename: text('imageFilename'),
+  imageAlt: text('imageAlt'),
 });
 
 export type Topic = {
