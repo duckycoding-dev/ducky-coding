@@ -25,7 +25,9 @@
     "dist"
   ],
   "scripts": {
-    "dev": "astro dev && turso dev --db-file content.db",
+    "dev": "astro dev",
+    "db_dev": "turso dev --db-file content.db",
+    "drizzle_studio": "npx drizzle-kit studio",
     "start": "astro dev",
     "build": "astro check && astro build",
     "preview": "astro preview",
