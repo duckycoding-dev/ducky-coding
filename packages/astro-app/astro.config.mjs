@@ -102,6 +102,6 @@ export default defineConfig({
     }),
   ],
   experimental: {
-    actions: true,
+    // actions: true,
   },
 });

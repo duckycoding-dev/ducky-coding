@@ -1,10 +1,10 @@
-import type { Topic } from '@db/tables/TopicsTable/TopicsTable';
+import type { SelectTopic } from '../../../../db/tables/TopicsTable/TopicsTable';
 
-const getAll = async (): Promise<Topic[]> => {
+const getAll = async (): Promise<SelectTopic[]> => {
+  const url = `${import.meta.env.PUBLIC_BASE_SITE_URL}/api/v1/topics.json`;
+  console.log('Fetching topics from:', url);
   try {
-    const response = await fetch(
-      `${import.meta.env.PUBLIC_BASE_SITE_URL}/api/v1/topics.json`,
-    );
+    const response = await fetch(url);
     if (!response.ok) {
       throw new Error('Failed to fetch topics');
     }

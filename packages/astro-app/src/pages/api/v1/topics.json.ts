@@ -4,6 +4,7 @@ import { db } from '@db/client';
 
 export const GET: APIRoute = async ({ request }) => {
   try {
+    console.log(db);
     const topics = await db.select().from(TopicsTable).all();
     return new Response(JSON.stringify(topics), {
       status: 200,

@@ -11,11 +11,5 @@ export const TopicsTable = sqliteTable('Topics', {
   imageAlt: text('imageAlt'),
 });
 
-export type Topic = {
-  title: string;
-  imageFilename?: string;
-  imageAlt?: string;
-};
-
-// Type for inserting new topics (in this case, it's the same as Topic)
-export type InsertTopic = Topic;
+export type InsertTopic = typeof TopicsTable.$inferInsert;
+export type SelectTopic = typeof TopicsTable.$inferSelect;
