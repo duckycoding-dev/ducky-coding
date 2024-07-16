@@ -10,6 +10,9 @@ const images: ImageGlob[] = await Astro.glob(
   '/src/assets/images/topics/**/*.{jpeg,jpg,png,gif}',
 );
 
+images.forEach((image) =>
+  console.log('image in src/assets/images/topics', image),
+);
 const processedTopics = topics.map((topic) => {
   let matchedImage;
   const imageToFind = topic.imageFilename;
@@ -21,6 +24,14 @@ const processedTopics = topics.map((topic) => {
     imageSrc: matchedImage ? matchedImage.default : null,
   };
 });
+
+processedTopics.forEach((topic) =>
+  console.log(
+    'processed topics, filename - src',
+    topic.imageFilename,
+    topic.imageSrc,
+  ),
+);
 ---
 
 {
