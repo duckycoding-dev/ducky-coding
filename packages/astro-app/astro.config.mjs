@@ -3,6 +3,7 @@ import mdx from '@astrojs/mdx';
 import tailwind from '@astrojs/tailwind';
 import sitemap from '@astrojs/sitemap';
 import icon from 'astro-icon';
+import netlify from '@astrojs/netlify';
 // import db from '@astrojs/db';
 // properties without "--DEFAULT--" either use a setting decided by me or/and didn't have a default value
 
@@ -16,6 +17,7 @@ export default defineConfig({
   base: '/',
   trailingSlash: 'ignore', // --DEFAULT--
   output: 'hybrid',
+  adapter: netlify(),
   cacheDir: './.astro',
   compressHTML: true, // could be set to false in development using env variables
   scopedStyleStrategy: 'attribute', // --DEFAULT--
