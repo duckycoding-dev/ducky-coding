@@ -53,7 +53,7 @@ const currentPath = Astro.url.pathname;
 
 {/* to avoid ciruclar links */}
 {
-  currentPath !== href ? (
+  href && currentPath !== href ? (
     <a
       href={href}
       class={cn(linkVariants({ variant, size }), className)}

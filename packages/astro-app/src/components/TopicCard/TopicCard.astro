@@ -14,6 +14,7 @@ export type TopicCardProps = HTMLAttributes<'a'> &
         imageAlt?: undefined;
         loading?: undefined;
         decoding?: undefined;
+        slug: string;
       }
     | {
         title?: undefined;
@@ -22,6 +23,7 @@ export type TopicCardProps = HTMLAttributes<'a'> &
         imageAlt: string;
         loading?: 'eager' | 'lazy';
         decoding?: 'async' | 'auto' | 'sync';
+        slug: string;
       }
     | {
         title: string;
@@ -30,6 +32,7 @@ export type TopicCardProps = HTMLAttributes<'a'> &
         imageAlt: string;
         loading?: 'eager' | 'lazy';
         decoding?: 'async' | 'auto' | 'sync';
+        slug: string;
       }
   );
 
@@ -43,13 +46,18 @@ const {
   loading = 'eager',
   imageSrc,
   imageAlt,
+  slug,
   ...props
 }: Props = Astro.props;
 ---
 
-<Link variant='unstyled' href='/' class={cn('', className)} {...props}>
+<Link
+  variant='unstyled'
+  href={slug && `${import.meta.env.PUBLIC_BASE_SITE_URL}/topics/${slug}`}
+  class={cn('', className)}
+  {...props}
+>
   <Card class='flex h-full flex-col'>
-    {/* need to replace img with Image */}
     {
       imageSrc ? (
         <Image
@@ -67,7 +75,7 @@ const {
     {
       title ? (
         <h2 class='border-secondary border-4 border-x-0 p-2.5 text-center text-xl font-black'>
-          {title}
+          {title.charAt(0).toUpperCase() + title.slice(1)}
         </h2>
       ) : null
     }

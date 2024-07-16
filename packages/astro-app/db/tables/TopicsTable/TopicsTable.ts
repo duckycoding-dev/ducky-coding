@@ -9,6 +9,7 @@ export const TopicsTable = sqliteTable('Topics', {
     .references(() => TagsTable.name),
   imageFilename: text('imageFilename'),
   imageAlt: text('imageAlt'),
+  slug: text('slug').unique().notNull(),
 });
 
 export type InsertTopic = typeof TopicsTable.$inferInsert;

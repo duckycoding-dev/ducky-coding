@@ -7,7 +7,7 @@ import type { ImageGlob } from '@ducky-coding/types';
 const topics = await TopicsService.getAll();
 // Process topics and match with images
 const images: ImageGlob[] = await Astro.glob(
-  '/src/assets/images/**/*.{jpeg,jpg,png,gif}',
+  '/src/assets/images/topics/**/*.{jpeg,jpg,png,gif}',
 );
 
 const processedTopics = topics.map((topic) => {
@@ -49,19 +49,15 @@ const processedTopics = topics.map((topic) => {
         topic.imageSrc ? (
           <TopicCard
             imageSrc={topic.imageSrc as unknown as string}
-            imageAlt={topic.imageAlt ?? 'topic'}
+            imageAlt={topic.imageAlt ?? `${topic.title} representation`}
             title={topic.title}
+            slug={topic.slug}
           />
         ) : (
           <p>Image not found for {topic.title}</p>
         ),
       )
     }
-    <TopicCard
-      imageSrc='https://picsum.photos/300/200?random=1'
-      imageAlt='image alt attribute'
-      title='Astro'
-    />
   </div>
 </HolyGrailLayout>
 

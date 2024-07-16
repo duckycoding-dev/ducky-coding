@@ -2,9 +2,8 @@ import type { APIRoute } from 'astro';
 import { TopicsTable } from '@db/tables/TopicsTable/TopicsTable';
 import { db } from '@db/client';
 
-export const GET: APIRoute = async ({ request }) => {
+export const GET: APIRoute = async () => {
   try {
-    console.log(db);
     const topics = await db.select().from(TopicsTable).all();
     return new Response(JSON.stringify(topics), {
       status: 200,
