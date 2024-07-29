@@ -6,32 +6,23 @@ import type { ImageGlob } from '@ducky-coding/types';
 
 const topics = await TopicsService.getAll();
 // Process topics and match with images
-const images: ImageGlob[] = await Astro.glob(
+const imagesInSrcTopicsDirectory: ImageGlob[] = await Astro.glob(
   '/src/assets/images/topics/**/*.{jpeg,jpg,png,gif}',
 );
 
-images.forEach((image) =>
-  console.log('image in src/assets/images/topics', image),
-);
 const processedTopics = topics.map((topic) => {
-  let matchedImage;
+  let processedImage: ImageGlob | undefined;
   const imageToFind = topic.imageFilename;
   if (imageToFind) {
-    matchedImage = images.find((img) => img.default.src.includes(imageToFind));
+    processedImage = imagesInSrcTopicsDirectory.find((img) =>
+      img.default.src.includes(imageToFind),
+    );
   }
   return {
     ...topic,
-    imageSrc: matchedImage ? matchedImage.default : null,
+    imageSrc: processedImage ? processedImage.default : null,
   };
 });
-
-processedTopics.forEach((topic) =>
-  console.log(
-    'processed topics, filename - src',
-    topic.imageFilename,
-    topic.imageSrc,
-  ),
-);
 ---
 
 {
