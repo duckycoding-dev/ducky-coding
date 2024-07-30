@@ -63,6 +63,9 @@ export default defineConfig({
     // remarkRehype: , // TODO
     gfm: true, // --DEFAULT--
     smartypants: true, // --DEFAULT--
+    shikiConfig: {
+      wrap: true,
+    },
   },
   i18n: {
     defaultLocale: 'en',
