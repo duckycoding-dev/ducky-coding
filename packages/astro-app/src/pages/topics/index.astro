@@ -7,7 +7,7 @@ import type { ImageGlob } from '@ducky-coding/types';
 const topics = await TopicsService.getAll();
 // Process topics and match with images
 const imagesInSrcTopicsDirectory: ImageGlob[] = await Astro.glob(
-  '/src/assets/images/topics/**/*.{jpeg,jpg,png,gif}',
+  '/src/assets/images/topics/**/*.{jpeg,jpg,png,gif,svg}',
 );
 
 const processedTopics = topics.map((topic) => {

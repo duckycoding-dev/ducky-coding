@@ -26,12 +26,14 @@
   ],
   "scripts": {
     "dev": "astro dev",
-    "db_dev": "turso dev --db-file content.db",
-    "drizzle_studio": "npx drizzle-kit studio",
+    "db:run": "turso dev --db-file content.db",
+    "db:generate_nigrations": "drizzle-kit generate:sqlite",
+    "db:migrate": "tsx db/migrate.ts",
     "start": "astro dev",
     "build": "astro check && astro build",
     "preview": "astro preview",
     "astro": "astro",
+    "drizzle:studio": "npx drizzle-kit studio",
     "drizzle:seed": "node --loader esbuild-register/loader -r esbuild-register ./db/seed.ts"
   },
   "dependencies": {
@@ -52,9 +54,8 @@
     "class-variance-authority": "^0.7.0",
     "drizzle-orm": "^0.32.0",
     "tailwindcss": "^3.4.1",
-    "typescript": "^5.3.3"
+    "drizzle-kit": "^0.23.0",
+    "typescript": "^5.5.4"
   },
-  "devDependencies": {
-    "drizzle-kit": "^0.23.0"
-  }
+  "devDependencies": {}
 }
