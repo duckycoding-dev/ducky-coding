@@ -14,12 +14,10 @@ export interface BaseHtmlProps extends BaseHeadProps {
 interface Props extends HTMLAttributes<'html'>, BaseHtmlProps {}
 
 const { theme = 'default', title, seoProps, ...props }: Props = Astro.props;
-
-console.log(title);
 ---
 
 <!doctype html>
-<html data-theme={theme} lang='en' title={title} class='bg-primary' {...props}>
+<html data-theme={theme} lang='en' class='bg-primary' {...props}>
   <title>{title ? `${title} - DuckyCoding` : 'DuckyCoding'}</title>
 
   <meta charset='utf-8' />

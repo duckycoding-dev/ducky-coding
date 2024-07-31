@@ -1,0 +1,46 @@
+---
+import { HolyGrailLayout } from '@layouts/HolyGrailLayout';
+import { TopicsService } from '@services/db/topics/TopicsService';
+import { getCollection } from 'astro:content';
+
+// 1. Generate a new path for every collection entry
+export async function getStaticPaths() {
+  const topics = await TopicsService.getAll();
+  return topics.map((topic) => {
+    return {
+      params: { topic: topic.slug },
+      props: { topic },
+    };
+  });
+}
+// 2. For your template, you can get the entry directly from the prop
+const { topic } = Astro.props;
+const postsEntries = await getCollection('posts');
+const relatedPosts = postsEntries.filter((entry) => {
+  return entry.data.topic.title === topic.title && entry.data.isPublished;
+});
+---
+
+<HolyGrailLayout
+  title={topic.title}
+  seoProps={{
+    title: `Topic: ${topic.title}`,
+    description: `Discover the latest articles related to ${topic.title}, written by DuckyCoding!`,
+    extend: {
+      meta: [
+        {
+          name: 'keywords',
+          content: `${topic.title}, articles about ${topic.title}, articles, posts`,
+        },
+      ],
+    },
+  }}
+>
+  <ul>
+    {
+      relatedPosts.map((post) => {
+        return <li>{post.data.title}</li>;
+      })
+    }
+  </ul>
+</HolyGrailLayout>
