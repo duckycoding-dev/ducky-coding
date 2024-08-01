@@ -2,26 +2,28 @@
 import { Image } from 'astro:assets';
 import type { CollectionEntry } from 'astro:content';
 import DuckyCodingLogo from '@assets/images/DuckyCoding_logo.png';
+import type { ImageMetadata } from 'astro';
 import { Card } from '../Card';
 import { Link } from '../Link';
 import { Tag } from '../Tag';
 
 export interface PostCardProps {
   post: CollectionEntry<'posts'>;
+  bannerImage?: ImageMetadata | null;
 }
 
 interface Props extends PostCardProps {}
 
 const { props }: { props: Props } = Astro;
 
-const { post } = props;
+const { post, bannerImage } = props;
 ---
 
-<Link variant='unstyled' href={`/articles/${post.slug}`}>
+<Link variant='unstyled' href={`/posts/${post.slug}`}>
   <Card class=''>
     <Image
-      src={DuckyCodingLogo}
-      alt={post.data.bannerImage.alt}
+      src={bannerImage ?? DuckyCodingLogo}
+      alt={post.data.bannerImage.alt ?? 'Post banner image'}
       loading='lazy'
       decoding='async'
       class='bg-primary-700 h-48 object-cover'

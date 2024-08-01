@@ -3,54 +3,116 @@ import { HolyGrailLayout } from '@layouts/HolyGrailLayout';
 import { TopicsService } from '@services/db/topics/TopicsService';
 import { PostCard } from '@components/PostCard';
 import { getCollection } from 'astro:content';
+import type { ImageGlob } from '@custom-types/image';
 
 // 1. Generate a new path for every collection entry
 export async function getStaticPaths() {
   const topics = await TopicsService.getAll();
+  const imagesInSrcTopicsDirectory: ImageGlob[] = await Astro.glob(
+    '/src/assets/images/topics/**/*.{jpeg,jpg,png,gif,svg}',
+  );
+
   return topics.map((topic) => {
+    let processedImage: ImageGlob | undefined;
+    const imageToFind = topic.imageFilename;
+    if (imageToFind) {
+      processedImage = imagesInSrcTopicsDirectory.find((img) =>
+        img.default.src.includes(imageToFind),
+      );
+    }
+    const processedTopic = {
+      ...topic,
+      imageSrc: processedImage ?? null,
+    };
     return {
       params: { topic: topic.slug },
-      props: { topic },
+      props: { processedTopic },
     };
   });
 }
 // 2. For your template, you can get the entry directly from the prop
-const { topic } = Astro.props;
+const { processedTopic } = Astro.props;
 const postsEntries = await getCollection('posts');
-const relatedPosts = postsEntries.filter((entry) => {
-  return entry.data.topic.title === topic.title && entry.data.isPublished;
-});
+
+let imagesInSrcPostsDirectory: ImageGlob[] = [];
+try {
+  imagesInSrcPostsDirectory = await Astro.glob(
+    '/src/assets/images/posts/**/*.{jpeg,jpg,png,gif,svg}',
+  );
+} catch (err) {
+  console.error("Can't find any images inside the posts directory");
+}
+
+const relatedPosts = postsEntries
+  .filter((entry) => {
+    return (
+      entry.data.topic.title === processedTopic.title && entry.data.isPublished
+    );
+  })
+  .map((post) => {
+    let processedImage: ImageGlob | undefined;
+    const imageToFind = post.data.bannerImage.filename;
+    if (imageToFind) {
+      processedImage = imagesInSrcPostsDirectory.find((img) =>
+        img.default.src.includes(imageToFind),
+      );
+    }
+    const processedPost = {
+      ...post,
+      processedBannerImage: processedImage ?? null,
+    };
+
+    return processedPost;
+  });
 ---
 
 <HolyGrailLayout
-  title={topic.title}
+  title={processedTopic.title}
   seoProps={{
-    title: `Topic: ${topic.title}`,
-    description: `Discover the latest articles related to ${topic.title}, written by DuckyCoding!`,
+    title: `Topic: ${processedTopic.title}`,
+    description: `Discover the latest posts related to ${processedTopic.title}, written by DuckyCoding!`,
     extend: {
       meta: [
         {
           name: 'keywords',
-          content: `${topic.title}, articles about ${topic.title}, articles, posts`,
+          content: `${processedTopic.title}, posts about ${processedTopic.title}, posts`,
         },
       ],
     },
   }}
 >
-  <h1 class='mb-8 text-center text-4xl font-extrabold'>{topic.title}</h1>
-  <ul class='grid-container grid gap-8'>
-    {
-      relatedPosts.map((post) => {
-        return (
-          <>
+  <h1 class='mb-8 text-center text-4xl font-extrabold md:text-left'>
+    {processedTopic.title}
+  </h1>
+  {
+    relatedPosts.length > 0 ? (
+      <ul class='grid-container grid gap-8'>
+        {relatedPosts.map((post) => {
+          return (
             <li class='mb-8 last-of-type:mb-0'>
-              <PostCard post={post} />
+              <PostCard
+                post={post}
+                bannerImage={
+                  post?.processedBannerImage?.default ||
+                  processedTopic.imageSrc?.default ||
+                  null
+                }
+              />
             </li>
-          </>
-        );
-      })
-    }
-  </ul>
+          );
+        })}
+      </ul>
+    ) : (
+      <>
+        <h2 class='text-balance text-center text-2xl font-extrabold md:text-left'>
+          {`There isn't any content about ${processedTopic.title} yet :'(`}
+        </h2>
+        <h3 class='text-center text-xl font-extrabold md:text-left'>
+          Check again soon!
+        </h3>
+      </>
+    )
+  }
 </HolyGrailLayout>
 
 <style>

@@ -9,7 +9,7 @@ It's been created a directory in `packages/astro-app/src/components/Markdown` in
 These custom components are used in this way, passed to the markdown `<Content />` component:
 
 ```jsx
-// src/pages/articles/[...slug]/index.astro
+// src/pages/posts/[...slug]/index.astro
 ---
 import { MarkdownComponents } from '@components/Markdown';
 const { Content } = await entry.render();

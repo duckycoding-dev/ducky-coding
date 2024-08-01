@@ -11,7 +11,8 @@
       "@styles/*": ["src/styles/*"],
       "@assets/*": ["src/assets/*"],
       "@services/*": ["src/services/*"],
-      "@db/*": ["db/*"]
+      "@db/*": ["db/*"],
+      "@custom-types/*": ["src/types/*"]
     },
     "verbatimModuleSyntax": true,
     "declaration": false, //set this to false, else I get the error (1): don't need many .ts files in the astro package anyways, so it's not a big problem to not have d.ts files

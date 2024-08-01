@@ -31,7 +31,7 @@ const postsCollection = defineCollection({
     publishedAt: z.date().optional(),
     updatedAt: z.date().optional(),
     bannerImage: z.object({
-      src: z.string(),
+      filename: z.string(),
       alt: z.string(),
     }),
     isPublished: z.boolean().default(false),
