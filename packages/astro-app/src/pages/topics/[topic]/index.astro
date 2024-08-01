@@ -46,7 +46,9 @@ try {
 const relatedPosts = postsEntries
   .filter((entry) => {
     return (
-      entry.data.topic.title === processedTopic.title && entry.data.isPublished
+      entry.data.topic.title === processedTopic.title &&
+      entry.data.isPublished &&
+      !entry.data.isDeleted
     );
   })
   .map((post) => {

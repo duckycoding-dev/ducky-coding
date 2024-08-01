@@ -30,11 +30,13 @@ const postsCollection = defineCollection({
     createdAt: z.date(),
     publishedAt: z.date().optional(),
     updatedAt: z.date().optional(),
+    deletedAt: z.date().optional(),
     bannerImage: z.object({
       filename: z.string(),
       alt: z.string(),
     }),
     isPublished: z.boolean().default(false),
+    isDeleted: z.boolean().default(false),
     language: z.enum(['en', 'it']).default('en'),
   }),
 });
