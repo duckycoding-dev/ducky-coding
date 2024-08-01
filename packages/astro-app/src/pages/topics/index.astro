@@ -18,10 +18,11 @@ const processedTopics = topics.map((topic) => {
       img.default.src.includes(imageToFind),
     );
   }
-  return {
+  const processedTopic = {
     ...topic,
     imageSrc: processedImage ? processedImage.default : null,
   };
+  return processedTopic;
 });
 ---
 
@@ -44,8 +45,8 @@ const processedTopics = topics.map((topic) => {
     },
   }}
 >
-  <h1 class='pb-8 text-center text-4xl font-extrabold'>Topics</h1>
-  <div class='grid-container grid grid-cols-1 gap-5'>
+  <h1 class='mb-8 text-center text-4xl font-extrabold'>Topics</h1>
+  <section class='grid-container grid grid-cols-1 gap-5'>
     {
       processedTopics.map((topic) =>
         topic.imageSrc ? (
@@ -60,14 +61,12 @@ const processedTopics = topics.map((topic) => {
         ),
       )
     }
-  </div>
+  </section>
 </HolyGrailLayout>
 
 <style>
-  @media (width >= 500px) {
-    .grid-container {
-      grid-template-columns: repeat(2, 1fr);
-    }
+  .grid-container {
+    grid-template-columns: repeat(2, 1fr);
   }
 
   @media (width >= 768px) {

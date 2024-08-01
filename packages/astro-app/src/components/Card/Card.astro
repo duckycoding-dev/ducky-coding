@@ -9,9 +9,13 @@ interface Props extends HTMLAttributes<'div'>, CardProps {}
 const { class: className, ...props }: Props = Astro.props;
 ---
 
+{
+  /* TODO - need to add animation on focus! should it be done here or somewhere else since a div can't be focused? */
+}
+
 <div
   class={cn(
-    'border-comic border-secondary shadow-comic-lg hover:shadow-comic-xl focus active:shadow-comic overflow-hidden rounded-xl transition-all duration-300 hover:-translate-y-1 active:translate-y-0.5',
+    'border-comic border-secondary shadow-comic-lg hover:shadow-comic-xl active:shadow-comic overflow-hidden rounded-xl transition-all duration-300 hover:-translate-y-1 active:translate-y-0.5',
     className,
   )}
   {...props}

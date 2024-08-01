@@ -1,0 +1,54 @@
+---
+import { Image } from 'astro:assets';
+import type { CollectionEntry } from 'astro:content';
+import DuckyCodingLogo from '@assets/images/DuckyCoding_logo.png';
+import { Card } from '../Card';
+import { Link } from '../Link';
+import { Tag } from '../Tag';
+
+export interface PostCardProps {
+  post: CollectionEntry<'posts'>;
+}
+
+interface Props extends PostCardProps {}
+
+const { props }: { props: Props } = Astro;
+
+const { post } = props;
+---
+
+<Link variant='unstyled' href={`/articles/${post.slug}`}>
+  <Card class=''>
+    <Image
+      src={DuckyCodingLogo}
+      alt={post.data.bannerImage.alt}
+      loading='lazy'
+      decoding='async'
+      class='bg-primary-700 h-48 object-cover'
+    />
+    <footer class='border-secondary flex flex-col gap-2 border-t-4 py-2.5'>
+      <h2 class='px-5 text-2xl font-black'>
+        {post.data.title}
+      </h2>
+      <p class='border-secondary px-5 text-base font-semibold'>
+        <span
+          >Written by: {
+            post.data.authors.map((author) => author.name).join(', ')
+          }</span
+        >
+        <span class="font-extralight before:content-['-']">
+          {post.data.publishedAt?.toLocaleDateString()}
+        </span>
+      </p>
+      <div
+        class='border-secondary flex justify-end gap-2 px-5 text-xl font-semibold'
+      >
+        {
+          post.data.tags.map((tag) => (
+            <Tag class='odd:bg-accent even:bg-accent2'>{tag}</Tag>
+          ))
+        }
+      </div>
+    </footer>
+  </Card>
+</Link>

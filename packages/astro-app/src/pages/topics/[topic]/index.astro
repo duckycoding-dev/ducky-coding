@@ -1,6 +1,7 @@
 ---
 import { HolyGrailLayout } from '@layouts/HolyGrailLayout';
 import { TopicsService } from '@services/db/topics/TopicsService';
+import { PostCard } from '@components/PostCard';
 import { getCollection } from 'astro:content';
 
 // 1. Generate a new path for every collection entry
@@ -36,11 +37,26 @@ const relatedPosts = postsEntries.filter((entry) => {
     },
   }}
 >
-  <ul>
+  <h1 class='mb-8 text-center text-4xl font-extrabold'>{topic.title}</h1>
+  <ul class='grid-container grid gap-8'>
     {
       relatedPosts.map((post) => {
-        return <li>{post.data.title}</li>;
+        return (
+          <>
+            <li class='mb-8 last-of-type:mb-0'>
+              <PostCard post={post} />
+            </li>
+          </>
+        );
       })
     }
   </ul>
 </HolyGrailLayout>
+
+<style>
+  @media (width >= 768px) {
+    .grid-container {
+      grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    }
+  }
+</style>
