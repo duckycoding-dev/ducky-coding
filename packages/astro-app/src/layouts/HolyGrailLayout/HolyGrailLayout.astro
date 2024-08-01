@@ -20,3 +20,47 @@ const { ...props }: Props = Astro.props;
   </MainContent>
   <Footer />
 </BaseHtml>
+
+<script>
+  // Swipe detection variables
+  let touchstartX = 0;
+  let touchendX = 0;
+  const minSwipeDistance = 50; // Minimum distance to be considered a swipe
+
+  // Get the checkbox element
+  const checkbox = document.getElementById(
+    'site_side_navigation_menu_id',
+  ) as HTMLInputElement;
+
+  // Function to handle touch start
+  function handleTouchStart(event: TouchEvent) {
+    touchstartX = event.changedTouches[0].screenX;
+  }
+
+  // Function to determine swipe direction and update checkbox
+  function handleSwipe() {
+    const swipeDistance = touchendX - touchstartX;
+
+    if (Math.abs(swipeDistance) < minSwipeDistance) {
+      return; // Not a significant swipe
+    }
+
+    if (swipeDistance > 0) {
+      // Right swipe
+      checkbox.checked = true;
+    } else {
+      // Left swipe
+      checkbox.checked = false;
+    }
+  }
+
+  // Function to handle touch end
+  function handleTouchEnd(event: TouchEvent) {
+    touchendX = event.changedTouches[0].screenX;
+    handleSwipe();
+  }
+
+  // Add event listeners
+  document.addEventListener('touchstart', handleTouchStart, false);
+  document.addEventListener('touchend', handleTouchEnd, false);
+</script>
