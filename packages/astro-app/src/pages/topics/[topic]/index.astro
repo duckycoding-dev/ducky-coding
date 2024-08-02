@@ -3,22 +3,23 @@ import { HolyGrailLayout } from '@layouts/HolyGrailLayout';
 import { TopicsService } from '@services/db/topics/TopicsService';
 import { PostCard } from '@components/PostCard';
 import { getCollection } from 'astro:content';
-import type { ImageGlob } from '@custom-types/image';
+import { type ImageMetadata } from 'astro';
 
 // 1. Generate a new path for every collection entry
 export async function getStaticPaths() {
   const topics = await TopicsService.getAll();
-  const imagesInSrcTopicsDirectory: ImageGlob[] = await Astro.glob(
-    '/src/assets/images/topics/**/*.{jpeg,jpg,png,gif,svg}',
-  );
+  const imagesInSrcTopicsDirectory: { default: ImageMetadata }[] =
+    await Astro.glob<{ default: ImageMetadata }>(
+      '/src/assets/images/topics/**/*.{jpeg,jpg,png,gif,svg}',
+    );
 
   return topics.map((topic) => {
-    let processedImage: ImageGlob | undefined;
+    let processedImage: ImageMetadata | undefined;
     const imageToFind = topic.imageFilename;
     if (imageToFind) {
       processedImage = imagesInSrcTopicsDirectory.find((img) =>
         img.default.src.includes(imageToFind),
-      );
+      )?.default;
     }
     const processedTopic = {
       ...topic,
@@ -34,9 +35,9 @@ export async function getStaticPaths() {
 const { processedTopic } = Astro.props;
 const postsEntries = await getCollection('posts');
 
-let imagesInSrcPostsDirectory: ImageGlob[] = [];
+let imagesInSrcPostsDirectory: { default: ImageMetadata }[] = [];
 try {
-  imagesInSrcPostsDirectory = await Astro.glob(
+  imagesInSrcPostsDirectory = await Astro.glob<{ default: ImageMetadata }>(
     '/src/assets/images/posts/**/*.{jpeg,jpg,png,gif,svg}',
   );
 } catch (err) {
@@ -52,12 +53,12 @@ const relatedPosts = postsEntries
     );
   })
   .map((post) => {
-    let processedImage: ImageGlob | undefined;
+    let processedImage: ImageMetadata | undefined;
     const imageToFind = post.data.bannerImage.filename;
     if (imageToFind) {
       processedImage = imagesInSrcPostsDirectory.find((img) =>
         img.default.src.includes(imageToFind),
-      );
+      )?.default;
     }
     const processedPost = {
       ...post,
@@ -95,9 +96,7 @@ const relatedPosts = postsEntries
               <PostCard
                 post={post}
                 bannerImage={
-                  post?.processedBannerImage?.default ||
-                  processedTopic.imageSrc?.default ||
-                  null
+                  post?.processedBannerImage || processedTopic.imageSrc || null
                 }
               />
             </li>

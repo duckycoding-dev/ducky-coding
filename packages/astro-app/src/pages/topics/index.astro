@@ -2,26 +2,25 @@
 import { TopicCard } from '@components/TopicCard';
 import { HolyGrailLayout } from '@layouts/HolyGrailLayout';
 import { TopicsService } from '@services/db/topics/TopicsService';
-import type { ImageGlob } from '@custom-types/image';
 import type { ImageMetadata } from 'astro';
 
 const topics = await TopicsService.getAll();
 // Process topics and match with images
-const imagesInSrcTopicsDirectory: ImageGlob[] = await Astro.glob(
+const imagesInSrcTopicsDirectory = await Astro.glob<{ default: ImageMetadata }>(
   '/src/assets/images/topics/**/*.{jpeg,jpg,png,gif,svg}',
 );
 
 const processedTopics = topics.map((topic) => {
-  let processedImage: ImageGlob | undefined;
+  let processedImage: ImageMetadata | undefined;
   const imageToFind = topic.imageFilename;
   if (imageToFind) {
     processedImage = imagesInSrcTopicsDirectory.find((img) =>
       img.default.src.includes(imageToFind),
-    );
+    )?.default;
   }
   const processedTopic = {
     ...topic,
-    imageSrc: processedImage ? processedImage.default : null,
+    imageSrc: processedImage ?? null,
   };
   return processedTopic;
 });
