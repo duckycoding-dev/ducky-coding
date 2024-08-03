@@ -6,6 +6,7 @@ import DuckyCodingLogo from '@assets/images/DuckyCoding_logo.png';
 import { HamburgerToggle } from '@components/HamburgerToggle';
 import { Link } from '@components/Link';
 import { cn } from '@utils/cn';
+import { IMAGE_DENSITIES } from '@utils/globals';
 
 export interface HeaderProps {}
 
@@ -16,16 +17,19 @@ const { class: className, ...props }: Props = Astro.props;
 
 <header
   class={cn(
-    'bg-primary-700 border-comic border-secondary sticky top-0 z-10 py-4 [grid-area:header]',
+    'bg-primary-700 border-comic border-secondary sticky top-0 z-10 [grid-area:header]',
     className,
   )}
   {...props}
 >
-  <div class='mx-auto flex max-w-7xl items-center justify-between gap-x-8 px-8'>
+  <div
+    class='mx-auto flex max-w-7xl items-center justify-between gap-x-8 px-8 py-2'
+  >
     <HamburgerToggle
       id='site_side_navigation_menu_id'
       title='navigation menu toggle'
       class='peer z-10 shrink-0 md:hidden'
+      variant={'small'}
     />
     <div class='mx-auto md:mx-0' aria-hidden='true'>
       <Link
@@ -38,8 +42,8 @@ const { class: className, ...props }: Props = Astro.props;
         <Image
           alt={'DuckyCoding logo'}
           src={DuckyCodingLogo}
-          width={50}
-          densities={[1.5, 2]}
+          width={38}
+          densities={IMAGE_DENSITIES}
           class='max-w-none'
         />
       </Link>
@@ -52,8 +56,8 @@ const { class: className, ...props }: Props = Astro.props;
       <Image
         alt={'DuckyCoding logo'}
         src={DuckyCodingLogo}
-        width={50}
-        densities={[1.5, 2]}
+        width={38}
+        densities={IMAGE_DENSITIES}
         class='max-w-none'
       />
     </div>

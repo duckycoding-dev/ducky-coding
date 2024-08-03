@@ -26,7 +26,7 @@
   ],
   "scripts": {
     "dev": "astro dev",
-    "db:run": "turso dev --db-file content.db",
+    "db": "turso dev --db-file content.db",
     "db:generate_migrations": "drizzle-kit generate:sqlite",
     "db:migrate": "tsx db/migrate.ts",
     "start": "astro dev",
