@@ -1,0 +1,1 @@
+export { PostsTagsTable } from './PostsTagsTable';
