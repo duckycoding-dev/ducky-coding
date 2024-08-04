@@ -1,1 +1,0 @@
-export { PostsAuthorsTable } from './PostsAuthorsTable';

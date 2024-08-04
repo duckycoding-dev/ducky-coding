@@ -1,1 +1,0 @@
-export { TopicsTable } from './TopicsTable';

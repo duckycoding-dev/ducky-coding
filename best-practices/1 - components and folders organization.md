@@ -1,4 +1,4 @@
-### For components and DB tables (maybe for other stuff too)
+### For components (maybe for other stuff too)
 
 The folder structure is the following
 

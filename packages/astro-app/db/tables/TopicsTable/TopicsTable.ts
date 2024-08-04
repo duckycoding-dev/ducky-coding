@@ -1,5 +1,5 @@
 import { text, sqliteTable } from 'drizzle-orm/sqlite-core';
-import { TagsTable } from '@db/tables/TagsTable';
+import { TagsTable } from '@db/tables/TagsTable/TagsTable';
 
 export const TopicsTable = sqliteTable('Topics', {
   title: text('title')

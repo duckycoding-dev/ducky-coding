@@ -1,1 +1,0 @@
-export { PostsTagsTable } from './PostsTagsTable';

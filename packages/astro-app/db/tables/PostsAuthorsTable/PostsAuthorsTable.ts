@@ -13,6 +13,8 @@ export const PostsAuthorsTable = sqliteTable(
       .references(() => AuthorsTable.userId),
   },
   (table) => ({
-    unq: primaryKey({ columns: [table.postId, table.authorId] }),
+    compositePrimaryKey: primaryKey({
+      columns: [table.postId, table.authorId],
+    }),
   }),
 );

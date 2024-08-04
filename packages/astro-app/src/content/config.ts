@@ -35,7 +35,7 @@ const postsCollection = defineCollection({
       filename: z.string(),
       alt: z.string(),
     }),
-    isPublished: z.boolean().default(false),
+    status: z.enum(['draft', 'published', 'deleted']).default('draft'),
     isDeleted: z.boolean().default(false),
     language: z.enum(['en', 'it']).default('en'),
   }),

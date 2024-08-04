@@ -1,6 +1,6 @@
 import { sqliteTable, integer, primaryKey } from 'drizzle-orm/sqlite-core';
-import { PostsTable } from '../PostsTable';
-import { TagsTable } from '../TagsTable';
+import { PostsTable } from '@db/tables/PostsTable/PostsTable';
+import { TagsTable } from '@db/tables/TagsTable/TagsTable';
 
 export const PostsTagsTable = sqliteTable(
   'PostsTags',

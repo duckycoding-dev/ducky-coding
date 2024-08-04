@@ -1,1 +1,0 @@
-export { PostsTable } from './PostsTable';
