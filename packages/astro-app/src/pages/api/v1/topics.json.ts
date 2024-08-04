@@ -1,10 +1,9 @@
 import type { APIRoute } from 'astro';
-import { TopicsTable } from '@db/tables/TopicsTable/TopicsTable';
-import { db } from '@db/client';
+import { TopicsService } from '@ducky-coding/db/services';
 
 export const GET: APIRoute = async () => {
   try {
-    const topics = await db.select().from(TopicsTable).all();
+    const topics = await TopicsService.getAll();
     return new Response(JSON.stringify(topics), {
       status: 200,
       headers: {
