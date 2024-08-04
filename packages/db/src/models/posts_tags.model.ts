@@ -1,9 +1,9 @@
 import { sqliteTable, integer, primaryKey } from 'drizzle-orm/sqlite-core';
-import { PostsTable } from './posts';
-import { TagsTable } from './tags';
+import { PostsTable } from './posts.model';
+import { TagsTable } from './tags.model';
 
 export const PostsTagsTable = sqliteTable(
-  'PostsTags',
+  'postsTags',
   {
     postId: integer('postId')
       .notNull()

@@ -1,5 +1,7 @@
+import { eq } from 'drizzle-orm';
 import { db } from '../client';
-import { type SelectTopic, TopicsTable } from '../models/topics';
+import { ImagesTable } from '../models';
+import { type SelectTopic, TopicsTable } from '../models/topics.model';
 
 // This commented getAll function is how I would call a server, but I will replace this with a direct db call instead
 
@@ -18,8 +20,13 @@ import { type SelectTopic, TopicsTable } from '../models/topics';
 //   }
 // };
 
-const getAll = async (): Promise<SelectTopic[]> => {
-  const topics: SelectTopic[] = await db.select().from(TopicsTable).all();
+const getAll = async () => {
+  const topics = await db
+    .select()
+    .from(TopicsTable)
+    .leftJoin(ImagesTable, eq(TopicsTable.imageId, ImagesTable.id))
+    .all();
+  console.log('davidelog', topics);
   return topics;
 };
 

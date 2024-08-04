@@ -3,27 +3,28 @@ import { TopicCard } from '@components/TopicCard';
 import { HolyGrailLayout } from '@layouts/HolyGrailLayout';
 import { TopicsService } from '@ducky-coding/db/services';
 import type { ImageMetadata } from 'astro';
+import DuckyCodingLogo from '@assets/images/DuckyCoding_logo.png';
 
-const topics = await TopicsService.getAll();
+const topicsWithImages = await TopicsService.getAll();
 // Process topics and match with images
-const imagesInSrcTopicsDirectory = await Astro.glob<{ default: ImageMetadata }>(
-  '/src/assets/images/topics/**/*.{jpeg,jpg,png,gif,svg}',
-);
 
-const processedTopics = topics.map((topic) => {
-  let processedImage: ImageMetadata | undefined;
-  const imageToFind = topic.imageFilename;
-  if (imageToFind) {
-    processedImage = imagesInSrcTopicsDirectory.find((img) =>
-      img.default.src.includes(imageToFind),
-    )?.default;
-  }
-  const processedTopic = {
-    ...topic,
-    imageSrc: processedImage ?? null,
-  };
-  return processedTopic;
-});
+const processedTopics = await Promise.all(
+  topicsWithImages.map(async (topic) => {
+    let processedImage: ImageMetadata | undefined;
+    const imageToFindPath = topic.images?.path;
+    if (imageToFindPath) {
+      const { default: img } = await import(
+        `../assets/images/${imageToFindPath}`
+      );
+      processedImage = img;
+    }
+    const processedTopic = {
+      ...topic,
+      imageSrc: processedImage ?? null,
+    };
+    return processedTopic;
+  }),
+);
 ---
 
 {
@@ -48,18 +49,14 @@ const processedTopics = topics.map((topic) => {
   <h1 class='mb-8 text-center text-4xl font-extrabold'>Topics</h1>
   <section class='grid-container grid grid-cols-1 gap-5'>
     {
-      processedTopics.map((topic) =>
-        topic.imageSrc ? (
-          <TopicCard
-            imageSrc={topic.imageSrc}
-            imageAlt={topic.imageAlt ?? `${topic.title} representation`}
-            title={topic.title}
-            slug={topic.slug}
-          />
-        ) : (
-          <p>Image not found for {topic.title}</p>
-        ),
-      )
+      processedTopics.map((topic) => (
+        <TopicCard
+          imageSrc={topic.imageSrc || DuckyCodingLogo}
+          imageAlt={topic.images?.alt ?? `${topic.topics.title} representation`}
+          title={topic.topics.title}
+          slug={topic.topics.slug}
+        />
+      ))
     }
   </section>
 </HolyGrailLayout>

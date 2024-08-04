@@ -1,14 +1,14 @@
-import { text, sqliteTable } from 'drizzle-orm/sqlite-core';
-import { TagsTable } from './tags';
+import { integer, text, sqliteTable } from 'drizzle-orm/sqlite-core';
+import { TagsTable } from './tags.model';
+import { ImagesTable } from './images.model';
 
-export const TopicsTable = sqliteTable('Topics', {
+export const TopicsTable = sqliteTable('topics', {
   title: text('title')
     .primaryKey()
     .unique()
     .notNull()
     .references(() => TagsTable.name),
-  imageFilename: text('imageFilename'),
-  imageAlt: text('imageAlt'),
+  imageId: integer('imageId').references(() => ImagesTable.id),
   slug: text('slug').unique().notNull(),
 });
 

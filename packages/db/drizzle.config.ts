@@ -1,7 +1,7 @@
 import type { Config } from 'drizzle-kit';
 
 const config: Config = {
-  schema: './src/models/**/!(index.ts)',
+  schema: './src/models/**/*.model.ts',
   out: './src/migrations',
   dialect: 'sqlite',
   driver: 'turso',

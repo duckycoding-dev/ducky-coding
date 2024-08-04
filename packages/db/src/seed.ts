@@ -19,14 +19,10 @@ export default async function seed() {
   await db.insert(TopicsTable).values([
     {
       title: 'Astro',
-      imageFilename: 'src/assets/images/topics/astro-icon-light-gradient.png',
-      imageAlt: 'Astro logo',
       slug: 'astro',
     },
     {
       title: 'React',
-      imageFilename: 'src/assets/images/topics/react-logo.png',
-      imageAlt: 'React logo',
       slug: 'react',
     },
   ]);

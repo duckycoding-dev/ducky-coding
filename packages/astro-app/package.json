@@ -26,15 +26,10 @@
   ],
   "scripts": {
     "dev": "astro dev",
-    "db": "turso dev --db-file content.db",
-    "db:generate_migrations": "drizzle-kit generate:sqlite",
-    "db:migrate": "tsx db/migrate.ts",
     "start": "astro dev",
     "build": "astro check && npm run db:migrate && astro build",
     "preview": "astro preview",
-    "astro": "astro",
-    "drizzle:studio": "npx drizzle-kit studio",
-    "drizzle:seed": "node --loader esbuild-register/loader -r esbuild-register ./db/seed.ts"
+    "astro": "astro"
   },
   "dependencies": {
     "@astrojs/check": "^0.9.1",

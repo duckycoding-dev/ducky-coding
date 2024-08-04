@@ -7,29 +7,31 @@ import { type ImageMetadata } from 'astro';
 
 // 1. Generate a new path for every collection entry
 export async function getStaticPaths() {
-  const topics = await TopicsService.getAll();
-  const imagesInSrcTopicsDirectory: { default: ImageMetadata }[] =
-    await Astro.glob<{ default: ImageMetadata }>(
-      '/src/assets/images/topics/**/*.{jpeg,jpg,png,gif,svg}',
-    );
+  const topicsWithImages = await TopicsService.getAll();
+  // Process topics and match with images
 
-  return topics.map((topic) => {
-    let processedImage: ImageMetadata | undefined;
-    const imageToFind = topic.imageFilename;
-    if (imageToFind) {
-      processedImage = imagesInSrcTopicsDirectory.find((img) =>
-        img.default.src.includes(imageToFind),
-      )?.default;
-    }
-    const processedTopic = {
-      ...topic,
-      imageSrc: processedImage ?? null,
-    };
-    return {
-      params: { topic: topic.slug },
-      props: { processedTopic },
-    };
-  });
+  const dynamicRouteData = await Promise.all(
+    topicsWithImages.map(async (topic) => {
+      let processedImage: ImageMetadata | undefined;
+      const imageToFindPath = topic.images?.path;
+      if (imageToFindPath) {
+        const { default: img } = await import(
+          `../assets/images/${imageToFindPath}`
+        );
+        processedImage = img;
+      }
+      const processedTopic = {
+        ...topic,
+        imageSrc: processedImage ?? null,
+      };
+      return {
+        params: { topic: topic.topics.slug },
+        props: { processedTopic },
+      };
+    }),
+  );
+
+  return dynamicRouteData;
 }
 // 2. For your template, you can get the entry directly from the prop
 const { processedTopic } = Astro.props;
@@ -44,20 +46,22 @@ try {
   console.error("Can't find any images inside the posts directory");
 }
 
-const relatedPosts = postsEntries
-  .filter((entry) => {
-    return (
-      entry.data.topic.title === processedTopic.title &&
-      entry.data.status === 'published'
-    );
-  })
-  .map((post) => {
+const filteredRelatedPosts = postsEntries.filter((entry) => {
+  return (
+    entry.data.topic.title === processedTopic.topics.title &&
+    entry.data.status === 'published'
+  );
+});
+
+const relatedPosts = await Promise.all(
+  filteredRelatedPosts.map(async (post) => {
     let processedImage: ImageMetadata | undefined;
     const imageToFind = post.data.bannerImage.filename;
     if (imageToFind) {
-      processedImage = imagesInSrcPostsDirectory.find((img) =>
-        img.default.src.includes(imageToFind),
-      )?.default;
+      const { default: img } = await import(
+        `../../../assets/images/posts/${imageToFind}`
+      );
+      processedImage = img;
     }
     const processedPost = {
       ...post,
@@ -65,26 +69,27 @@ const relatedPosts = postsEntries
     };
 
     return processedPost;
-  });
+  }),
+);
 ---
 
 <HolyGrailLayout
-  title={processedTopic.title}
+  title={processedTopic.topics.title}
   seoProps={{
-    title: `Topic: ${processedTopic.title}`,
-    description: `Discover the latest posts related to ${processedTopic.title}, written by DuckyCoding!`,
+    title: `Topic: ${processedTopic.topics.title}`,
+    description: `Discover the latest posts related to ${processedTopic.topics.title}, written by DuckyCoding!`,
     extend: {
       meta: [
         {
           name: 'keywords',
-          content: `${processedTopic.title}, posts about ${processedTopic.title}, posts`,
+          content: `${processedTopic.topics.title}, posts about ${processedTopic.topics.title}, posts`,
         },
       ],
     },
   }}
 >
   <h1 class='mb-8 text-center text-4xl font-extrabold md:text-left'>
-    {processedTopic.title}
+    {processedTopic.topics.title}
   </h1>
   {
     relatedPosts.length > 0 ? (
@@ -105,7 +110,7 @@ const relatedPosts = postsEntries
     ) : (
       <>
         <h2 class='text-balance text-center text-2xl font-extrabold md:text-left'>
-          {`There isn't any content about ${processedTopic.title} yet :'(`}
+          {`There isn't any content about ${processedTopic.topics.title} yet :'(`}
         </h2>
         <h3 class='text-center text-xl font-extrabold md:text-left'>
           Check again soon!

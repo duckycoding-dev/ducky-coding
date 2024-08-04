@@ -1,7 +1,7 @@
 import { text, sqliteTable } from 'drizzle-orm/sqlite-core';
-import { UsersTable } from './users';
+import { UsersTable } from './users.model';
 
-export const AuthorsTable = sqliteTable('Authors', {
+export const AuthorsTable = sqliteTable('authors', {
   userId: text('userId')
     .notNull()
     .unique()
