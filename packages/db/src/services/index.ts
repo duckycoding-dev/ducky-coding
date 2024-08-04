@@ -1,1 +1,1 @@
-export const tmp = 'need at least one export to not break build';
+export * from './topics.service';

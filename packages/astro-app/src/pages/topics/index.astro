@@ -1,7 +1,7 @@
 ---
 import { TopicCard } from '@components/TopicCard';
 import { HolyGrailLayout } from '@layouts/HolyGrailLayout';
-import { TopicsService } from '@services/db/topics/TopicsService';
+import { TopicsService } from '@ducky-coding/db/services';
 import type { ImageMetadata } from 'astro';
 
 const topics = await TopicsService.getAll();

@@ -13,14 +13,13 @@ This package is used to define everything related to the database of DuckyCoding
   │   │   │   │   |── content.ts
   │   │   │   │   └── index.ts
   │   │   │   ├── repositories/
-  │   │   │   │   ├── userRepository.ts
-  │   │   │   │   |── contentRepository.ts
+  │   │   │   │   ├── user.repository.ts
+  │   │   │   │   |── content.repository.ts
   │   │   │   │   └── index.ts
   │   │   │   ├── services/
-  │   │   │   │   ├── userService.ts
-  │   │   │   │   |── contentService.ts
+  │   │   │   │   ├── user.service.ts
+  │   │   │   │   |── content.service.ts
   │   │   │   │   └── index.ts
-
   │   │   │   ├── entities/
   │   │   │   │   ├── userDTO.ts
   │   │   │   │   ├── contentDTO.ts
@@ -28,11 +27,13 @@ This package is used to define everything related to the database of DuckyCoding
   │   │   │   └── index.ts
   │   │   ├── [__tests__]/
   │   │   ├── database/
+  |   │   │   ├── client.ts
+  |   │   │   ├── migrations/
+  |   │   │   |   ├── migrations/
   │   │   │   ├── content.db
   │   │   │   ├── content.db-shm
   │   │   │   └── content.db-wal
   │   │   ├── env.development
-  │   │   ├── client.ts
   │   │   ├── drizzle.config.ts
   │   │   ├── package.json
   │   │   └── tsconfig.json
@@ -57,3 +58,32 @@ This package is used to define everything related to the database of DuckyCoding
 ## What gets exported for external use
 
 This package will only export the `entities/`, `models/`, and `services/` contents: everything else is for internal use only, so there is no need to export them.
+
+### Future
+
+We might want to consider switching to a structure like the following instead, following a "Feature-Based" project structure:
+
+```
+src/
+├── topics/
+│   ├── topics.model.ts
+│   ├── topics.service.ts
+│   ├── topics.repository.ts
+│   └── topics.schema.ts
+├── images/
+│   ├── images.model.ts
+│   ├── images.service.ts
+│   ├── images.repository.ts
+│   └── images.schema.ts
+├── entities/
+│   ├── topicWithImage.ts
+│   └── ...
+├── shared/
+│   ├── types.ts
+│   └── utils.ts
+└── database/
+    ├── client.ts
+    └── migrations/
+```
+
+I like the idea of having everything together in a single folder, but for now I'll stick to ther previously explained structure, since that's what I use at work and thus I'm more familiar with it at the moment.

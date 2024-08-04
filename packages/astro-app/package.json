@@ -45,6 +45,7 @@
     "@astrojs/tailwind": "^5.1.0",
     "@ducky-coding/types": "*",
     "@ducky-coding/utils": "*",
+    "@ducky-coding/db": "*",
     "@iconify-json/mdi": "^1.1.66",
     "@iconify-json/ph": "^1.1.13",
     "@libsql/client": "^0.7.0",
