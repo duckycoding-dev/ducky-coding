@@ -1,5 +1,7 @@
 ALTER TABLE `tmp__authors` RENAME TO `authors`;--> statement-breakpoint
 ALTER TABLE `tmp__images` RENAME TO `images`;--> statement-breakpoint
+ALTER TABLE `tmp__postsAuthors` RENAME TO `postsAuthors`;--> statement-breakpoint
+ALTER TABLE `tmp__postsTags` RENAME TO `postsTags`;--> statement-breakpoint
 ALTER TABLE `tmp__posts` RENAME TO `posts`;--> statement-breakpoint
 ALTER TABLE `tmp__tags` RENAME TO `tags`;--> statement-breakpoint
 ALTER TABLE `tmp__topics` RENAME TO `topics`;--> statement-breakpoint
