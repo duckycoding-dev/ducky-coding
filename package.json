@@ -42,10 +42,12 @@
   "scripts": {
     "dev": "npx lerna run dev",
     "dev:astro": "npx lerna run dev --scope=@ducky-coding/astro-app",
+    "dev:db": "npx lerna run dev --scope=@ducky-coding/db",
     "build": "npx lerna run build",
     "build:astro": "npx lerna run build --scope=@ducky-coding/astro-app",
     "build:types": "npx lerna run build --scope=@ducky-coding/types",
     "build:utils": "npx lerna run build --scope=@ducky-coding/utils",
+    "build:db": "npx lerna run build --scope=@ducky-coding/db",
     "start": "npx lerna run start",
     "start:astro": "npx lerna run start --scope=@ducky-coding/astro-app"
   },

@@ -1,0 +1,107 @@
+{
+  "version": "6",
+  "dialect": "sqlite",
+  "id": "1b2fb96e-b1f1-4f10-a4b9-291dce58d7ca",
+  "prevId": "d041735c-2cee-49a3-9022-db0cdeb7fdd7",
+  "tables": {
+    "Tags": {
+      "name": "Tags",
+      "columns": {
+        "name": {
+          "name": "name",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": false
+        }
+      },
+      "indexes": {
+        "Tags_name_unique": {
+          "name": "Tags_name_unique",
+          "columns": [
+            "name"
+          ],
+          "isUnique": true
+        }
+      },
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "Topics": {
+      "name": "Topics",
+      "columns": {
+        "title": {
+          "name": "title",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "imageFilename": {
+          "name": "imageFilename",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "imageAlt": {
+          "name": "imageAlt",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "slug": {
+          "name": "slug",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        }
+      },
+      "indexes": {
+        "Topics_title_unique": {
+          "name": "Topics_title_unique",
+          "columns": [
+            "title"
+          ],
+          "isUnique": true
+        },
+        "Topics_slug_unique": {
+          "name": "Topics_slug_unique",
+          "columns": [
+            "slug"
+          ],
+          "isUnique": true
+        }
+      },
+      "foreignKeys": {
+        "Topics_title_Tags_name_fk": {
+          "name": "Topics_title_Tags_name_fk",
+          "tableFrom": "Topics",
+          "tableTo": "Tags",
+          "columnsFrom": [
+            "title"
+          ],
+          "columnsTo": [
+            "name"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    }
+  },
+  "enums": {},
+  "_meta": {
+    "schemas": {},
+    "tables": {},
+    "columns": {}
+  },
+  "internal": {
+    "indexes": {}
+  }
+}

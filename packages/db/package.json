@@ -1,0 +1,45 @@
+{
+  "name": "@ducky-coding/db",
+  "version": "0.0.0",
+  "type": "module",
+  "description": "Database system for DuckyCoding.dev: mostly used for content related data, but also for user related data",
+  "keywords": [
+    "database",
+    "drizzle",
+    "sqlite",
+    "turso"
+  ],
+  "author": "Ducky <duckycoding.dev@gmail.com>",
+  "homepage": "https://github.com/duckycoding-dev/ducky-coding#readme",
+  "license": "MIT",
+  "main": ".dist/index.js",
+  "types": "dist/index.d.ts",
+  "directories": {
+    "lib": "src",
+    "test": "__tests__"
+  },
+  "files": [
+    "dist"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/duckycoding-dev/ducky-coding.git"
+  },
+  "scripts": {
+    "test": "node ./__tests__/db.test.js",
+    "dev": "turso dev --db-file database/content.db && tsc -w",
+    "build": "tsc",
+    "db:migrate": "tsx db/migrate.ts",
+    "drizzle:studio": "npx drizzle-kit studio",
+    "drizzle:generate_migrations": "drizzle-kit generate:sqlite",
+    "drizzle:seed": "node --loader esbuild-register/loader -r esbuild-register ./db/seed.ts"
+  },
+  "bugs": {
+    "url": "https://github.com/duckycoding-dev/ducky-coding/issues"
+  },
+  "dependencies": {
+    "@libsql/client": "^0.7.0",
+    "drizzle-kit": "^0.23.0",
+    "drizzle-orm": "^0.32.0"
+  }
+}
