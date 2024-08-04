@@ -28,7 +28,7 @@
   "scripts": {
     "test": "node ./__tests__/db.test.js",
     "dev": "turso dev --db-file database/content.db && tsc -w",
-    "build": "tsc",
+    "build": "tsc && npm run db:migrate",
     "db:migrate": "tsx ./src/migrate.ts",
     "drizzle:studio": "npx drizzle-kit studio",
     "drizzle:generate_migrations": "drizzle-kit generate",
