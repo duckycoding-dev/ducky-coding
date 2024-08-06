@@ -4,6 +4,7 @@ import { TopicsService } from '@ducky-coding/db/services';
 import { PostCard } from '@components/PostCard';
 import { getCollection } from 'astro:content';
 import { type ImageMetadata } from 'astro';
+import { matchImageFromGlobImport } from '../../../utils/images/images';
 
 // 1. Generate a new path for every collection entry
 export async function getStaticPaths() {
@@ -15,11 +16,15 @@ export async function getStaticPaths() {
       let processedImage: ImageMetadata | undefined;
       const imageToFindPath = topic.images?.path;
       if (imageToFindPath) {
-        const { default: img } = await import(
-          `../assets/images/${imageToFindPath}`
+        const images = import.meta.glob<{ default: ImageMetadata }>(
+          `/src/assets/images/topics/**/*.{jpeg,jpg,png,gif,webp,svg}`,
         );
-        processedImage = img;
+        processedImage = await matchImageFromGlobImport(
+          images,
+          imageToFindPath,
+        );
       }
+
       const processedTopic = {
         ...topic,
         imageSrc: processedImage ?? null,
@@ -37,15 +42,6 @@ export async function getStaticPaths() {
 const { processedTopic } = Astro.props;
 const postsEntries = await getCollection('posts');
 
-let imagesInSrcPostsDirectory: { default: ImageMetadata }[] = [];
-try {
-  imagesInSrcPostsDirectory = await Astro.glob<{ default: ImageMetadata }>(
-    '/src/assets/images/posts/**/*.{jpeg,jpg,png,gif,svg}',
-  );
-} catch (err) {
-  console.error("Can't find any images inside the posts directory");
-}
-
 const filteredRelatedPosts = postsEntries.filter((entry) => {
   return (
     entry.data.topic.title === processedTopic.topics.title &&
@@ -53,21 +49,21 @@ const filteredRelatedPosts = postsEntries.filter((entry) => {
   );
 });
 
-const relatedPosts = await Promise.all(
+const processedPosts = await Promise.all(
   filteredRelatedPosts.map(async (post) => {
     let processedImage: ImageMetadata | undefined;
-    const imageToFind = post.data.bannerImage.filename;
-    if (imageToFind) {
-      const { default: img } = await import(
-        `../../../assets/images/posts/${imageToFind}`
+    const imageToFindPath = `posts/${post.data.bannerImage.filename}`;
+    if (imageToFindPath) {
+      const images = import.meta.glob<{ default: ImageMetadata }>(
+        `/src/assets/images/posts/**/*.{jpeg,jpg,png,gif,webp,svg}`,
       );
-      processedImage = img;
+      processedImage = await matchImageFromGlobImport(images, imageToFindPath);
     }
+
     const processedPost = {
       ...post,
       processedBannerImage: processedImage ?? null,
     };
-
     return processedPost;
   }),
 );
@@ -92,9 +88,9 @@ const relatedPosts = await Promise.all(
     {processedTopic.topics.title}
   </h1>
   {
-    relatedPosts.length > 0 ? (
+    processedPosts.length > 0 ? (
       <ul class='grid-container grid gap-8'>
-        {relatedPosts.map((post) => {
+        {processedPosts.map((post) => {
           return (
             <li class='mb-8 last-of-type:mb-0'>
               <PostCard

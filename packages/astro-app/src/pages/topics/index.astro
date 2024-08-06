@@ -3,21 +3,22 @@ import { TopicCard } from '@components/TopicCard';
 import { HolyGrailLayout } from '@layouts/HolyGrailLayout';
 import { TopicsService } from '@ducky-coding/db/services';
 import type { ImageMetadata } from 'astro';
+import { matchImageFromGlobImport } from '@utils/images/images';
 import DuckyCodingLogo from '@assets/images/DuckyCoding_logo.png';
 
 const topicsWithImages = await TopicsService.getAll();
 // Process topics and match with images
-
 const processedTopics = await Promise.all(
   topicsWithImages.map(async (topic) => {
     let processedImage: ImageMetadata | undefined;
     const imageToFindPath = topic.images?.path;
     if (imageToFindPath) {
-      const { default: img } = await import(
-        `../assets/images/${imageToFindPath}`
+      const images = import.meta.glob<{ default: ImageMetadata }>(
+        `/src/assets/images/topics/**/*.{jpeg,jpg,png,gif,webp,svg}`,
       );
-      processedImage = img;
+      processedImage = await matchImageFromGlobImport(images, imageToFindPath);
     }
+
     const processedTopic = {
       ...topic,
       imageSrc: processedImage ?? null,

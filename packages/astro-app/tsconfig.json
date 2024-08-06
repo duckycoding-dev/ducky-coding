@@ -11,6 +11,7 @@
       "@styles/*": ["src/styles/*"],
       "@assets/*": ["src/assets/*"],
       "@services/*": ["src/services/*"],
+      "@utils/*": ["src/utils/*"],
       "@custom-types/*": ["src/types/*"]
     },
     "verbatimModuleSyntax": true,

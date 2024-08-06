@@ -21,14 +21,14 @@ DROP INDEX IF EXISTS `tmp__topics_slug_unique`;--> statement-breakpoint
 DROP INDEX IF EXISTS `tmp__users_id_unique`;--> statement-breakpoint
 DROP INDEX IF EXISTS `tmp__users_username_unique`;--> statement-breakpoint
 DROP INDEX IF EXISTS `tmp__users_email_unique`;--> statement-breakpoint
-CREATE UNIQUE INDEX `authors_userId_unique` ON `authors` (`userId`);--> statement-breakpoint
-CREATE UNIQUE INDEX `posts_slug_unique` ON `posts` (`slug`);--> statement-breakpoint
-CREATE UNIQUE INDEX `tags_name_unique` ON `tags` (`name`);--> statement-breakpoint
-CREATE UNIQUE INDEX `topics_title_unique` ON `topics` (`title`);--> statement-breakpoint
-CREATE UNIQUE INDEX `topics_slug_unique` ON `topics` (`slug`);--> statement-breakpoint
-CREATE UNIQUE INDEX `users_id_unique` ON `users` (`id`);--> statement-breakpoint
-CREATE UNIQUE INDEX `users_username_unique` ON `users` (`username`);--> statement-breakpoint
-CREATE UNIQUE INDEX `users_email_unique` ON `users` (`email`);
+CREATE UNIQUE INDEX IF NOT EXISTS `authors_userId_unique` ON `authors` (`userId`);--> statement-breakpoint
+CREATE UNIQUE INDEX IF NOT EXISTS `posts_slug_unique` ON `posts` (`slug`);--> statement-breakpoint
+CREATE UNIQUE INDEX IF NOT EXISTS `tags_name_unique` ON `tags` (`name`);--> statement-breakpoint
+CREATE UNIQUE INDEX IF NOT EXISTS `topics_title_unique` ON `topics` (`title`);--> statement-breakpoint
+CREATE UNIQUE INDEX IF NOT EXISTS `topics_slug_unique` ON `topics` (`slug`);--> statement-breakpoint
+CREATE UNIQUE INDEX IF NOT EXISTS `users_id_unique` ON `users` (`id`);--> statement-breakpoint
+CREATE UNIQUE INDEX IF NOT EXISTS `users_username_unique` ON `users` (`username`);--> statement-breakpoint
+CREATE UNIQUE INDEX IF NOT EXISTS `users_email_unique` ON `users` (`email`);
 /*
  SQLite does not support "Creating foreign key on existing column" out of the box, we do not generate automatic migration for that, so it has to be done manually
  Please refer to: https://www.techonthenet.com/sqlite/tables/alter_table.php

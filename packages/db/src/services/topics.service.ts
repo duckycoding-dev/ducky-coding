@@ -26,7 +26,6 @@ const getAll = async () => {
     .from(TopicsTable)
     .leftJoin(ImagesTable, eq(TopicsTable.imageId, ImagesTable.id))
     .all();
-  console.log('davidelog', topics);
   return topics;
 };
 
