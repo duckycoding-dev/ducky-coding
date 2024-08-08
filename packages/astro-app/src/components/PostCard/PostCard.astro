@@ -38,9 +38,6 @@ const { post, bannerImage } = props;
             post.data.authors.map((author) => author.name).join(', ')
           }</span
         >
-        <span class="font-extralight before:content-['-']">
-          {post.data.publishedAt?.toLocaleDateString()}
-        </span>
       </p>
       <div
         class='border-secondary flex justify-end gap-2 px-5 text-xl font-semibold'
