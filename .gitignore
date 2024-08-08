@@ -6,3 +6,5 @@ lerna-debug.log
 **/*/dist
 **/*.d.ts
 **/*.d.ts.map
+
+**/*.env.production
