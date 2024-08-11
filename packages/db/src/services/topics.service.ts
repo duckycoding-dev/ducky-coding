@@ -1,36 +1,54 @@
-import { eq } from 'drizzle-orm';
-import { db } from '../client';
-import { ImagesTable } from '../models';
-import { type SelectTopic, TopicsTable } from '../models/topics.model';
+import { TopicDTO, TopicWithImageDTO } from '@ducky-coding/types/DTOs';
+import { TopicsRepository } from '../repositories/topics.repository';
+import { mapToTopicWithImageDTO } from '../mappers/topics.mappers';
+import { mapToTopicDTO } from '../models';
 
-// This commented getAll function is how I would call a server, but I will replace this with a direct db call instead
+const getTopic = async (topicTitle: string): Promise<TopicDTO | undefined> => {
+  const selectedTopics = await TopicsRepository.getTopics([topicTitle]);
+  if (selectedTopics.length === 0) return undefined;
 
-// const getAll = async (): Promise<SelectTopic[]> => {
-//   const url = `${import.meta.env.PUBLIC_BASE_SITE_URL}/api/v1/topics.json`;
-//   console.log('Fetching topics from:', url);
-//   try {
-//     const response = await fetch(url);
-//     if (!response.ok) {
-//       throw new Error('Failed to fetch topics');
-//     }
-//     return await response.json();
-//   } catch (error) {
-//     console.error('Error in getTopicImages:', error);
-//     return [];
-//   }
-// };
+  const topicDTO: TopicDTO = mapToTopicDTO(selectedTopics[0]);
+  return topicDTO;
+};
 
-const getAll = async () => {
-  const topics = await db
-    .select()
-    .from(TopicsTable)
-    .leftJoin(ImagesTable, eq(TopicsTable.imageId, ImagesTable.id))
-    .all();
-  return topics;
+const getTopics = async (topicTitles: string[]): Promise<TopicDTO[]> => {
+  const selectedTopics = await TopicsRepository.getTopics(topicTitles);
+
+  const topicDTOs: TopicDTO[] = selectedTopics.map((topic) => {
+    return mapToTopicDTO(topic);
+  });
+  return topicDTOs;
+};
+
+const getAllTopics = async (): Promise<TopicDTO[]> => {
+  const selectedTopics = await TopicsRepository.getAllTopics();
+
+  const topicDTOs: TopicDTO[] = selectedTopics.map((topic) => {
+    return mapToTopicDTO(topic);
+  });
+  return topicDTOs;
+};
+
+const getAllTopicsWithImage = async (): Promise<TopicWithImageDTO[]> => {
+  const selectedTopicsWithImages =
+    await TopicsRepository.getAllTopicsWithImage();
+
+  const topicWithImageDTOs: TopicWithImageDTO[] = selectedTopicsWithImages.map(
+    (topicWithImage) => {
+      return mapToTopicWithImageDTO(
+        topicWithImage.topics,
+        topicWithImage.images ?? undefined,
+      );
+    },
+  );
+  return topicWithImageDTOs;
 };
 
 export const TopicsService = {
-  getAll,
+  getTopic,
+  getTopics,
+  getAllTopics,
+  getAllTopicsWithImage,
 };
 
 // Add more methods as needed

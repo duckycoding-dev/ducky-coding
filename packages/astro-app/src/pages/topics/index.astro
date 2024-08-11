@@ -6,12 +6,12 @@ import type { ImageMetadata } from 'astro';
 import { matchImageFromGlobImport } from '@utils/images/images';
 import DuckyCodingLogo from '@assets/images/DuckyCoding_logo.png';
 
-const topicsWithImages = await TopicsService.getAll();
+const topicsWithImages = await TopicsService.getAllTopicsWithImage();
 // Process topics and match with images
 const processedTopics = await Promise.all(
   topicsWithImages.map(async (topic) => {
     let processedImage: ImageMetadata | undefined;
-    const imageToFindPath = topic.images?.path;
+    const imageToFindPath = topic.image?.path;
     if (imageToFindPath) {
       const images = import.meta.glob<{ default: ImageMetadata }>(
         `/src/assets/images/topics/**/*.{jpeg,jpg,png,gif,webp,svg}`,
@@ -53,9 +53,9 @@ const processedTopics = await Promise.all(
       processedTopics.map((topic) => (
         <TopicCard
           imageSrc={topic.imageSrc || DuckyCodingLogo}
-          imageAlt={topic.images?.alt ?? `${topic.topics.title} representation`}
-          title={topic.topics.title}
-          slug={topic.topics.slug}
+          imageAlt={topic.image?.alt ?? `${topic.title} representation`}
+          title={topic.title}
+          slug={topic.slug}
         />
       ))
     }

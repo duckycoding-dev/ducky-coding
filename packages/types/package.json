@@ -29,9 +29,7 @@
   "exports": {
     ".": "./src/types.ts",
     "./DTOs": "./src/DTOs/index.ts",
-    "./entities": "./src/entities/index.ts",
-    "./composite-entities": "./src/entities/composite-entities/index.ts",
-    "./mappers": "./src/mappers/index.ts"
+    "./entities": "./src/entities/index.ts"
   },
   "scripts": {
     "test": "node ./__tests__/types.test.js",

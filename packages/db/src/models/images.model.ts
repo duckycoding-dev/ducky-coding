@@ -1,8 +1,18 @@
+import { z } from 'zod';
 import { text, sqliteTable, integer } from 'drizzle-orm/sqlite-core';
 
 export const ImagesTable = sqliteTable('images', {
   id: integer('id').primaryKey({ autoIncrement: true }),
-  alt: text('alt'),
   path: text('path').notNull().unique(), // Relative path from src/assets/images
+  alt: text('alt'),
   // credits: text('credits'), // TODO Possible text to add if needed, to give credit to the creator / original publisher of the image
 });
+
+export const ImageSchema = z.object({
+  id: z.number(),
+  path: z.string(),
+  alt: z.string().optional(),
+});
+
+export type InsertImage = typeof ImagesTable.$inferInsert;
+export type Image = typeof ImagesTable.$inferSelect;
