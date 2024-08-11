@@ -2,7 +2,7 @@ import { z } from 'zod';
 import { ImageDTOSchema } from './image.dto';
 import { AuthorDTOSchema } from './author.dto';
 import { TopicDTOSchema } from './topic.dto';
-import { ContentStatusSchema } from '../entities/post.entity';
+import { ContentStatusSchema } from '../entities/postContent.entity';
 
 export const PostDTOSchema = z.object({
   slug: z.string(),

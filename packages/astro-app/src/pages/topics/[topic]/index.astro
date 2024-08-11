@@ -8,13 +8,13 @@ import { matchImageFromGlobImport } from '../../../utils/images/images';
 
 // 1. Generate a new path for every collection entry
 export async function getStaticPaths() {
-  const topicsWithImages = await TopicsService.getAll();
+  const topicsWithImages = await TopicsService.getAllTopicsWithImage();
   // Process topics and match with images
 
   const dynamicRouteData = await Promise.all(
     topicsWithImages.map(async (topic) => {
       let processedImage: ImageMetadata | undefined;
-      const imageToFindPath = topic.images?.path;
+      const imageToFindPath = topic.image?.path;
       if (imageToFindPath) {
         const images = import.meta.glob<{ default: ImageMetadata }>(
           `/src/assets/images/topics/**/*.{jpeg,jpg,png,gif,webp,svg}`,
@@ -30,7 +30,7 @@ export async function getStaticPaths() {
         imageSrc: processedImage ?? null,
       };
       return {
-        params: { topic: topic.topics.slug },
+        params: { topic: topic.slug },
         props: { processedTopic },
       };
     }),
@@ -44,7 +44,7 @@ const postsEntries = await getCollection('posts');
 
 const filteredRelatedPosts = postsEntries.filter((entry) => {
   return (
-    entry.data.topic.title === processedTopic.topics.title &&
+    entry.data.topic.title === processedTopic.title &&
     entry.data.status === 'published'
   );
 });
@@ -52,7 +52,7 @@ const filteredRelatedPosts = postsEntries.filter((entry) => {
 const processedPosts = await Promise.all(
   filteredRelatedPosts.map(async (post) => {
     let processedImage: ImageMetadata | undefined;
-    const imageToFindPath = `posts/${post.data.bannerImage.filename}`;
+    const imageToFindPath = `${post.data.bannerImage.path}`;
     if (imageToFindPath) {
       const images = import.meta.glob<{ default: ImageMetadata }>(
         `/src/assets/images/posts/**/*.{jpeg,jpg,png,gif,webp,svg}`,
@@ -70,22 +70,22 @@ const processedPosts = await Promise.all(
 ---
 
 <HolyGrailLayout
-  title={processedTopic.topics.title}
+  title={processedTopic.title}
   seoProps={{
-    title: `Topic: ${processedTopic.topics.title}`,
-    description: `Discover the latest posts related to ${processedTopic.topics.title}, written by DuckyCoding!`,
+    title: `Topic: ${processedTopic.title}`,
+    description: `Discover the latest posts related to ${processedTopic.title}, written by DuckyCoding!`,
     extend: {
       meta: [
         {
           name: 'keywords',
-          content: `${processedTopic.topics.title}, posts about ${processedTopic.topics.title}, posts`,
+          content: `${processedTopic.title}, posts about ${processedTopic.title}, posts`,
         },
       ],
     },
   }}
 >
   <h1 class='mb-8 text-center text-4xl font-extrabold md:text-left'>
-    {processedTopic.topics.title}
+    {processedTopic.title}
   </h1>
   {
     processedPosts.length > 0 ? (
@@ -106,7 +106,7 @@ const processedPosts = await Promise.all(
     ) : (
       <>
         <h2 class='text-balance text-center text-2xl font-extrabold md:text-left'>
-          {`There isn't any content about ${processedTopic.topics.title} yet :'(`}
+          {`There isn't any content about ${processedTopic.title} yet :'(`}
         </h2>
         <h3 class='text-center text-xl font-extrabold md:text-left'>
           Check again soon!

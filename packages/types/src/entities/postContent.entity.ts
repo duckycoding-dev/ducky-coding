@@ -1,7 +1,4 @@
 import { z } from 'zod';
-import { ImageDTOSchema } from '../DTOs/image.dto';
-import { TopicDTOSchema } from '../DTOs';
-import { AuthorDTOSchema } from '../DTOs/author.dto';
 
 export const ContentStatusSchema = z
   .enum(['draft', 'published', 'deleted'])
@@ -10,11 +7,22 @@ export type ContentStatus = z.infer<typeof ContentStatusSchema>;
 
 export const PostContentSchema = z.object({
   title: z.string(),
-  bannerImage: ImageDTOSchema,
+  bannerImage: z.object({
+    path: z.string(),
+    alt: z.string().optional(),
+  }),
   summary: z.string().optional(),
   content: z.string(),
-  authors: z.array(AuthorDTOSchema).min(1),
-  topic: TopicDTOSchema,
+  authors: z
+    .array(
+      z.object({
+        username: z.string(),
+      }),
+    )
+    .min(1),
+  topic: z.object({
+    title: z.string(),
+  }),
   tags: z.array(z.string()).min(1),
   language: z.enum(['en', 'it']).default('en'),
   timeToRead: z.number(),
