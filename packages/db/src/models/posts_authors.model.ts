@@ -1,6 +1,8 @@
 import { sqliteTable, integer, primaryKey } from 'drizzle-orm/sqlite-core';
+import { z } from 'zod';
+import { PostAuthorDTO } from '@ducky-coding/types/DTOs';
 import { PostsTable } from './posts.model';
-import { AuthorsTable } from './authors.model';
+import { UsersTable } from './users.model';
 
 export const PostsAuthorsTable = sqliteTable(
   'postsAuthors',
@@ -10,7 +12,7 @@ export const PostsAuthorsTable = sqliteTable(
       .references(() => PostsTable.id),
     authorId: integer('authorId')
       .notNull()
-      .references(() => AuthorsTable.userId),
+      .references(() => UsersTable.id),
   },
   (table) => ({
     compositePrimaryKey: primaryKey({
@@ -18,3 +20,20 @@ export const PostsAuthorsTable = sqliteTable(
     }),
   }),
 );
+
+export const PostsAuthorsSchema = z.object({
+  postId: z.number(),
+  autorId: z.number(),
+});
+
+export type InsertPostAuthor = typeof PostsAuthorsTable.$inferInsert;
+export type PostAuthor = typeof PostsAuthorsTable.$inferSelect;
+
+export function mapToPostAuthorDTO(
+  selectedPostAuthor: PostAuthor,
+): PostAuthorDTO {
+  return {
+    postId: selectedPostAuthor.postId,
+    authorId: selectedPostAuthor.authorId,
+  };
+}

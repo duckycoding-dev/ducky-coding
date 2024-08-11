@@ -24,7 +24,7 @@ export const PostContentSchema = z.object({
     title: z.string(),
   }),
   tags: z.array(z.string()).min(1),
-  language: z.enum(['en', 'it']).default('en'),
+  language: z.string().default('en'),
   timeToRead: z.number(),
   status: ContentStatusSchema,
 });

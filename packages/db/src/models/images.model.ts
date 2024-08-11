@@ -1,5 +1,6 @@
 import { z } from 'zod';
 import { text, sqliteTable, integer } from 'drizzle-orm/sqlite-core';
+import { ImageDTO } from '@ducky-coding/types/DTOs';
 
 export const ImagesTable = sqliteTable('images', {
   id: integer('id').primaryKey({ autoIncrement: true }),
@@ -16,3 +17,11 @@ export const ImageSchema = z.object({
 
 export type InsertImage = typeof ImagesTable.$inferInsert;
 export type Image = typeof ImagesTable.$inferSelect;
+
+export function mapToImageDTO(selectedImage: Image): ImageDTO {
+  return {
+    id: selectedImage.id,
+    path: selectedImage.path,
+    alt: selectedImage.alt ?? undefined,
+  };
+}

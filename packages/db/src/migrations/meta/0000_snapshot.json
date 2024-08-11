@@ -1,11 +1,303 @@
 {
   "version": "6",
   "dialect": "sqlite",
-  "id": "d041735c-2cee-49a3-9022-db0cdeb7fdd7",
+  "id": "7711004f-2a1f-4b74-9218-f19b65af46d5",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
-    "Tags": {
-      "name": "Tags",
+    "images": {
+      "name": "images",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "integer",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": true
+        },
+        "path": {
+          "name": "path",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "alt": {
+          "name": "alt",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        }
+      },
+      "indexes": {
+        "images_path_unique": {
+          "name": "images_path_unique",
+          "columns": [
+            "path"
+          ],
+          "isUnique": true
+        }
+      },
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "postsAuthors": {
+      "name": "postsAuthors",
+      "columns": {
+        "postId": {
+          "name": "postId",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "authorId": {
+          "name": "authorId",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "postsAuthors_postId_posts_id_fk": {
+          "name": "postsAuthors_postId_posts_id_fk",
+          "tableFrom": "postsAuthors",
+          "tableTo": "posts",
+          "columnsFrom": [
+            "postId"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "postsAuthors_authorId_users_id_fk": {
+          "name": "postsAuthors_authorId_users_id_fk",
+          "tableFrom": "postsAuthors",
+          "tableTo": "users",
+          "columnsFrom": [
+            "authorId"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {
+        "postsAuthors_postId_authorId_pk": {
+          "columns": [
+            "authorId",
+            "postId"
+          ],
+          "name": "postsAuthors_postId_authorId_pk"
+        }
+      },
+      "uniqueConstraints": {}
+    },
+    "postsTags": {
+      "name": "postsTags",
+      "columns": {
+        "postId": {
+          "name": "postId",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "tagName": {
+          "name": "tagName",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "postsTags_postId_posts_id_fk": {
+          "name": "postsTags_postId_posts_id_fk",
+          "tableFrom": "postsTags",
+          "tableTo": "posts",
+          "columnsFrom": [
+            "postId"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "postsTags_tagName_tags_name_fk": {
+          "name": "postsTags_tagName_tags_name_fk",
+          "tableFrom": "postsTags",
+          "tableTo": "tags",
+          "columnsFrom": [
+            "tagName"
+          ],
+          "columnsTo": [
+            "name"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {
+        "postsTags_postId_tagName_pk": {
+          "columns": [
+            "postId",
+            "tagName"
+          ],
+          "name": "postsTags_postId_tagName_pk"
+        }
+      },
+      "uniqueConstraints": {}
+    },
+    "posts": {
+      "name": "posts",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "integer",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": true
+        },
+        "slug": {
+          "name": "slug",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "title": {
+          "name": "title",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "bannerImageId": {
+          "name": "bannerImageId",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "summary": {
+          "name": "summary",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "content": {
+          "name": "content",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "topicTitle": {
+          "name": "topicTitle",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "language": {
+          "name": "language",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "timeToRead": {
+          "name": "timeToRead",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": 1
+        },
+        "status": {
+          "name": "status",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": "'draft'"
+        },
+        "createdAt": {
+          "name": "createdAt",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": 1723386965280
+        },
+        "updatedAt": {
+          "name": "updatedAt",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": 1723386965280
+        },
+        "publishedAt": {
+          "name": "publishedAt",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "deletedAt": {
+          "name": "deletedAt",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "posts_bannerImageId_images_id_fk": {
+          "name": "posts_bannerImageId_images_id_fk",
+          "tableFrom": "posts",
+          "tableTo": "images",
+          "columnsFrom": [
+            "bannerImageId"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "posts_topicTitle_topics_title_fk": {
+          "name": "posts_topicTitle_topics_title_fk",
+          "tableFrom": "posts",
+          "tableTo": "topics",
+          "columnsFrom": [
+            "topicTitle"
+          ],
+          "columnsTo": [
+            "title"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "tags": {
+      "name": "tags",
       "columns": {
         "name": {
           "name": "name",
@@ -16,8 +308,8 @@
         }
       },
       "indexes": {
-        "Tags_name_unique": {
-          "name": "Tags_name_unique",
+        "tags_name_unique": {
+          "name": "tags_name_unique",
           "columns": [
             "name"
           ],
@@ -28,8 +320,8 @@
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
-    "Topics": {
-      "name": "Topics",
+    "topics": {
+      "name": "topics",
       "columns": {
         "title": {
           "name": "title",
@@ -38,40 +330,168 @@
           "notNull": true,
           "autoincrement": false
         },
-        "imageFilename": {
-          "name": "imageFilename",
+        "slug": {
+          "name": "slug",
           "type": "text",
           "primaryKey": false,
-          "notNull": false,
+          "notNull": true,
           "autoincrement": false
         },
-        "imageAlt": {
-          "name": "imageAlt",
-          "type": "text",
+        "imageId": {
+          "name": "imageId",
+          "type": "integer",
           "primaryKey": false,
           "notNull": false,
           "autoincrement": false
         }
       },
       "indexes": {
-        "Topics_title_unique": {
-          "name": "Topics_title_unique",
+        "topics_title_unique": {
+          "name": "topics_title_unique",
           "columns": [
             "title"
+          ],
+          "isUnique": true
+        },
+        "topics_slug_unique": {
+          "name": "topics_slug_unique",
+          "columns": [
+            "slug"
           ],
           "isUnique": true
         }
       },
       "foreignKeys": {
-        "Topics_title_Tags_name_fk": {
-          "name": "Topics_title_Tags_name_fk",
-          "tableFrom": "Topics",
-          "tableTo": "Tags",
+        "topics_title_tags_name_fk": {
+          "name": "topics_title_tags_name_fk",
+          "tableFrom": "topics",
+          "tableTo": "tags",
           "columnsFrom": [
             "title"
           ],
           "columnsTo": [
             "name"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "topics_imageId_images_id_fk": {
+          "name": "topics_imageId_images_id_fk",
+          "tableFrom": "topics",
+          "tableTo": "images",
+          "columnsFrom": [
+            "imageId"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "users": {
+      "name": "users",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "integer",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": true
+        },
+        "username": {
+          "name": "username",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "email": {
+          "name": "email",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "name": {
+          "name": "name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "lastName": {
+          "name": "lastName",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "profilePictureId": {
+          "name": "profilePictureId",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "bio": {
+          "name": "bio",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "createdAt": {
+          "name": "createdAt",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "deletedAt": {
+          "name": "deletedAt",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        }
+      },
+      "indexes": {
+        "users_id_unique": {
+          "name": "users_id_unique",
+          "columns": [
+            "id"
+          ],
+          "isUnique": true
+        },
+        "users_username_unique": {
+          "name": "users_username_unique",
+          "columns": [
+            "username"
+          ],
+          "isUnique": true
+        },
+        "users_email_unique": {
+          "name": "users_email_unique",
+          "columns": [
+            "email"
+          ],
+          "isUnique": true
+        }
+      },
+      "foreignKeys": {
+        "users_profilePictureId_images_id_fk": {
+          "name": "users_profilePictureId_images_id_fk",
+          "tableFrom": "users",
+          "tableTo": "images",
+          "columnsFrom": [
+            "profilePictureId"
+          ],
+          "columnsTo": [
+            "id"
           ],
           "onDelete": "no action",
           "onUpdate": "no action"

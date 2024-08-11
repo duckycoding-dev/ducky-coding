@@ -1,4 +1,3 @@
-export * from './authors.model';
 export * from './images.model';
 export * from './posts_authors.model';
 export * from './posts_tags.model';
