@@ -1,5 +1,7 @@
 import { z } from 'zod';
 import { ContentStatusSchema } from '../entities/postContent.entity';
+import { UserDTOSchema } from './user.dto';
+import { ImageDTOSchema } from './image.dto';
 
 export const PostDTOSchema = z.object({
   id: z.number(),
@@ -31,3 +33,12 @@ export const PostTagDTOSchema = z.object({
   tagName: z.string(),
 });
 export type PostTagDTO = z.infer<typeof PostTagDTOSchema>;
+
+export const PostWithAuthorAndBannerImageDTOSchema = PostDTOSchema.extend({
+  authors: UserDTOSchema.array().min(1),
+  bannerImage: ImageDTOSchema.optional(),
+}).omit({ bannerImageId: true });
+
+export type PostWithAuthorAndBannerImageDTO = z.infer<
+  typeof PostWithAuthorAndBannerImageDTOSchema
+>;

@@ -1,4 +1,5 @@
 import z from 'zod';
+import { ImageDTOSchema } from './image.dto';
 
 export const UserDTOSchema = z.object({
   id: z.number(),
@@ -13,3 +14,10 @@ export const UserDTOSchema = z.object({
   deletedAt: z.number().optional(),
 });
 export type UserDTO = z.infer<typeof UserDTOSchema>;
+
+export const UserWithProfilePictureDTOSchema = UserDTOSchema.extend({
+  profilePicture: ImageDTOSchema,
+}).omit({ profilePictureId: true });
+export type UserWithProfilePictureDTO = z.infer<
+  typeof UserWithProfilePictureDTOSchema
+>;

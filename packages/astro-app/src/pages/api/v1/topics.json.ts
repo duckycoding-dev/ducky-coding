@@ -3,7 +3,7 @@ import { TopicsService } from '@ducky-coding/db/services';
 
 export const GET: APIRoute = async () => {
   try {
-    const topics = await TopicsService.getAll();
+    const topics = await TopicsService.getAllTopics();
     return new Response(JSON.stringify(topics), {
       status: 200,
       headers: {
