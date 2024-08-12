@@ -8,9 +8,8 @@ export const TopicDTOSchema = z.object({
 });
 export type TopicDTO = z.infer<typeof TopicDTOSchema>;
 
-export const TopicWithImageDTOSchema = z.object({
-  title: z.string(),
-  slug: z.string(),
+export const TopicWithImageDTOSchema = TopicDTOSchema.extend({
   image: ImageDTOSchema.optional(),
-});
+}).omit({ imageId: true });
+
 export type TopicWithImageDTO = z.infer<typeof TopicWithImageDTOSchema>;

@@ -3,15 +3,17 @@ import { Image, mapToUserDTO, User } from '../models';
 
 export function mapToUserWithProfilePictureDTO(
   user: User,
-  image: Image,
+  image: Image | null,
 ): UserWithProfilePictureDTO {
   const mapped = {
     ...mapToUserDTO(user),
-    profilePicture: {
-      id: image.id,
-      path: image.path,
-      alt: image.alt ?? undefined,
-    },
+    profilePicture: image
+      ? {
+          id: image.id,
+          path: image.path,
+          alt: image.alt ?? undefined,
+        }
+      : undefined,
   };
   delete mapped.profilePictureId;
   return mapped;

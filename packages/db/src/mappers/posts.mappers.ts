@@ -10,12 +10,12 @@ import {
 
 export function mapToPostWithAuthorAndBannerImageDTO(
   selectedPost: Post,
-  users: User[],
-  image?: Image,
+  users: User[] | null,
+  image: Image | null,
 ): PostWithAuthorAndBannerImageDTO {
   const mapped = {
     ...mapToPostDTO(selectedPost),
-    authors: users.map((user) => mapToUserDTO(user)),
+    authors: users ? users.map((user) => mapToUserDTO(user)) : [],
     bannerImage: image ? mapToImageDTO(image) : undefined,
   };
 

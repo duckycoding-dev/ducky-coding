@@ -22,6 +22,7 @@ export const PostDTOSchema = z.object({
   deletedAt: z.number().optional(),
 });
 export type PostDTO = z.infer<typeof PostDTOSchema>;
+
 export const PostAuthorDTOSchema = z.object({
   postId: z.number(),
   authorId: z.number(),
@@ -41,4 +42,12 @@ export const PostWithAuthorAndBannerImageDTOSchema = PostDTOSchema.extend({
 
 export type PostWithAuthorAndBannerImageDTO = z.infer<
   typeof PostWithAuthorAndBannerImageDTOSchema
+>;
+
+export const PostWithAuthorAndBannerImageAndTagsDTOSchema =
+  PostWithAuthorAndBannerImageDTOSchema.extend({
+    tags: z.array(z.string()).min(1),
+  });
+export type PostWithAuthorAndBannerImageAndTagsDTO = z.infer<
+  typeof PostWithAuthorAndBannerImageAndTagsDTOSchema
 >;

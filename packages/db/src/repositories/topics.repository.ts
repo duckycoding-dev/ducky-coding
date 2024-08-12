@@ -1,27 +1,47 @@
 import { eq, inArray } from 'drizzle-orm';
+import { TopicDTO, TopicWithImageDTO } from '@ducky-coding/types/DTOs';
 import { db } from '../client';
-import { ImagesTable, TopicsTable } from '../models';
+import { ImagesTable, mapToTopicDTO, TopicsTable } from '../models';
+import { mapToTopicWithImageDTO } from '../mappers/topics.mappers';
 
-const getTopics = async (topicTitles: string[]) => {
+const getTopics = async (topicTitles: string[]): Promise<TopicDTO[]> => {
   const topics = await db
     .select()
     .from(TopicsTable)
     .where(inArray(TopicsTable.title, topicTitles));
-  return topics;
+
+  const topicDTOs: TopicDTO[] = topics.map((topic) => {
+    return mapToTopicDTO(topic);
+  });
+
+  return topicDTOs;
 };
 
-const getAllTopics = async () => {
+const getAllTopics = async (): Promise<TopicDTO[]> => {
   const topics = await db.select().from(TopicsTable).all();
-  return topics;
+  const topicDTOs: TopicDTO[] = topics.map((topic) => {
+    return mapToTopicDTO(topic);
+  });
+
+  return topicDTOs;
 };
 
-const getAllTopicsWithImage = async () => {
+const getAllTopicsWithImage = async (): Promise<TopicWithImageDTO[]> => {
   const topics = await db
     .select()
     .from(TopicsTable)
     .leftJoin(ImagesTable, eq(TopicsTable.imageId, ImagesTable.id))
     .all();
-  return topics;
+
+  const topicWithImageDTOs: TopicWithImageDTO[] = topics.map(
+    (topicWithImage) => {
+      return mapToTopicWithImageDTO(
+        topicWithImage.topics,
+        topicWithImage.images ?? undefined,
+      );
+    },
+  );
+  return topicWithImageDTOs;
 };
 
 export const TopicsRepository = {

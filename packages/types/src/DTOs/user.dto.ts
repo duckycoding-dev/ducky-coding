@@ -16,7 +16,7 @@ export const UserDTOSchema = z.object({
 export type UserDTO = z.infer<typeof UserDTOSchema>;
 
 export const UserWithProfilePictureDTOSchema = UserDTOSchema.extend({
-  profilePicture: ImageDTOSchema,
+  profilePicture: ImageDTOSchema.optional(),
 }).omit({ profilePictureId: true });
 export type UserWithProfilePictureDTO = z.infer<
   typeof UserWithProfilePictureDTOSchema

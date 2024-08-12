@@ -1,53 +1,93 @@
 import { eq, inArray } from 'drizzle-orm';
+import { UserDTO, UserWithProfilePictureDTO } from '@ducky-coding/types/DTOs';
 import { db } from '../client';
-import { ImagesTable, UsersTable } from '../models';
+import { ImagesTable, mapToUserDTO, UsersTable } from '../models';
+import { mapToUserWithProfilePictureDTO } from '../mappers/users.mappers';
 
-const getUsers = async (userIds: number[]) => {
+const getUsers = async (userIds: number[]): Promise<UserDTO[]> => {
   const users = await db
     .select()
     .from(UsersTable)
     .where(inArray(UsersTable.id, userIds));
-  return users;
+
+  const userDTOs: UserDTO[] = users.map((user) => {
+    return mapToUserDTO(user);
+  });
+  return userDTOs;
 };
 
-const getUsersByUsername = async (usernames: string[]) => {
+const getUsersByUsername = async (usernames: string[]): Promise<UserDTO[]> => {
   const users = await db
     .select()
     .from(UsersTable)
     .where(inArray(UsersTable.username, usernames));
-  return users;
+  const userDTOs: UserDTO[] = users.map((user) => {
+    return mapToUserDTO(user);
+  });
+  return userDTOs;
 };
 
-const getAllUsers = async () => {
+const getAllUsers = async (): Promise<UserDTO[]> => {
   const users = await db.select().from(UsersTable).all();
-  return users;
+  const userDTOs: UserDTO[] = users.map((user) => {
+    return mapToUserDTO(user);
+  });
+  return userDTOs;
 };
 
-const getUsersWithProfilePictureByUsername = async (usernames: string[]) => {
-  const users = await db
+const getUsersWithProfilePictureByUsername = async (
+  usernames: string[],
+): Promise<UserWithProfilePictureDTO[]> => {
+  const usersWithProfilePicture = await db
     .select()
     .from(UsersTable)
     .leftJoin(ImagesTable, eq(UsersTable.profilePictureId, ImagesTable.id))
     .where(inArray(UsersTable.username, usernames));
-  return users;
+
+  const userWithProfilePictureDTOs: UserWithProfilePictureDTO[] =
+    usersWithProfilePicture.map((userWithProfilePicture) => {
+      return mapToUserWithProfilePictureDTO(
+        userWithProfilePicture.users,
+        userWithProfilePicture.images,
+      );
+    });
+  return userWithProfilePictureDTOs;
 };
 
-const getUsersWithProfilePicture = async (userIds: number[]) => {
-  const users = await db
+const getUsersWithProfilePicture = async (
+  userIds: number[],
+): Promise<UserWithProfilePictureDTO[]> => {
+  const usersWithProfilePicture = await db
     .select()
     .from(UsersTable)
     .leftJoin(ImagesTable, eq(UsersTable.profilePictureId, ImagesTable.id))
     .where(inArray(UsersTable.id, userIds));
-  return users;
+  const userWithProfilePictureDTOs: UserWithProfilePictureDTO[] =
+    usersWithProfilePicture.map((userWithProfilePicture) => {
+      return mapToUserWithProfilePictureDTO(
+        userWithProfilePicture.users,
+        userWithProfilePicture.images,
+      );
+    });
+  return userWithProfilePictureDTOs;
 };
 
-const getAllUsersWithProfilePicture = async () => {
-  const users = await db
+const getAllUsersWithProfilePicture = async (): Promise<
+  UserWithProfilePictureDTO[]
+> => {
+  const usersWithProfilePicture = await db
     .select()
     .from(UsersTable)
     .leftJoin(ImagesTable, eq(UsersTable.profilePictureId, ImagesTable.id))
     .all();
-  return users;
+  const userWithProfilePictureDTOs: UserWithProfilePictureDTO[] =
+    usersWithProfilePicture.map((userWithProfilePicture) => {
+      return mapToUserWithProfilePictureDTO(
+        userWithProfilePicture.users,
+        userWithProfilePicture.images,
+      );
+    });
+  return userWithProfilePictureDTOs;
 };
 
 export const UsersRepository = {

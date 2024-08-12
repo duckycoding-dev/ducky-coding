@@ -33,7 +33,8 @@ Here's a breakdown of where they will be stored
 ## Mapping from and to DTOs
 
 We also need to define functions that can map between dbSchemas-DTOs and viceversa.\
-These functions will be defined in the _mappers_ directory in the db package, as these mappers will only be used at the service and repository layers of the db package.\
+These functions will be defined in the _mappers_ directory in the db package, as these mappers will only be used at the repository layer of the db package.\
+Our service layer will always expect to receive an object DTO from the repository layer: this allows us to be more flexible in the future, by letting us be able to change the repository layer at any time without having to change the service layer as well.
 
 ## How to define types
 
@@ -50,3 +51,22 @@ In order to maintaing data integrity and correctness, it will be mandatory to va
 On the backend the validation will always happen at the service layer and will always happen at the API endpoint handlers layer (controllers) when and if they will be introduced in the project; the double validation will be an extra step for security: keep in mind that the database service layer could be called directly, thus needing to validate content there as well, not only at the API endpoint handler.
 
 The object can be validated on the client side before sending requests to the backend to provide users instant feedback and avoid unnecessary backend calls
+
+## Inversion of Control (IoC) with Dependency Injection (DI)
+
+As of right now, having a very simple project, we don't really need much of the complexity we are creating by structuring the architecture: we could also be using IoC with DI in order to remove the service layer dependencies from the repository layer.\
+We should be passing the repository to the service layer, instead of importing it directly, so that we can later swap it out with ease (say for example, if we need to move our repository logic to Prisma instead of Drizzle): this will be more meaninful when/if we will have a controller layer for the API endpoints from which we will be calling the service layer by passing the repository layer we want to use as a dependency.\
+We could have a `v1/getAllUsers/` endpoint that uses the Drizzle repository and at the same time have a `v2/getAllUsers/` that uses the Prisma repository:
+
+```ts
+// users.controller.ts
+export function getAllUsers(repository: IRepository): UserDTO[]{
+    ...
+    const usersFromServiceLayer: UserDTO[] = service.getAllUsers(repository);
+    return ...;
+}
+
+// users.handlers.ts (pseudo-code)
+v1getAllUsers = getAllUsers(drizzleRepository);
+v2getAllUsers = getAllUsers(prismaRepository);
+```
