@@ -1,6 +1,7 @@
 import { UserDTO } from '@ducky-coding/types/DTOs';
 import { text, sqliteTable, integer } from 'drizzle-orm/sqlite-core';
 import { z } from 'zod';
+import { sql } from 'drizzle-orm';
 import { ImagesTable } from './images.model';
 
 export const UsersTable = sqliteTable('users', {
@@ -14,16 +15,27 @@ export const UsersTable = sqliteTable('users', {
     () => ImagesTable.id,
   ),
   bio: text('bio'),
-  createdAt: integer('createdAt').notNull(),
-  deletedAt: integer('deletedAt'),
+  createdAt: integer('createdAt', { mode: 'number' })
+    .notNull()
+    .default(sql`(strftime('%s', 'now'))`),
+  updatedAt: integer('updatedAt', { mode: 'number' })
+    .notNull()
+    .default(sql`(strftime('%s', 'now'))`),
+  deletedAt: integer('deletedAt', { mode: 'number' }),
 });
 
 export const UserSchema = z.object({
   id: z.number(),
   username: z.string(),
   email: z.string(),
+  password: z.string(),
   name: z.string(),
   lastName: z.string().optional(),
+  profilePictureId: z.number().optional(),
+  bio: z.string().optional(),
+  createdAt: z.number(),
+  updatedAt: z.number(),
+  deletedAt: z.number().optional(),
 });
 
 export type InsertUser = typeof UsersTable.$inferInsert;
@@ -40,6 +52,7 @@ export function mapToUserDTO(selectedUser: User): UserDTO {
     password: selectedUser.password,
     bio: selectedUser.bio ?? undefined,
     createdAt: selectedUser.createdAt,
+    updatedAt: selectedUser.updatedAt,
     deletedAt: selectedUser.deletedAt ?? undefined,
   };
 }

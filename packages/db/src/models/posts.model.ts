@@ -1,5 +1,6 @@
 import { z } from 'zod';
 import { text, sqliteTable, integer } from 'drizzle-orm/sqlite-core';
+import { sql } from 'drizzle-orm';
 import {
   ContentStatus,
   ContentStatusSchema,
@@ -24,10 +25,10 @@ export const PostsTable = sqliteTable('posts', {
   status: text('status').$type<ContentStatus>().notNull().default('draft'), // value should be one of [draft, published, deleted] (can't yet use enums )
   createdAt: integer('createdAt', { mode: 'number' })
     .notNull()
-    .default(Date.now()),
+    .default(sql`(strftime('%s', 'now'))`),
   updatedAt: integer('updatedAt', { mode: 'number' })
     .notNull()
-    .default(Date.now()),
+    .default(sql`(strftime('%s', 'now'))`),
   publishedAt: integer('publishedAt', { mode: 'number' }),
   deletedAt: integer('deletedAt', { mode: 'number' }), // need to use date type instead of integer maybe
 });

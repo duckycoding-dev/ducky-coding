@@ -31,8 +31,8 @@ CREATE TABLE `posts` (
 	`language` text NOT NULL,
 	`timeToRead` integer DEFAULT 1 NOT NULL,
 	`status` text DEFAULT 'draft' NOT NULL,
-	`createdAt` integer DEFAULT 1723386965280 NOT NULL,
-	`updatedAt` integer DEFAULT 1723386965280 NOT NULL,
+	`createdAt` integer DEFAULT (strftime('%s', 'now')) NOT NULL,
+	`updatedAt` integer DEFAULT (strftime('%s', 'now')) NOT NULL,
 	`publishedAt` integer,
 	`deletedAt` integer,
 	FOREIGN KEY (`bannerImageId`) REFERENCES `images`(`id`) ON UPDATE no action ON DELETE no action,
@@ -59,7 +59,8 @@ CREATE TABLE `users` (
 	`lastName` text,
 	`profilePictureId` integer,
 	`bio` text,
-	`createdAt` integer NOT NULL,
+	`createdAt` integer DEFAULT (strftime('%s', 'now')) NOT NULL,
+	`updatedAt` integer DEFAULT (strftime('%s', 'now')) NOT NULL,
 	`deletedAt` integer,
 	FOREIGN KEY (`profilePictureId`) REFERENCES `images`(`id`) ON UPDATE no action ON DELETE no action
 );

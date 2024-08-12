@@ -11,6 +11,7 @@ export const UserDTOSchema = z.object({
   profilePictureId: z.number().optional(),
   bio: z.string().optional(),
   createdAt: z.number(),
+  updatedAt: z.number(),
   deletedAt: z.number().optional(),
 });
 export type UserDTO = z.infer<typeof UserDTOSchema>;

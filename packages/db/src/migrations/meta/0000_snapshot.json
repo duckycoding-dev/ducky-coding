@@ -1,7 +1,7 @@
 {
   "version": "6",
   "dialect": "sqlite",
-  "id": "7711004f-2a1f-4b74-9218-f19b65af46d5",
+  "id": "88d2fcca-6ecd-4e91-8b74-081efb088f17",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
     "images": {
@@ -239,7 +239,7 @@
           "primaryKey": false,
           "notNull": true,
           "autoincrement": false,
-          "default": 1723386965280
+          "default": "(strftime('%s', 'now'))"
         },
         "updatedAt": {
           "name": "updatedAt",
@@ -247,7 +247,7 @@
           "primaryKey": false,
           "notNull": true,
           "autoincrement": false,
-          "default": 1723386965280
+          "default": "(strftime('%s', 'now'))"
         },
         "publishedAt": {
           "name": "publishedAt",
@@ -449,7 +449,16 @@
           "type": "integer",
           "primaryKey": false,
           "notNull": true,
-          "autoincrement": false
+          "autoincrement": false,
+          "default": "(strftime('%s', 'now'))"
+        },
+        "updatedAt": {
+          "name": "updatedAt",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": "(strftime('%s', 'now'))"
         },
         "deletedAt": {
           "name": "deletedAt",
