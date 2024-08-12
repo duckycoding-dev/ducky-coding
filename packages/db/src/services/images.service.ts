@@ -1,4 +1,4 @@
-import { ImageDTO } from '@ducky-coding/types/DTOs';
+import { ImageDTO, ImageDTOSchema } from '@ducky-coding/types/DTOs';
 import { ImagesRepository } from '../repositories/images.repository';
 
 const getImage = async (imageId: number): Promise<ImageDTO | undefined> => {
@@ -32,12 +32,21 @@ const getAllImages = async (): Promise<ImageDTO[]> => {
   return selectedImages;
 };
 
+const upsertImage = async (image: ImageDTO): Promise<ImageDTO | undefined> => {
+  const parsedImage = ImageDTOSchema.parse(image);
+  const upsertedImages = await ImagesRepository.upsertImage([parsedImage]);
+  if (upsertedImages.length === 0) return undefined; // throw new Error('Failed to upsert image');
+  return upsertedImages[0];
+};
+
 export const ImagesService = {
   getImage,
   getImageByPath,
   getImages,
   getImagesByPaths,
   getAllImages,
+
+  upsertImage,
 };
 
 // Add more methods as needed

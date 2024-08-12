@@ -3,12 +3,12 @@ import { ContentStatusSchema } from '../entities/postContent.entity';
 import { UserDTOSchema } from './user.dto';
 import { ImageDTOSchema } from './image.dto';
 
-export const PostDTOSchema = z.object({
-  id: z.number(),
+export const BasePostDTOSchema = z.object({
+  id: z.number().optional(),
   slug: z.string(),
   title: z.string(),
   bannerImageId: z.number().optional(),
-  summary: z.string().optional(),
+  summary: z.string(),
   content: z.string(),
   // authorsIds: z.array(z.number()).min(1),
   topicTitle: z.string(),
@@ -21,6 +21,17 @@ export const PostDTOSchema = z.object({
   publishedAt: z.number().optional(),
   deletedAt: z.number().optional(),
 });
+export type BasePostDTO = z.infer<typeof BasePostDTOSchema>;
+
+const CreatePostDTOSchema = BasePostDTOSchema.omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true,
+  deletedAt: true,
+});
+export type CreatePostDTO = z.infer<typeof CreatePostDTOSchema>;
+
+export const PostDTOSchema = BasePostDTOSchema.required({ id: true });
 export type PostDTO = z.infer<typeof PostDTOSchema>;
 
 export const PostAuthorDTOSchema = z.object({

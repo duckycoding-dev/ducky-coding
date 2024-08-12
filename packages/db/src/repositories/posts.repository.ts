@@ -1,5 +1,6 @@
-import { eq, inArray } from 'drizzle-orm';
+import { eq, inArray, sql } from 'drizzle-orm';
 import {
+  PostAuthorDTO,
   PostDTO,
   PostTagDTO,
   PostWithAuthorAndBannerImageAndTagsDTO,
@@ -8,6 +9,10 @@ import {
 import { db } from '../client';
 import {
   ImagesTable,
+  InsertPost,
+  InsertPostAuthor,
+  InsertPostTag,
+  mapToPostAuthorDTO,
   mapToPostDTO,
   mapToPostTagDTO,
   PostsAuthorsTable,
@@ -232,6 +237,157 @@ const getAllPostsWithAuthorAndBannerImageAndTags = async (): Promise<
   return postWithAuthorAndBannerImageAndSlugsDTOs;
 };
 
+const insertPosts = async (posts: InsertPost[]): Promise<PostDTO[]> => {
+  const insertedPosts = await db
+    .insert(PostsTable)
+    .values(
+      posts.map((post) => {
+        return {
+          slug: post.slug,
+          topicTitle: post.topicTitle,
+          bannerImageId: post.bannerImageId,
+          publishedAt: post.status === 'published' ? Date.now() / 1000 : null,
+          content: post.content,
+          language: post.language,
+          summary: post.summary,
+          title: post.title,
+          timeToRead: post.timeToRead,
+          status: post.status,
+          createdAt: post.createdAt,
+          updatedAt: post.updatedAt,
+        };
+      }),
+    )
+    .returning();
+
+  return insertedPosts.map((insertedPost) => mapToPostDTO(insertedPost));
+};
+
+const insertPostAuthors = async (
+  postAuthors: InsertPostAuthor[],
+): Promise<PostAuthorDTO[]> => {
+  const insertedPostAuthors = await db
+    .insert(PostsAuthorsTable)
+    .values(postAuthors)
+    .returning();
+
+  return insertedPostAuthors.map((insertedPostAuthor) => {
+    return mapToPostAuthorDTO(insertedPostAuthor);
+  });
+};
+
+const insertPostTags = async (
+  postTags: InsertPostTag[],
+): Promise<PostTagDTO[]> => {
+  const insertedPostTags = await db
+    .insert(PostsTagsTable)
+    .values(postTags)
+    .returning();
+
+  return insertedPostTags.map((insertedPostTag) => {
+    return mapToPostTagDTO(insertedPostTag);
+  });
+};
+
+const deletePosts = async (postIds: number[]): Promise<PostDTO[]> => {
+  const deletedPosts = await db
+    .delete(PostsTable)
+    .where(inArray(PostsTable.id, postIds))
+    .returning();
+
+  return deletedPosts.map((deletedPost) => mapToPostDTO(deletedPost));
+};
+
+const softDeletePosts = async (postIds: number[]): Promise<PostDTO[]> => {
+  const now = Date.now() / 1000;
+  const softDeletedPosts = await db
+    .update(PostsTable)
+    .set({
+      deletedAt: now,
+      status: 'deleted',
+      updatedAt: now,
+    })
+    .where(inArray(PostsTable.id, postIds))
+    .returning();
+
+  return softDeletedPosts.map((deletedPost) => mapToPostDTO(deletedPost));
+};
+
+const deletePostAuthors = async (
+  postIds: number[],
+): Promise<PostAuthorDTO[]> => {
+  const deletedPostAuthors = await db
+    .delete(PostsAuthorsTable)
+    .where(inArray(PostsAuthorsTable.postId, postIds))
+    .returning();
+
+  return deletedPostAuthors.map((deletedPostAuthor) => {
+    return mapToPostAuthorDTO(deletedPostAuthor);
+  });
+};
+
+const deletePostTags = async (postIds: number[]): Promise<PostTagDTO[]> => {
+  const deletedPostTags = await db
+    .delete(PostsTagsTable)
+    .where(inArray(PostsTagsTable.postId, postIds))
+    .returning();
+
+  return deletedPostTags.map((deletedPostTag) => {
+    return mapToPostTagDTO(deletedPostTag);
+  });
+};
+
+const updatePost = async (post: PostDTO): Promise<PostDTO | undefined> => {
+  const updatedPost = await db
+    .update(PostsTable)
+    .set({
+      bannerImageId: post.bannerImageId,
+      content: post.content,
+      createdAt: post.createdAt,
+      deletedAt: post.deletedAt,
+      language: post.language,
+      publishedAt: post.publishedAt,
+      status: post.status,
+      summary: post.summary,
+      timeToRead: post.timeToRead,
+      title: post.title,
+      topicTitle: post.topicTitle,
+      updatedAt: post.updatedAt,
+      slug: post.slug,
+    })
+    .returning();
+
+  if (updatedPost.length === 0) return undefined;
+  return mapToPostDTO(updatedPost[0]);
+};
+
+const upsertPosts = async (posts: PostDTO[]): Promise<PostDTO[]> => {
+  const updatedPosts = await db
+    .insert(PostsTable)
+    .values(posts)
+    .onConflictDoUpdate({
+      target: PostsTable.id,
+      set: {
+        bannerImageId: sql.raw(`excluded.${PostsTable.bannerImageId}`),
+        content: sql.raw(`excluded.${PostsTable.content}`),
+        createdAt: sql.raw(`excluded.${PostsTable.createdAt}`),
+        deletedAt: sql.raw(`excluded.${PostsTable.deletedAt}`),
+        language: sql.raw(`excluded.${PostsTable.language}`),
+        publishedAt: sql.raw(`excluded.${PostsTable.publishedAt}`),
+        status: sql.raw(`excluded.${PostsTable.status}`),
+        summary: sql.raw(`excluded.${PostsTable.summary}`),
+        timeToRead: sql.raw(`excluded.${PostsTable.timeToRead}`),
+        title: sql.raw(`excluded.${PostsTable.title}`),
+        topicTitle: sql.raw(`excluded.${PostsTable.topicTitle}`),
+        updatedAt: sql.raw(`excluded.${PostsTable.updatedAt}`),
+        slug: sql.raw(`excluded.${PostsTable.slug}`),
+      },
+    })
+    .returning();
+
+  return updatedPosts.map((updatedPost) => mapToPostDTO(updatedPost));
+};
+
 export const PostsRepository = {
   getPosts,
   getPostsBySlug,
@@ -240,4 +396,14 @@ export const PostsRepository = {
   getAllPostsWithAuthorAndBannerImage,
   getPostsWithAuthorAndBannerImageAndTagsBySlugs,
   getAllPostsWithAuthorAndBannerImageAndTags,
+
+  insertPosts,
+  insertPostAuthors,
+  insertPostTags,
+  deletePosts,
+  softDeletePosts,
+  deletePostAuthors,
+  deletePostTags,
+  updatePost,
+  upsertPosts,
 };

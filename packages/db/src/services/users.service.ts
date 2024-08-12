@@ -8,15 +8,22 @@ const getUser = async (userId: number): Promise<UserDTO | undefined> => {
   const userDTO: UserDTO = selectedUsers[0];
   return userDTO;
 };
+const getUserByUsername = async (
+  username: string,
+): Promise<UserDTO | undefined> => {
+  const selectedUsers = await UsersRepository.getUsersByUsername([username]);
+  if (selectedUsers.length === 0) return undefined;
+  return selectedUsers[0];
+};
 
 const getUsers = async (userIds: number[]): Promise<UserDTO[]> => {
   const selectedUsers = await UsersRepository.getUsers(userIds);
   return selectedUsers;
 };
 
-const getUsersByUsername = async (usernames: string[]): Promise<UserDTO[]> => {
-  const selectedTopics = await UsersRepository.getUsersByUsername(usernames);
-  return selectedTopics;
+const getUsersByUsernames = async (usernames: string[]): Promise<UserDTO[]> => {
+  const selectedUsers = await UsersRepository.getUsersByUsername(usernames);
+  return selectedUsers;
 };
 
 const getAllUsers = async (): Promise<UserDTO[]> => {
@@ -27,16 +34,17 @@ const getAllUsers = async (): Promise<UserDTO[]> => {
 const getAllUsersWithProfilePicture = async (): Promise<
   UserWithProfilePictureDTO[]
 > => {
-  const selectedTopicWithImages: UserWithProfilePictureDTO[] =
+  const selectedUsersWithProfilePicture: UserWithProfilePictureDTO[] =
     await UsersRepository.getAllUsersWithProfilePicture();
 
-  return selectedTopicWithImages;
+  return selectedUsersWithProfilePicture;
 };
 
-export const TopicsService = {
+export const UsersService = {
   getUser,
+  getUserByUsername,
   getUsers,
-  getUsersByUsername,
+  getUsersByUsernames,
   getAllUsers,
   getAllUsersWithProfilePicture,
 };

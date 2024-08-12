@@ -38,7 +38,7 @@ export const PostSchema = z.object({
   slug: z.string(),
   title: z.string(),
   bannerImage: ImageSchema,
-  summary: z.string().optional(),
+  summary: z.string(),
   content: z.string(),
   authors: z.array(UserSchema).min(1),
   topic: TopicSchema,

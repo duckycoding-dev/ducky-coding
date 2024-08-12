@@ -1,13 +1,15 @@
 ---
 import { Image } from 'astro:assets';
 import type { CollectionEntry } from 'astro:content';
-import DuckyCodingLogo from '@assets/images/DuckyCoding_logo.png';
 import type { ImageMetadata } from 'astro';
+import type { HTMLAttributes } from 'astro/types';
+import DuckyCodingLogo from '@assets/images/DuckyCoding_logo.png';
+import { cn } from '@utils/cn';
 import { Card } from '../Card';
 import { Link } from '../Link';
 import { Tag } from '../Tag';
 
-export interface PostCardProps {
+export interface PostCardProps extends HTMLAttributes<'a'> {
   post: CollectionEntry<'posts'>;
   bannerImage?: ImageMetadata | null;
 }
@@ -16,11 +18,11 @@ interface Props extends PostCardProps {}
 
 const { props }: { props: Props } = Astro;
 
-const { post, bannerImage } = props;
+const { post, bannerImage, class: className } = props;
 ---
 
-<Link variant='unstyled' href={`/posts/${post.slug}`}>
-  <Card class=''>
+<Link variant='unstyled' href={`/posts/${post.slug}`} class={cn(className)}>
+  <Card class='flex h-full flex-col'>
     <Image
       src={bannerImage ?? DuckyCodingLogo}
       alt={post.data.bannerImage.alt ?? 'Post banner image'}
@@ -28,23 +30,36 @@ const { post, bannerImage } = props;
       decoding='async'
       class='bg-primary-700 h-48 object-cover'
     />
-    <footer class='border-secondary flex flex-col gap-2 border-t-4 py-2.5'>
+    <footer class='border-secondary flex grow flex-col gap-2 border-t-4 py-2.5'>
       <h2 class='px-5 text-2xl font-black'>
         {post.data.title}
       </h2>
-      <p class='border-secondary px-5 text-base font-semibold'>
-        <span
-          >Written by: {
-            post.data.authors.map((author) => author.username).join(', ')
-          }</span
-        >
-      </p>
+      <section>
+        <p class='border-secondary px-5 text-base font-semibold'>
+          <span
+            >Written by: {
+              post.data.authors.map((author) => author.username).join(', ')
+            }</span
+          >
+        </p>
+        <p class='px-5 text-sm italic'>
+          Read time: {post.data.timeToRead}
+          {post.data.timeToRead > 1 ? 'minutes' : 'minute'}
+        </p>
+      </section>
       <div
-        class='border-secondary flex justify-end gap-2 px-5 text-xl font-semibold'
+        class='border-secondary mt-auto flex flex-wrap justify-end gap-2 px-5 text-xl font-semibold'
       >
         {
           post.data.tags.map((tag) => (
-            <Tag class='odd:bg-accent even:bg-accent2'>{tag}</Tag>
+            <>
+              <Tag class='odd:bg-accent even:bg-accent2'>{tag}</Tag>
+              <Tag class='odd:bg-accent even:bg-accent2'>{tag}</Tag>
+              <Tag class='odd:bg-accent even:bg-accent2'>{tag}</Tag>
+              <Tag class='odd:bg-accent even:bg-accent2'>{tag}</Tag>
+              <Tag class='odd:bg-accent even:bg-accent2'>{tag}</Tag>
+              <Tag class='odd:bg-accent even:bg-accent2'>{tag}</Tag>
+            </>
           ))
         }
       </div>
