@@ -23,7 +23,7 @@ export const BasePostDTOSchema = z.object({
 });
 export type BasePostDTO = z.infer<typeof BasePostDTOSchema>;
 
-const CreatePostDTOSchema = BasePostDTOSchema.omit({
+export const CreatePostDTOSchema = BasePostDTOSchema.omit({
   id: true,
   createdAt: true,
   updatedAt: true,

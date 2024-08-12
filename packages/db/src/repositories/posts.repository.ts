@@ -246,7 +246,8 @@ const insertPosts = async (posts: InsertPost[]): Promise<PostDTO[]> => {
           slug: post.slug,
           topicTitle: post.topicTitle,
           bannerImageId: post.bannerImageId,
-          publishedAt: post.status === 'published' ? Date.now() / 1000 : null,
+          publishedAt:
+            post.status === 'published' ? Math.floor(Date.now() / 1000) : null,
           content: post.content,
           language: post.language,
           summary: post.summary,
@@ -299,7 +300,7 @@ const deletePosts = async (postIds: number[]): Promise<PostDTO[]> => {
 };
 
 const softDeletePosts = async (postIds: number[]): Promise<PostDTO[]> => {
-  const now = Date.now() / 1000;
+  const now = Math.floor(Date.now() / 1000);
   const softDeletedPosts = await db
     .update(PostsTable)
     .set({

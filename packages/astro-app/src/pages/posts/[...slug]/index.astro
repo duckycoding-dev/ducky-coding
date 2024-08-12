@@ -2,10 +2,31 @@
 import { getCollection } from 'astro:content';
 import { HolyGrailLayout } from '@layouts/HolyGrailLayout';
 import { MarkdownComponents } from '@components/Markdown';
+import { syncPostWithDatabase } from '@utils/content/content';
 
 // 1. Generate a new path for every collection entry
 export async function getStaticPaths() {
   const postsEntries = await getCollection('posts');
+
+  const failedSyncs = [];
+
+  // eslint-disable-next-line no-restricted-syntax
+  for (const post of postsEntries) {
+    if (import.meta.env.PROD) {
+      try {
+        // eslint-disable-next-line no-await-in-loop
+        await syncPostWithDatabase(post.data, post.slug);
+      } catch (error) {
+        failedSyncs.push(post);
+      }
+    }
+  }
+
+  console.error(
+    'Failed to sync the following posts with database',
+    failedSyncs.map((post) => post.slug).join(', '),
+  );
+
   return postsEntries.map((entry) => ({
     params: { slug: entry.slug },
     props: { entry },

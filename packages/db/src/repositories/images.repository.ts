@@ -1,5 +1,5 @@
 import { inArray, sql } from 'drizzle-orm';
-import { ImageDTO } from '@ducky-coding/types/DTOs';
+import { CreateImageDTO, ImageDTO } from '@ducky-coding/types/DTOs';
 import { db } from '../client';
 import { ImagesTable, mapToImageDTO } from '../models';
 
@@ -38,7 +38,7 @@ const getAllImages = async (): Promise<ImageDTO[]> => {
   return imageDTOs;
 };
 
-const upsertImage = async (images: ImageDTO[]): Promise<ImageDTO[]> => {
+const upsertImage = async (images: CreateImageDTO[]): Promise<ImageDTO[]> => {
   const upsertedImages = await db
     .insert(ImagesTable)
     .values(images)

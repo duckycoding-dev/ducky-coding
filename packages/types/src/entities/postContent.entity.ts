@@ -11,7 +11,7 @@ export const PostContentSchema = z.object({
     path: z.string(),
     alt: z.string().optional(),
   }),
-  summary: z.string().optional(),
+  summary: z.string(),
   content: z.string(),
   authors: z
     .array(

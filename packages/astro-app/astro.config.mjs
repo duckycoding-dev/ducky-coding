@@ -69,9 +69,9 @@ export default defineConfig({
   },
   i18n: {
     defaultLocale: 'en',
-    locales: ['en', 'it'],
+    locales: ['en'],
     fallback: {
-      it: 'en', // when italian page is missing, redirects to /en
+      // it: 'en', // when italian page is missing, redirects to /en
       // if no fallback is found, pages return 404
     },
     routing: {

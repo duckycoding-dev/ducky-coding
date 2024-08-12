@@ -1,5 +1,6 @@
 import {
-  ImageDTO,
+  CreatePostDTO,
+  CreatePostDTOSchema,
   PostAuthorDTO,
   PostDTO,
   PostDTOSchema,
@@ -9,7 +10,6 @@ import {
 } from '@ducky-coding/types/DTOs';
 import { PostsRepository } from '../repositories/posts.repository';
 import { InsertPost } from '../models';
-import { ImagesService } from './images.service';
 import { UsersService } from './users.service';
 
 const getPost = async (postId: number): Promise<PostDTO | undefined> => {
@@ -101,16 +101,11 @@ const getAllPostsWithAuthorAndBannerImageAndTags = async (): Promise<
 };
 
 const insertPost = async (
-  post: PostDTO,
-  bannerImage?: ImageDTO,
+  post: CreatePostDTO,
 ): Promise<PostDTO | undefined> => {
-  let upsertedImage: ImageDTO | undefined;
-  if (bannerImage) upsertedImage = await ImagesService.upsertImage(bannerImage);
-
-  const parsedPost = PostDTOSchema.parse(post);
+  const parsedPost = CreatePostDTOSchema.parse(post);
   const postToInsert: InsertPost = {
     content: parsedPost.content,
-    createdAt: parsedPost.createdAt,
     language: parsedPost.language,
     publishedAt: parsedPost.publishedAt,
     slug: parsedPost.slug,
@@ -119,8 +114,7 @@ const insertPost = async (
     timeToRead: parsedPost.timeToRead,
     title: parsedPost.title,
     topicTitle: parsedPost.topicTitle,
-    updatedAt: parsedPost.updatedAt,
-    bannerImageId: upsertedImage?.id,
+    bannerImageId: parsedPost?.bannerImageId,
   };
   const insertedPost = await PostsRepository.insertPosts([postToInsert]);
 
@@ -159,17 +153,12 @@ const insertPostTags = async (
   return insertedPostTags;
 };
 
-const updatePost = async (
-  post: PostDTO,
-  bannerImage?: ImageDTO,
-): Promise<PostDTO | undefined> => {
+const updatePost = async (post: PostDTO): Promise<PostDTO | undefined> => {
   const parsedPost = PostDTOSchema.parse(post);
-  let upsertedImage: ImageDTO | undefined;
-  if (bannerImage) upsertedImage = await ImagesService.upsertImage(bannerImage);
 
   const updatedPost = await PostsRepository.updatePost({
     ...parsedPost,
-    bannerImageId: upsertedImage?.id,
+    updatedAt: Math.floor(Date.now() / 1000),
   });
   return updatedPost;
 };
@@ -204,11 +193,11 @@ const updatePostTags = async (
 };
 
 const upsertPostWithAuthorsAndTags = async (
-  post: PostDTO,
+  post: CreatePostDTO,
   authorsUsernames: string[],
   tags: string[],
 ): Promise<PostDTO | undefined> => {
-  const parsedPost = PostDTOSchema.parse(post);
+  const parsedPost = CreatePostDTOSchema.parse(post);
   const existingPost = await getPostBySlug(parsedPost.slug);
 
   if (!existingPost) {
@@ -227,7 +216,12 @@ const upsertPostWithAuthorsAndTags = async (
     return insertedPost;
   }
   // Update existing post if needed
-  const updatedPost = await updatePost(parsedPost);
+  const updatedPost = await updatePost({
+    ...parsedPost,
+    id: existingPost.id,
+    updatedAt: Math.floor(Date.now() / 1000),
+    createdAt: existingPost.createdAt,
+  });
 
   if (!updatedPost) return undefined; // throw new Error('Failed to update post');
   // Update author and tag relationships

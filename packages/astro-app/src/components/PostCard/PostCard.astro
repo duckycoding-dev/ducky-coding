@@ -5,6 +5,7 @@ import type { ImageMetadata } from 'astro';
 import type { HTMLAttributes } from 'astro/types';
 import DuckyCodingLogo from '@assets/images/DuckyCoding_logo.png';
 import { cn } from '@utils/cn';
+import { IMAGE_DENSITIES } from '@utils/globals';
 import { Card } from '../Card';
 import { Link } from '../Link';
 import { Tag } from '../Tag';
@@ -25,7 +26,10 @@ const { post, bannerImage, class: className } = props;
   <Card class='flex h-full flex-col'>
     <Image
       src={bannerImage ?? DuckyCodingLogo}
+      width={bannerImage ? bannerImage.width / 3 : DuckyCodingLogo.width / 3}
+      height={bannerImage ? bannerImage.height / 3 : DuckyCodingLogo.height / 3}
       alt={post.data.bannerImage.alt ?? 'Post banner image'}
+      densities={IMAGE_DENSITIES}
       loading='lazy'
       decoding='async'
       class='bg-primary-700 h-48 object-cover'
@@ -52,14 +56,7 @@ const { post, bannerImage, class: className } = props;
       >
         {
           post.data.tags.map((tag) => (
-            <>
-              <Tag class='odd:bg-accent even:bg-accent2'>{tag}</Tag>
-              <Tag class='odd:bg-accent even:bg-accent2'>{tag}</Tag>
-              <Tag class='odd:bg-accent even:bg-accent2'>{tag}</Tag>
-              <Tag class='odd:bg-accent even:bg-accent2'>{tag}</Tag>
-              <Tag class='odd:bg-accent even:bg-accent2'>{tag}</Tag>
-              <Tag class='odd:bg-accent even:bg-accent2'>{tag}</Tag>
-            </>
+            <Tag class='odd:bg-accent even:bg-accent2'>{tag}</Tag>
           ))
         }
       </div>
