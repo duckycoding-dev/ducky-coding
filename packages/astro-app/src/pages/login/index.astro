@@ -1,0 +1,31 @@
+---
+import { HolyGrailLayout } from '@layouts/HolyGrailLayout';
+---
+
+<HolyGrailLayout
+  seoProps={{
+    description:
+      "Login into your DuckyCoding's blog account: manage your favorite posts!.",
+    extend: {
+      meta: [
+        {
+          name: 'keywords',
+          content: 'DuckyCoding, web development, login, auth',
+        },
+      ],
+    },
+  }}
+>
+  <h1 class='mb-8 text-center text-4xl font-extrabold'>Login</h1>
+  <p class='mb-8 text-center text-lg'>
+    Access your account to manage your favorite posts and more.
+  </p>
+  <form action='login'>
+    <label for='username' id='username-label'>Username:</label>
+    <input type='text' name='username' id='username' />
+    <label for='password' id='password-label'>Password:</label>
+    <input type='password' name='password' id='password' />
+  </form>
+</HolyGrailLayout>
+
+<style></style>

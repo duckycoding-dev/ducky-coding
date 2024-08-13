@@ -5,3 +5,4 @@ export * from './topic.dto';
 export * from './image.dto';
 export * from './user.dto';
 export * from './tag.dto';
+export * from './session.dto';
