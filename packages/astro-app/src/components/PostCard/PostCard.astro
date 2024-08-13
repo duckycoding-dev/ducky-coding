@@ -23,7 +23,7 @@ const { post, bannerImage, class: className } = props;
 ---
 
 <Link variant='unstyled' href={`/posts/${post.slug}`} class={cn(className)}>
-  <Card class='flex h-full flex-col'>
+  <Card class='card flex h-full flex-col'>
     <Image
       src={bannerImage ?? DuckyCodingLogo}
       width={bannerImage ? bannerImage.width / 3 : DuckyCodingLogo.width / 3}
@@ -34,7 +34,9 @@ const { post, bannerImage, class: className } = props;
       decoding='async'
       class='bg-primary-700 h-48 w-full object-cover'
     />
-    <footer class='border-secondary flex grow flex-col gap-2 border-t-4 py-2.5'>
+    <footer
+      class='border-secondary flex grow flex-col gap-2 border-t-4 pb-4 pt-2.5'
+    >
       <h2 class='px-5 text-2xl font-black'>
         {post.data.title}
       </h2>
@@ -51,15 +53,27 @@ const { post, bannerImage, class: className } = props;
           {post.data.timeToRead > 1 ? 'minutes' : 'minute'}
         </p>
       </section>
-      <div
-        class='border-secondary mt-auto flex flex-wrap justify-end gap-2 px-5 text-xl font-semibold'
+      <section
+        class='tags border-secondary mt-auto flex flex-wrap justify-end gap-2 px-5 text-sm font-semibold'
       >
         {
           post.data.tags.map((tag) => (
             <Tag class='odd:bg-accent even:bg-accent2'>{tag}</Tag>
           ))
         }
-      </div>
+      </section>
     </footer>
   </Card>
 </Link>
+
+<style>
+  .card {
+    container-name: card;
+    container-type: inline-size;
+  }
+  @container card (width > 400px) {
+    .tags {
+      @apply text-xl;
+    }
+  }
+</style>

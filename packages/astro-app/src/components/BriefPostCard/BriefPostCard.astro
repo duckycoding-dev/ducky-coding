@@ -1,0 +1,47 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import type { HTMLAttributes } from 'astro/types';
+import { cn } from '@utils/cn';
+import { Card } from '../Card';
+import { Link } from '../Link';
+import { Tag } from '../Tag';
+
+export interface BriefPostCardProps extends HTMLAttributes<'a'> {
+  post: CollectionEntry<'posts'>;
+}
+
+interface Props extends BriefPostCardProps {}
+
+const { props }: { props: Props } = Astro;
+
+const { post, class: className } = props;
+---
+
+<Link variant='unstyled' href={`/posts/${post.slug}`} class={cn(className)}>
+  <Card class='card flex h-full grow flex-col gap-2 py-2.5'>
+    <h2 class='px-5 text-xl font-semibold [text-wrap:unset]'>
+      {post.data.title}
+    </h2>
+    <section
+      class='tags border-secondary mt-auto flex flex-wrap justify-end gap-2 px-5 text-sm font-semibold'
+    >
+      {
+        post.data.tags.map((tag) => (
+          <Tag class='odd:bg-accent even:bg-accent2'>{tag}</Tag>
+        ))
+      }
+    </section>
+  </Card>
+</Link>
+
+<style>
+  .card {
+    container-name: card;
+    container-type: inline-size;
+  }
+  @container card (width > 400px) {
+    .tags {
+      @apply text-xl;
+    }
+  }
+</style>

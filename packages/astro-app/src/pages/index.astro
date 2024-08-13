@@ -1,6 +1,7 @@
 ---
 import { HolyGrailLayout } from '@layouts/HolyGrailLayout';
 import { PostCard } from '@components/PostCard';
+import { BriefPostCard } from '@components/BriefPostCard';
 import { getCollection } from 'astro:content';
 import { type ImageMetadata } from 'astro';
 import { matchImageFromGlobImport } from '@utils/images/images';
@@ -54,32 +55,73 @@ const processedPosts = await Promise.all(
     processedPosts.length > 0 ? (
       <div class='grid-layout gap-8'>
         <section class='[grid-area:latest]'>
-          <h2 class='border-comic border-secondary bg-accent mb-4 px-4 py-2 text-4xl font-extrabold'>
+          <h2 class='border-comic border-secondary bg-accent mb-4 rounded-xl px-4 py-2 text-4xl font-extrabold'>
             Latest posts
           </h2>
           <ul class='latest-grid-layout grid items-baseline gap-8'>
             {processedPosts.map((post, i) => {
               return (
-                <li class={`${i === 0 ? '[grid-area:last-post]' : ''}`}>
-                  <PostCard
-                    class='block h-full'
-                    post={post}
-                    bannerImage={post?.processedBannerImage || null}
-                  />
-                </li>
+                <>
+                  <li class={`${i === 0 ? '[grid-area:last-post]' : ''}`}>
+                    <PostCard
+                      class='block h-full'
+                      post={post}
+                      bannerImage={post?.processedBannerImage || null}
+                    />
+                  </li>
+                  <li class={`${i === 0 ? '' : ''}`}>
+                    <PostCard
+                      class='block h-full'
+                      post={post}
+                      bannerImage={post?.processedBannerImage || null}
+                    />
+                  </li>
+                  <li class={`${i === 0 ? '' : ''}`}>
+                    <PostCard
+                      class='block h-full'
+                      post={post}
+                      bannerImage={post?.processedBannerImage || null}
+                    />
+                  </li>
+                  <li class={`${i === 0 ? '' : ''}`}>
+                    <PostCard
+                      class='block h-full'
+                      post={post}
+                      bannerImage={post?.processedBannerImage || null}
+                    />
+                  </li>
+                  <li class={`${i === 0 ? '' : ''}`}>
+                    <PostCard
+                      class='block h-full'
+                      post={post}
+                      bannerImage={post?.processedBannerImage || null}
+                    />
+                  </li>
+                </>
               );
             })}
           </ul>
         </section>
         <section class='trending'>
-          <h2 class='border-comic border-secondary bg-accent2 mb-4 px-4 py-2 text-4xl font-extrabold'>
+          <h2 class='border-comic border-secondary bg-accent2 mb-4 rounded-xl px-4 py-2 text-4xl font-extrabold'>
             Trending
           </h2>
-          <ol>
-            <li class='border-comic border-secondary'>Trending post 1</li>
-            <li class='border-comic border-secondary'>Trending post 2</li>
-            <li class='border-comic border-secondary'>Trending post 3</li>
-            <li class='border-comic border-secondary'>Trending post 4</li>
+          <ol class='flex flex-col gap-4'>
+            <li>
+              <BriefPostCard post={processedPosts[0]}>
+                Trending post 1
+              </BriefPostCard>
+            </li>
+            <li>
+              <BriefPostCard post={processedPosts[0]}>
+                Trending post 1
+              </BriefPostCard>
+            </li>
+            <li>
+              <BriefPostCard post={processedPosts[0]}>
+                Trending post 1
+              </BriefPostCard>
+            </li>
           </ol>
         </section>
       </div>
@@ -123,13 +165,15 @@ const processedPosts = await Promise.all(
     }
   }
 
-  @media (max-width: 972px) {
+  @media (max-width: 976px) {
     .grid-layout {
       grid-template-columns: 1fr;
-      grid-template-areas: 'latest';
+      grid-template-areas:
+        'latest'
+        'trending';
     }
-    .trending {
+    /* .trending {
       display: none;
-    }
+    } */
   }
 </style>
