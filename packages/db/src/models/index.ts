@@ -5,3 +5,4 @@ export * from './posts.model';
 export * from './tags.model';
 export * from './topics.model';
 export * from './users.model';
+export * from './sessions.model';

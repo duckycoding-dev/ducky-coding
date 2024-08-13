@@ -8,7 +8,7 @@ export const UsersTable = sqliteTable('users', {
   id: integer('id').primaryKey({ autoIncrement: true }).unique().notNull(),
   username: text('username').unique().notNull(),
   email: text('email').unique().notNull(),
-  password: text('email').notNull(),
+  password: text('password').notNull(),
   name: text('name').notNull(),
   lastName: text('lastName'),
   profilePictureId: integer('profilePictureId').references(
