@@ -40,7 +40,7 @@ CREATE TABLE `posts` (
 );
 --> statement-breakpoint
 CREATE TABLE `sessions` (
-	`id` integer PRIMARY KEY NOT NULL,
+	`id` text PRIMARY KEY NOT NULL,
 	`userId` integer NOT NULL,
 	`expiresAt` integer NOT NULL,
 	FOREIGN KEY (`userId`) REFERENCES `users`(`id`) ON UPDATE no action ON DELETE no action

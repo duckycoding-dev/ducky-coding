@@ -1,5 +1,6 @@
 ---
 import { HolyGrailLayout } from '@layouts/HolyGrailLayout';
+import { Button } from '../components/Button';
 ---
 
 <HolyGrailLayout
@@ -20,11 +21,14 @@ import { HolyGrailLayout } from '@layouts/HolyGrailLayout';
   <p class='mb-8 text-center text-lg'>
     Access your account to manage your favorite posts and more.
   </p>
-  <form action='login'>
-    <label for='username' id='username-label'>Username:</label>
-    <input type='text' name='username' id='username' />
-    <label for='password' id='password-label'>Password:</label>
-    <input type='password' name='password' id='password' />
+  <form method='post' action='/api/v1/login' class='flex flex-col'>
+    <label for='username' id='username-label'
+      >Username: <input type='text' name='username' id='username' /></label
+    >
+    <label for='password' id='password-label'
+      >Password: <input type='password' name='password' id='password' /></label
+    >
+    <Button type='submit' variant={'contained'}>Login</Button>
   </form>
 </HolyGrailLayout>
 

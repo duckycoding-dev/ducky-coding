@@ -11,7 +11,13 @@ const getUser = async (userId: number): Promise<UserDTO | undefined> => {
 const getUserByUsername = async (
   username: string,
 ): Promise<UserDTO | undefined> => {
-  const selectedUsers = await UsersRepository.getUsersByUsername([username]);
+  const selectedUsers = await UsersRepository.getUsersByUsernames([username]);
+  if (selectedUsers.length === 0) return undefined;
+  return selectedUsers[0];
+};
+
+const getUserByEmail = async (email: string): Promise<UserDTO | undefined> => {
+  const selectedUsers = await UsersRepository.getUsersByEmails([email]);
   if (selectedUsers.length === 0) return undefined;
   return selectedUsers[0];
 };
@@ -22,7 +28,12 @@ const getUsers = async (userIds: number[]): Promise<UserDTO[]> => {
 };
 
 const getUsersByUsernames = async (usernames: string[]): Promise<UserDTO[]> => {
-  const selectedUsers = await UsersRepository.getUsersByUsername(usernames);
+  const selectedUsers = await UsersRepository.getUsersByUsernames(usernames);
+  return selectedUsers;
+};
+
+const getUsersByEmails = async (emails: string[]): Promise<UserDTO[]> => {
+  const selectedUsers = await UsersRepository.getUsersByEmails(emails);
   return selectedUsers;
 };
 
@@ -43,8 +54,10 @@ const getAllUsersWithProfilePicture = async (): Promise<
 export const UsersService = {
   getUser,
   getUserByUsername,
+  getUserByEmail,
   getUsers,
   getUsersByUsernames,
+  getUsersByEmails,
   getAllUsers,
   getAllUsersWithProfilePicture,
 };

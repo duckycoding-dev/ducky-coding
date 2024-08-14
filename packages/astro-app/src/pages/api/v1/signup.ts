@@ -8,7 +8,6 @@ import { UsersTable } from '@ducky-coding/db/models';
 export const prerender = false;
 
 export async function POST(context: APIContext): Promise<Response> {
-  console.log(JSON.stringify(context.request, null, 2));
   const formData = await context.request.formData();
   const username = formData.get('username');
   const name = formData.get('name');
@@ -60,7 +59,7 @@ export async function POST(context: APIContext): Promise<Response> {
     })
     .returning();
 
-  const session = await lucia.createSession(newUser.id.toString(), {});
+  const session = await lucia.createSession(newUser.id, {});
   const sessionCookie = lucia.createSessionCookie(session.id);
   context.cookies.set(
     sessionCookie.name,

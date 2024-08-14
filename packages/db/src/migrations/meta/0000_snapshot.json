@@ -32,9 +32,7 @@
       "indexes": {
         "images_path_unique": {
           "name": "images_path_unique",
-          "columns": [
-            "path"
-          ],
+          "columns": ["path"],
           "isUnique": true
         }
       },
@@ -66,12 +64,8 @@
           "name": "postsAuthors_postId_posts_id_fk",
           "tableFrom": "postsAuthors",
           "tableTo": "posts",
-          "columnsFrom": [
-            "postId"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["postId"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         },
@@ -79,22 +73,15 @@
           "name": "postsAuthors_authorId_users_id_fk",
           "tableFrom": "postsAuthors",
           "tableTo": "users",
-          "columnsFrom": [
-            "authorId"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["authorId"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
       },
       "compositePrimaryKeys": {
         "postsAuthors_postId_authorId_pk": {
-          "columns": [
-            "authorId",
-            "postId"
-          ],
+          "columns": ["authorId", "postId"],
           "name": "postsAuthors_postId_authorId_pk"
         }
       },
@@ -124,12 +111,8 @@
           "name": "postsTags_postId_posts_id_fk",
           "tableFrom": "postsTags",
           "tableTo": "posts",
-          "columnsFrom": [
-            "postId"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["postId"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         },
@@ -137,22 +120,15 @@
           "name": "postsTags_tagName_tags_name_fk",
           "tableFrom": "postsTags",
           "tableTo": "tags",
-          "columnsFrom": [
-            "tagName"
-          ],
-          "columnsTo": [
-            "name"
-          ],
+          "columnsFrom": ["tagName"],
+          "columnsTo": ["name"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
       },
       "compositePrimaryKeys": {
         "postsTags_postId_tagName_pk": {
-          "columns": [
-            "postId",
-            "tagName"
-          ],
+          "columns": ["postId", "tagName"],
           "name": "postsTags_postId_tagName_pk"
         }
       },
@@ -270,12 +246,8 @@
           "name": "posts_bannerImageId_images_id_fk",
           "tableFrom": "posts",
           "tableTo": "images",
-          "columnsFrom": [
-            "bannerImageId"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["bannerImageId"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         },
@@ -283,12 +255,8 @@
           "name": "posts_topicTitle_topics_title_fk",
           "tableFrom": "posts",
           "tableTo": "topics",
-          "columnsFrom": [
-            "topicTitle"
-          ],
-          "columnsTo": [
-            "title"
-          ],
+          "columnsFrom": ["topicTitle"],
+          "columnsTo": ["title"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -301,7 +269,7 @@
       "columns": {
         "id": {
           "name": "id",
-          "type": "integer",
+          "type": "text",
           "primaryKey": true,
           "notNull": true,
           "autoincrement": false
@@ -327,12 +295,8 @@
           "name": "sessions_userId_users_id_fk",
           "tableFrom": "sessions",
           "tableTo": "users",
-          "columnsFrom": [
-            "userId"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["userId"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -354,9 +318,7 @@
       "indexes": {
         "tags_name_unique": {
           "name": "tags_name_unique",
-          "columns": [
-            "name"
-          ],
+          "columns": ["name"],
           "isUnique": true
         }
       },
@@ -392,16 +354,12 @@
       "indexes": {
         "topics_title_unique": {
           "name": "topics_title_unique",
-          "columns": [
-            "title"
-          ],
+          "columns": ["title"],
           "isUnique": true
         },
         "topics_slug_unique": {
           "name": "topics_slug_unique",
-          "columns": [
-            "slug"
-          ],
+          "columns": ["slug"],
           "isUnique": true
         }
       },
@@ -410,12 +368,8 @@
           "name": "topics_title_tags_name_fk",
           "tableFrom": "topics",
           "tableTo": "tags",
-          "columnsFrom": [
-            "title"
-          ],
-          "columnsTo": [
-            "name"
-          ],
+          "columnsFrom": ["title"],
+          "columnsTo": ["name"],
           "onDelete": "no action",
           "onUpdate": "no action"
         },
@@ -423,12 +377,8 @@
           "name": "topics_imageId_images_id_fk",
           "tableFrom": "topics",
           "tableTo": "images",
-          "columnsFrom": [
-            "imageId"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["imageId"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -522,23 +472,17 @@
       "indexes": {
         "users_id_unique": {
           "name": "users_id_unique",
-          "columns": [
-            "id"
-          ],
+          "columns": ["id"],
           "isUnique": true
         },
         "users_username_unique": {
           "name": "users_username_unique",
-          "columns": [
-            "username"
-          ],
+          "columns": ["username"],
           "isUnique": true
         },
         "users_email_unique": {
           "name": "users_email_unique",
-          "columns": [
-            "email"
-          ],
+          "columns": ["email"],
           "isUnique": true
         }
       },
@@ -547,12 +491,8 @@
           "name": "users_profilePictureId_images_id_fk",
           "tableFrom": "users",
           "tableTo": "images",
-          "columnsFrom": [
-            "profilePictureId"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["profilePictureId"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }

@@ -5,6 +5,7 @@ import { BriefPostCard } from '@components/BriefPostCard';
 import { getCollection } from 'astro:content';
 import { type ImageMetadata } from 'astro';
 import { matchImageFromGlobImport } from '@utils/images/images';
+import { Button } from '../components/Button';
 
 const postsEntries = await getCollection('posts');
 
@@ -30,6 +31,7 @@ const processedPosts = await Promise.all(
     return processedPost;
   }),
 );
+const showLogout = Astro.locals.user?.id && true;
 ---
 
 <HolyGrailLayout
@@ -46,6 +48,13 @@ const processedPosts = await Promise.all(
     },
   }}
 >
+  {
+    showLogout && (
+      <form method='post' action='/api/v1/logout'>
+        <Button variant={'contained'}>Logout</Button>
+      </form>
+    )
+  }
   <h1 class='mb-8 text-center text-4xl font-extrabold'>Welcome to my blog</h1>
   <p class='mb-8 text-center text-lg'>
     Here you will find articles and guides on web development, fullstack

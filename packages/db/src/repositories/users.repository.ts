@@ -16,11 +16,22 @@ const getUsers = async (userIds: number[]): Promise<UserDTO[]> => {
   return userDTOs;
 };
 
-const getUsersByUsername = async (usernames: string[]): Promise<UserDTO[]> => {
+const getUsersByUsernames = async (usernames: string[]): Promise<UserDTO[]> => {
   const users = await db
     .select()
     .from(UsersTable)
     .where(inArray(UsersTable.username, usernames));
+  const userDTOs: UserDTO[] = users.map((user) => {
+    return mapToUserDTO(user);
+  });
+  return userDTOs;
+};
+
+const getUsersByEmails = async (emails: string[]): Promise<UserDTO[]> => {
+  const users = await db
+    .select()
+    .from(UsersTable)
+    .where(inArray(UsersTable.email, emails));
   const userDTOs: UserDTO[] = users.map((user) => {
     return mapToUserDTO(user);
   });
@@ -92,7 +103,8 @@ const getAllUsersWithProfilePicture = async (): Promise<
 
 export const UsersRepository = {
   getUsers,
-  getUsersByUsername,
+  getUsersByUsernames,
+  getUsersByEmails,
   getUsersWithProfilePicture,
   getUsersWithProfilePictureByUsername,
   getAllUsers,

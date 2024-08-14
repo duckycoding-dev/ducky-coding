@@ -16,7 +16,7 @@ export default defineConfig({
   outDir: './dist', // --DEFAULT--
   base: '/',
   trailingSlash: 'ignore', // --DEFAULT--
-  output: 'hybrid',
+  output: 'server',
   adapter: netlify(),
   cacheDir: './.astro',
   compressHTML: true, // could be set to false in development using env variables

@@ -1,10 +1,10 @@
-import { integer, sqliteTable } from 'drizzle-orm/sqlite-core';
+import { integer, sqliteTable, text } from 'drizzle-orm/sqlite-core';
 import { z } from 'zod';
 import { SessionDTO } from '@ducky-coding/types/DTOs';
 import { UsersTable } from './users.model';
 
 export const SessionsTable = sqliteTable('sessions', {
-  id: integer('id').notNull().primaryKey(),
+  id: text('id').notNull().primaryKey(),
   userId: integer('userId')
     .notNull()
     .references(() => UsersTable.id),

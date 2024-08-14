@@ -1,7 +1,7 @@
 import { z } from 'zod';
 
 export const SessionDTOSchema = z.object({
-  id: z.number(),
+  id: z.string(),
   userId: z.number(),
   expiresAt: z.number(),
 });
