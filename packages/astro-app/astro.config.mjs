@@ -104,11 +104,8 @@ export default defineConfig({
       iconDir: 'src/assets/icons', // user svgs stored in this path instead of src/icons
     }),
   ],
-  security: {
-    checkOrigin: true,
-  },
   experimental: {
-    actions: true,
+    // actions: true,
     // serverIslands: true,
   },
 });
