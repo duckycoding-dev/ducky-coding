@@ -1,5 +1,6 @@
 import { UserDTO, UserWithProfilePictureDTO } from '@ducky-coding/types/DTOs';
 import { UsersRepository } from '../repositories/users.repository';
+import { InsertUser } from '../models';
 
 const getUser = async (userId: number): Promise<UserDTO | undefined> => {
   const selectedUsers = await UsersRepository.getUsers([userId]);
@@ -40,6 +41,14 @@ const getAllUsersWithProfilePicture = async (): Promise<
   return selectedUsersWithProfilePicture;
 };
 
+const insertUser = async (
+  userToInsert: InsertUser,
+): Promise<UserDTO | undefined> => {
+  const insertedUsers = await UsersRepository.insertUsers([userToInsert]);
+  if (insertedUsers.length === 0) return undefined;
+  return insertedUsers[0];
+};
+
 export const UsersService = {
   getUser,
   getUserByUsername,
@@ -47,6 +56,7 @@ export const UsersService = {
   getUsersByUsernames,
   getAllUsers,
   getAllUsersWithProfilePicture,
+  insertUser,
 };
 
 // Add more methods as needed
