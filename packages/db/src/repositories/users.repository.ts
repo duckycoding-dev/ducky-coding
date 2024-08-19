@@ -1,7 +1,7 @@
 import { eq, inArray } from 'drizzle-orm';
 import { UserDTO, UserWithProfilePictureDTO } from '@ducky-coding/types/DTOs';
 import { db } from '../client';
-import { ImagesTable, mapToUserDTO, UsersTable } from '../models';
+import { ImagesTable, InsertUser, mapToUserDTO, UsersTable } from '../models';
 import { mapToUserWithProfilePictureDTO } from '../mappers/users.mappers';
 
 const getUsers = async (userIds: number[]): Promise<UserDTO[]> => {
@@ -90,6 +90,24 @@ const getAllUsersWithProfilePicture = async (): Promise<
   return userWithProfilePictureDTOs;
 };
 
+const insertUsers = async (users: InsertUser[]): Promise<UserDTO[]> => {
+  const insertedUsers = await db
+    .insert(UsersTable)
+    .values(
+      users.map((user) => {
+        return {
+          username: user.username,
+          password: user.password,
+          name: user.name,
+          email: user.email,
+        };
+      }),
+    )
+    .returning();
+
+  return insertedUsers.map((insertedUser) => mapToUserDTO(insertedUser));
+};
+
 export const UsersRepository = {
   getUsers,
   getUsersByUsername,
@@ -97,4 +115,6 @@ export const UsersRepository = {
   getUsersWithProfilePictureByUsername,
   getAllUsers,
   getAllUsersWithProfilePicture,
+
+  insertUsers,
 };
