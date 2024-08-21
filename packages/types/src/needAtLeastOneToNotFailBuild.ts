@@ -1,3 +1,0 @@
-interface mock {
-  createdOn: '12/06/2024';
-}
