@@ -32,6 +32,23 @@ const getAllUsers = async (): Promise<UserDTO[]> => {
   return selectedUsers;
 };
 
+const getUserWithProfilePicture = async (
+  userId: number,
+): Promise<UserWithProfilePictureDTO | undefined> => {
+  const selectedUserWithProfilePicture =
+    await UsersRepository.getUsersWithProfilePicture([userId]);
+  if (selectedUserWithProfilePicture.length === 0) return undefined;
+  return selectedUserWithProfilePicture[0];
+};
+
+const getUsersWithProfilePicture = async (
+  userIds: number[],
+): Promise<UserWithProfilePictureDTO[]> => {
+  const selectedUserWithProfilePicture =
+    await UsersRepository.getUsersWithProfilePicture(userIds);
+  return selectedUserWithProfilePicture;
+};
+
 const getAllUsersWithProfilePicture = async (): Promise<
   UserWithProfilePictureDTO[]
 > => {
@@ -55,6 +72,8 @@ export const UsersService = {
   getUsers,
   getUsersByUsernames,
   getAllUsers,
+  getUserWithProfilePicture,
+  getUsersWithProfilePicture,
   getAllUsersWithProfilePicture,
   insertUser,
 };

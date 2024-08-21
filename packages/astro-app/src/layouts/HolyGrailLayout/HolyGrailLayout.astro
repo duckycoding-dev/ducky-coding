@@ -63,4 +63,28 @@ const { ...props }: Props = Astro.props;
   // Add event listeners
   document.addEventListener('touchstart', handleTouchStart, false);
   document.addEventListener('touchend', handleTouchEnd, false);
+
+  document.addEventListener('DOMContentLoaded', async () => {
+    const userInLocalStorage = window.localStorage.getItem('user');
+    if (!userInLocalStorage) {
+      const response = await (
+        await fetch('/api/v1/auth/verify-user.json', {
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        })
+      ).json();
+
+      const { user } = response;
+
+      if (user) {
+        window.localStorage.setItem('user', JSON.stringify(user));
+      } else {
+        console.log(
+          `Sign in to have access to lots of user related features!
+        Click here to login! 👉 ${import.meta.env.PUBLIC_BASE_SITE_URL}/login 👈`,
+        );
+      }
+    }
+  });
 </script>
