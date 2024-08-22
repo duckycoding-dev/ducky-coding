@@ -67,6 +67,7 @@ if (res.user) {
       title='name'
       placeholder='Your name'
       required={true}
+      minlength={2}
     >
       Name
     </InputWithLabel>
@@ -87,6 +88,7 @@ if (res.user) {
       title='Password'
       placeholder='Your password'
       required={true}
+      minlength={8}
     >
       Password
     </InputWithLabel>
@@ -97,6 +99,7 @@ if (res.user) {
       title='Repeat password'
       placeholder='Your password (again)'
       required={true}
+      minlength={8}
     >
       Repeat password
     </InputWithLabel>
@@ -134,47 +137,89 @@ if (res.user) {
   import { CreateUserDTOSchema } from '@ducky-coding/types/DTOs';
   import type { inferFormattedError } from 'zod';
 
+  function updateOrCreateErrorLabel(
+    label: HTMLLabelElement,
+    labelId: string,
+    errorMessage: string,
+  ) {
+    let errorLabel = document.getElementById(`${labelId}-error`);
+    if (!errorLabel) {
+      errorLabel = document.createElement('span');
+      errorLabel.id = `${labelId}-error`;
+      errorLabel.className = 'text-red-500';
+      label.appendChild(errorLabel);
+    }
+    errorLabel.textContent = errorMessage;
+    label.parentElement
+      ?.querySelector('input')
+      ?.setAttribute('aria-invalid', 'true');
+    label.parentElement
+      ?.querySelector('input')
+      ?.setAttribute('aria-describedby', `${labelId}-error`);
+  }
+
+  function removeErrorLabel(labelId: string) {
+    const errorLabel = document.getElementById(`${labelId}-error`);
+    if (errorLabel) errorLabel.remove();
+    const input = document.getElementById(labelId.split('-')[0]);
+    input?.removeAttribute('aria-invalid');
+    input?.removeAttribute('aria-describedby');
+  }
+
+  function displayErrors(
+    formattedErrors: inferFormattedError<typeof CreateUserDTOSchema>,
+    formTarget: HTMLFormElement,
+  ) {
+    const formLabels = formTarget?.querySelectorAll('label');
+    formLabels?.forEach((label) => {
+      const labelId = label.getAttribute('id');
+      if (labelId === null) return;
+      const fieldName = labelId.split('-')[0];
+      const errorMessageObject = formattedErrors[
+        fieldName as keyof typeof formattedErrors
+      ] as { _errors: string[] } | undefined;
+
+      if (errorMessageObject) {
+        // eslint-disable-next-line no-underscore-dangle
+        const errorMessage = errorMessageObject._errors.at(-1) ?? '';
+        updateOrCreateErrorLabel(label, labelId, errorMessage);
+      } else {
+        removeErrorLabel(labelId);
+      }
+    });
+  }
+
+  function displayServerError(message: string) {
+    const errorContainer =
+      document.getElementById('server-error') || document.createElement('div');
+    errorContainer.id = 'server-error';
+    errorContainer.className = 'text-red-500 text-center mt-4';
+    errorContainer.textContent = message;
+    document
+      .querySelector('form')
+      ?.insertAdjacentElement('beforebegin', errorContainer);
+  }
+
+  // Add input event listeners to clear errors when user starts typing
+  document.querySelectorAll('input').forEach((input) => {
+    input.addEventListener('input', () => {
+      const labelId = `${input.id}-label`;
+      removeErrorLabel(labelId);
+      const serverError = document.getElementById('server-error');
+      if (serverError) serverError.remove();
+    });
+  });
+
   function handleSubmit(event: Event) {
     event.preventDefault();
     const formTarget = event.target as HTMLFormElement;
     const formData = new FormData(formTarget);
     const payload = Object.fromEntries(formData.entries());
     console.log(payload);
-    const { error, data } = CreateUserDTOSchema.safeParse(payload);
+    const { error } = CreateUserDTOSchema.safeParse(payload);
 
     if (error) {
-      // Display errors
-      const formattedErrors = error.format();
-      console.log(formattedErrors);
-      const formLabels = formTarget?.querySelectorAll('label');
-      formLabels?.forEach((label) => {
-        const labelId = label.getAttribute('id');
-        if (labelId === null) return;
-        const errorMessageObject = formattedErrors[
-          labelId.split('-')[0] as keyof inferFormattedError<
-            typeof CreateUserDTOSchema
-          >
-        ] as unknown as { _errors: string[] } | undefined;
-        if (errorMessageObject) {
-          // eslint-disable-next-line no-underscore-dangle
-          const errorMessage = errorMessageObject._errors.at(-1) ?? '';
-          let errorLabel = document?.getElementById(`${labelId}-error`);
-          if (!errorLabel) {
-            errorLabel = document.createElement('span');
-            errorLabel.setAttribute('id', `${labelId}-error`);
-            errorLabel.setAttribute('class', 'text-red-500');
-            errorLabel.textContent = errorMessage;
-            label.appendChild(errorLabel);
-          } else if (errorMessage !== errorLabel?.textContent) {
-            errorLabel.textContent = errorMessage;
-          }
-
-          console.log(errorMessage);
-        } else {
-          const errorLabel = document?.getElementById(`${labelId}-error`);
-          if (errorLabel) errorLabel.remove();
-        }
-      });
+      displayErrors(error.format(), formTarget);
       return;
     }
 
