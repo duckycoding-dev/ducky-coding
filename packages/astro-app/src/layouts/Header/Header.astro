@@ -53,7 +53,14 @@ const { class: className, ...props }: Props = Astro.props;
       class='fixed overflow-hidden transition-transform peer-checked:flex peer-checked:translate-x-0 peer-[:not(checked)]:-translate-x-full md:ml-auto md:peer-[:not(checked)]:translate-x-0'
     />
     <div class='flex items-center gap-4 text-2xl'>
+      <Link
+        id='login-link-header'
+        href={'/login'}
+        class={'text-3xl md:text-base text-primary font-medium w-full'}
+        >Login</Link
+      >
       <Image
+        id='logged-user-avatar-header'
         alt={'DuckyCoding logo'}
         src={DuckyCodingLogo}
         width={38}
@@ -69,3 +76,25 @@ const { class: className, ...props }: Props = Astro.props;
     transform: translateX(1000px);
   }
 </style>
+
+<script>
+  const loginLinkHeader: HTMLAnchorElement | null = document.querySelector(
+    'a#login-link-header',
+  );
+  const loggedUserAvatarHeader: HTMLElement | null = document.querySelector(
+    '#logged-user-avatar-header',
+  );
+  const userString = window.localStorage.getItem('user');
+  if (userString) {
+    if (loginLinkHeader) {
+      loginLinkHeader.hidden = true;
+      loginLinkHeader.style.display = 'none';
+    }
+    const user = JSON.parse(userString);
+    const profilePicture = JSON.parse(user.profilePicture);
+    console.log(profilePicture);
+  } else if (loggedUserAvatarHeader) {
+    loggedUserAvatarHeader.hidden = true;
+    loggedUserAvatarHeader.style.display = 'none';
+  }
+</script>

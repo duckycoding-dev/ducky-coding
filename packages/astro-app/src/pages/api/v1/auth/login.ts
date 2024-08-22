@@ -33,6 +33,7 @@ export const POST: APIRoute = async ({ request }) => {
 
   const user = await AuthService.validateUser(username, password);
 
+  console.log('user', user);
   if (user) {
     const { accessToken, refreshToken } = AuthService.generateTokens(user);
     const session = await SessionsService.insertSession({
