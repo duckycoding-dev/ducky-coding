@@ -58,6 +58,7 @@ const { class: className, ...props }: Props = Astro.props;
     </li>
     <li>
       <Link
+        id='login-link-navbar'
         href={'/login'}
         class={'text-3xl md:text-base text-primary font-medium w-full'}
         >Login</Link
@@ -67,7 +68,10 @@ const { class: className, ...props }: Props = Astro.props;
       <LogoutButton variant={'default'} />
     </li>
   </ul>
-  <div class='mt-auto flex items-center gap-4 text-2xl md:hidden'>
+  <div
+    id='logged-user-avatar-navbar'
+    class='mt-auto flex items-center gap-4 text-2xl md:hidden'
+  >
     <Image
       alt={'DuckyCoding logo'}
       src={DuckyCodingLogo}
@@ -79,3 +83,25 @@ const { class: className, ...props }: Props = Astro.props;
 </nav>
 
 {/* USABLE BUT NOT COMPLETED */}
+
+<script>
+  const loginLinkNavbar: HTMLAnchorElement | null = document.querySelector(
+    'a#login-link-navbar',
+  );
+  const loggedUserAvatarNavbar: HTMLElement | null = document.querySelector(
+    '#logged-user-avatar-navbar',
+  );
+  const userString = window.localStorage.getItem('user');
+  if (userString) {
+    if (loginLinkNavbar) {
+      loginLinkNavbar.hidden = true;
+      loginLinkNavbar.style.display = 'none';
+    }
+    const user = JSON.parse(userString);
+    const profilePicture = JSON.parse(user.profilePicture);
+    console.log(profilePicture);
+  } else if (loggedUserAvatarNavbar) {
+    loggedUserAvatarNavbar.hidden = true;
+    loggedUserAvatarNavbar.style.display = 'none';
+  }
+</script>
