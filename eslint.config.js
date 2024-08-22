@@ -66,6 +66,7 @@ export default tseslint.config(
       'import/extensions': 'off',
       '@typescript-eslint/no-unused-vars': 'warn',
       '@typescript-eslint/no-explicit-any': 'warn',
+      'consistent-return': 'off',
       'max-len': [
         // https://eslint.org/docs/latest/rules/max-len
         'error',

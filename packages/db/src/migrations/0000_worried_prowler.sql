@@ -42,6 +42,7 @@ CREATE TABLE `posts` (
 CREATE TABLE `sessions` (
 	`id` integer PRIMARY KEY NOT NULL,
 	`userId` integer NOT NULL,
+	`refreshToken` text NOT NULL,
 	`expiresAt` integer NOT NULL,
 	FOREIGN KEY (`userId`) REFERENCES `users`(`id`) ON UPDATE no action ON DELETE no action
 );

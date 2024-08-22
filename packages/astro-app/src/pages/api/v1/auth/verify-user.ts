@@ -11,8 +11,8 @@ export const GET: APIRoute = withAuth(async ({ locals }) => {
   if (!userId) {
     const headers = new Headers();
     headers.set('Content-Type', 'application/json');
-    headers.append('Set-Cookie', `accessToken=`);
-    headers.append('Set-Cookie', `refreshToken=`);
+    headers.append('Set-Cookie', `accessToken=; HttpOnly; Path=/; Max-Age=-1`);
+    headers.append('Set-Cookie', `refreshToken=; HttpOnly; Path=/; Max-Age=-1`);
     return new Response(JSON.stringify({ message: 'Unauthorized' }), {
       status: 403,
       headers,
@@ -24,8 +24,8 @@ export const GET: APIRoute = withAuth(async ({ locals }) => {
   if (!user) {
     const headers = new Headers();
     headers.set('Content-Type', 'application/json');
-    headers.append('Set-Cookie', `accessToken=`);
-    headers.append('Set-Cookie', `refreshToken=`);
+    headers.append('Set-Cookie', `accessToken=; HttpOnly; Path=/; Max-Age=-1`);
+    headers.append('Set-Cookie', `refreshToken=; HttpOnly; Path=/; Max-Age=-1`);
     return new Response(JSON.stringify({ message: 'User not found' }), {
       status: 404,
       headers,
@@ -33,11 +33,13 @@ export const GET: APIRoute = withAuth(async ({ locals }) => {
   }
 
   // only refreshes the access token, not the refresh token
+
+  const newExpiration = new Date(Date.now() + 900000).toUTCString();
   const headers = new Headers();
   headers.set('Content-Type', 'application/json');
   headers.append(
     'Set-Cookie',
-    `accessToken=${tokens.accessToken}; HttpOnly; Path=/; Max-Age=900`,
+    `accessToken=${tokens.accessToken}; HttpOnly; Path=/; Expires=${newExpiration}`,
   );
 
   const userData = {
@@ -49,6 +51,7 @@ export const GET: APIRoute = withAuth(async ({ locals }) => {
   return new Response(
     JSON.stringify({
       user: userData,
+      sessionExpiresAt: newExpiration,
     }),
     {
       status: 200,

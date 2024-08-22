@@ -4,6 +4,7 @@ import type { HTMLAttributes } from 'astro/types';
 import { cn } from '@utils/cn';
 import DuckyCodingLogo from '@assets/images/DuckyCoding_logo.png';
 import { Image } from 'astro:assets';
+import { LogoutButton } from '@components/LogoutButton';
 
 export interface NavbarProps {}
 
@@ -41,13 +42,6 @@ const { class: className, ...props }: Props = Astro.props;
     </li>
     <li>
       <Link
-        href={'/about'}
-        class={'text-3xl md:text-base text-primary font-medium w-full'}
-        >About me</Link
-      >
-    </li>
-    <li>
-      <Link
         href={'/topics'}
         size={'medium'}
         class={'text-3xl md:text-base text-primary font-medium w-full'}
@@ -61,6 +55,16 @@ const { class: className, ...props }: Props = Astro.props;
         class={'text-3xl md:text-base text-primary font-medium w-full'}
         >Components</Link
       >
+    </li>
+    <li>
+      <Link
+        href={'/login'}
+        class={'text-3xl md:text-base text-primary font-medium w-full'}
+        >Login</Link
+      >
+    </li>
+    <li>
+      <LogoutButton variant={'default'} />
     </li>
   </ul>
   <div class='mt-auto flex items-center gap-4 text-2xl md:hidden'>

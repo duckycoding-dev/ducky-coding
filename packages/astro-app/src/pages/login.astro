@@ -1,8 +1,15 @@
 ---
+import { GET } from './api/v1/auth/verify-user';
 
+export const prerender = false;
+const res = await (await GET(Astro)).json();
+
+if (res.user) {
+  return Astro.redirect('/');
+}
 ---
 
-<form action='/api/v1/auth/login.json' method='post'>
+<form action='/api/v1/auth/login' method='post'>
   <label>Username<input type='text' name='username' /></label>
   <label>Password<input type='password' name='password' /></label>
   <button type='submit'>Login</button>
