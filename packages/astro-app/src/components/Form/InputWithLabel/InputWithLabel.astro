@@ -15,6 +15,18 @@ const { props }: { props: Props } = Astro;
 <label class='flex flex-col gap-1' for={props.id} id={`${props.id}-label`}>
   <span class='text-primary-900 font-semibold'>
     <slot />
+    {
+      props.required && (
+        <span title='This field is required!' class='text-danger'>
+          *
+        </span>
+      )
+    }
   </span>
-  <Input {...props} />
+  <Input
+    {...props}
+    placeholder={props.required === false
+      ? `${props.placeholder} (optional)`
+      : props.placeholder}
+  />
 </label>
