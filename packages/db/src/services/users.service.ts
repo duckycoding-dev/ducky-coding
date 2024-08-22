@@ -9,6 +9,14 @@ const getUser = async (userId: number): Promise<UserDTO | undefined> => {
   const userDTO: UserDTO = selectedUsers[0];
   return userDTO;
 };
+
+const getUsersByField = async (fieldValuePair: {
+  field: string;
+  value: string | number;
+}): Promise<UserDTO[]> => {
+  const selectedUsers = await UsersRepository.getUsersByField(fieldValuePair);
+  return selectedUsers;
+};
 const getUserByUsername = async (
   username: string,
 ): Promise<UserDTO | undefined> => {
@@ -66,8 +74,17 @@ const insertUser = async (
   return insertedUsers[0];
 };
 
+const findUserByField = async (fieldValuePair: {
+  field: string;
+  value: string | number;
+}): Promise<boolean> => {
+  const selectedUsers = await UsersRepository.findUserByField(fieldValuePair);
+  return selectedUsers;
+};
+
 export const UsersService = {
   getUser,
+  getUsersByField,
   getUserByUsername,
   getUsers,
   getUsersByUsernames,
@@ -76,6 +93,8 @@ export const UsersService = {
   getUsersWithProfilePicture,
   getAllUsersWithProfilePicture,
   insertUser,
+
+  findUserByField,
 };
 
 // Add more methods as needed
