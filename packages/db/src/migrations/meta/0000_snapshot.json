@@ -1,7 +1,7 @@
 {
   "version": "6",
   "dialect": "sqlite",
-  "id": "d5220855-09b2-4ce2-91f0-5116b57fccf6",
+  "id": "4927108b-d2b1-4a72-adb9-27d30661f257",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
     "images": {
@@ -309,6 +309,13 @@
         "userId": {
           "name": "userId",
           "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "refreshToken": {
+          "name": "refreshToken",
+          "type": "text",
           "primaryKey": false,
           "notNull": true,
           "autoincrement": false

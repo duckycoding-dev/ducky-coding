@@ -1,19 +1,23 @@
-import { integer, sqliteTable } from 'drizzle-orm/sqlite-core';
+import { integer, sqliteTable, text } from 'drizzle-orm/sqlite-core';
 import { z } from 'zod';
 import { SessionDTO } from '@ducky-coding/types/DTOs';
 import { UsersTable } from './users.model';
+
+// TODO: could add more fields such as IP, user agent, etc.
 
 export const SessionsTable = sqliteTable('sessions', {
   id: integer('id').notNull().primaryKey(),
   userId: integer('userId')
     .notNull()
     .references(() => UsersTable.id),
+  refreshToken: text('refreshToken').notNull(),
   expiresAt: integer('expiresAt', { mode: 'number' }).notNull(),
 });
 
 export const SessionSchema = z.object({
   id: z.number(),
   userId: z.number(),
+  refreshToken: z.string(),
   expiresAt: z.number(),
 });
 
@@ -24,6 +28,7 @@ export function mapToSessionDTO(selectedSession: Session): SessionDTO {
   return {
     id: selectedSession.id,
     userId: selectedSession.userId,
+    refreshToken: selectedSession.refreshToken,
     expiresAt: selectedSession.expiresAt,
   };
 }

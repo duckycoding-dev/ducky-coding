@@ -2,6 +2,8 @@ import { UserDTO } from '@ducky-coding/types/DTOs';
 import { TokenPair } from '@ducky-coding/types/entities';
 import jwt from 'jsonwebtoken';
 import { UsersService } from '../services/users.service';
+import { envs } from '../utils/env';
+import { SessionsService } from './sessions.service';
 
 const validateUser = async (
   username: string,
@@ -18,19 +20,11 @@ const generateTokens = (
   user: UserDTO,
   generateBothTokens = true,
 ): TokenPair => {
-  if (!process.env.JWT_SECRET_KEY)
-    throw new Error('JWT_SECRET_KEY is not defined');
-  const accessToken = jwt.sign(
-    { userId: user.id },
-    process.env.JWT_SECRET_KEY,
-    {
-      expiresIn: '15m',
-    },
-  );
-  if (!process.env.REFRESH_JWT_SECRET_KEY)
-    throw new Error('REFRESH_JWT_SECRET_KEY is not defined');
+  const accessToken = jwt.sign({ userId: user.id }, envs.JWT_SECRET_KEY, {
+    expiresIn: '15m',
+  });
   const refreshToken = generateBothTokens
-    ? jwt.sign({ userId: user.id }, process.env.REFRESH_JWT_SECRET_KEY, {
+    ? jwt.sign({ userId: user.id }, envs.REFRESH_JWT_SECRET_KEY, {
         expiresIn: '7d',
       })
     : '';
@@ -38,10 +32,8 @@ const generateTokens = (
 };
 
 const verifyAccessToken = (accessToken: string): number | null => {
-  if (!process.env.JWT_SECRET_KEY)
-    throw new Error('JWT_SECRET_KEY is not defined');
   try {
-    const decoded = jwt.verify(accessToken, process.env.JWT_SECRET_KEY) as {
+    const decoded = jwt.verify(accessToken, envs.JWT_SECRET_KEY) as {
       userId: number;
     };
     return decoded.userId;
@@ -51,16 +43,19 @@ const verifyAccessToken = (accessToken: string): number | null => {
   }
 };
 
-const verifyRefreshToken = (refreshToken: string): number | null => {
-  if (!process.env.REFRESH_JWT_SECRET_KEY)
-    throw new Error('REFRESH_JWT_SECRET_KEY is not defined');
+const verifyRefreshToken = async (
+  refreshToken: string,
+): Promise<number | null> => {
   try {
-    const decoded = jwt.verify(
-      refreshToken,
-      process.env.REFRESH_JWT_SECRET_KEY,
-    ) as {
+    const decoded = jwt.verify(refreshToken, envs.REFRESH_JWT_SECRET_KEY) as {
       userId: number;
     };
+    SessionsService.cleanupSessionsTableRegularly();
+    const dbSession = await SessionsService.getSessionByRefreshTokenAndUserId(
+      refreshToken,
+      decoded.userId,
+    );
+    if (!dbSession) throw new Error('Session not found');
     return decoded.userId;
   } catch (error) {
     console.error('verifyRefreshToken error', error);
@@ -73,14 +68,15 @@ const refreshTokens = async (
   refreshBothTokens = false,
 ): Promise<TokenPair | null> => {
   try {
-    const userId = verifyRefreshToken(refreshToken);
+    const userId = await verifyRefreshToken(refreshToken);
     if (!userId) return null;
 
     const user = await UsersService.getUser(userId);
     if (!user) {
       return null;
     }
-    return generateTokens(user, refreshBothTokens);
+    const tokens = generateTokens(user, refreshBothTokens);
+    return tokens;
   } catch (error) {
     console.error('refreshToken error', error);
     return null;

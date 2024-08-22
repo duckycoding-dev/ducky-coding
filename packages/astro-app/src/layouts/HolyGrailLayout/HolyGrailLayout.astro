@@ -66,20 +66,34 @@ const { ...props }: Props = Astro.props;
 
   document.addEventListener('DOMContentLoaded', async () => {
     const userInLocalStorage = window.localStorage.getItem('user');
-    if (!userInLocalStorage) {
+    const sessionExpiration: string | null = JSON.parse(
+      window.localStorage.getItem('sessionExpiresAt') ?? 'null',
+    );
+
+    if (
+      !userInLocalStorage ||
+      !sessionExpiration ||
+      new Date(sessionExpiration).getTime() < Date.now()
+    ) {
       const response = await (
-        await fetch('/api/v1/auth/verify-user.json', {
+        await fetch('/api/v1/auth/verify-user', {
           headers: {
             'Content-Type': 'application/json',
           },
         })
       ).json();
 
-      const { user } = response;
+      const { user, sessionExpiresAt } = response;
 
       if (user) {
         window.localStorage.setItem('user', JSON.stringify(user));
+        window.localStorage.setItem(
+          'sessionExpiresAt',
+          JSON.stringify(sessionExpiresAt),
+        );
       } else {
+        window.localStorage.removeItem('user');
+        window.localStorage.removeItem('sessionExpiresAt');
         console.log(
           `Sign in to have access to lots of user related features!
         Click here to login! 👉 ${import.meta.env.PUBLIC_BASE_SITE_URL}/login 👈`,

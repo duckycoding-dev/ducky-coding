@@ -73,17 +73,30 @@ export const withAuth =
       context.locals.userId = userId;
       context.locals.tokens = { accessToken, refreshToken };
     } catch (error) {
+      const headers = new Headers();
+      headers.set('Content-Type', 'application/json');
       if (error instanceof Error) {
+        if (error.message === 'Unauthorized') {
+          headers.append(
+            'Set-Cookie',
+            `accessToken=; HttpOnly; Path=/; Max-Age=-1`,
+          );
+          headers.append(
+            'Set-Cookie',
+            `refreshToken=; HttpOnly; Path=/; Max-Age=-1`,
+          );
+        }
+
         return new Response(JSON.stringify({ message: error.message }), {
           status: 403,
-          headers: { 'Content-Type': 'application/json' },
+          headers,
         });
       }
       return new Response(
         JSON.stringify({ message: 'INTERNAL_SERVER_ERROR' }),
         {
           status: 500,
-          headers: { 'Content-Type': 'application/json' },
+          headers,
         },
       );
     }
