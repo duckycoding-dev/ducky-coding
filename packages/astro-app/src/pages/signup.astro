@@ -34,12 +34,7 @@ if (res.user) {
     Create an account to manage your favorite posts, customize your experience
     and engage with other developers!
   </p>
-  <form
-    action='/api/v1/auth/signup'
-    method='post'
-    class='flex flex-col gap-4'
-    novalidate={true}
-  >
+  <form action='/api/v1/auth/signup' method='post' class='flex flex-col gap-4'>
     <InputWithLabel
       type='email'
       name='email'
@@ -189,24 +184,11 @@ if (res.user) {
     });
   }
 
-  function displayServerError(message: string) {
-    const errorContainer =
-      document.getElementById('server-error') || document.createElement('div');
-    errorContainer.id = 'server-error';
-    errorContainer.className = 'text-red-500 text-center mt-4';
-    errorContainer.textContent = message;
-    document
-      .querySelector('form')
-      ?.insertAdjacentElement('beforebegin', errorContainer);
-  }
-
   // Add input event listeners to clear errors when user starts typing
   document.querySelectorAll('input').forEach((input) => {
     input.addEventListener('input', () => {
       const labelId = `${input.id}-label`;
       removeErrorLabel(labelId);
-      const serverError = document.getElementById('server-error');
-      if (serverError) serverError.remove();
     });
   });
 
@@ -215,7 +197,6 @@ if (res.user) {
     const formTarget = event.target as HTMLFormElement;
     const formData = new FormData(formTarget);
     const payload = Object.fromEntries(formData.entries());
-    console.log(payload);
     const { error } = CreateUserDTOSchema.safeParse(payload);
 
     if (error) {
@@ -230,4 +211,37 @@ if (res.user) {
 
   const form = document.querySelector('form');
   form?.addEventListener('submit', handleSubmit);
+
+  async function checkAvailability(input: HTMLInputElement) {
+    const field = input.getAttribute('name');
+    const { value } = input;
+    if (!value) return;
+    const res = await fetch(
+      `/api/v1/users/check-availability?${field}=${value}`,
+    );
+    const data = await res.json();
+
+    if (res.status === 403) {
+      updateOrCreateErrorLabel(
+        input.labels?.[0] as HTMLLabelElement,
+        `${field}-label`,
+        data.message,
+      );
+      input.setCustomValidity(data.message);
+    } else {
+      input.setCustomValidity(''); // Clear the custom validity
+    }
+  }
+
+  const emailInput: HTMLInputElement | null =
+    document.querySelector('input#email');
+  emailInput?.addEventListener('blur', function () {
+    checkAvailability(this);
+  });
+
+  const usernameInput: HTMLInputElement | null =
+    document.querySelector('input#username');
+  usernameInput?.addEventListener('blur', function () {
+    checkAvailability(this);
+  });
 </script>

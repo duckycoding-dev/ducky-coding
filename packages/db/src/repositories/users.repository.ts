@@ -1,4 +1,4 @@
-import { eq, inArray } from 'drizzle-orm';
+import { eq, inArray, SQL } from 'drizzle-orm';
 import { UserDTO, UserWithProfilePictureDTO } from '@ducky-coding/types/DTOs';
 import { db } from '../client';
 import { ImagesTable, InsertUser, mapToUserDTO, UsersTable } from '../models';
@@ -10,6 +10,34 @@ const getUsers = async (userIds: number[]): Promise<UserDTO[]> => {
     .from(UsersTable)
     .where(inArray(UsersTable.id, userIds));
 
+  const userDTOs: UserDTO[] = users.map((user) => {
+    return mapToUserDTO(user);
+  });
+  return userDTOs;
+};
+
+const getUsersByField = async (fieldValuePair: {
+  field: string;
+  value: string | number;
+}): Promise<UserDTO[]> => {
+  console.log('fieldValuePair', fieldValuePair);
+  let whereClause: SQL<unknown>;
+
+  switch (fieldValuePair.field.toLowerCase()) {
+    case 'id':
+      whereClause = eq(UsersTable.id, fieldValuePair.value as number);
+      break;
+    case 'email':
+      whereClause = eq(UsersTable.email, fieldValuePair.value as string);
+      break;
+    case 'username':
+      whereClause = eq(UsersTable.username, fieldValuePair.value as string);
+      break;
+    default:
+      throw new Error(`Unsupported field: "${fieldValuePair.field}"`);
+  }
+
+  const users = await db.select().from(UsersTable).where(whereClause);
   const userDTOs: UserDTO[] = users.map((user) => {
     return mapToUserDTO(user);
   });
@@ -108,8 +136,38 @@ const insertUsers = async (users: InsertUser[]): Promise<UserDTO[]> => {
   return insertedUsers.map((insertedUser) => mapToUserDTO(insertedUser));
 };
 
+const findUserByField = async (fieldValuePair: {
+  field: string;
+  value: string | number;
+}): Promise<boolean> => {
+  let whereClause: SQL<unknown>;
+
+  switch (fieldValuePair.field.toLowerCase()) {
+    case 'id':
+      whereClause = eq(UsersTable.id, fieldValuePair.value as number);
+      break;
+    case 'email':
+      whereClause = eq(UsersTable.email, fieldValuePair.value as string);
+      break;
+    case 'username':
+      whereClause = eq(UsersTable.username, fieldValuePair.value as string);
+      break;
+    default:
+      throw new Error(`Unsupported field: "${fieldValuePair.field}"`);
+  }
+
+  const users = await db
+    .select({ id: UsersTable.id })
+    .from(UsersTable)
+    .where(whereClause)
+    .limit(1);
+  if (users.length === 0) return false;
+  return true;
+};
+
 export const UsersRepository = {
   getUsers,
+  getUsersByField,
   getUsersByUsername,
   getUsersWithProfilePicture,
   getUsersWithProfilePictureByUsername,
@@ -117,4 +175,5 @@ export const UsersRepository = {
   getAllUsersWithProfilePicture,
 
   insertUsers,
+  findUserByField,
 };
