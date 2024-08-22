@@ -3,10 +3,12 @@ import { ImageDTOSchema } from './image.dto';
 
 export const BaseUserDTOSchema = z.object({
   id: z.number().optional(),
-  username: z.string(),
-  email: z.string(),
+  username: z
+    .string({ message: 'Username is required' })
+    .min(2, 'Username must be at least 2 characters long'),
+  email: z.string().email('Email is required'),
   password: z.string().optional(),
-  name: z.string(),
+  name: z.string({ message: 'Name is required' }),
   lastName: z.string().optional(),
   profilePictureId: z.number().optional(),
   bio: z.string().optional(),
@@ -21,7 +23,20 @@ export const CreateUserDTOSchema = BaseUserDTOSchema.omit({
   createdAt: true,
   updatedAt: true,
   deletedAt: true,
-}).required({ password: true });
+  password: true,
+})
+  .extend({
+    password: z
+      .string({ message: 'Password is required' })
+      .min(8, 'Password must be at least 8 characters long'),
+    repeatPassword: z
+      .string({ message: 'Repeat password is required' })
+      .min(8, 'Password must be at least 8 characters long'),
+  })
+  .refine((fields) => fields.password === fields.repeatPassword, {
+    message: "Passwords don't match",
+    path: ['repeatPassword'],
+  });
 export type CreateUserDTO = z.infer<typeof CreateUserDTOSchema>;
 
 export const UserDTOSchema = BaseUserDTOSchema.required({

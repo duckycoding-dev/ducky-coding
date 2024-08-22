@@ -72,9 +72,25 @@ export const POST: APIRoute = async ({ request }) => {
       },
     );
   } catch (error) {
+    let errorMessage = 'Something went wrong creating the user profile';
+    if (
+      error instanceof Error &&
+      error.message.includes(
+        'SQLite error: UNIQUE constraint failed: users.email',
+      )
+    )
+      errorMessage = 'Email already in use';
+    else if (
+      error instanceof Error &&
+      error.message.includes(
+        'SQLite error: UNIQUE constraint failed: users.username',
+      )
+    )
+      errorMessage = 'Username already in use';
+
     return new Response(
       JSON.stringify({
-        message: 'Something went wrong creating the user profile',
+        message: errorMessage,
       }),
       {
         status: 500,
