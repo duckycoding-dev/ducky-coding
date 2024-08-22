@@ -1,0 +1,47 @@
+---
+import { Link } from '../components/Link';
+import { HolyGrailLayout } from '../layouts/HolyGrailLayout';
+
+export const prerender = false;
+
+const url = new URL(Astro.request.url);
+const username = url.searchParams.get('username');
+---
+
+<HolyGrailLayout
+  title='Signed up successfully'
+  seoProps={{
+    title: 'Signed up successfully',
+    description: `Congratulations${username ? ` ${username}` : ''}! You've successfully signed up to DuckyCoding's blog! Login to start engaging with other developers!`,
+    extend: {
+      meta: [
+        {
+          name: 'keywords',
+          content: 'signed up, register, DuckyCoding, web development, auth',
+        },
+      ],
+    },
+  }}
+>
+  <h1 class='mb-8 text-center text-4xl font-extrabold'>
+    Signed up <span class='text-accent font-black underline'>successfully</span>
+  </h1>
+  <section class='mb-8 flex flex-col items-center gap-4 text-center text-lg'>
+    <span class='text-2xl font-semibold'>
+      Congratulations {
+        username ? (
+          <span class='text-accent font-extrabold underline'>{`${username}`}</span>
+        ) : (
+          ''
+        )
+      }!
+    </span>
+    <p class='flex flex-col gap-2'>
+      <span>You've successfully signed up to DuckyCoding's blog!</span>
+      <span>
+        <Link href='/login' class={'font-extrabold'}>Login now</Link> to start engaging
+        with other developers!
+      </span>
+    </p>
+  </section>
+</HolyGrailLayout>
