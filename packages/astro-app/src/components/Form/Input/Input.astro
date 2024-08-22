@@ -1,0 +1,18 @@
+---
+import type { HTMLAttributes } from 'astro/types';
+import { cn } from '@utils/cn';
+
+export interface InputProps {}
+
+interface Props extends InputProps, HTMLAttributes<'input'> {}
+
+const { class: className, ...props }: Props = Astro.props;
+---
+
+<input
+  class={cn(
+    'text-primary-900 bg-primary-100 border-comic border-secondary rounded-lg py-2 px-4',
+    className,
+  )}
+  {...props}
+/>
