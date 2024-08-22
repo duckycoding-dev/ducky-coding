@@ -67,10 +67,10 @@ if (res.user) {
     </InputWithLabel>
     <InputWithLabel
       type='text'
-      name='lastname'
-      id='lastname'
-      title='Lastname'
-      placeholder='Your lastname'
+      name='lastName'
+      id='lastName'
+      title='Last name'
+      placeholder='Your last name'
       required={false}
     >
       Last name
@@ -102,15 +102,15 @@ if (res.user) {
   </form>
   <p class='mt-4 text-sm text-red-500'>* Required fields</p>
 
-  <p class='mt-8 text-center'>
+  <p class='mt-2 text-center'>
     By signing up, you agree to our
     <Link href='/terms' class={'font-extrabold'}> Terms of Service </Link>
     and
     <Link href='/privacy' class={'font-extrabold'}> Privacy Policy </Link>
   </p>
-  <p class='mt-8 text-center'>
+  <p class='mt-4 text-center'>
     Already have an account?
-    <Link href='/signup' class={'font-extrabold'}> Login instead! </Link>
+    <Link href='/login' class={'font-extrabold'}> Login instead! </Link>
   </p>
 </HolyGrailLayout>
 
