@@ -6,9 +6,26 @@ export const prerender = false;
 
 export const POST: APIRoute = async ({ request }) => {
   const existingTokens = getTokens(request.headers);
+  const { searchParams } = new URL(request.url);
+  let redirectToParam = searchParams.get('redirectTo');
+  let redirectTo = '/';
+
+  if (redirectToParam) {
+    if (!redirectToParam.startsWith('/')) {
+      redirectToParam = `/${redirectToParam}`;
+    }
+    if (
+      redirectToParam.startsWith('/login') ||
+      redirectToParam.startsWith('/signup')
+    ) {
+      redirectToParam = '/';
+    }
+    redirectTo = redirectToParam;
+  }
+
   if (existingTokens.refreshToken) {
     const headers = new Headers();
-    headers.append('Location', '/');
+    headers.append('Location', redirectTo);
     return new Response(JSON.stringify({ message: 'User already logged in' }), {
       status: 303,
       headers,
@@ -33,7 +50,6 @@ export const POST: APIRoute = async ({ request }) => {
 
   const user = await AuthService.validateUser(username, password);
 
-  console.log('user', user);
   if (user) {
     const { accessToken, refreshToken } = AuthService.generateTokens(user);
     const session = await SessionsService.insertSession({
@@ -61,7 +77,8 @@ export const POST: APIRoute = async ({ request }) => {
       'Set-Cookie',
       `refreshToken=${refreshToken}; HttpOnly; Path=/; Expires=${new Date(session.expiresAt).toUTCString()}`,
     );
-    headers.append('Location', '/');
+
+    headers.append('Location', redirectTo);
 
     return new Response(JSON.stringify({ message: 'Successfully logged in' }), {
       status: 303,

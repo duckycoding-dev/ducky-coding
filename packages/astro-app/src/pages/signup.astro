@@ -132,6 +132,11 @@ if (res.user) {
   import { CreateUserDTOSchema } from '@ducky-coding/types/DTOs';
   import type { inferFormattedError } from 'zod';
 
+  // if this script is executed, it means the user is not logged in
+  // so we can safely clear the local storage from user related data
+  window.localStorage.removeItem('user');
+  window.localStorage.removeItem('sessionExpiresAt');
+
   function updateOrCreateErrorLabel(
     label: HTMLLabelElement,
     labelId: string,

@@ -36,8 +36,13 @@ export const GET: APIRoute = withAuth(async ({ request, locals }) => {
   headers.set('Content-Type', 'application/json');
   headers.append('Set-Cookie', `accessToken=; HttpOnly; Path=/; Max-Age=-1`);
   headers.append('Set-Cookie', `refreshToken=; HttpOnly; Path=/; Max-Age=-1`);
-  return new Response(JSON.stringify({ message: 'Sucessfully logged out' }), {
-    status: 200,
-    headers,
-  });
+  return new Response(
+    JSON.stringify({
+      message: `Sucessfully logged out${logoutFromEveryDevice ? 'from every device' : ''}`,
+    }),
+    {
+      status: 200,
+      headers,
+    },
+  );
 });

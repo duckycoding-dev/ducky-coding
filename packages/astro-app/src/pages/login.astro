@@ -6,11 +6,21 @@ import { Link } from '../components/Link';
 import { InputWithLabel } from '../components/Form/InputWithLabel';
 
 export const prerender = false;
-const res = await (await GET(Astro)).json();
 
-if (res.user) {
-  return Astro.redirect('/');
+const res = await (await GET(Astro)).json();
+// if (res.user) {
+//   return Astro.redirect('/');
+// }
+
+const { searchParams } = new URL(Astro.request.url);
+// const searchParamsKeys = searchParams.entries();
+let authorizationFailed: boolean = false;
+const authorizationFailedParam = searchParams.get('authorizationFailed');
+if (authorizationFailedParam === '' || authorizationFailedParam === 'true') {
+  authorizationFailed = true;
 }
+
+const redirectTo = searchParams.get('redirectTo');
 ---
 
 <HolyGrailLayout
@@ -34,7 +44,22 @@ if (res.user) {
     Access your account to manage your favorite posts and customize your
     experience!
   </p>
-  <form action='/api/v1/auth/login' method='post' class='flex flex-col gap-4'>
+  {
+    authorizationFailed && (
+      <>
+        <p class='text-center text-red-500'>
+          You've been redirected here because your session might have expired or
+          your access credentials have been changed from another device.
+        </p>
+        <p class='text-center text-red-500'>Please login again.</p>
+      </>
+    )
+  }
+  <form
+    action={`/api/v1/auth/login${redirectTo ? `?redirectTo=${redirectTo}` : ''}`}
+    method='post'
+    class='flex flex-col gap-4'
+  >
     <InputWithLabel
       type='text'
       name='username'
@@ -64,3 +89,10 @@ if (res.user) {
     <Link href='/signup' class={'font-extrabold'}> Sign up now! </Link>
   </p>
 </HolyGrailLayout>
+
+<script>
+  // if this script is executed, it means the user is not logged in
+  // so we can safely clear the local storage from user related data
+  window.localStorage.removeItem('user');
+  window.localStorage.removeItem('sessionExpiresAt');
+</script>
