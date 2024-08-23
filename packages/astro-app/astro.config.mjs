@@ -106,6 +106,6 @@ export default defineConfig({
   ],
   experimental: {
     // actions: true,
-    // serverIslands: true,
+    serverIslands: true,
   },
 });
