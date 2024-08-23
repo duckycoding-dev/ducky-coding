@@ -1,4 +1,4 @@
-import { UserDTO } from '@ducky-coding/types/DTOs';
+import { UserDTO, UserWithProfilePictureDTO } from '@ducky-coding/types/DTOs';
 import { TokenPair } from '@ducky-coding/types/entities';
 import jwt from 'jsonwebtoken';
 import { UsersService } from '../services/users.service';
@@ -8,7 +8,7 @@ import { SessionsService } from './sessions.service';
 const validateUser = async (
   username: string,
   password: string,
-): Promise<UserDTO | null> => {
+): Promise<UserWithProfilePictureDTO | null> => {
   const user = await UsersService.getUserByUsername(username);
   if (user && user.password === password) {
     return user;
@@ -38,7 +38,7 @@ const verifyAccessToken = (accessToken: string): number | null => {
     };
     return decoded.userId;
   } catch (error) {
-    console.error('verifyAccessToken error', error);
+    console.error('Failed to verify access token');
     return null;
   }
 };

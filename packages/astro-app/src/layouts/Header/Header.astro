@@ -2,6 +2,7 @@
 import { Navbar } from '@components/Navbar';
 import type { HTMLAttributes } from 'astro/types';
 import { Image } from 'astro:assets';
+import DefaultProfileIcon from '@assets/images/default_profile_icon.png';
 import DuckyCodingLogo from '@assets/images/DuckyCoding_logo.png';
 import { HamburgerToggle } from '@components/HamburgerToggle';
 import { Link } from '@components/Link';
@@ -24,7 +25,7 @@ const { class: className, ...props }: Props = Astro.props;
   {...props}
 >
   <div
-    class='mx-auto flex max-w-7xl items-center justify-between gap-x-8 px-4 py-2 md:px-8'
+    class='mx-auto flex max-w-7xl items-stretch justify-between gap-x-8 px-4 py-2 md:px-8'
   >
     <HamburgerToggle
       id='site_side_navigation_menu_id'
@@ -57,15 +58,16 @@ const { class: className, ...props }: Props = Astro.props;
       <Link
         id='login-link-header'
         href={'/login'}
-        class={'text-3xl md:text-base text-primary font-medium'}>Login</Link
-      >
-      <UserProfileIcon server:defer id={'1'}>
+        class={'text-3xl md:text-base text-primary font-medium'}
+        >Login
+      </Link>
+      <UserProfileIcon server:defer width={38} height={38}>
         <Image
           slot='fallback'
           hidden
           id='logged-user-avatar-header'
-          alt={'DuckyCoding logo'}
-          src={DuckyCodingLogo}
+          alt={'Default profile icon'}
+          src={DefaultProfileIcon}
           width={38}
           densities={IMAGE_DENSITIES}
           class='max-w-none'
