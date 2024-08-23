@@ -1,10 +1,5 @@
-import {
-  AuthService,
-  SessionsService,
-  UsersService,
-} from '@ducky-coding/db/services';
+import { UsersService } from '@ducky-coding/db/services';
 import type { APIRoute } from 'astro';
-import { getTokens } from '@utils/auth/auth';
 
 export const prerender = false;
 

@@ -57,14 +57,6 @@ const { class: className, ...props }: Props = Astro.props;
       >
     </li>
     <li>
-      <Link
-        id='login-link-navbar'
-        href={'/login'}
-        class={'text-3xl md:text-base text-primary font-medium w-full'}
-        >Login</Link
-      >
-    </li>
-    <li>
       <LogoutButton variant={'default'} />
     </li>
   </ul>
@@ -85,23 +77,48 @@ const { class: className, ...props }: Props = Astro.props;
 {/* USABLE BUT NOT COMPLETED */}
 
 <script>
-  const loginLinkNavbar: HTMLAnchorElement | null = document.querySelector(
-    'a#login-link-navbar',
-  );
+  import type { UserVerificationEvent } from '../../types/events';
+
   const loggedUserAvatarNavbar: HTMLElement | null = document.querySelector(
     '#logged-user-avatar-navbar',
   );
-  const userString = window.localStorage.getItem('user');
-  if (userString) {
-    if (loginLinkNavbar) {
-      loginLinkNavbar.hidden = true;
-      loginLinkNavbar.style.display = 'none';
+
+  if (loggedUserAvatarNavbar) {
+    const userStringInLocalStorage = window.localStorage.getItem('user');
+    if (
+      userStringInLocalStorage !== 'checked' &&
+      userStringInLocalStorage !== null
+    ) {
+      loggedUserAvatarNavbar.hidden = false;
+      loggedUserAvatarNavbar.style.display = '';
+    } else {
+      loggedUserAvatarNavbar.hidden = true;
+      loggedUserAvatarNavbar.style.display = 'none';
     }
-    const user = JSON.parse(userString);
-    const profilePicture = JSON.parse(user.profilePicture);
-    console.log(profilePicture);
-  } else if (loggedUserAvatarNavbar) {
-    loggedUserAvatarNavbar.hidden = true;
-    loggedUserAvatarNavbar.style.display = 'none';
   }
+
+  function updateNavbarState(isLoggedIn: boolean): void {
+    if (isLoggedIn) {
+      if (loggedUserAvatarNavbar) {
+        loggedUserAvatarNavbar.hidden = false;
+        loggedUserAvatarNavbar.style.display = '';
+        const userString = window.localStorage.getItem('user');
+        if (userString) {
+          const user = JSON.parse(userString);
+          const profilePicture = JSON.parse(user.profilePicture);
+          // Update the avatar with profilePicture data
+          console.log(profilePicture);
+        }
+      }
+    } else if (loggedUserAvatarNavbar) {
+      loggedUserAvatarNavbar.hidden = true;
+      loggedUserAvatarNavbar.style.display = 'none';
+    }
+  }
+
+  window.addEventListener('userVerificationComplete', ((
+    event: UserVerificationEvent,
+  ) => {
+    updateNavbarState(event.detail.isLoggedIn);
+  }) as EventListener);
 </script>

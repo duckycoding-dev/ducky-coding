@@ -128,6 +128,7 @@ const insertUsers = async (users: InsertUser[]): Promise<UserDTO[]> => {
           password: user.password,
           name: user.name,
           email: user.email,
+          profilePictureId: user.profilePictureId ?? 1, // 1 is the id of the default profile picture in the database (might need to make some changes here to fetch the image id before hand, but for now I leave it like this)
         };
       }),
     )

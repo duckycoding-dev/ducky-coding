@@ -67,6 +67,7 @@ const processedPosts = await Promise.all(
                       class='block h-full'
                       post={post}
                       bannerImage={post?.processedBannerImage || null}
+                      loading='eager'
                     />
                   </li>
                   <li class={`${i === 0 ? '' : ''}`}>

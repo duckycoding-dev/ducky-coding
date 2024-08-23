@@ -13,13 +13,14 @@ import { Tag } from '../Tag';
 export interface PostCardProps extends HTMLAttributes<'a'> {
   post: CollectionEntry<'posts'>;
   bannerImage?: ImageMetadata | null;
+  loading?: 'eager' | 'lazy';
 }
 
 interface Props extends PostCardProps {}
 
 const { props }: { props: Props } = Astro;
 
-const { post, bannerImage, class: className } = props;
+const { post, bannerImage, class: className, loading = 'lazy' } = props;
 ---
 
 <Link variant='unstyled' href={`/posts/${post.slug}`} class={cn(className)}>
@@ -30,8 +31,8 @@ const { post, bannerImage, class: className } = props;
       height={bannerImage ? bannerImage.height / 3 : DuckyCodingLogo.height / 3}
       alt={post.data.bannerImage.alt ?? 'Post banner image'}
       densities={IMAGE_DENSITIES}
-      loading='lazy'
-      decoding='async'
+      loading={loading}
+      decoding={'async'}
       class='bg-primary-700 h-48 w-full object-cover'
     />
     <footer

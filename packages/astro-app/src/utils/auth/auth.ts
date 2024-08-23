@@ -27,11 +27,6 @@ export async function validateAccessToBackend(
     throw new Error('User is not logged in');
   }
 
-  if (!refreshToken) {
-    // it's the refresh token that authorizes the user, if it's not present, return unauthorized
-    throw new Error('Unauthorized');
-  }
-
   if (accessToken) {
     // if the access token is invalid, set it to undefined to force a refresh
     if (AuthService.verifyAccessToken(accessToken) === null) {
@@ -39,10 +34,19 @@ export async function validateAccessToBackend(
     }
   }
 
+  if (!refreshToken) {
+    // it's the refresh token that authorizes the user, if it's not present, return unauthorized
+    throw new Error('Session expired');
+  }
+
+  if (AuthService.verifyRefreshToken(refreshToken) === null) {
+    throw new Error('Session expired');
+  }
+
   if (!accessToken) {
     const newTokens = await AuthService.refreshTokens(refreshToken);
     if (!newTokens) {
-      throw new Error('Unauthorized');
+      throw new Error('Session expired');
     }
     accessToken = newTokens.accessToken;
   }
@@ -59,6 +63,8 @@ export async function validateAccessToBackend(
 export const withAuth =
   (handler: APIRoute): APIRoute =>
   async (context) => {
+    const redirectTo = context.request.headers.get('X-Redirect-To');
+
     try {
       const { accessToken, refreshToken } = await validateAccessToBackend(
         context.request.headers,
@@ -76,6 +82,36 @@ export const withAuth =
       const headers = new Headers();
       headers.set('Content-Type', 'application/json');
       if (error instanceof Error) {
+        if (error.message === 'Session expired') {
+          headers.set('Content-Type', 'application/json');
+          headers.append(
+            'Set-Cookie',
+            `accessToken=; HttpOnly; Path=/; Max-Age=-1`,
+          );
+          headers.append(
+            'Set-Cookie',
+            `refreshToken=; HttpOnly; Path=/; Max-Age=-1`,
+          );
+          headers.append('Location', `/login?redirectTo=${redirectTo ?? '/'}`);
+          return new Response(
+            JSON.stringify({
+              message: error.message,
+              redirectTo: `/login?redirectTo=${redirectTo ?? '/'}`,
+            }),
+            {
+              status: 401,
+              headers,
+            },
+          );
+        }
+
+        if (error.message === 'User is not logged in') {
+          return new Response(JSON.stringify({ message: error.message }), {
+            status: 200,
+            headers,
+          });
+        }
+
         if (error.message === 'Unauthorized') {
           headers.append(
             'Set-Cookie',
