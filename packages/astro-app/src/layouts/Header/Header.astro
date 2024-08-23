@@ -7,6 +7,7 @@ import { HamburgerToggle } from '@components/HamburgerToggle';
 import { Link } from '@components/Link';
 import { cn } from '@utils/cn';
 import { IMAGE_DENSITIES } from '@utils/globals';
+import { UserProfileIcon } from '../../components/UserProfileIcon';
 
 export interface HeaderProps {}
 
@@ -58,15 +59,18 @@ const { class: className, ...props }: Props = Astro.props;
         href={'/login'}
         class={'text-3xl md:text-base text-primary font-medium'}>Login</Link
       >
-      <Image
-        hidden
-        id='logged-user-avatar-header'
-        alt={'DuckyCoding logo'}
-        src={DuckyCodingLogo}
-        width={38}
-        densities={IMAGE_DENSITIES}
-        class='max-w-none'
-      />
+      <UserProfileIcon server:defer id={'1'}>
+        <Image
+          slot='fallback'
+          hidden
+          id='logged-user-avatar-header'
+          alt={'DuckyCoding logo'}
+          src={DuckyCodingLogo}
+          width={38}
+          densities={IMAGE_DENSITIES}
+          class='max-w-none'
+        />
+      </UserProfileIcon>
     </div>
   </div>
 </header>

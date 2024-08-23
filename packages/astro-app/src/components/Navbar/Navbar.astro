@@ -5,6 +5,7 @@ import { cn } from '@utils/cn';
 import DuckyCodingLogo from '@assets/images/DuckyCoding_logo.png';
 import { Image } from 'astro:assets';
 import { LogoutButton } from '@components/LogoutButton';
+import { UserProfileIcon } from '../UserProfileIcon';
 
 export interface NavbarProps {}
 
@@ -64,13 +65,16 @@ const { class: className, ...props }: Props = Astro.props;
     id='logged-user-avatar-navbar'
     class='mt-auto flex items-center gap-4 text-2xl md:hidden'
   >
+    <UserProfileIcon server:defer id={'1'}>
+      <div>hello</div>
+    </UserProfileIcon>
     <Image
+      id='user-profile-picture-navbar'
       alt={'DuckyCoding logo'}
       src={DuckyCodingLogo}
       width={50}
-      densities={[1.5, 2]}
     />
-    <span class='md:hidden'>User_name</span>
+    <span class='md:hidden' id='username-in-navbar'></span>
   </div>
 </nav>
 
@@ -82,6 +86,10 @@ const { class: className, ...props }: Props = Astro.props;
   const loggedUserAvatarNavbar: HTMLElement | null = document.querySelector(
     '#logged-user-avatar-navbar',
   );
+  const usernameInNavbar = document.querySelector('#username-in-navbar');
+  const userProfilePictureNavbar = document.querySelector(
+    '#user-profile-picture-navbar',
+  );
 
   if (loggedUserAvatarNavbar) {
     const userStringInLocalStorage = window.localStorage.getItem('user');
@@ -89,6 +97,22 @@ const { class: className, ...props }: Props = Astro.props;
       userStringInLocalStorage !== 'checked' &&
       userStringInLocalStorage !== null
     ) {
+      const user = JSON.parse(userStringInLocalStorage);
+      const profilePicture = JSON.parse(user.profilePicture);
+      console.log(userProfilePictureNavbar);
+      if (userProfilePictureNavbar) {
+        userProfilePictureNavbar.setAttribute(
+          'src',
+          `images/${profilePicture.path}`,
+        );
+        userProfilePictureNavbar.setAttribute(
+          'alt',
+          profilePicture.alt ?? 'User profile icon',
+        );
+      }
+      if (usernameInNavbar) {
+        usernameInNavbar.textContent = `Hello ${user.username}! 👋`;
+      }
       loggedUserAvatarNavbar.hidden = false;
       loggedUserAvatarNavbar.style.display = '';
     } else {
@@ -106,6 +130,9 @@ const { class: className, ...props }: Props = Astro.props;
         if (userString) {
           const user = JSON.parse(userString);
           const profilePicture = JSON.parse(user.profilePicture);
+          if (usernameInNavbar) {
+            usernameInNavbar.textContent = `Hello ${user.username}! 👋`;
+          }
           // Update the avatar with profilePicture data
           console.log(profilePicture);
         }

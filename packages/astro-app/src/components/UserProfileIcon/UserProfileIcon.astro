@@ -1,0 +1,53 @@
+---
+import { UsersService } from '@ducky-coding/db/services';
+import type { HTMLAttributes } from 'astro/types';
+import { getImage, Image } from 'astro:assets';
+import DuckyCodingLogo from '@assets/images/DuckyCoding_logo.png';
+import type { ImageMetadata } from 'astro';
+import { matchImageFromGlobImport } from '../../utils/images/images';
+import { IMAGE_DENSITIES } from '../../utils/globals';
+
+export interface UserProfileIconProps extends HTMLAttributes<'img'> {}
+
+interface Props extends UserProfileIconProps {}
+
+const { props }: { props: Props } = Astro;
+console.log(props.id);
+
+const user = await UsersService.getUserWithProfilePicture(
+  props.id as unknown as number,
+);
+
+let processedImage: ImageMetadata | undefined;
+const userImagePath = user?.profilePicture?.path;
+if (userImagePath) {
+  const imageToFindPath = userImagePath;
+  if (imageToFindPath) {
+    const images = import.meta.glob<{ default: ImageMetadata }>(
+      `/src/assets/images/**/*.{jpeg,jpg,png,gif,webp,svg}`,
+    );
+    processedImage = (await matchImageFromGlobImport(
+      images,
+      imageToFindPath,
+    )) as ImageMetadata;
+  }
+}
+
+console.log(processedImage);
+// getImage('https://avatars.githubusercontent.com/u/7221389?v=4');
+---
+
+<Image
+  src={DuckyCodingLogo}
+  alt={user?.profilePicture?.alt ?? 'User profile picture'}
+  {...props}
+  width={processedImage ? processedImage.width / 3 : DuckyCodingLogo.width / 3}
+  height={processedImage
+    ? processedImage.height / 3
+    : DuckyCodingLogo.height / 3}
+  densities={IMAGE_DENSITIES}
+  loading={'eager'}
+  decoding={'async'}
+/>
+<div>{JSON.stringify(user)}</div>
+<img src='' />
