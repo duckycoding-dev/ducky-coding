@@ -1,5 +1,5 @@
-/// <reference path="../.astro/actions.d.ts" />
 /* eslint-disable @typescript-eslint/triple-slash-reference */
+/// <reference path="../.astro/actions.d.ts" />
 /// <reference path="../.astro/db-types.d.ts" />
 /// <reference path="../.astro/types.d.ts" />
 /// <reference types="astro/client" />
@@ -22,7 +22,8 @@ interface ImportMeta {
 
 namespace App {
   interface Locals {
-    tokens: TokenPair;
+    tokens: import('@ducky-coding/types/entities').TokenPair;
     userId: number;
+    userWithProfilePicture: import('@ducky-coding/types/DTOs').UserWithProfilePictureDTO;
   }
 }

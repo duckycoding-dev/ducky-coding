@@ -78,6 +78,7 @@ export const withAuth =
       // Add the tokens and userId to the request context for later use in the handler
       context.locals.userId = userId;
       context.locals.tokens = { accessToken, refreshToken };
+      console.log('context.locals', context.locals);
     } catch (error) {
       const headers = new Headers();
       headers.set('Content-Type', 'application/json');
@@ -138,6 +139,7 @@ export const withAuth =
     }
 
     try {
+      console.log('contextDavide', context.locals);
       return handler(context);
     } catch (error) {
       console.error('UNHANDLED_SERVER_ERROR', error);

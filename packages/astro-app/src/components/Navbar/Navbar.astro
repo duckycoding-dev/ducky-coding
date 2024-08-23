@@ -3,6 +3,7 @@ import { Link } from '@components/Link';
 import type { HTMLAttributes } from 'astro/types';
 import { cn } from '@utils/cn';
 import DuckyCodingLogo from '@assets/images/DuckyCoding_logo.png';
+import DefaultProfileIcon from '@assets/images/default_profile_icon.png';
 import { Image } from 'astro:assets';
 import { LogoutButton } from '@components/LogoutButton';
 import { UserProfileIcon } from '../UserProfileIcon';
@@ -16,7 +17,7 @@ const { class: className, ...props }: Props = Astro.props;
 
 <nav
   class={cn(
-    'bg-primary-700 top-0 left-0 md:top-0 md:left-0 fixed md:static h-dvh w-full flex flex-col md:h-auto md:flex-row gap-x-8 md:items-center px-8 md:px-0 pb-8 pt-16 md:py-0 max-w-96 gap-y-4 border-comic border-secondary md:border-none md:justify-end',
+    'bg-primary-700 top-0 left-0 md:top-0 md:left-0 fixed md:static h-dvh w-full flex flex-col md:h-auto md:flex-row gap-x-8 px-8 md:px-0 pb-8 pt-16 md:py-0 max-w-96 gap-y-4 border-comic border-secondary md:border-none md:justify-end',
     className,
   )}
   {...props}
@@ -33,7 +34,7 @@ const { class: className, ...props }: Props = Astro.props;
     />
     <h2 class='text-primary text-3xl md:hidden lg:block'>DuckyCoding</h2>
   </div>
-  <ul class='flex h-full flex-col gap-4 md:flex-row'>
+  <ul class='flex h-full flex-col gap-4 md:flex-row md:items-center'>
     <li>
       <Link
         href={'/'}
@@ -65,15 +66,14 @@ const { class: className, ...props }: Props = Astro.props;
     id='logged-user-avatar-navbar'
     class='mt-auto flex items-center gap-4 text-2xl md:hidden'
   >
-    <UserProfileIcon server:defer id={'1'}>
-      <div>hello</div>
+    <UserProfileIcon server:defer id={'1'} width={50} height={50}>
+      <Image
+        id='user-profile-picture-navbar'
+        alt={'Default profile icon'}
+        src={DefaultProfileIcon}
+        width={50}
+      />
     </UserProfileIcon>
-    <Image
-      id='user-profile-picture-navbar'
-      alt={'DuckyCoding logo'}
-      src={DuckyCodingLogo}
-      width={50}
-    />
     <span class='md:hidden' id='username-in-navbar'></span>
   </div>
 </nav>
@@ -87,9 +87,9 @@ const { class: className, ...props }: Props = Astro.props;
     '#logged-user-avatar-navbar',
   );
   const usernameInNavbar = document.querySelector('#username-in-navbar');
-  const userProfilePictureNavbar = document.querySelector(
-    '#user-profile-picture-navbar',
-  );
+  // const userProfilePictureNavbar = document.querySelector(
+  //   '#user-profile-picture-navbar',
+  // );
 
   if (loggedUserAvatarNavbar) {
     const userStringInLocalStorage = window.localStorage.getItem('user');
@@ -98,18 +98,17 @@ const { class: className, ...props }: Props = Astro.props;
       userStringInLocalStorage !== null
     ) {
       const user = JSON.parse(userStringInLocalStorage);
-      const profilePicture = JSON.parse(user.profilePicture);
-      console.log(userProfilePictureNavbar);
-      if (userProfilePictureNavbar) {
-        userProfilePictureNavbar.setAttribute(
-          'src',
-          `images/${profilePicture.path}`,
-        );
-        userProfilePictureNavbar.setAttribute(
-          'alt',
-          profilePicture.alt ?? 'User profile icon',
-        );
-      }
+      // const profilePicture = JSON.parse(user.profilePicture);
+      // if (userProfilePictureNavbar) {
+      //   userProfilePictureNavbar.setAttribute(
+      //     'src',
+      //     `images/${profilePicture.path}`,
+      //   );
+      //   userProfilePictureNavbar.setAttribute(
+      //     'alt',
+      //     profilePicture.alt ?? 'User profile icon',
+      //   );
+      // }
       if (usernameInNavbar) {
         usernameInNavbar.textContent = `Hello ${user.username}! 👋`;
       }

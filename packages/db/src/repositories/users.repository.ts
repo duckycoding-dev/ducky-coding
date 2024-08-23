@@ -1,7 +1,17 @@
 import { eq, inArray, SQL } from 'drizzle-orm';
-import { UserDTO, UserWithProfilePictureDTO } from '@ducky-coding/types/DTOs';
+import {
+  ImageDTO,
+  UserDTO,
+  UserWithProfilePictureDTO,
+} from '@ducky-coding/types/DTOs';
 import { db } from '../client';
-import { ImagesTable, InsertUser, mapToUserDTO, UsersTable } from '../models';
+import {
+  ImagesTable,
+  InsertUser,
+  mapToImageDTO,
+  mapToUserDTO,
+  UsersTable,
+} from '../models';
 import { mapToUserWithProfilePictureDTO } from '../mappers/users.mappers';
 
 const getUsers = async (userIds: number[]): Promise<UserDTO[]> => {
@@ -166,6 +176,22 @@ const findUserByField = async (fieldValuePair: {
   return true;
 };
 
+const getUserProfilePicture = async (
+  userId: number,
+): Promise<ImageDTO | undefined> => {
+  const image = await db
+    .select({
+      image: ImagesTable,
+    })
+    .from(ImagesTable)
+    .leftJoin(UsersTable, eq(UsersTable.profilePictureId, ImagesTable.id))
+    .where(eq(UsersTable.id, userId))
+    .limit(1);
+
+  if (image.length === 0) return undefined;
+  return mapToImageDTO(image[0].image);
+};
+
 export const UsersRepository = {
   getUsers,
   getUsersByField,
@@ -174,6 +200,7 @@ export const UsersRepository = {
   getUsersWithProfilePictureByUsername,
   getAllUsers,
   getAllUsersWithProfilePicture,
+  getUserProfilePicture,
 
   insertUsers,
   findUserByField,

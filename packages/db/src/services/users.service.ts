@@ -1,4 +1,8 @@
-import { UserDTO, UserWithProfilePictureDTO } from '@ducky-coding/types/DTOs';
+import {
+  ImageDTO,
+  UserDTO,
+  UserWithProfilePictureDTO,
+} from '@ducky-coding/types/DTOs';
 import { UsersRepository } from '../repositories/users.repository';
 import { InsertUser } from '../models';
 
@@ -82,6 +86,13 @@ const findUserByField = async (fieldValuePair: {
   return selectedUsers;
 };
 
+const getUserProfilePicture = async (
+  userId: number,
+): Promise<ImageDTO | undefined> => {
+  const selectedImage = await UsersRepository.getUserProfilePicture(userId);
+  return selectedImage;
+};
+
 export const UsersService = {
   getUser,
   getUsersByField,
@@ -91,6 +102,7 @@ export const UsersService = {
   getAllUsers,
   getUserWithProfilePicture,
   getUsersWithProfilePicture,
+  getUserProfilePicture,
   getAllUsersWithProfilePicture,
   insertUser,
 

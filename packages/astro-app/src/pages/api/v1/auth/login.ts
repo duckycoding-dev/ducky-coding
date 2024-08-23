@@ -4,7 +4,7 @@ import { getTokens } from '@utils/auth/auth';
 
 export const prerender = false;
 
-export const POST: APIRoute = async ({ request }) => {
+export const POST: APIRoute = async ({ request, locals }) => {
   const existingTokens = getTokens(request.headers);
   const { searchParams } = new URL(request.url);
   let redirectToParam = searchParams.get('redirectTo');
