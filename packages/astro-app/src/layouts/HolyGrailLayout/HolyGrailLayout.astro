@@ -27,12 +27,10 @@ const { ...props }: Props = Astro.props;
   let touchendX = 0;
   const minSwipeDistance = 50; // Minimum distance to be considered a swipe
 
-  // Get the checkbox element
   const checkbox = document.getElementById(
     'site_side_navigation_menu_id',
   ) as HTMLInputElement;
 
-  // Function to handle touch start
   function handleTouchStart(event: TouchEvent) {
     touchstartX = event.changedTouches[0].screenX;
   }
@@ -54,7 +52,6 @@ const { ...props }: Props = Astro.props;
     }
   }
 
-  // Function to handle touch end
   function handleTouchEnd(event: TouchEvent) {
     touchendX = event.changedTouches[0].screenX;
     handleSwipe();
@@ -63,73 +60,4 @@ const { ...props }: Props = Astro.props;
   // Add event listeners
   document.addEventListener('touchstart', handleTouchStart, false);
   document.addEventListener('touchend', handleTouchEnd, false);
-
-  document.addEventListener('DOMContentLoaded', async () => {
-    let userInLocalStorage = window.localStorage.getItem('user');
-    const sessionExpiration: string | null = JSON.parse(
-      window.localStorage.getItem('sessionExpiresAt') ?? 'null',
-    );
-
-    const PAGES_WITHOUT_AUTH: `/${string}`[] = [
-      '/login',
-      '/signup',
-      '/forgotPassword',
-    ];
-
-    if (PAGES_WITHOUT_AUTH.includes(window.location.pathname as `/${string}`)) {
-      return;
-    }
-
-    if (
-      userInLocalStorage !== 'checked' &&
-      (!sessionExpiration || new Date(sessionExpiration).getTime() < Date.now())
-    ) {
-      try {
-        const response = await fetch('/api/v1/auth/verify-user', {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-            'X-Redirect-To': window.location.pathname,
-          },
-        });
-        const responseData = await response.json();
-        const { user, sessionExpiresAt } = responseData;
-        if (user) {
-          window.localStorage.setItem('user', JSON.stringify(user));
-          userInLocalStorage = JSON.stringify(user);
-          window.localStorage.setItem(
-            'sessionExpiresAt',
-            JSON.stringify(sessionExpiresAt),
-          );
-        } else {
-          userInLocalStorage = null;
-          window.localStorage.removeItem('sessionExpiresAt');
-          if (responseData.message === 'Session expired') {
-            window.location.href = responseData.redirectTo ?? '/';
-          }
-          if (responseData.message === 'User is not logged in') {
-            window.localStorage.setItem('user', 'checked');
-            console.log(
-              `Sign in to have access to lots of user related features!
-        Click here to login! 👉 ${import.meta.env.PUBLIC_BASE_SITE_URL}/login 👈`,
-            );
-          }
-        }
-      } catch (error) {
-        console.log(
-          `Sign in to have access to lots of user related features!
-        Click here to login! 👉 ${import.meta.env.PUBLIC_BASE_SITE_URL}/login 👈`,
-        );
-      } finally {
-        window.dispatchEvent(
-          new CustomEvent('userVerificationComplete', {
-            detail: {
-              isLoggedIn:
-                userInLocalStorage !== 'checked' && userInLocalStorage !== null,
-            },
-          }),
-        );
-      }
-    }
-  });
 </script>

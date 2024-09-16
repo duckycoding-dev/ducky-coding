@@ -27,8 +27,12 @@ const { post, bannerImage, class: className, loading = 'lazy' } = props;
   <Card class='card flex h-full flex-col'>
     <Image
       src={bannerImage ?? DuckyCodingLogo}
-      width={bannerImage ? bannerImage.width / 3 : DuckyCodingLogo.width / 3}
-      height={bannerImage ? bannerImage.height / 3 : DuckyCodingLogo.height / 3}
+      width={bannerImage
+        ? Math.floor(bannerImage.width / 3)
+        : Math.floor(DuckyCodingLogo.width / 3)}
+      height={bannerImage
+        ? Math.floor(bannerImage.height / 3)
+        : Math.floor(DuckyCodingLogo.height / 3)}
       alt={post.data.bannerImage.alt ?? 'Post banner image'}
       densities={IMAGE_DENSITIES}
       loading={loading}

@@ -30,7 +30,7 @@ const { class: className, ...props }: Props = Astro.props;
     <HamburgerToggle
       id='site_side_navigation_menu_id'
       title='navigation menu toggle'
-      class='peer z-20 shrink-0 md:hidden'
+      class='peer absolute z-20 shrink-0 md:hidden'
       variant={'small'}
     />
     <div class='mx-auto md:mx-0' aria-hidden='true'>
@@ -54,26 +54,6 @@ const { class: className, ...props }: Props = Astro.props;
       id='primary-navigation'
       class='fixed z-10 overflow-hidden transition-transform peer-checked:flex peer-checked:translate-x-0 peer-[:not(checked)]:-translate-x-full md:ml-auto md:peer-[:not(checked)]:translate-x-0'
     />
-    <div class='flex items-center gap-4 text-2xl'>
-      <Link
-        id='login-link-header'
-        href={'/login'}
-        class={'text-3xl md:text-base text-primary font-medium'}
-        >Login
-      </Link>
-      <UserProfileIcon server:defer width={38} height={38}>
-        <Image
-          slot='fallback'
-          hidden
-          id='logged-user-avatar-header'
-          alt={'Default profile icon'}
-          src={DefaultProfileIcon}
-          width={38}
-          densities={IMAGE_DENSITIES}
-          class='max-w-none'
-        />
-      </UserProfileIcon>
-    </div>
   </div>
 </header>
 
@@ -82,66 +62,3 @@ const { class: className, ...props }: Props = Astro.props;
     transform: translateX(1000px);
   }
 </style>
-
-<script>
-  import type { UserVerificationEvent } from '../../types/events';
-
-  const loginLinkHeader: HTMLAnchorElement | null = document.querySelector(
-    'a#login-link-header',
-  );
-  const loggedUserAvatarHeader: HTMLElement | null = document.querySelector(
-    '#logged-user-avatar-header',
-  );
-  if (loggedUserAvatarHeader && loginLinkHeader) {
-    const userStringInLocalStorage = window.localStorage.getItem('user');
-    if (
-      userStringInLocalStorage !== 'checked' &&
-      userStringInLocalStorage !== null
-    ) {
-      loggedUserAvatarHeader.hidden = false;
-      loggedUserAvatarHeader.style.display = '';
-      loginLinkHeader.hidden = true;
-      loginLinkHeader.style.display = 'none';
-    } else {
-      loggedUserAvatarHeader.hidden = true;
-      loggedUserAvatarHeader.style.display = 'none';
-      loginLinkHeader.hidden = false;
-      loginLinkHeader.style.display = '';
-    }
-  }
-
-  function updateHeaderState(isLoggedIn: boolean): void {
-    if (isLoggedIn) {
-      if (loginLinkHeader) {
-        loginLinkHeader.hidden = true;
-        loginLinkHeader.style.display = 'none';
-      }
-      if (loggedUserAvatarHeader) {
-        loggedUserAvatarHeader.hidden = false;
-        loggedUserAvatarHeader.style.display = '';
-        const userString = window.localStorage.getItem('user');
-        if (userString) {
-          const user = JSON.parse(userString);
-          const profilePicture = JSON.parse(user.profilePicture);
-          // Update the avatar with profilePicture data
-          console.log(profilePicture);
-        }
-      }
-    } else {
-      if (loginLinkHeader) {
-        loginLinkHeader.hidden = false;
-        loginLinkHeader.style.display = '';
-      }
-      if (loggedUserAvatarHeader) {
-        loggedUserAvatarHeader.hidden = true;
-        loggedUserAvatarHeader.style.display = 'none';
-      }
-    }
-  }
-
-  window.addEventListener('userVerificationComplete', ((
-    event: UserVerificationEvent,
-  ) => {
-    updateHeaderState(event.detail.isLoggedIn);
-  }) as EventListener);
-</script>

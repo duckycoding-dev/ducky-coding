@@ -3,10 +3,7 @@ import { Link } from '@components/Link';
 import type { HTMLAttributes } from 'astro/types';
 import { cn } from '@utils/cn';
 import DuckyCodingLogo from '@assets/images/DuckyCoding_logo.png';
-import DefaultProfileIcon from '@assets/images/default_profile_icon.png';
 import { Image } from 'astro:assets';
-import { LogoutButton } from '@components/LogoutButton';
-import { UserProfileIcon } from '../UserProfileIcon';
 
 export interface NavbarProps {}
 
@@ -58,93 +55,5 @@ const { class: className, ...props }: Props = Astro.props;
         >Components</Link
       >
     </li>
-    <li>
-      <LogoutButton variant={'default'} />
-    </li>
   </ul>
-  <div
-    id='logged-user-avatar-navbar'
-    class='mt-auto flex items-center gap-4 text-2xl md:hidden'
-  >
-    <UserProfileIcon server:defer id={'1'} width={50} height={50}>
-      <Image
-        id='user-profile-picture-navbar'
-        alt={'Default profile icon'}
-        src={DefaultProfileIcon}
-        width={50}
-      />
-    </UserProfileIcon>
-    <span class='md:hidden' id='username-in-navbar'></span>
-  </div>
 </nav>
-
-{/* USABLE BUT NOT COMPLETED */}
-
-<script>
-  import type { UserVerificationEvent } from '../../types/events';
-
-  const loggedUserAvatarNavbar: HTMLElement | null = document.querySelector(
-    '#logged-user-avatar-navbar',
-  );
-  const usernameInNavbar = document.querySelector('#username-in-navbar');
-  // const userProfilePictureNavbar = document.querySelector(
-  //   '#user-profile-picture-navbar',
-  // );
-
-  if (loggedUserAvatarNavbar) {
-    const userStringInLocalStorage = window.localStorage.getItem('user');
-    if (
-      userStringInLocalStorage !== 'checked' &&
-      userStringInLocalStorage !== null
-    ) {
-      const user = JSON.parse(userStringInLocalStorage);
-      // const profilePicture = JSON.parse(user.profilePicture);
-      // if (userProfilePictureNavbar) {
-      //   userProfilePictureNavbar.setAttribute(
-      //     'src',
-      //     `images/${profilePicture.path}`,
-      //   );
-      //   userProfilePictureNavbar.setAttribute(
-      //     'alt',
-      //     profilePicture.alt ?? 'User profile icon',
-      //   );
-      // }
-      if (usernameInNavbar) {
-        usernameInNavbar.textContent = `Hello ${user.username}! 👋`;
-      }
-      loggedUserAvatarNavbar.hidden = false;
-      loggedUserAvatarNavbar.style.display = '';
-    } else {
-      loggedUserAvatarNavbar.hidden = true;
-      loggedUserAvatarNavbar.style.display = 'none';
-    }
-  }
-
-  function updateNavbarState(isLoggedIn: boolean): void {
-    if (isLoggedIn) {
-      if (loggedUserAvatarNavbar) {
-        loggedUserAvatarNavbar.hidden = false;
-        loggedUserAvatarNavbar.style.display = '';
-        const userString = window.localStorage.getItem('user');
-        if (userString) {
-          const user = JSON.parse(userString);
-          const profilePicture = JSON.parse(user.profilePicture);
-          if (usernameInNavbar) {
-            usernameInNavbar.textContent = `Hello ${user.username}! 👋`;
-          }
-          // Update the avatar with profilePicture data
-          console.log(profilePicture);
-        }
-      }
-    } else if (loggedUserAvatarNavbar) {
-      loggedUserAvatarNavbar.hidden = true;
-      loggedUserAvatarNavbar.style.display = 'none';
-    }
-  }
-
-  window.addEventListener('userVerificationComplete', ((
-    event: UserVerificationEvent,
-  ) => {
-    updateNavbarState(event.detail.isLoggedIn);
-  }) as EventListener);
-</script>
