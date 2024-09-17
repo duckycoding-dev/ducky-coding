@@ -117,5 +117,5 @@ export default {
     //   full: '9999px',
     // },
   },
-  plugins: [typography],
+  // plugins: [typography],
 };
