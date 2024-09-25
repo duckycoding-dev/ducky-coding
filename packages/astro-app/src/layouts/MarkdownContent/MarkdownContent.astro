@@ -1,0 +1,32 @@
+---
+import { MarkdownComponents } from '@components/Markdown';
+import type { CollectionEntry } from 'astro:content';
+import '@styles/markdown.css';
+import { logger } from '@utils/logs/logger';
+
+logger.setShowTimestamp(true);
+logger.error('hello');
+export type MarkdownContentProps = {
+  entry: CollectionEntry<'posts'>;
+};
+
+type Props = MarkdownContentProps;
+
+const { entry }: Props = Astro.props;
+
+const { Content, headings } = await entry.render();
+---
+
+<article class='markdown-content'>
+  <Content components={MarkdownComponents} />
+</article>
+
+<script>
+  import { logger } from '@utils/logs/logger';
+
+  logger.warn('hello');
+  logger.setShowTimestamp(true);
+  logger.warn('hello2');
+  logger.setShowTimestamp(false);
+  logger.warn('hello3');
+</script>
