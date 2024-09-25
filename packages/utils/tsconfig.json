@@ -5,6 +5,8 @@
   "compilerOptions": {
     "outDir": "dist",
     "declarationDir": "dist",
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
     "lib": ["esnext", "dom"]
   }
 }

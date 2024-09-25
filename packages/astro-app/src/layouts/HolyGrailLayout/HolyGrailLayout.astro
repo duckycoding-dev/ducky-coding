@@ -4,7 +4,10 @@ import { Footer } from '@layouts/Footer';
 import { Header } from '@layouts/Header';
 import { MainContent } from '@layouts/MainContent';
 import type { HTMLAttributes } from 'astro/types';
+import { logger } from '@utils/logs/logger';
 
+logger.setShowTimestamp(true);
+logger.error('hello holy');
 export type HolyGrailLayoutProps = BaseHtmlProps;
 
 interface Props extends HTMLAttributes<'html'>, HolyGrailLayoutProps {}
