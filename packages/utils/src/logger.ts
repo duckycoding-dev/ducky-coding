@@ -1,7 +1,7 @@
 /* eslint-disable max-classes-per-file */
 import chalk from 'chalk';
 
-export type LogLevel = 'info' | 'warn' | 'error' | 'debug';
+export type LogLevel = 'log' | 'info' | 'warn' | 'error' | 'debug';
 
 interface BaseLoggerConfig {
   showTimestamp: boolean;
@@ -19,6 +19,7 @@ interface BaseLogger {
   setLogLevel(level: LogLevel): void;
   setShowTimestamp(show: boolean): void;
   setShowLevelLabel(show: boolean): void;
+  log(message: string, ...args: unknown[]): void;
   info(message: string, ...args: unknown[]): void;
   warn(message: string, ...args: unknown[]): void;
   error(message: string, ...args: unknown[]): void;
@@ -56,7 +57,7 @@ class LoggerImpl implements BaseLogger {
     this.showLevelLabel = show;
   }
 
-  protected levels: LogLevel[] = ['debug', 'info', 'warn', 'error'];
+  protected levels: LogLevel[] = ['debug', 'log', 'info', 'warn', 'error'];
 
   protected shouldLog(level: LogLevel): boolean {
     return this.levels.indexOf(level) >= this.levels.indexOf(this.logLevel);
@@ -66,7 +67,11 @@ class LoggerImpl implements BaseLogger {
     return new Date().toISOString();
   }
 
-  protected log(level: LogLevel, message: string, ...args: unknown[]): void {
+  protected logLogic(
+    level: LogLevel,
+    message: string,
+    ...args: unknown[]
+  ): void {
     if (!this.shouldLog(level)) return;
 
     const logParts: unknown[] = [];
@@ -89,6 +94,7 @@ class LoggerImpl implements BaseLogger {
           coloredLevel = chalk.green(level.toUpperCase());
           break;
         case 'info':
+        case 'log':
         default:
           coloredLevel = chalk.blue(level.toUpperCase());
           break;
@@ -100,20 +106,24 @@ class LoggerImpl implements BaseLogger {
     console[level](logParts.join(' '), message, ...args);
   }
 
+  public log(message: string, ...args: unknown[]): void {
+    this.logLogic('log', message, ...args);
+  }
+
   public info(message: string, ...args: unknown[]): void {
-    this.log('info', message, ...args);
+    this.logLogic('info', message, ...args);
   }
 
   public warn(message: string, ...args: unknown[]): void {
-    this.log('warn', message, ...args);
+    this.logLogic('warn', message, ...args);
   }
 
   public error(message: string, ...args: unknown[]): void {
-    this.log('error', message, ...args);
+    this.logLogic('error', message, ...args);
   }
 
   public debug(message: string, ...args: unknown[]): void {
-    this.log('debug', message, ...args);
+    this.logLogic('debug', message, ...args);
   }
 }
 
@@ -134,7 +144,11 @@ class ServerImpl extends LoggerImpl implements ServerLogger {
 
   private showColoredOutput: boolean;
 
-  protected log(level: LogLevel, message: string, ...args: unknown[]): void {
+  protected logLogic(
+    level: LogLevel,
+    message: string,
+    ...args: unknown[]
+  ): void {
     if (!this.shouldLog(level)) return;
 
     const logParts: unknown[] = [];
@@ -178,6 +192,7 @@ class ServerImpl extends LoggerImpl implements ServerLogger {
           coloredMessage = chalk.green(message);
           break;
         case 'info':
+        case 'log':
         default:
           coloredMessage = chalk.blue(message);
           break;
