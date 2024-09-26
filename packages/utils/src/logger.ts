@@ -1,32 +1,34 @@
 import chalk from 'chalk';
 
-interface LoggerConfig {
-  showTimestamp?: boolean;
-  showLevelLabel?: boolean;
-  useEnvVar?: boolean;
-}
+export type LogLevel = 'info' | 'warn' | 'error' | 'debug';
 
-type LogLevel = 'info' | 'warn' | 'error' | 'debug';
+interface LoggerConfig {
+  showTimestamp: boolean;
+  showLevelLabel: boolean;
+  showColoredOutput: boolean;
+  logLevel: LogLevel;
+}
 
 class Logger {
   // eslint-disable-next-line no-use-before-define
   private static instance: Logger;
 
-  private logLevel: LogLevel = 'info';
+  private logLevel: LogLevel;
 
   private showTimestamp: boolean;
 
   private showLevelLabel: boolean;
 
-  private useEnvVar: boolean;
+  private showColoredOutput: boolean;
 
-  private constructor(config: LoggerConfig = {}) {
-    this.showTimestamp = config.showTimestamp ?? true;
-    this.showLevelLabel = config.showLevelLabel ?? true;
-    this.useEnvVar = config.useEnvVar ?? false;
+  private constructor(config: LoggerConfig) {
+    this.showTimestamp = config.showTimestamp;
+    this.showLevelLabel = config.showLevelLabel;
+    this.showColoredOutput = config.showColoredOutput;
+    this.logLevel = config.logLevel;
   }
 
-  static getInstance(config?: LoggerConfig): Logger {
+  static getInstance(config: LoggerConfig): Logger {
     if (!Logger.instance) {
       Logger.instance = new Logger(config);
     }
@@ -45,6 +47,10 @@ class Logger {
     this.showTimestamp = show;
   }
 
+  setShowColoredOutput(show: boolean): void {
+    this.showColoredOutput = show;
+  }
+
   private levels: LogLevel[] = ['debug', 'info', 'warn', 'error'];
 
   private shouldLog(level: LogLevel): boolean {
@@ -55,66 +61,54 @@ class Logger {
     return new Date().toISOString();
   }
 
-  private shouldShowTimestamp(): boolean {
-    if (this.useEnvVar) {
-      return process.env.LOGGER_SHOW_TIMESTAMP === 'true';
-    }
-    return this.showTimestamp;
-  }
-
-  private shouldShowLevelLabel(): boolean {
-    if (this.useEnvVar) {
-      return process.env.LOGGER_SHOW_LEVEL_LABEL === 'true';
-    }
-    return this.showLevelLabel;
-  }
-
   private log(level: LogLevel, message: string, ...args: unknown[]): void {
     if (!this.shouldLog(level)) return;
 
     let coloredLevel: string;
     const logParts: unknown[] = [];
 
-    // if (this.shouldShowTimestamp()) {
-    //   logParts.push(`[${Logger.getTimestamp()}]`);
-    // }
+    if (this.showTimestamp) {
+      logParts.push(`[${Logger.getTimestamp()}]`);
+    }
 
-    // if (this.shouldShowLevelLabel()) {
-    //   switch (level) {
-    //     case 'warn':
-    //       coloredLevel = chalk.yellow(level.toUpperCase());
-    //       break;
-    //     case 'error':
-    //       coloredLevel = chalk.red(level.toUpperCase());
-    //       break;
-    //     case 'debug':
-    //       coloredLevel = chalk.green(level.toUpperCase());
-    //       break;
-    //     case 'info':
-    //     default:
-    //       coloredLevel = chalk.blue(level.toUpperCase());
-    //       break;
-    //   }
+    if (this.showLevelLabel) {
+      switch (level) {
+        case 'warn':
+          coloredLevel = chalk.yellow(level.toUpperCase());
+          break;
+        case 'error':
+          coloredLevel = chalk.red(level.toUpperCase());
+          break;
+        case 'debug':
+          coloredLevel = chalk.green(level.toUpperCase());
+          break;
+        case 'info':
+        default:
+          coloredLevel = chalk.blue(level.toUpperCase());
+          break;
+      }
 
-    //   logParts.push(`${coloredLevel}:`);
-    // }
+      logParts.push(`${coloredLevel}:`);
+    }
 
     let coloredMessage = message;
 
-    switch (level) {
-      case 'warn':
-        coloredMessage = chalk.yellow(message);
-        break;
-      case 'error':
-        coloredMessage = chalk.red(message);
-        break;
-      case 'debug':
-        coloredMessage = chalk.green(message);
-        break;
-      case 'info':
-      default:
-        coloredMessage = chalk.blue(message);
-        break;
+    if (this.showColoredOutput) {
+      switch (level) {
+        case 'warn':
+          coloredMessage = chalk.yellow(message);
+          break;
+        case 'error':
+          coloredMessage = chalk.red(message);
+          break;
+        case 'debug':
+          coloredMessage = chalk.green(message);
+          break;
+        case 'info':
+        default:
+          coloredMessage = chalk.blue(message);
+          break;
+      }
     }
 
     console[level](logParts.join(' '), coloredMessage, ...args);
@@ -137,5 +131,26 @@ class Logger {
   }
 }
 
-export const createLogger = (config?: LoggerConfig) =>
-  Logger.getInstance(config);
+/**
+ * Create a logger instance with the given configuration.
+ *
+ * @param {Partial<LoggerConfig>} [config={}] - The partial configuration for the logger.
+ * @returns {Logger} The logger instance.
+ */
+export const createLogger = (
+  config: Partial<LoggerConfig> = {
+    logLevel: 'info',
+    showColoredOutput: false,
+    showLevelLabel: true,
+    showTimestamp: true,
+  },
+) => {
+  const actualConfig: LoggerConfig = {
+    logLevel: config.logLevel ?? 'info',
+    showTimestamp: config.showTimestamp ?? true,
+    showLevelLabel: config.showLevelLabel ?? true,
+    showColoredOutput: config.showColoredOutput ?? false,
+  };
+
+  return Logger.getInstance(actualConfig);
+};
