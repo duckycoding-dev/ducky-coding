@@ -1,77 +1,150 @@
+/* eslint-disable max-classes-per-file */
 import chalk from 'chalk';
 
 export type LogLevel = 'info' | 'warn' | 'error' | 'debug';
 
-interface LoggerConfig {
+interface BaseLoggerConfig {
   showTimestamp: boolean;
   showLevelLabel: boolean;
-  showColoredOutput: boolean;
   logLevel: LogLevel;
 }
 
-class Logger {
-  // eslint-disable-next-line no-use-before-define
-  private static instance: Logger;
+type ClientLoggerConfig = BaseLoggerConfig;
 
-  private logLevel: LogLevel;
+interface ServerLoggerConfig extends BaseLoggerConfig {
+  showColoredOutput: boolean;
+}
 
-  private showTimestamp: boolean;
+interface BaseLogger {
+  setLogLevel(level: LogLevel): void;
+  setShowTimestamp(show: boolean): void;
+  setShowLevelLabel(show: boolean): void;
+  info(message: string, ...args: unknown[]): void;
+  warn(message: string, ...args: unknown[]): void;
+  error(message: string, ...args: unknown[]): void;
+  debug(message: string, ...args: unknown[]): void;
+}
 
-  private showLevelLabel: boolean;
+export type ClientLogger = BaseLogger;
 
-  private showColoredOutput: boolean;
+export interface ServerLogger extends BaseLogger {
+  setShowColoredOutput(show: boolean): void;
+}
 
-  private constructor(config: LoggerConfig) {
+class LoggerImpl implements BaseLogger {
+  protected logLevel: LogLevel;
+
+  protected showTimestamp: boolean;
+
+  protected showLevelLabel: boolean;
+
+  constructor(config: ClientLoggerConfig) {
     this.showTimestamp = config.showTimestamp;
     this.showLevelLabel = config.showLevelLabel;
-    this.showColoredOutput = config.showColoredOutput;
     this.logLevel = config.logLevel;
   }
 
-  static getInstance(config: LoggerConfig): Logger {
-    if (!Logger.instance) {
-      Logger.instance = new Logger(config);
-    }
-    return Logger.instance;
-  }
-
-  setLogLevel(level: LogLevel): void {
+  public setLogLevel(level: LogLevel): void {
     this.logLevel = level;
   }
 
-  setShowTimestamp(show: boolean): void {
+  public setShowTimestamp(show: boolean): void {
     this.showTimestamp = show;
   }
 
-  setShowLevelLabel(show: boolean): void {
-    this.showTimestamp = show;
+  public setShowLevelLabel(show: boolean): void {
+    this.showLevelLabel = show;
   }
 
-  setShowColoredOutput(show: boolean): void {
-    this.showColoredOutput = show;
-  }
+  protected levels: LogLevel[] = ['debug', 'info', 'warn', 'error'];
 
-  private levels: LogLevel[] = ['debug', 'info', 'warn', 'error'];
-
-  private shouldLog(level: LogLevel): boolean {
+  protected shouldLog(level: LogLevel): boolean {
     return this.levels.indexOf(level) >= this.levels.indexOf(this.logLevel);
   }
 
-  static getTimestamp(): string {
+  protected static getTimestamp(): string {
     return new Date().toISOString();
   }
 
-  private log(level: LogLevel, message: string, ...args: unknown[]): void {
+  protected log(level: LogLevel, message: string, ...args: unknown[]): void {
     if (!this.shouldLog(level)) return;
 
-    let coloredLevel: string;
     const logParts: unknown[] = [];
 
     if (this.showTimestamp) {
-      logParts.push(`[${Logger.getTimestamp()}]`);
+      logParts.push(`[${LoggerImpl.getTimestamp()}]`);
+    }
+
+    // for some reasons the label can be colored even in the browser, while the messages are not interpolated correctly: thus we keep only the labels colored
+    if (this.showLevelLabel) {
+      let coloredLevel: string;
+      switch (level) {
+        case 'warn':
+          coloredLevel = chalk.yellow(level.toUpperCase());
+          break;
+        case 'error':
+          coloredLevel = chalk.red(level.toUpperCase());
+          break;
+        case 'debug':
+          coloredLevel = chalk.green(level.toUpperCase());
+          break;
+        case 'info':
+        default:
+          coloredLevel = chalk.blue(level.toUpperCase());
+          break;
+      }
+
+      logParts.push(`${coloredLevel}:`);
+    }
+
+    console[level](logParts.join(' '), message, ...args);
+  }
+
+  public info(message: string, ...args: unknown[]): void {
+    this.log('info', message, ...args);
+  }
+
+  public warn(message: string, ...args: unknown[]): void {
+    this.log('warn', message, ...args);
+  }
+
+  public error(message: string, ...args: unknown[]): void {
+    this.log('error', message, ...args);
+  }
+
+  public debug(message: string, ...args: unknown[]): void {
+    this.log('debug', message, ...args);
+  }
+}
+
+/**
+ * Extends the base logger to add colored output for the server environment:
+ * in fact, chalk (the library underneath) does not work for the browser's console output.
+ * Don't use in the client environment.
+ */
+class ServerImpl extends LoggerImpl implements ServerLogger {
+  constructor(config: ServerLoggerConfig) {
+    super(config);
+    this.showColoredOutput = config.showColoredOutput;
+  }
+
+  public setShowColoredOutput(show: boolean): void {
+    this.showColoredOutput = show;
+  }
+
+  private showColoredOutput: boolean;
+
+  protected log(level: LogLevel, message: string, ...args: unknown[]): void {
+    if (!this.shouldLog(level)) return;
+
+    const logParts: unknown[] = [];
+
+    if (this.showTimestamp) {
+      logParts.push(`[${LoggerImpl.getTimestamp()}]`);
     }
 
     if (this.showLevelLabel) {
+      let coloredLevel: string;
       switch (level) {
         case 'warn':
           coloredLevel = chalk.yellow(level.toUpperCase());
@@ -92,8 +165,8 @@ class Logger {
     }
 
     let coloredMessage = message;
-
     if (this.showColoredOutput) {
+      // Only import chalk in server environment
       switch (level) {
         case 'warn':
           coloredMessage = chalk.yellow(message);
@@ -113,44 +186,32 @@ class Logger {
 
     console[level](logParts.join(' '), coloredMessage, ...args);
   }
-
-  info(message: string, ...args: unknown[]): void {
-    this.log('info', message, ...args);
-  }
-
-  warn(message: string, ...args: unknown[]): void {
-    this.log('warn', message, ...args);
-  }
-
-  error(message: string, ...args: unknown[]): void {
-    this.log('error', message, ...args);
-  }
-
-  debug(message: string, ...args: unknown[]): void {
-    this.log('debug', message, ...args);
-  }
 }
 
-/**
- * Create a logger instance with the given configuration.
- *
- * @param {Partial<LoggerConfig>} [config={}] - The partial configuration for the logger.
- * @returns {Logger} The logger instance.
- */
-export const createLogger = (
-  config: Partial<LoggerConfig> = {
-    logLevel: 'info',
-    showColoredOutput: false,
-    showLevelLabel: true,
-    showTimestamp: true,
-  },
-) => {
-  const actualConfig: LoggerConfig = {
+export const createClientLogger = (
+  config: Partial<ClientLoggerConfig> = {},
+): ClientLogger => {
+  const actualConfig: ClientLoggerConfig = {
     logLevel: config.logLevel ?? 'info',
     showTimestamp: config.showTimestamp ?? true,
     showLevelLabel: config.showLevelLabel ?? true,
-    showColoredOutput: config.showColoredOutput ?? false,
   };
 
-  return Logger.getInstance(actualConfig);
+  const clientLogger = new LoggerImpl(actualConfig) as ClientLogger;
+
+  return clientLogger;
+};
+
+export const createServerLogger = (
+  config: Partial<ServerLoggerConfig> = {},
+): ServerLogger => {
+  const actualConfig: ServerLoggerConfig = {
+    logLevel: config.logLevel ?? 'info',
+    showTimestamp: config.showTimestamp ?? true,
+    showLevelLabel: config.showLevelLabel ?? true,
+    showColoredOutput: config.showColoredOutput ?? true,
+  };
+
+  const serverLogger = new ServerImpl(actualConfig) as ServerLogger;
+  return serverLogger;
 };

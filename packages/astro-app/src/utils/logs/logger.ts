@@ -1,19 +1,63 @@
-import { createLogger } from '@ducky-coding/utils/logger';
+import {
+  createClientLogger,
+  createServerLogger,
+  type ClientLogger,
+  type ServerLogger,
+} from '@ducky-coding/utils/logger';
 
-const logger = createLogger({
-  showTimestamp: true,
-  showLevelLabel: true,
-  showColoredOutput: true,
-  logLevel: import.meta.env.CLIENT_LOGS_LEVEL ?? 'info',
-});
+/**
+ * Holds the singleton instance of the client logger.
+ */
+let clientLoggerInstance: ClientLogger;
 
-export const clientLogger = logger;
+/**
+ * Holds the singleton instance of the server logger.
+ */
+let serverLoggerInstance: ServerLogger;
 
-export const serverLogger = createLogger({
-  showTimestamp: true,
-  showLevelLabel: true,
-  showColoredOutput: true,
-  logLevel: import.meta.env.SERVER_LOGS_LEVEL ?? 'warn',
-});
+/**
+ * Returns the singleton instance of the client logger.
+ * If the instance doesn't exist, it creates one with default configuration.
+ *
+ * @returns {ClientLogger} The singleton client logger instance.
+ */
+export const getClientLogger = (): ClientLogger => {
+  if (!clientLoggerInstance) {
+    clientLoggerInstance = createClientLogger({
+      showTimestamp: true,
+      showLevelLabel: true,
+      logLevel: import.meta.env.CLIENT_LOGS_LEVEL ?? 'info',
+    });
+  }
+  return clientLoggerInstance;
+};
 
-export default logger;
+/**
+ * Returns the singleton instance of the server logger.
+ * If the instance doesn't exist, it creates one with default configuration.
+ *
+ * @returns {ServerLogger} The singleton server logger instance.
+ */
+export const getServerLogger = (): ServerLogger => {
+  if (!serverLoggerInstance) {
+    serverLoggerInstance = createServerLogger({
+      showTimestamp: true,
+      showLevelLabel: true,
+      showColoredOutput: true,
+      logLevel: import.meta.env.SERVER_LOGS_LEVEL ?? 'warn',
+    });
+  }
+  return serverLoggerInstance;
+};
+
+/**
+ * The singleton instance of the client logger.
+ * This is created on the first import of this module.
+ */
+export const clientLogger: ClientLogger = getClientLogger();
+
+/**
+ * The singleton instance of the server logger.
+ * This is created on the first import of this module.
+ */
+export const serverLogger: ServerLogger = getServerLogger();
