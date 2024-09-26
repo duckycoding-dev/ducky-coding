@@ -2,10 +2,10 @@
 import { MarkdownComponents } from '@components/Markdown';
 import type { CollectionEntry } from 'astro:content';
 import '@styles/markdown.css';
-import { logger } from '@utils/logs/logger';
+import { serverLogger } from '@utils/logs/logger';
 
-logger.setShowTimestamp(true);
-logger.error('hello');
+serverLogger.setShowTimestamp(true);
+serverLogger.error('hello');
 export type MarkdownContentProps = {
   entry: CollectionEntry<'posts'>;
 };
@@ -22,11 +22,10 @@ const { Content, headings } = await entry.render();
 </article>
 
 <script>
-  import { logger } from '@utils/logs/logger';
+  import { clientLogger } from '@utils/logs/logger';
 
-  logger.warn('hello');
-  logger.setShowTimestamp(true);
-  logger.warn('hello2');
-  logger.setShowTimestamp(false);
-  logger.warn('hello3');
+  clientLogger.info('hello');
+  clientLogger.setShowColoredOutput(true);
+  clientLogger.info('hello2');
+  clientLogger.warn('hello3');
 </script>

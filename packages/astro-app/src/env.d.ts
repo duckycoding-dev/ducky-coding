@@ -14,6 +14,8 @@ interface ImportMetaEnv {
   // env variables declared inside the .env file
   // REMEMBER: only variables prefixed with PUBLIC_ are available on the client side
   PUBLIC_BASE_SITE_URL: string;
+  SERVER_LOGS_LEVEL: import('@ducky-coding/utils/logger').LogLevel;
+  CLIENT_LOGS_LEVEL: import('@ducky-coding/utils/logger').LogLevel;
 }
 
 interface ImportMeta {
@@ -21,9 +23,5 @@ interface ImportMeta {
 }
 
 namespace App {
-  interface Locals {
-    tokens: import('@ducky-coding/types/entities').TokenPair;
-    userId: number;
-    userWithProfilePicture: import('@ducky-coding/types/DTOs').UserWithProfilePictureDTO;
-  }
+  interface Locals {}
 }
