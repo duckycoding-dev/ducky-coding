@@ -1,3 +1,5 @@
+import type { ClientLogger, ServerLogger } from '@ducky-coding/utils/logger';
+
 /**
  *
  * @param images a record of images to match
@@ -6,9 +8,10 @@
 export async function matchImageFromGlobImport(
   images: Record<string, () => Promise<{ default: ImageMetadata }>>,
   relativePath?: string | undefined | null,
+  logger?: ServerLogger | ClientLogger,
 ): Promise<ImageMetadata | undefined> {
   if (!relativePath === undefined || relativePath === null) {
-    console.warn('A relative path is required to match an image');
+    logger?.warn('A relative path is required to match an image');
     return undefined;
   }
 
@@ -16,7 +19,7 @@ export async function matchImageFromGlobImport(
   try {
     return (await images[fullPath]())?.default;
   } catch (err) {
-    console.error(`Can't find any image with path ${fullPath}`);
+    logger?.error(`Can't find any image with path ${fullPath}`);
   }
 
   return undefined;

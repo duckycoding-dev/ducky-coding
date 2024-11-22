@@ -1,7 +1,15 @@
 /* eslint-disable max-classes-per-file */
 import chalk from 'chalk';
 
-export type LogLevel = 'log' | 'info' | 'warn' | 'error' | 'debug';
+export const LogLevelSchema = [
+  'log',
+  'info',
+  'warn',
+  'error',
+  'debug',
+] as const;
+
+export type LogLevel = (typeof LogLevelSchema)[number];
 
 interface BaseLoggerConfig {
   showTimestamp: boolean;
@@ -19,11 +27,11 @@ interface BaseLogger {
   setLogLevel(level: LogLevel): void;
   setShowTimestamp(show: boolean): void;
   setShowLevelLabel(show: boolean): void;
-  log(message: string, ...args: unknown[]): void;
-  info(message: string, ...args: unknown[]): void;
-  warn(message: string, ...args: unknown[]): void;
-  error(message: string, ...args: unknown[]): void;
-  debug(message: string, ...args: unknown[]): void;
+  log(...args: Parameters<typeof console.log>): void;
+  info(...args: Parameters<typeof console.info>): void;
+  warn(...args: Parameters<typeof console.warn>): void;
+  error(...args: Parameters<typeof console.error>): void;
+  debug(...args: Parameters<typeof console.debug>): void;
 }
 
 export type ClientLogger = BaseLogger;
@@ -103,27 +111,28 @@ class LoggerImpl implements BaseLogger {
       logParts.push(`${coloredLevel}:`);
     }
 
+    // eslint-disable-next-line no-console
     console[level](logParts.join(' '), message, ...args);
   }
 
-  public log(message: string, ...args: unknown[]): void {
-    this.logLogic('log', message, ...args);
+  public log(...args: Parameters<typeof console.log>): void {
+    this.logLogic('log', ...args);
   }
 
-  public info(message: string, ...args: unknown[]): void {
-    this.logLogic('info', message, ...args);
+  public info(...args: Parameters<typeof console.info>): void {
+    this.logLogic('info', ...args);
   }
 
-  public warn(message: string, ...args: unknown[]): void {
-    this.logLogic('warn', message, ...args);
+  public warn(...args: Parameters<typeof console.warn>): void {
+    this.logLogic('warn', ...args);
   }
 
-  public error(message: string, ...args: unknown[]): void {
-    this.logLogic('error', message, ...args);
+  public error(...args: Parameters<typeof console.error>): void {
+    this.logLogic('error', ...args);
   }
 
-  public debug(message: string, ...args: unknown[]): void {
-    this.logLogic('debug', message, ...args);
+  public debug(...args: Parameters<typeof console.debug>): void {
+    this.logLogic('debug', ...args);
   }
 }
 
@@ -199,6 +208,7 @@ class ServerImpl extends LoggerImpl implements ServerLogger {
       }
     }
 
+    // eslint-disable-next-line no-console
     console[level](logParts.join(' '), coloredMessage, ...args);
   }
 }

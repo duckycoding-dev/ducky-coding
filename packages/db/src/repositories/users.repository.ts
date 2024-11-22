@@ -30,7 +30,6 @@ const getUsersByField = async (fieldValuePair: {
   field: string;
   value: string | number;
 }): Promise<UserDTO[]> => {
-  console.log('fieldValuePair', fieldValuePair);
   let whereClause: SQL<unknown>;
 
   switch (fieldValuePair.field.toLowerCase()) {

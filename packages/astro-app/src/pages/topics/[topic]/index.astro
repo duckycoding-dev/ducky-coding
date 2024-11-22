@@ -7,6 +7,7 @@ import { Image } from 'astro:assets';
 import { type ImageMetadata } from 'astro';
 import { matchImageFromGlobImport } from '@utils/images/images';
 import { IMAGE_DENSITIES } from '@utils/globals';
+import { serverLogger } from '@utils/logs/logger';
 
 // 1. Generate a new path for every collection entry
 export async function getStaticPaths() {
@@ -59,7 +60,11 @@ const processedPosts = await Promise.all(
       const images = import.meta.glob<{ default: ImageMetadata }>(
         `/src/assets/images/posts/**/*.{jpeg,jpg,png,gif,webp,svg}`,
       );
-      processedImage = await matchImageFromGlobImport(images, imageToFindPath);
+      processedImage = await matchImageFromGlobImport(
+        images,
+        imageToFindPath,
+        serverLogger,
+      );
     }
 
     const processedPost = {

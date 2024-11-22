@@ -1,6 +1,7 @@
 import { SessionDTO } from '@ducky-coding/types/DTOs';
 import { SessionsRepository } from '../repositories/sessions.repository';
 import { InsertSession } from '../models';
+import { logger } from '../utils/logger';
 
 const getSessionByRefreshToken = async (
   sessionTitle: string,
@@ -73,7 +74,7 @@ const cleanupSessionsTableRegularly = async () => {
   if (now - lastCleanup > cleanupInterval) {
     await deleteExpiredSessions();
     lastCleanup = now;
-    console.log('Cleaned sessions at: ', lastCleanup);
+    logger.log('Cleaned sessions at: ', lastCleanup);
   }
 };
 
