@@ -1,5 +1,6 @@
 import type { APIRoute } from 'astro';
 import { TopicsService } from '@ducky-coding/db/services';
+import { serverLogger } from '@utils/logs/logger';
 
 export const GET: APIRoute = async () => {
   try {
@@ -11,7 +12,7 @@ export const GET: APIRoute = async () => {
       },
     });
   } catch (error) {
-    console.error('Error fetching topics:', error);
+    serverLogger.error('Error fetching topics:', error);
     return new Response(JSON.stringify({ error: 'Failed to fetch topics' }), {
       status: 500,
       headers: {

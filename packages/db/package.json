@@ -39,6 +39,7 @@
   },
   "dependencies": {
     "@ducky-coding/types": "*",
+    "@ducky-coding/utils": "*",
     "@libsql/client": "^0.7.0",
     "@types/jsonwebtoken": "^9.0.6",
     "dotenv": "^16.4.5",

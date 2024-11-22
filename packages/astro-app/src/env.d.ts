@@ -21,7 +21,3 @@ interface ImportMetaEnv {
 interface ImportMeta {
   readonly env: ImportMetaEnv;
 }
-
-namespace App {
-  interface Locals {}
-}

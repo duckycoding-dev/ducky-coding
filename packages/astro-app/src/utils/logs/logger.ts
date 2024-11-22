@@ -1,19 +1,17 @@
 import {
   createClientLogger,
   createServerLogger,
-  type ClientLogger,
-  type ServerLogger,
 } from '@ducky-coding/utils/logger';
 
 /**
  * Holds the singleton instance of the client logger.
  */
-let clientLoggerInstance: ClientLogger;
+let clientLoggerInstance: ReturnType<typeof createClientLogger>;
 
 /**
  * Holds the singleton instance of the server logger.
  */
-let serverLoggerInstance: ServerLogger;
+let serverLoggerInstance: ReturnType<typeof createServerLogger>;
 
 /**
  * Returns the singleton instance of the client logger.
@@ -21,7 +19,7 @@ let serverLoggerInstance: ServerLogger;
  *
  * @returns {ClientLogger} The singleton client logger instance.
  */
-export const getClientLogger = (): ClientLogger => {
+export const getClientLogger = (): ReturnType<typeof createClientLogger> => {
   if (!clientLoggerInstance) {
     clientLoggerInstance = createClientLogger({
       showTimestamp: true,
@@ -38,7 +36,7 @@ export const getClientLogger = (): ClientLogger => {
  *
  * @returns {ServerLogger} The singleton server logger instance.
  */
-export const getServerLogger = (): ServerLogger => {
+export const getServerLogger = (): ReturnType<typeof createServerLogger> => {
   if (!serverLoggerInstance) {
     serverLoggerInstance = createServerLogger({
       showTimestamp: true,
@@ -54,10 +52,10 @@ export const getServerLogger = (): ServerLogger => {
  * The singleton instance of the client logger.
  * This is created on the first import of this module.
  */
-export const clientLogger: ClientLogger = getClientLogger();
+export const clientLogger = getClientLogger();
 
 /**
  * The singleton instance of the server logger.
  * This is created on the first import of this module.
  */
-export const serverLogger: ServerLogger = getServerLogger();
+export const serverLogger = getServerLogger();
