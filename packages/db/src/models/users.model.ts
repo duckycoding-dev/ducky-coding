@@ -1,4 +1,4 @@
-import { UserDTO } from '@ducky-coding/types/DTOs';
+import type { UserDTO } from '@ducky-coding/types/DTOs';
 import { text, sqliteTable, integer } from 'drizzle-orm/sqlite-core';
 import { z } from 'zod';
 import { sql } from 'drizzle-orm';

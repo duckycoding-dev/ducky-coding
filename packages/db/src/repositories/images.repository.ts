@@ -1,5 +1,5 @@
 import { inArray, sql } from 'drizzle-orm';
-import { CreateImageDTO, ImageDTO } from '@ducky-coding/types/DTOs';
+import type { CreateImageDTO, ImageDTO } from '@ducky-coding/types/DTOs';
 import { db } from '../client';
 import { ImagesTable, mapToImageDTO } from '../models';
 

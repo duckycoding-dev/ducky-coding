@@ -1,6 +1,6 @@
 import { z } from 'zod';
 import { text, sqliteTable, integer } from 'drizzle-orm/sqlite-core';
-import { ImageDTO } from '@ducky-coding/types/DTOs';
+import type { ImageDTO } from '@ducky-coding/types/DTOs';
 
 export const ImagesTable = sqliteTable('images', {
   id: integer('id').primaryKey({ autoIncrement: true }),

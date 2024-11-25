@@ -1,6 +1,6 @@
 import { sqliteTable, integer, primaryKey } from 'drizzle-orm/sqlite-core';
 import { z } from 'zod';
-import { PostAuthorDTO } from '@ducky-coding/types/DTOs';
+import type { PostAuthorDTO } from '@ducky-coding/types/DTOs';
 import { PostsTable } from './posts.model';
 import { UsersTable } from './users.model';
 

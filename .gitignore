@@ -8,3 +8,6 @@ lerna-debug.log
 **/*.d.ts.map
 
 **/*.env.production
+
+# macOS-specific files
+.DS_Store

@@ -1,5 +1,5 @@
 import { eq, inArray, sql } from 'drizzle-orm';
-import {
+import type {
   PostAuthorDTO,
   PostDTO,
   PostTagDTO,
@@ -9,9 +9,9 @@ import {
 import { db } from '../client';
 import {
   ImagesTable,
-  InsertPost,
-  InsertPostAuthor,
-  InsertPostTag,
+  type InsertPost,
+  type InsertPostAuthor,
+  type InsertPostTag,
   mapToPostAuthorDTO,
   mapToPostDTO,
   mapToPostTagDTO,

@@ -1,6 +1,6 @@
 import { integer, sqliteTable, text } from 'drizzle-orm/sqlite-core';
 import { z } from 'zod';
-import { SessionDTO } from '@ducky-coding/types/DTOs';
+import type { SessionDTO } from '@ducky-coding/types/DTOs';
 import { UsersTable } from './users.model';
 
 // TODO: could add more fields such as IP, user agent, etc.

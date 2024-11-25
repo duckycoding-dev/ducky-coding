@@ -2,10 +2,10 @@ import { z } from 'zod';
 import { text, sqliteTable, integer } from 'drizzle-orm/sqlite-core';
 import { sql } from 'drizzle-orm';
 import {
-  ContentStatus,
+  type ContentStatus,
   ContentStatusSchema,
 } from '@ducky-coding/types/entities';
-import { PostDTO } from '@ducky-coding/types/DTOs';
+import type { PostDTO } from '@ducky-coding/types/DTOs';
 import { TopicsTable, TopicSchema } from './topics.model';
 import { ImagesTable, ImageSchema } from './images.model';
 import { UserSchema } from './users.model';

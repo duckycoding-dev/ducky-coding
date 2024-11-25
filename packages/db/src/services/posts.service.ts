@@ -1,15 +1,15 @@
 import {
-  CreatePostDTO,
+  type CreatePostDTO,
   CreatePostDTOSchema,
-  PostAuthorDTO,
-  PostDTO,
+  type PostAuthorDTO,
+  type PostDTO,
   PostDTOSchema,
-  PostTagDTO,
-  PostWithAuthorAndBannerImageAndTagsDTO,
-  PostWithAuthorAndBannerImageDTO,
+  type PostTagDTO,
+  type PostWithAuthorAndBannerImageAndTagsDTO,
+  type PostWithAuthorAndBannerImageDTO,
 } from '@ducky-coding/types/DTOs';
 import { PostsRepository } from '../repositories/posts.repository';
-import { InsertPost } from '../models';
+import type { InsertPost } from '../models';
 import { UsersService } from './users.service';
 
 const getPost = async (postId: number): Promise<PostDTO | undefined> => {

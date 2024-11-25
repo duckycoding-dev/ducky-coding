@@ -1,6 +1,6 @@
-import { SessionDTO } from '@ducky-coding/types/DTOs';
+import type { SessionDTO } from '@ducky-coding/types/DTOs';
 import { SessionsRepository } from '../repositories/sessions.repository';
-import { InsertSession } from '../models';
+import type { InsertSession } from '../models';
 import { logger } from '../utils/logger';
 
 const getSessionByRefreshToken = async (

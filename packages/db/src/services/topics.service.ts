@@ -1,4 +1,4 @@
-import { TopicDTO, TopicWithImageDTO } from '@ducky-coding/types/DTOs';
+import type { TopicDTO, TopicWithImageDTO } from '@ducky-coding/types/DTOs';
 import { TopicsRepository } from '../repositories/topics.repository';
 
 const getTopic = async (topicTitle: string): Promise<TopicDTO | undefined> => {

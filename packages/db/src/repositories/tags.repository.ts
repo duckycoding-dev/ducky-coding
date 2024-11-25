@@ -1,5 +1,5 @@
 import { inArray } from 'drizzle-orm';
-import { TagDTO } from '@ducky-coding/types/DTOs';
+import type { TagDTO } from '@ducky-coding/types/DTOs';
 import { db } from '../client';
 import { mapToTagDTO, TagsTable } from '../models';
 
