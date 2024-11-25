@@ -1,0 +1,1353 @@
+{
+  "version": "6.0",
+  "nxVersion": "20.1.3",
+  "pathMappings": {},
+  "nxJsonPlugins": [],
+  "fileMap": {
+    "nonProjectFiles": [
+      {
+        "file": "prettier.config.js",
+        "hash": "12592462345202335880"
+      },
+      {
+        "file": ".vscode/extensions.json",
+        "hash": "15925514941962789069"
+      },
+      {
+        "file": ".vscode/templates/Database table/{{name}}Table.ts",
+        "hash": "3364801187755627442"
+      },
+      {
+        "file": "best-practices/4 - defining and exporting components props interfaces.md",
+        "hash": "17534300556861672512"
+      },
+      {
+        "file": ".gitignore",
+        "hash": "15399439811814243080"
+      },
+      {
+        "file": "best-practices/10 - styling markdown content/10 - styling markdown content.md",
+        "hash": "2856701597795270130"
+      },
+      {
+        "file": "best-practices/5 - fast file creation/5 - fast file creation.md",
+        "hash": "9485852771720135995"
+      },
+      {
+        "file": ".vscode/templates/Astro component/index.ts",
+        "hash": "6873406696161715654"
+      },
+      {
+        "file": "best-practices/5 - fast file creation/create-from-template-option.png",
+        "hash": "3062956726042568057"
+      },
+      {
+        "file": "best-practices/5 - fast file creation/custom-name-for-generated-content.png",
+        "hash": "16387390320808318078"
+      },
+      {
+        "file": "package-lock.json",
+        "hash": "7492060076476569990"
+      },
+      {
+        "file": "best-practices/2 - styling mobile first.md",
+        "hash": "4954630927087209410"
+      },
+      {
+        "file": ".vscode/settings.json",
+        "hash": "14555463215200406690"
+      },
+      {
+        "file": ".nvmrc",
+        "hash": "10676902357185609083"
+      },
+      {
+        "file": ".vscode/templates/Astro component/{{name}}.astro",
+        "hash": "15320984252034070844"
+      },
+      {
+        "file": ".vscode/templates/Database table/index.ts",
+        "hash": "15176808719266407475"
+      },
+      {
+        "file": "best-practices/5 - fast file creation/choose-file-template.png",
+        "hash": "4593674721166483511"
+      },
+      {
+        "file": "best-practices/9 - icons/9 - icons.md",
+        "hash": "17217161521689344244"
+      },
+      {
+        "file": "nx.json",
+        "hash": "9947703483355570315"
+      },
+      {
+        "file": ".vscode/templates/CustomIconComponent/index.ts",
+        "hash": "11203829120804806258"
+      },
+      {
+        "file": "README.md",
+        "hash": "5875129962092260223"
+      },
+      {
+        "file": "best-practices/8 - usable but not completed components/8 - usable but not completed components.md",
+        "hash": "13990086804539021298"
+      },
+      {
+        "file": "best-practices/3 - importing style sheets in astro files.md",
+        "hash": "10814303995603088746"
+      },
+      {
+        "file": "best-practices/11 - organizing types in the monorepo/11 - organizing types in the monorepo.md",
+        "hash": "11450427239547167801"
+      },
+      {
+        "file": "best-practices/1 - components and folders organization.md",
+        "hash": "15793288547996588664"
+      },
+      {
+        "file": "best-practices/7 - colors/7 - colors.md",
+        "hash": "17107177429169766625"
+      },
+      {
+        "file": "lerna.json",
+        "hash": "7936728164708575593"
+      },
+      {
+        "file": "eslint.config.js",
+        "hash": "7819689793607305101"
+      },
+      {
+        "file": "package.json",
+        "hash": "15671730958686449985"
+      },
+      {
+        "file": "dump.sql",
+        "hash": "1499382107056979365"
+      },
+      {
+        "file": ".vscode/templates/CustomIconComponent/{{name}}Icon.astro",
+        "hash": "5411068881818932178"
+      },
+      {
+        "file": "best-practices/6 - organize css and theming/6 - organize css and theming.md",
+        "hash": "8840556845519307697"
+      },
+      {
+        "file": "best-practices/5 - fast file creation/template-file-example.png",
+        "hash": "16415440486043485004"
+      },
+      {
+        "file": "tsconfig.json",
+        "hash": "4954849192512501843"
+      }
+    ],
+    "projectFileMap": {
+      "@ducky-coding/utils": [
+        {
+          "file": "packages/utils/README.md",
+          "hash": "3244421341483603138"
+        },
+        {
+          "file": "packages/utils/__tests__/utils.test.js",
+          "hash": "14453996436464896720"
+        },
+        {
+          "file": "packages/utils/package.json",
+          "hash": "16172695693862829886",
+          "deps": [
+            "@ducky-coding/types",
+            "npm:chalk"
+          ]
+        },
+        {
+          "file": "packages/utils/src/logger.ts",
+          "hash": "12074839416718673599"
+        },
+        {
+          "file": "packages/utils/src/utils.ts",
+          "hash": "4355450507543691596"
+        },
+        {
+          "file": "packages/utils/tsconfig.json",
+          "hash": "10149131081683497723"
+        }
+      ],
+      "@ducky-coding/db": [
+        {
+          "file": "packages/db/.env.development",
+          "hash": "1829655067063071216"
+        },
+        {
+          "file": "packages/db/.gitignore",
+          "hash": "2849586214347684921"
+        },
+        {
+          "file": "packages/db/README.md",
+          "hash": "11813210216808045012"
+        },
+        {
+          "file": "packages/db/__tests__/db.test.js",
+          "hash": "4494792525651793812"
+        },
+        {
+          "file": "packages/db/database/content.db",
+          "hash": "3595026249474552179"
+        },
+        {
+          "file": "packages/db/database/content.db-shm",
+          "hash": "9215569418660186729"
+        },
+        {
+          "file": "packages/db/database/content.db-wal",
+          "hash": "9597107585304032482"
+        },
+        {
+          "file": "packages/db/database/db",
+          "hash": "3244421341483603138"
+        },
+        {
+          "file": "packages/db/drizzle.config.ts",
+          "hash": "13513018453318821340"
+        },
+        {
+          "file": "packages/db/dump.sql",
+          "hash": "2156120579762335406"
+        },
+        {
+          "file": "packages/db/package.json",
+          "hash": "5340343300038580206",
+          "deps": [
+            "@ducky-coding/types",
+            "@ducky-coding/utils",
+            "npm:@libsql/client",
+            "npm:@types/jsonwebtoken",
+            "npm:dotenv@16.4.5",
+            "npm:drizzle-kit",
+            "npm:drizzle-orm@0.32.1",
+            "npm:drizzle-zod",
+            "npm:jsonwebtoken"
+          ]
+        },
+        {
+          "file": "packages/db/src/client.ts",
+          "hash": "2633217323187709712"
+        },
+        {
+          "file": "packages/db/src/index.ts",
+          "hash": "17904384581187175374"
+        },
+        {
+          "file": "packages/db/src/mappers/posts.mappers.ts",
+          "hash": "13305374664688577674"
+        },
+        {
+          "file": "packages/db/src/mappers/topics.mappers.ts",
+          "hash": "9445434320125639760"
+        },
+        {
+          "file": "packages/db/src/mappers/users.mappers.ts",
+          "hash": "16126064045208000011"
+        },
+        {
+          "file": "packages/db/src/migrate.ts",
+          "hash": "238621444027474986"
+        },
+        {
+          "file": "packages/db/src/migrations/0000_worried_prowler.sql",
+          "hash": "16240678962406236244"
+        },
+        {
+          "file": "packages/db/src/migrations/custom_queries/dropAllTables.sql",
+          "hash": "17030446232907365021"
+        },
+        {
+          "file": "packages/db/src/migrations/meta/0000_snapshot.json",
+          "hash": "6102306401179485515"
+        },
+        {
+          "file": "packages/db/src/migrations/meta/_journal.json",
+          "hash": "253988100421520829"
+        },
+        {
+          "file": "packages/db/src/models/images.model.ts",
+          "hash": "1952156950783140600"
+        },
+        {
+          "file": "packages/db/src/models/index.ts",
+          "hash": "7016224478444440670"
+        },
+        {
+          "file": "packages/db/src/models/posts.model.ts",
+          "hash": "6296445768750581307"
+        },
+        {
+          "file": "packages/db/src/models/posts_authors.model.ts",
+          "hash": "16916789638952728557"
+        },
+        {
+          "file": "packages/db/src/models/posts_tags.model.ts",
+          "hash": "8400496399431851665"
+        },
+        {
+          "file": "packages/db/src/models/sessions.model.ts",
+          "hash": "3997457862109666450"
+        },
+        {
+          "file": "packages/db/src/models/tags.model.ts",
+          "hash": "249074988526505583"
+        },
+        {
+          "file": "packages/db/src/models/topics.model.ts",
+          "hash": "16428715836776005943"
+        },
+        {
+          "file": "packages/db/src/models/users.model.ts",
+          "hash": "3955315855134829446"
+        },
+        {
+          "file": "packages/db/src/repositories/images.repository.ts",
+          "hash": "1650959201980626528"
+        },
+        {
+          "file": "packages/db/src/repositories/index.ts",
+          "hash": "3244421341483603138"
+        },
+        {
+          "file": "packages/db/src/repositories/posts.repository.ts",
+          "hash": "3922551206669981537"
+        },
+        {
+          "file": "packages/db/src/repositories/sessions.repository.ts",
+          "hash": "8810242638979887354"
+        },
+        {
+          "file": "packages/db/src/repositories/tags.repository.ts",
+          "hash": "7792048991419355392"
+        },
+        {
+          "file": "packages/db/src/repositories/topics.repository.ts",
+          "hash": "14210646309490759969"
+        },
+        {
+          "file": "packages/db/src/repositories/users.repository.ts",
+          "hash": "6597961383904577679"
+        },
+        {
+          "file": "packages/db/src/seed.ts",
+          "hash": "1925283986868864360"
+        },
+        {
+          "file": "packages/db/src/services/images.service.ts",
+          "hash": "1887142613925832541"
+        },
+        {
+          "file": "packages/db/src/services/index.ts",
+          "hash": "5867874611388134082"
+        },
+        {
+          "file": "packages/db/src/services/posts.service.ts",
+          "hash": "7533747109862410614"
+        },
+        {
+          "file": "packages/db/src/services/sessions.service.ts",
+          "hash": "9493136239474374375"
+        },
+        {
+          "file": "packages/db/src/services/tags.service.ts",
+          "hash": "11643918633339647077"
+        },
+        {
+          "file": "packages/db/src/services/topics.service.ts",
+          "hash": "5227012370521660664"
+        },
+        {
+          "file": "packages/db/src/services/users.service.ts",
+          "hash": "5138499618642228758"
+        },
+        {
+          "file": "packages/db/src/types/env.d.ts",
+          "hash": "6406471666292024059"
+        },
+        {
+          "file": "packages/db/src/utils/logger.ts",
+          "hash": "5239067645164856010"
+        },
+        {
+          "file": "packages/db/tsconfig.json",
+          "hash": "13213927288338940486"
+        }
+      ],
+      "@ducky-coding/types": [
+        {
+          "file": "packages/types/README.md",
+          "hash": "3244421341483603138"
+        },
+        {
+          "file": "packages/types/__tests__/types.test.js",
+          "hash": "11082177928396529557"
+        },
+        {
+          "file": "packages/types/package.json",
+          "hash": "15504883303175932144"
+        },
+        {
+          "file": "packages/types/src/DTOs/image.dto.ts",
+          "hash": "12094911969385543355"
+        },
+        {
+          "file": "packages/types/src/DTOs/index.ts",
+          "hash": "4397741973431097263"
+        },
+        {
+          "file": "packages/types/src/DTOs/post.dto.ts",
+          "hash": "8452635523373835527"
+        },
+        {
+          "file": "packages/types/src/DTOs/session.dto.ts",
+          "hash": "14347016111256131988"
+        },
+        {
+          "file": "packages/types/src/DTOs/tag.dto.ts",
+          "hash": "8906277365659808012"
+        },
+        {
+          "file": "packages/types/src/DTOs/topic.dto.ts",
+          "hash": "10039753188961089518"
+        },
+        {
+          "file": "packages/types/src/DTOs/user.dto.ts",
+          "hash": "14669655087433002438"
+        },
+        {
+          "file": "packages/types/src/entities/index.ts",
+          "hash": "6426881045296192190"
+        },
+        {
+          "file": "packages/types/src/entities/postContent.entity.ts",
+          "hash": "13486116212226767685"
+        },
+        {
+          "file": "packages/types/src/entities/tokens.entity.ts",
+          "hash": "9937404430684757287"
+        },
+        {
+          "file": "packages/types/src/types.ts",
+          "hash": "5188989945510420613"
+        },
+        {
+          "file": "packages/types/tsconfig.json",
+          "hash": "9627634244181504443"
+        }
+      ],
+      "@ducky-coding/astro-app": [
+        {
+          "file": "packages/astro-app/.env.development",
+          "hash": "13516665265833609757"
+        },
+        {
+          "file": "packages/astro-app/.gitignore",
+          "hash": "3107774392239557089"
+        },
+        {
+          "file": "packages/astro-app/.vscode/extensions.json",
+          "hash": "4591125310708873372"
+        },
+        {
+          "file": "packages/astro-app/.vscode/launch.json",
+          "hash": "1679638439007128934"
+        },
+        {
+          "file": "packages/astro-app/README.md",
+          "hash": "17910215936242644991"
+        },
+        {
+          "file": "packages/astro-app/astro.config.mjs",
+          "hash": "5816725768134274006"
+        },
+        {
+          "file": "packages/astro-app/package.json",
+          "hash": "7686530279645459939",
+          "deps": [
+            "npm:@tailwindcss/typography",
+            "npm:@astrojs/check",
+            "npm:@astrojs/mdx",
+            "npm:@astrojs/netlify",
+            "npm:@astrojs/sitemap",
+            "npm:@astrojs/tailwind",
+            "@ducky-coding/db",
+            "@ducky-coding/types",
+            "@ducky-coding/utils",
+            "npm:@iconify-json/mdi",
+            "npm:@iconify-json/ph",
+            "npm:@libsql/client",
+            "npm:astro",
+            "npm:astro-icon",
+            "npm:astro-seo",
+            "npm:class-variance-authority",
+            "npm:drizzle-kit",
+            "npm:drizzle-orm@0.32.0",
+            "npm:tailwindcss",
+            "npm:typescript"
+          ]
+        },
+        {
+          "file": "packages/astro-app/public/favicon.svg",
+          "hash": "9875909904608765743"
+        },
+        {
+          "file": "packages/astro-app/public/fonts/Inter/Inter-VariableFont_slnt,wght.ttf",
+          "hash": "12068198562404819109"
+        },
+        {
+          "file": "packages/astro-app/public/fonts/Inter/Inter-VariableFont_slnt,wght.ttf:Zone.Identifier",
+          "hash": "3244421341483603138"
+        },
+        {
+          "file": "packages/astro-app/public/fonts/Inter/OFL.txt",
+          "hash": "4852307763432279454"
+        },
+        {
+          "file": "packages/astro-app/public/fonts/Inter/OFL.txt:Zone.Identifier",
+          "hash": "3244421341483603138"
+        },
+        {
+          "file": "packages/astro-app/public/fonts/Inter/README.txt",
+          "hash": "8670523659785062606"
+        },
+        {
+          "file": "packages/astro-app/public/fonts/Inter/README.txt:Zone.Identifier",
+          "hash": "3244421341483603138"
+        },
+        {
+          "file": "packages/astro-app/public/fonts/Inter/static/Inter-Black.ttf",
+          "hash": "2968236493697222083"
+        },
+        {
+          "file": "packages/astro-app/public/fonts/Inter/static/Inter-Black.ttf:Zone.Identifier",
+          "hash": "3244421341483603138"
+        },
+        {
+          "file": "packages/astro-app/public/fonts/Inter/static/Inter-Bold.ttf",
+          "hash": "2915947430692943411"
+        },
+        {
+          "file": "packages/astro-app/public/fonts/Inter/static/Inter-Bold.ttf:Zone.Identifier",
+          "hash": "3244421341483603138"
+        },
+        {
+          "file": "packages/astro-app/public/fonts/Inter/static/Inter-ExtraBold.ttf",
+          "hash": "5456162361451656665"
+        },
+        {
+          "file": "packages/astro-app/public/fonts/Inter/static/Inter-ExtraBold.ttf:Zone.Identifier",
+          "hash": "3244421341483603138"
+        },
+        {
+          "file": "packages/astro-app/public/fonts/Inter/static/Inter-ExtraLight.ttf",
+          "hash": "18217433362759599940"
+        },
+        {
+          "file": "packages/astro-app/public/fonts/Inter/static/Inter-ExtraLight.ttf:Zone.Identifier",
+          "hash": "3244421341483603138"
+        },
+        {
+          "file": "packages/astro-app/public/fonts/Inter/static/Inter-Light.ttf",
+          "hash": "8638331756396630806"
+        },
+        {
+          "file": "packages/astro-app/public/fonts/Inter/static/Inter-Light.ttf:Zone.Identifier",
+          "hash": "3244421341483603138"
+        },
+        {
+          "file": "packages/astro-app/public/fonts/Inter/static/Inter-Medium.ttf",
+          "hash": "1972134939526048906"
+        },
+        {
+          "file": "packages/astro-app/public/fonts/Inter/static/Inter-Medium.ttf:Zone.Identifier",
+          "hash": "3244421341483603138"
+        },
+        {
+          "file": "packages/astro-app/public/fonts/Inter/static/Inter-Regular.ttf",
+          "hash": "17910931451049185240"
+        },
+        {
+          "file": "packages/astro-app/public/fonts/Inter/static/Inter-Regular.ttf:Zone.Identifier",
+          "hash": "3244421341483603138"
+        },
+        {
+          "file": "packages/astro-app/public/fonts/Inter/static/Inter-SemiBold.ttf",
+          "hash": "4255754514988160023"
+        },
+        {
+          "file": "packages/astro-app/public/fonts/Inter/static/Inter-SemiBold.ttf:Zone.Identifier",
+          "hash": "3244421341483603138"
+        },
+        {
+          "file": "packages/astro-app/public/fonts/Inter/static/Inter-Thin.ttf",
+          "hash": "10653490544658324834"
+        },
+        {
+          "file": "packages/astro-app/public/fonts/Inter/static/Inter-Thin.ttf:Zone.Identifier",
+          "hash": "3244421341483603138"
+        },
+        {
+          "file": "packages/astro-app/public/fonts/Poppins/OFL.txt",
+          "hash": "6096325279627790433"
+        },
+        {
+          "file": "packages/astro-app/public/fonts/Poppins/OFL.txt:Zone.Identifier",
+          "hash": "3244421341483603138"
+        },
+        {
+          "file": "packages/astro-app/public/fonts/Poppins/Poppins-Black.ttf",
+          "hash": "11327420754488073778"
+        },
+        {
+          "file": "packages/astro-app/public/fonts/Poppins/Poppins-Black.ttf:Zone.Identifier",
+          "hash": "3244421341483603138"
+        },
+        {
+          "file": "packages/astro-app/public/fonts/Poppins/Poppins-BlackItalic.ttf",
+          "hash": "8660769099015756572"
+        },
+        {
+          "file": "packages/astro-app/public/fonts/Poppins/Poppins-BlackItalic.ttf:Zone.Identifier",
+          "hash": "3244421341483603138"
+        },
+        {
+          "file": "packages/astro-app/public/fonts/Poppins/Poppins-Bold.ttf",
+          "hash": "3661811412608830506"
+        },
+        {
+          "file": "packages/astro-app/public/fonts/Poppins/Poppins-Bold.ttf:Zone.Identifier",
+          "hash": "3244421341483603138"
+        },
+        {
+          "file": "packages/astro-app/public/fonts/Poppins/Poppins-BoldItalic.ttf",
+          "hash": "15307421319903736273"
+        },
+        {
+          "file": "packages/astro-app/public/fonts/Poppins/Poppins-BoldItalic.ttf:Zone.Identifier",
+          "hash": "3244421341483603138"
+        },
+        {
+          "file": "packages/astro-app/public/fonts/Poppins/Poppins-ExtraBold.ttf",
+          "hash": "3887298988456017430"
+        },
+        {
+          "file": "packages/astro-app/public/fonts/Poppins/Poppins-ExtraBold.ttf:Zone.Identifier",
+          "hash": "3244421341483603138"
+        },
+        {
+          "file": "packages/astro-app/public/fonts/Poppins/Poppins-ExtraBoldItalic.ttf",
+          "hash": "18303333014964522173"
+        },
+        {
+          "file": "packages/astro-app/public/fonts/Poppins/Poppins-ExtraBoldItalic.ttf:Zone.Identifier",
+          "hash": "3244421341483603138"
+        },
+        {
+          "file": "packages/astro-app/public/fonts/Poppins/Poppins-ExtraLight.ttf",
+          "hash": "10596010613660637230"
+        },
+        {
+          "file": "packages/astro-app/public/fonts/Poppins/Poppins-ExtraLight.ttf:Zone.Identifier",
+          "hash": "3244421341483603138"
+        },
+        {
+          "file": "packages/astro-app/public/fonts/Poppins/Poppins-ExtraLightItalic.ttf",
+          "hash": "17107563853228431107"
+        },
+        {
+          "file": "packages/astro-app/public/fonts/Poppins/Poppins-ExtraLightItalic.ttf:Zone.Identifier",
+          "hash": "3244421341483603138"
+        },
+        {
+          "file": "packages/astro-app/public/fonts/Poppins/Poppins-Italic.ttf",
+          "hash": "17125509640441007631"
+        },
+        {
+          "file": "packages/astro-app/public/fonts/Poppins/Poppins-Italic.ttf:Zone.Identifier",
+          "hash": "3244421341483603138"
+        },
+        {
+          "file": "packages/astro-app/public/fonts/Poppins/Poppins-Light.ttf",
+          "hash": "98189831529622483"
+        },
+        {
+          "file": "packages/astro-app/public/fonts/Poppins/Poppins-Light.ttf:Zone.Identifier",
+          "hash": "3244421341483603138"
+        },
+        {
+          "file": "packages/astro-app/public/fonts/Poppins/Poppins-LightItalic.ttf",
+          "hash": "9281890130798972162"
+        },
+        {
+          "file": "packages/astro-app/public/fonts/Poppins/Poppins-LightItalic.ttf:Zone.Identifier",
+          "hash": "3244421341483603138"
+        },
+        {
+          "file": "packages/astro-app/public/fonts/Poppins/Poppins-Medium.ttf",
+          "hash": "2212611710025299377"
+        },
+        {
+          "file": "packages/astro-app/public/fonts/Poppins/Poppins-Medium.ttf:Zone.Identifier",
+          "hash": "3244421341483603138"
+        },
+        {
+          "file": "packages/astro-app/public/fonts/Poppins/Poppins-MediumItalic.ttf",
+          "hash": "11488194921770089402"
+        },
+        {
+          "file": "packages/astro-app/public/fonts/Poppins/Poppins-MediumItalic.ttf:Zone.Identifier",
+          "hash": "3244421341483603138"
+        },
+        {
+          "file": "packages/astro-app/public/fonts/Poppins/Poppins-Regular.ttf",
+          "hash": "14748150737151666323"
+        },
+        {
+          "file": "packages/astro-app/public/fonts/Poppins/Poppins-Regular.ttf:Zone.Identifier",
+          "hash": "3244421341483603138"
+        },
+        {
+          "file": "packages/astro-app/public/fonts/Poppins/Poppins-SemiBold.ttf",
+          "hash": "1872290532348165247"
+        },
+        {
+          "file": "packages/astro-app/public/fonts/Poppins/Poppins-SemiBold.ttf:Zone.Identifier",
+          "hash": "3244421341483603138"
+        },
+        {
+          "file": "packages/astro-app/public/fonts/Poppins/Poppins-SemiBoldItalic.ttf",
+          "hash": "11067923688278511413"
+        },
+        {
+          "file": "packages/astro-app/public/fonts/Poppins/Poppins-SemiBoldItalic.ttf:Zone.Identifier",
+          "hash": "3244421341483603138"
+        },
+        {
+          "file": "packages/astro-app/public/fonts/Poppins/Poppins-Thin.ttf",
+          "hash": "17460030065323505701"
+        },
+        {
+          "file": "packages/astro-app/public/fonts/Poppins/Poppins-Thin.ttf:Zone.Identifier",
+          "hash": "3244421341483603138"
+        },
+        {
+          "file": "packages/astro-app/public/fonts/Poppins/Poppins-ThinItalic.ttf",
+          "hash": "2660455158996998110"
+        },
+        {
+          "file": "packages/astro-app/public/fonts/Poppins/Poppins-ThinItalic.ttf:Zone.Identifier",
+          "hash": "3244421341483603138"
+        },
+        {
+          "file": "packages/astro-app/public/fonts/Roboto/LICENSE.txt",
+          "hash": "9630801356268031432"
+        },
+        {
+          "file": "packages/astro-app/public/fonts/Roboto/LICENSE.txt:Zone.Identifier",
+          "hash": "3244421341483603138"
+        },
+        {
+          "file": "packages/astro-app/public/fonts/Roboto/Roboto-Black.ttf",
+          "hash": "7491435733589274410"
+        },
+        {
+          "file": "packages/astro-app/public/fonts/Roboto/Roboto-Black.ttf:Zone.Identifier",
+          "hash": "3244421341483603138"
+        },
+        {
+          "file": "packages/astro-app/public/fonts/Roboto/Roboto-BlackItalic.ttf",
+          "hash": "6367488612617151901"
+        },
+        {
+          "file": "packages/astro-app/public/fonts/Roboto/Roboto-BlackItalic.ttf:Zone.Identifier",
+          "hash": "3244421341483603138"
+        },
+        {
+          "file": "packages/astro-app/public/fonts/Roboto/Roboto-Bold.ttf",
+          "hash": "11118875498363073866"
+        },
+        {
+          "file": "packages/astro-app/public/fonts/Roboto/Roboto-Bold.ttf:Zone.Identifier",
+          "hash": "3244421341483603138"
+        },
+        {
+          "file": "packages/astro-app/public/fonts/Roboto/Roboto-BoldItalic.ttf",
+          "hash": "18208016290686678219"
+        },
+        {
+          "file": "packages/astro-app/public/fonts/Roboto/Roboto-BoldItalic.ttf:Zone.Identifier",
+          "hash": "3244421341483603138"
+        },
+        {
+          "file": "packages/astro-app/public/fonts/Roboto/Roboto-Italic.ttf",
+          "hash": "2871797822062044145"
+        },
+        {
+          "file": "packages/astro-app/public/fonts/Roboto/Roboto-Italic.ttf:Zone.Identifier",
+          "hash": "3244421341483603138"
+        },
+        {
+          "file": "packages/astro-app/public/fonts/Roboto/Roboto-Light.ttf",
+          "hash": "11743008747391677234"
+        },
+        {
+          "file": "packages/astro-app/public/fonts/Roboto/Roboto-Light.ttf:Zone.Identifier",
+          "hash": "3244421341483603138"
+        },
+        {
+          "file": "packages/astro-app/public/fonts/Roboto/Roboto-LightItalic.ttf",
+          "hash": "7345932088123158190"
+        },
+        {
+          "file": "packages/astro-app/public/fonts/Roboto/Roboto-LightItalic.ttf:Zone.Identifier",
+          "hash": "3244421341483603138"
+        },
+        {
+          "file": "packages/astro-app/public/fonts/Roboto/Roboto-Medium.ttf",
+          "hash": "12534942947226036357"
+        },
+        {
+          "file": "packages/astro-app/public/fonts/Roboto/Roboto-Medium.ttf:Zone.Identifier",
+          "hash": "3244421341483603138"
+        },
+        {
+          "file": "packages/astro-app/public/fonts/Roboto/Roboto-MediumItalic.ttf",
+          "hash": "10354767113262496729"
+        },
+        {
+          "file": "packages/astro-app/public/fonts/Roboto/Roboto-MediumItalic.ttf:Zone.Identifier",
+          "hash": "3244421341483603138"
+        },
+        {
+          "file": "packages/astro-app/public/fonts/Roboto/Roboto-Regular.ttf",
+          "hash": "9500555408324524103"
+        },
+        {
+          "file": "packages/astro-app/public/fonts/Roboto/Roboto-Regular.ttf:Zone.Identifier",
+          "hash": "3244421341483603138"
+        },
+        {
+          "file": "packages/astro-app/public/fonts/Roboto/Roboto-Thin.ttf",
+          "hash": "16494021493287799544"
+        },
+        {
+          "file": "packages/astro-app/public/fonts/Roboto/Roboto-Thin.ttf:Zone.Identifier",
+          "hash": "3244421341483603138"
+        },
+        {
+          "file": "packages/astro-app/public/fonts/Roboto/Roboto-ThinItalic.ttf",
+          "hash": "8572171983110193039"
+        },
+        {
+          "file": "packages/astro-app/public/fonts/Roboto/Roboto-ThinItalic.ttf:Zone.Identifier",
+          "hash": "3244421341483603138"
+        },
+        {
+          "file": "packages/astro-app/public/images/DuckyCoding_logo.png",
+          "hash": "13985971712538133782"
+        },
+        {
+          "file": "packages/astro-app/public/images/android-chrome-192x192.png",
+          "hash": "5906537326868715215"
+        },
+        {
+          "file": "packages/astro-app/public/images/android-chrome-512x512.png",
+          "hash": "14313073323849377975"
+        },
+        {
+          "file": "packages/astro-app/public/images/apple-touch-icon.png",
+          "hash": "9827265149314567572"
+        },
+        {
+          "file": "packages/astro-app/public/images/default_profile_icon.png",
+          "hash": "1591727881338305962"
+        },
+        {
+          "file": "packages/astro-app/public/images/favicon-16x16.png",
+          "hash": "309311957597763384"
+        },
+        {
+          "file": "packages/astro-app/public/images/favicon-32x32.png",
+          "hash": "13519336665471025869"
+        },
+        {
+          "file": "packages/astro-app/public/images/favicon.ico",
+          "hash": "5241965137072721312"
+        },
+        {
+          "file": "packages/astro-app/public/robots.txt",
+          "hash": "16973988395181370849"
+        },
+        {
+          "file": "packages/astro-app/public/site.webmanifest",
+          "hash": "17392100417174686076"
+        },
+        {
+          "file": "packages/astro-app/src/assets/images/404_duck.png",
+          "hash": "18156860023734713920"
+        },
+        {
+          "file": "packages/astro-app/src/assets/images/DuckyCoding_logo.png",
+          "hash": "13985971712538133782"
+        },
+        {
+          "file": "packages/astro-app/src/assets/images/default_profile_icon.png",
+          "hash": "1591727881338305962"
+        },
+        {
+          "file": "packages/astro-app/src/assets/images/posts/test-banner.png",
+          "hash": "1042337275149002546"
+        },
+        {
+          "file": "packages/astro-app/src/assets/images/topics/astro-icon-light-gradient.png",
+          "hash": "5021283200905463907"
+        },
+        {
+          "file": "packages/astro-app/src/assets/images/topics/css3-logo.png",
+          "hash": "13700307153717618608"
+        },
+        {
+          "file": "packages/astro-app/src/assets/images/topics/react-logo.png",
+          "hash": "8051870972528291711"
+        },
+        {
+          "file": "packages/astro-app/src/assets/images/topics/typescript-logo.png",
+          "hash": "4131472537197559777"
+        },
+        {
+          "file": "packages/astro-app/src/assets/images/topics/typescript-logo.svg",
+          "hash": "12508595158166177524"
+        },
+        {
+          "file": "packages/astro-app/src/components/AnimatedWheel/AnimatedWheel.astro",
+          "hash": "15170602778720352766"
+        },
+        {
+          "file": "packages/astro-app/src/components/AnimatedWheel/index.ts",
+          "hash": "11700907651471782844"
+        },
+        {
+          "file": "packages/astro-app/src/components/BriefPostCard/BriefPostCard.astro",
+          "hash": "7203853415112892220"
+        },
+        {
+          "file": "packages/astro-app/src/components/BriefPostCard/index.ts",
+          "hash": "5196998479351040411"
+        },
+        {
+          "file": "packages/astro-app/src/components/Button/Button.astro",
+          "hash": "8175592910282827997"
+        },
+        {
+          "file": "packages/astro-app/src/components/Button/index.ts",
+          "hash": "7488383039969921786"
+        },
+        {
+          "file": "packages/astro-app/src/components/Card/Card.astro",
+          "hash": "15081130183160594673"
+        },
+        {
+          "file": "packages/astro-app/src/components/Card/index.ts",
+          "hash": "15797233142161589397"
+        },
+        {
+          "file": "packages/astro-app/src/components/Form/Input/Input.astro",
+          "hash": "8346397080048616192"
+        },
+        {
+          "file": "packages/astro-app/src/components/Form/Input/index.ts",
+          "hash": "12058455802840938233"
+        },
+        {
+          "file": "packages/astro-app/src/components/Form/InputWithLabel/InputWithLabel.astro",
+          "hash": "15441328570073825292"
+        },
+        {
+          "file": "packages/astro-app/src/components/Form/InputWithLabel/index.ts",
+          "hash": "2528522975713333389"
+        },
+        {
+          "file": "packages/astro-app/src/components/HamburgerToggle/HamburgerToggle.astro",
+          "hash": "4872539566284696553"
+        },
+        {
+          "file": "packages/astro-app/src/components/HamburgerToggle/index.ts",
+          "hash": "10469726734268845017"
+        },
+        {
+          "file": "packages/astro-app/src/components/Icons/DuckIcon/DuckIcon.astro",
+          "hash": "6764709624883672407"
+        },
+        {
+          "file": "packages/astro-app/src/components/Icons/DuckIcon/index.ts",
+          "hash": "3614707163391096454"
+        },
+        {
+          "file": "packages/astro-app/src/components/Icons/GenericIcon.astro",
+          "hash": "16463321147129578217"
+        },
+        {
+          "file": "packages/astro-app/src/components/Icons/GitHubIcon/GitHubIcon.astro",
+          "hash": "9003862378541215306"
+        },
+        {
+          "file": "packages/astro-app/src/components/Icons/GitHubIcon/index.ts",
+          "hash": "3825805770026866665"
+        },
+        {
+          "file": "packages/astro-app/src/components/Icons/InstagramIcon/InstagramIcon.astro",
+          "hash": "18216357861306546348"
+        },
+        {
+          "file": "packages/astro-app/src/components/Icons/InstagramIcon/index.ts",
+          "hash": "11753987056374332990"
+        },
+        {
+          "file": "packages/astro-app/src/components/Icons/RedditIcon/RedditIcon.astro",
+          "hash": "2514416821382122497"
+        },
+        {
+          "file": "packages/astro-app/src/components/Icons/RedditIcon/index.ts",
+          "hash": "13864758785891268167"
+        },
+        {
+          "file": "packages/astro-app/src/components/Icons/StackOverflowIcon/StackOverflowIcon.astro",
+          "hash": "8202349784187117287"
+        },
+        {
+          "file": "packages/astro-app/src/components/Icons/StackOverflowIcon/index.ts",
+          "hash": "3586610452160500895"
+        },
+        {
+          "file": "packages/astro-app/src/components/Icons/TikTokIcon/TikTokIcon.astro",
+          "hash": "2612530955381897943"
+        },
+        {
+          "file": "packages/astro-app/src/components/Icons/TikTokIcon/index.ts",
+          "hash": "8073770222271605372"
+        },
+        {
+          "file": "packages/astro-app/src/components/Icons/XIcon/XIcon.astro",
+          "hash": "418051199528235198"
+        },
+        {
+          "file": "packages/astro-app/src/components/Icons/XIcon/index.ts",
+          "hash": "5610131334637044918"
+        },
+        {
+          "file": "packages/astro-app/src/components/Icons/YouTubeIcon/YouTubeIcon.astro",
+          "hash": "10284655732350551355"
+        },
+        {
+          "file": "packages/astro-app/src/components/Icons/YouTubeIcon/index.ts",
+          "hash": "6114387852282163804"
+        },
+        {
+          "file": "packages/astro-app/src/components/Icons/index.ts",
+          "hash": "14625952296153799511"
+        },
+        {
+          "file": "packages/astro-app/src/components/Link/Link.astro",
+          "hash": "15385060342152179203"
+        },
+        {
+          "file": "packages/astro-app/src/components/Link/index.ts",
+          "hash": "10453392346281171595"
+        },
+        {
+          "file": "packages/astro-app/src/components/Markdown/CustomA.astro",
+          "hash": "14225032778155435754"
+        },
+        {
+          "file": "packages/astro-app/src/components/Markdown/CustomBlockquote.astro",
+          "hash": "9319903847662383554"
+        },
+        {
+          "file": "packages/astro-app/src/components/Markdown/CustomH1.astro",
+          "hash": "16615853470231566939"
+        },
+        {
+          "file": "packages/astro-app/src/components/Markdown/CustomH2.astro",
+          "hash": "15452946998141036785"
+        },
+        {
+          "file": "packages/astro-app/src/components/Markdown/CustomH3.astro",
+          "hash": "16944895601440588611"
+        },
+        {
+          "file": "packages/astro-app/src/components/Markdown/CustomH4.astro",
+          "hash": "3958420914170701129"
+        },
+        {
+          "file": "packages/astro-app/src/components/Markdown/CustomH5.astro",
+          "hash": "12181600660127858710"
+        },
+        {
+          "file": "packages/astro-app/src/components/Markdown/CustomH6.astro",
+          "hash": "17576162465736937387"
+        },
+        {
+          "file": "packages/astro-app/src/components/Markdown/CustomLi.astro",
+          "hash": "3007729334072967135"
+        },
+        {
+          "file": "packages/astro-app/src/components/Markdown/CustomOl.astro",
+          "hash": "5906378903690318227"
+        },
+        {
+          "file": "packages/astro-app/src/components/Markdown/CustomP.astro",
+          "hash": "13283997520885366729"
+        },
+        {
+          "file": "packages/astro-app/src/components/Markdown/CustomTable.astro",
+          "hash": "4997051943197666524"
+        },
+        {
+          "file": "packages/astro-app/src/components/Markdown/CustomTbody.astro",
+          "hash": "13011770233735617887"
+        },
+        {
+          "file": "packages/astro-app/src/components/Markdown/CustomTd.astro",
+          "hash": "13884285737853765097"
+        },
+        {
+          "file": "packages/astro-app/src/components/Markdown/CustomTh.astro",
+          "hash": "3623193192245109378"
+        },
+        {
+          "file": "packages/astro-app/src/components/Markdown/CustomThead.astro",
+          "hash": "16422448719286512171"
+        },
+        {
+          "file": "packages/astro-app/src/components/Markdown/CustomTr.astro",
+          "hash": "4658784434691585064"
+        },
+        {
+          "file": "packages/astro-app/src/components/Markdown/CustomUl.astro",
+          "hash": "12919907114159403162"
+        },
+        {
+          "file": "packages/astro-app/src/components/Markdown/index.ts",
+          "hash": "13365454079530873260"
+        },
+        {
+          "file": "packages/astro-app/src/components/Navbar/Navbar.astro",
+          "hash": "6453094333649104960"
+        },
+        {
+          "file": "packages/astro-app/src/components/Navbar/index.ts",
+          "hash": "18156879006861189506"
+        },
+        {
+          "file": "packages/astro-app/src/components/PostCard/PostCard.astro",
+          "hash": "1939159037596418324"
+        },
+        {
+          "file": "packages/astro-app/src/components/PostCard/index.ts",
+          "hash": "9731403980098592959"
+        },
+        {
+          "file": "packages/astro-app/src/components/Tag/Tag.astro",
+          "hash": "9919596076408688496"
+        },
+        {
+          "file": "packages/astro-app/src/components/Tag/index.ts",
+          "hash": "4657766916252052371"
+        },
+        {
+          "file": "packages/astro-app/src/components/ToggleSwitch/ToggleSwitch.astro",
+          "hash": "15266421916266458266"
+        },
+        {
+          "file": "packages/astro-app/src/components/ToggleSwitch/index.ts",
+          "hash": "1128408598068639563"
+        },
+        {
+          "file": "packages/astro-app/src/components/TopicCard/TopicCard.astro",
+          "hash": "5124907078321624526"
+        },
+        {
+          "file": "packages/astro-app/src/components/TopicCard/index.ts",
+          "hash": "10750807373248019081"
+        },
+        {
+          "file": "packages/astro-app/src/content/config.ts",
+          "hash": "11132677171665013731"
+        },
+        {
+          "file": "packages/astro-app/src/content/md/test.md",
+          "hash": "17221128561214521355"
+        },
+        {
+          "file": "packages/astro-app/src/content/posts/post-1.mdx",
+          "hash": "3106524520621778298"
+        },
+        {
+          "file": "packages/astro-app/src/layouts/BaseHead/BaseHead.astro",
+          "hash": "2422932610020708576"
+        },
+        {
+          "file": "packages/astro-app/src/layouts/BaseHead/index.ts",
+          "hash": "18019749138181607629"
+        },
+        {
+          "file": "packages/astro-app/src/layouts/BaseHtml/BaseHtml.astro",
+          "hash": "15159726591656334897"
+        },
+        {
+          "file": "packages/astro-app/src/layouts/BaseHtml/BaseHtml.style.module.css",
+          "hash": "8869638942632708667"
+        },
+        {
+          "file": "packages/astro-app/src/layouts/BaseHtml/index.ts",
+          "hash": "16436535013035016499"
+        },
+        {
+          "file": "packages/astro-app/src/layouts/Footer/Footer.astro",
+          "hash": "51825949442476586"
+        },
+        {
+          "file": "packages/astro-app/src/layouts/Footer/index.ts",
+          "hash": "1667208495398469692"
+        },
+        {
+          "file": "packages/astro-app/src/layouts/Header/Header.astro",
+          "hash": "10054920747051685753"
+        },
+        {
+          "file": "packages/astro-app/src/layouts/Header/index.ts",
+          "hash": "3453283161687307986"
+        },
+        {
+          "file": "packages/astro-app/src/layouts/HolyGrailLayout/HolyGrailLayout.astro",
+          "hash": "12942192505984633792"
+        },
+        {
+          "file": "packages/astro-app/src/layouts/HolyGrailLayout/index.ts",
+          "hash": "14460584238113620876"
+        },
+        {
+          "file": "packages/astro-app/src/layouts/MainContent/MainContent.astro",
+          "hash": "2419842634747206928"
+        },
+        {
+          "file": "packages/astro-app/src/layouts/MainContent/index.ts",
+          "hash": "4414348368308815779"
+        },
+        {
+          "file": "packages/astro-app/src/layouts/MarkdownContent/MarkdownContent.astro",
+          "hash": "8017227460497146896"
+        },
+        {
+          "file": "packages/astro-app/src/layouts/MarkdownContent/index.ts",
+          "hash": "8148192281955241019"
+        },
+        {
+          "file": "packages/astro-app/src/pages/404.astro",
+          "hash": "14165861901758728485"
+        },
+        {
+          "file": "packages/astro-app/src/pages/api/v1/topics.json.ts",
+          "hash": "18082780439869954694"
+        },
+        {
+          "file": "packages/astro-app/src/pages/components.astro",
+          "hash": "9326532492177678846"
+        },
+        {
+          "file": "packages/astro-app/src/pages/index.astro",
+          "hash": "14690253424002563536"
+        },
+        {
+          "file": "packages/astro-app/src/pages/md/[...slug]/index.astro",
+          "hash": "5165014749631261645"
+        },
+        {
+          "file": "packages/astro-app/src/pages/posts/[...slug]/index.astro",
+          "hash": "1772390436868426385"
+        },
+        {
+          "file": "packages/astro-app/src/pages/topics/[topic]/index.astro",
+          "hash": "1087966326787837021"
+        },
+        {
+          "file": "packages/astro-app/src/pages/topics/index.astro",
+          "hash": "15089717130692557412"
+        },
+        {
+          "file": "packages/astro-app/src/services/posts.service.ts",
+          "hash": "17334090082321185902"
+        },
+        {
+          "file": "packages/astro-app/src/styles/global.css",
+          "hash": "9190943438109289900"
+        },
+        {
+          "file": "packages/astro-app/src/styles/markdown-empty.css",
+          "hash": "3256776900967697110"
+        },
+        {
+          "file": "packages/astro-app/src/styles/markdown.css",
+          "hash": "8688367919819947762"
+        },
+        {
+          "file": "packages/astro-app/src/styles/markdown2.css",
+          "hash": "3311321519865153962"
+        },
+        {
+          "file": "packages/astro-app/src/styles/style-reset.css",
+          "hash": "502753705727530483"
+        },
+        {
+          "file": "packages/astro-app/src/styles/themes/dark-theme.css",
+          "hash": "13157060398929300507"
+        },
+        {
+          "file": "packages/astro-app/src/styles/themes/default.css",
+          "hash": "12081199395519683392"
+        },
+        {
+          "file": "packages/astro-app/src/utils/cn/cn.ts",
+          "hash": "10564582242637025182"
+        },
+        {
+          "file": "packages/astro-app/src/utils/cn/index.ts",
+          "hash": "17302036773688304036"
+        },
+        {
+          "file": "packages/astro-app/src/utils/content/content.ts",
+          "hash": "15415197399158987491"
+        },
+        {
+          "file": "packages/astro-app/src/utils/globals.ts",
+          "hash": "7424309859826893758"
+        },
+        {
+          "file": "packages/astro-app/src/utils/images/images.ts",
+          "hash": "5762969863642366239"
+        },
+        {
+          "file": "packages/astro-app/src/utils/logs/logger.ts",
+          "hash": "4314182550000998767"
+        },
+        {
+          "file": "packages/astro-app/src/utils/tailwind-merge/tailwind-merge.ts",
+          "hash": "12950564641459261968"
+        },
+        {
+          "file": "packages/astro-app/tailwind.config.mjs",
+          "hash": "1224835878197047436"
+        },
+        {
+          "file": "packages/astro-app/tsconfig.json",
+          "hash": "6926246199444953050"
+        }
+      ]
+    }
+  }
+}
