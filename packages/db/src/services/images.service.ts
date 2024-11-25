@@ -1,7 +1,7 @@
 import {
-  CreateImageDTO,
+  type CreateImageDTO,
   CreateImageDTOSchema,
-  ImageDTO,
+  type ImageDTO,
 } from '@ducky-coding/types/DTOs';
 import { ImagesRepository } from '../repositories/images.repository';
 

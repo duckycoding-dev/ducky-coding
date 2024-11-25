@@ -1,6 +1,6 @@
 import { integer, text, sqliteTable } from 'drizzle-orm/sqlite-core';
 import { z } from 'zod';
-import { TopicDTO } from '@ducky-coding/types/DTOs';
+import type { TopicDTO } from '@ducky-coding/types/DTOs';
 import { TagsTable } from './tags.model';
 import { ImagesTable } from './images.model';
 

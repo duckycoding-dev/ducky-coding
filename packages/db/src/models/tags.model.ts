@@ -1,4 +1,4 @@
-import { TagDTO } from '@ducky-coding/types/DTOs';
+import type { TagDTO } from '@ducky-coding/types/DTOs';
 import { sqliteTable, text } from 'drizzle-orm/sqlite-core';
 
 export const TagsTable = sqliteTable('tags', {

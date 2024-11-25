@@ -12,14 +12,14 @@ let serverLoggerInstance: ReturnType<typeof createServerLogger>;
  *
  * @returns {ServerLogger} The singleton server logger instance.
  */
+
 export const getServerLogger = (): ReturnType<typeof createServerLogger> => {
-  console.log('DUCKYLOG', process.env.LOGS_LEVEL);
   if (!serverLoggerInstance) {
     serverLoggerInstance = createServerLogger({
       showTimestamp: true,
       showLevelLabel: true,
       showColoredOutput: true,
-      logLevel: process.env.LOGS_LEVEL ?? 'warn',
+      logLevel: process.env.DB_PACKAGE_LOGS_LEVEL ?? 'warn',
     });
   }
   return serverLoggerInstance;

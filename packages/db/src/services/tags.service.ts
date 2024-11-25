@@ -1,4 +1,4 @@
-import { TagDTO } from '@ducky-coding/types/DTOs';
+import type { TagDTO } from '@ducky-coding/types/DTOs';
 import { TagsRepository } from '../repositories/tags.repository';
 
 const getTag = async (tagTitle: string): Promise<TagDTO | undefined> => {

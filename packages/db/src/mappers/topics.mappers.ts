@@ -1,5 +1,5 @@
-import { TopicWithImageDTO } from '@ducky-coding/types/DTOs';
-import { Image, Topic } from '../models';
+import type { TopicWithImageDTO } from '@ducky-coding/types/DTOs';
+import type { Image, Topic } from '../models';
 
 export function mapToTopicWithImageDTO(
   topic: Topic,

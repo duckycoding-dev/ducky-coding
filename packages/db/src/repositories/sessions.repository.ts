@@ -1,6 +1,6 @@
-import { SessionDTO } from '@ducky-coding/types/DTOs';
+import type { SessionDTO } from '@ducky-coding/types/DTOs';
 import { and, eq, inArray, lt } from 'drizzle-orm';
-import { InsertSession, mapToSessionDTO, SessionsTable } from '../models';
+import { type InsertSession, mapToSessionDTO, SessionsTable } from '../models';
 import { db } from '../client';
 
 const getSessions = async (refreshTokens: string[]): Promise<SessionDTO[]> => {

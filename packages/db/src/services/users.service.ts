@@ -1,10 +1,10 @@
-import {
+import type {
   ImageDTO,
   UserDTO,
   UserWithProfilePictureDTO,
 } from '@ducky-coding/types/DTOs';
 import { UsersRepository } from '../repositories/users.repository';
-import { InsertUser } from '../models';
+import type { InsertUser } from '../models';
 
 const getUser = async (userId: number): Promise<UserDTO | undefined> => {
   const selectedUsers = await UsersRepository.getUsers([userId]);

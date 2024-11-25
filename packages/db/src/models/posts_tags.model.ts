@@ -5,7 +5,7 @@ import {
   text,
 } from 'drizzle-orm/sqlite-core';
 import { z } from 'zod';
-import { PostTagDTO } from '@ducky-coding/types/DTOs';
+import type { PostTagDTO } from '@ducky-coding/types/DTOs';
 import { PostsTable } from './posts.model';
 import { TagsTable } from './tags.model';
 

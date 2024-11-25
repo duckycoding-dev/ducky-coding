@@ -1,5 +1,5 @@
 import { eq, inArray, SQL } from 'drizzle-orm';
-import {
+import type {
   ImageDTO,
   UserDTO,
   UserWithProfilePictureDTO,
@@ -7,7 +7,7 @@ import {
 import { db } from '../client';
 import {
   ImagesTable,
-  InsertUser,
+  type InsertUser,
   mapToImageDTO,
   mapToUserDTO,
   UsersTable,

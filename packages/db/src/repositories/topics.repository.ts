@@ -1,5 +1,5 @@
 import { eq, inArray } from 'drizzle-orm';
-import { TopicDTO, TopicWithImageDTO } from '@ducky-coding/types/DTOs';
+import type { TopicDTO, TopicWithImageDTO } from '@ducky-coding/types/DTOs';
 import { db } from '../client';
 import { ImagesTable, mapToTopicDTO, TopicsTable } from '../models';
 import { mapToTopicWithImageDTO } from '../mappers/topics.mappers';
