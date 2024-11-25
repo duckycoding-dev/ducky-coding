@@ -14,7 +14,7 @@ const { class: className, ...props }: Props = Astro.props;
 
 <footer
   class={cn(
-    'bg-primary-700 border-comic border-secondary py-8 [grid-area:footer]',
+    'bg-primary-700 border-comic border-secondary py-8 [grid-area:footer] border-x-0 border-b-0',
     className,
   )}
   {...props}
@@ -53,6 +53,15 @@ const { class: className, ...props }: Props = Astro.props;
           >
             <DuckIcon title='' variant={'small'} class='inline' />
             Home
+          </Link>
+        </li>
+        <li>
+          <Link
+            href={'/md/test'}
+            class={'text-xl md:text-base text-primary font-medium w-full flex items-center gap-4'}
+          >
+            <DuckIcon title='' variant={'small'} class='inline' />
+            Test Markdown
           </Link>
         </li>
         <li>

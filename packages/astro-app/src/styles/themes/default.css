@@ -294,3 +294,9 @@ html[data-theme='default'] {
   font-family: 'Inter', 'Poppins', 'Roboto', sans-serif;
   --font-primary: 3rem;
 }
+
+:root {
+  scrollbar-color: var(--color-accent) var(--color-primary-700);
+  scrollbar-width: thin;
+  /* scrollbar-gutter: stable; */
+}

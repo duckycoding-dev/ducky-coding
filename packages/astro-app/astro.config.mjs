@@ -96,7 +96,6 @@ export default defineConfig({
   }, // add Vite configs TODO
   integrations: [
     mdx(),
-    // db(),
     tailwind({ applyBaseStyles: false }),
     sitemap(),
     icon({
