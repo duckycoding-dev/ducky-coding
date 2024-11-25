@@ -1,6 +1,6 @@
 // tailwind custom variables are not applying when editing classes in the developer tools? remember that if a class
 // is not used tailwind will purge it from the css file on load in dev and on build in production!!
-import typography from '@tailwindcss/typography';
+// import typography from '@tailwindcss/typography';
 
 const primaryColor = {
   DEFAULT: 'var(--color-primary)',
