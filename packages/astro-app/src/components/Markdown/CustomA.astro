@@ -1,7 +1,9 @@
 ---
-import { Link } from '../Link';
+import { Link, type LinkProps } from '../Link';
 
-const { props } = Astro;
+type Props = LinkProps;
+
+const { props }: { props: Props } = Astro;
 ---
 
 {

@@ -1,6 +1,7 @@
 ---
 import { getCollection } from 'astro:content';
 import { HolyGrailLayout } from '@layouts/HolyGrailLayout';
+import { MarkdownComponents } from '@components/Markdown';
 import '@styles/markdown.css';
 
 // 1. Generate a new path for every collection entry
@@ -24,7 +25,7 @@ const { Content } = await entry.render();
 >
   <section class='flex flex-col gap-4'>
     <article class='markdown-content'>
-      <Content />
+      <Content components={MarkdownComponents} />
     </article>
   </section>
 </HolyGrailLayout>

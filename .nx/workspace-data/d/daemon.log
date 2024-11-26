@@ -91,3 +91,6 @@
 [NX Daemon Server] - 2024-11-25T15:01:22.142Z - Done responding to the client handleGetFlakyTasks
 [NX Daemon Server] - 2024-11-25T15:01:22.142Z - Handled GET_FLAKY_TASKS. Handling time: 2. Response time: 0.
 [NX Daemon Server] - 2024-11-25T15:01:22.170Z - Closed a connection. Number of open connections: 0
+[NX Daemon Server] - 2024-11-25T18:54:26.119Z - [WATCHER]: Stopping the watcher for /Users/davidemilan/Desktop/repos/duckycoding/ducky-coding (sources)
+[NX Daemon Server] - 2024-11-25T18:54:26.232Z - [WATCHER]: Stopping the watcher for /Users/davidemilan/Desktop/repos/duckycoding/ducky-coding (outputs)
+[NX Daemon Server] - 2024-11-25T18:54:26.262Z - Server stopped because: "10800000ms of inactivity"
