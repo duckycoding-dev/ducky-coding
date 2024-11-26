@@ -1,4 +1,4 @@
-/* Basic text elements */
+Basic text elements
 /* done */
 .markdown-content p {
   margin-top: 1rem;
@@ -12,39 +12,28 @@
 .markdown-content h6 {
   color: var(--color-secondary);
   margin-block: 2rem 1.5rem;
-  font-weight: 900;
+  font-weight: 800;
   border-bottom: 5px solid var(--color-accent);
+  line-height: 125%;
 }
 
 .markdown-content h1 {
-  font-size: 2.5rem;
+  font-size: 2.25rem;
 }
 .markdown-content h2 {
-  font-size: 2rem;
-}
-.markdown-content h3 {
   font-size: 1.75rem;
 }
-.markdown-content h4 {
+.markdown-content h3 {
   font-size: 1.5rem;
 }
-.markdown-content h5 {
+.markdown-content h4 {
   font-size: 1.25rem;
+}
+.markdown-content h5 {
+  font-size: 1.125rem;
 }
 .markdown-content h6 {
   font-size: 1rem;
-}
-
-.markdown-content a {
-  color: var(--color-accent);
-  text-decoration: none;
-  border-bottom: 3px solid var(--color-accent);
-  font-weight: 700;
-  transition: background-color 0.2s;
-}
-
-.markdown-content a:hover {
-  background-color: var(--color-accent-100);
 }
 
 /* done */
@@ -100,7 +89,6 @@
   background-color: var(--color-secondary);
   color: var(--color-primary);
   padding: 0.2rem 0.4rem;
-  border-radius: 0;
   font-family: monospace;
   font-size: 1em;
 }
@@ -128,10 +116,10 @@
 .markdown-content kbd {
   background-color: var(--color-primary-600);
   border: 2px solid var(--color-secondary);
-  border-radius: 0;
   padding: 0.2rem 0.4rem;
   font-family: monospace;
   box-shadow: 2px 2px 0 var(--color-secondary);
+  white-space: break-spaces;
 }
 
 /* Quotes */
@@ -142,6 +130,7 @@
   padding: 1rem;
   background-color: var(--color-primary-200);
   box-shadow: 4px 4px 0 var(--color-secondary);
+  outline: 1px solid var(--color-secondary);
 }
 
 /* done */
@@ -155,7 +144,7 @@
 
 /* done */
 .markdown-content q {
-  background-color: var(--color-primary-300);
+  background-color: var(--color-accent2-200);
   padding: 0.2rem 0.4rem;
   border: 2px solid var(--color-secondary);
   font-style: italic;
@@ -196,6 +185,7 @@
   background-color: var(--color-accent3);
   padding: 0.2rem 0.4rem;
   border: 2px solid var(--color-secondary);
+  white-space: break-spaces;
 }
 
 /* done */
@@ -246,6 +236,7 @@
   padding: 0.2rem 0.4rem;
   border: 2px solid var(--color-secondary);
   font-weight: 700;
+  white-space: break-spaces;
 }
 
 /* done */
@@ -260,3 +251,14 @@
   scrollbar-color: var(--color-accent) var(--color-primary);
   scrollbar-width: thin;
 }
+
+/*
+* ===================================================================================
+* === Markdown styles created using custom components instead of this stylesheet ====
+* ===================================================================================
+*
+* - a (anchor tag)
+*
+*
+*
+*/
