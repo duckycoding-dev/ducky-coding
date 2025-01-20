@@ -23,7 +23,7 @@ const { props }: { props: Props } = Astro;
 const { post, bannerImage, class: className, loading = 'lazy' } = props;
 ---
 
-<Link variant='unstyled' href={`/posts/${post.slug}`} class={cn(className)}>
+<Link variant='unstyled' href={`/posts/${post.id}`} class={cn(className)}>
   <Card class='card flex h-full flex-col'>
     <Image
       src={bannerImage ?? DuckyCodingLogo}

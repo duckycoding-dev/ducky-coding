@@ -1,5 +1,5 @@
 ---
-import { getCollection } from 'astro:content';
+import { getCollection, render } from 'astro:content';
 import { HolyGrailLayout } from '@layouts/HolyGrailLayout';
 import { MarkdownComponents } from '@components/Markdown';
 import '@styles/markdown.css';
@@ -9,13 +9,13 @@ export async function getStaticPaths() {
   const postsEntries = await getCollection('md');
 
   return postsEntries.map((entry) => ({
-    params: { slug: entry.slug },
+    params: { id: decodeURI(entry.id) },
     props: { entry },
   }));
 }
 // 2. For your template, you can get the entry directly from the prop
 const { entry } = Astro.props;
-const { Content } = await entry.render();
+const { Content } = await render(entry);
 ---
 
 <HolyGrailLayout

@@ -33,7 +33,7 @@ export async function getStaticPaths() {
         imageSrc: processedImage ?? null,
       };
       return {
-        params: { topic: topic.slug },
+        params: { topic: decodeURI(topic.slug) },
         props: { processedTopic },
       };
     }),

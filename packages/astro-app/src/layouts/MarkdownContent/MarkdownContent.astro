@@ -2,6 +2,7 @@
 import { MarkdownComponents } from '@components/Markdown';
 import type { CollectionEntry } from 'astro:content';
 import '@styles/markdown.css';
+import { render } from 'astro:content';
 
 export type MarkdownContentProps = {
   entry: CollectionEntry<'posts'>;
@@ -11,7 +12,9 @@ type Props = MarkdownContentProps;
 
 const { entry }: Props = Astro.props;
 
-const { Content, headings } = await entry.render();
+const { Content, headings } = await render(entry);
+
+// if this is not working for some reasons, check mdx v4 changelogs
 ---
 
 <article class='markdown-content'>
