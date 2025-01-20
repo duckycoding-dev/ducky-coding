@@ -35,5 +35,8 @@
     "test": "node ./__tests__/types.test.js",
     "build": "tsc",
     "dev": "tsc -w"
+  },
+  "dependencies": {
+    "zod": "^3.24.1"
   }
 }

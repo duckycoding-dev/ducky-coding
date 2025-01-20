@@ -15,7 +15,6 @@ export default defineConfig({
   outDir: './dist', // --DEFAULT--
   base: '/',
   trailingSlash: 'ignore', // --DEFAULT--
-  output: 'hybrid',
   adapter: netlify(),
   cacheDir: './.astro',
   compressHTML: true, // could be set to false in development using env variables
@@ -104,6 +103,5 @@ export default defineConfig({
   ],
   experimental: {
     // actions: true,
-    serverIslands: true,
   },
 });

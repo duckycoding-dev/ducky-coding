@@ -46,7 +46,8 @@
     "drizzle-kit": "^0.23.0",
     "drizzle-orm": "^0.32.0",
     "drizzle-zod": "^0.5.1",
-    "jsonwebtoken": "^9.0.2"
+    "jsonwebtoken": "^9.0.2",
+    "zod": "^3.24.1"
   },
   "exports": {
     ".": "./src/index.ts",

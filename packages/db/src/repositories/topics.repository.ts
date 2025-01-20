@@ -18,6 +18,7 @@ const getTopics = async (topicTitles: string[]): Promise<TopicDTO[]> => {
 };
 
 const getAllTopics = async (): Promise<TopicDTO[]> => {
+  console.log('DAVIDELOG');
   const topics = await db.select().from(TopicsTable).all();
   const topicDTOs: TopicDTO[] = topics.map((topic) => {
     return mapToTopicDTO(topic);
