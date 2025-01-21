@@ -1,4 +1,4 @@
-import { createServerLogger } from '@ducky-coding/utils/logger';
+import { createServerLogger } from '@ducky-coding/utils';
 
 /**
  * Holds the singleton instance of the server logger.

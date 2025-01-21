@@ -6,6 +6,7 @@
     "utils",
     "functions"
   ],
+  "type": "module",
   "author": "DuckyCoding <duckycoding.dev@gmail.com>",
   "homepage": "https://github.com/duckycoding-dev/ducky-coding#readme",
   "license": "MIT",
@@ -35,7 +36,7 @@
     "dev": "tsc -w"
   },
   "exports": {
-    ".": "./src/utils.ts",
+    ".": "./src/index.ts",
     "./logger": "./src/logger.ts"
   }
 }
