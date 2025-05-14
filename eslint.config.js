@@ -8,28 +8,13 @@
 // export default [
 // ];
 
-// Or you can use the following tseslint.confg() utility functions, which
+// Or you can use the following tseslint.config() utility functions, which
 // is just a wrapper to provide type checking and intellisense
 // THIS IS NOT REQUIRED IN ORDER TO USE TSESLINT CONFIGS!!
 // https://typescript-eslint.io/packages/typescript-eslint#config
 import tseslint from 'typescript-eslint';
 import eslintPluginPrettierRecommended from 'eslint-plugin-prettier/recommended';
 import eslintPluginAstro from 'eslint-plugin-astro';
-
-// ===== START: Fallback for configs that don't yet support Flat Config =====
-import { FlatCompat } from '@eslint/eslintrc';
-import path from 'path';
-import { fileURLToPath } from 'url';
-
-// mimic CommonJS variables -- not needed if using CommonJS
-const filename = fileURLToPath(import.meta.url);
-const dirname = path.dirname(filename);
-
-const compat = new FlatCompat({
-  baseDirectory: dirname, // optional; default: process.cwd()
-  resolvePluginsRelativeTo: dirname, // optional
-});
-// ===== END: Fallback for configs that don't support Flat Config yet =====
 
 export default tseslint.config(
   // ignore all files inside distribution folders
@@ -43,8 +28,6 @@ export default tseslint.config(
     ],
     files: ['**/*.js', '*.js', '**/*.ts', '*.ts', '**/*.astro'],
   },
-  // airbnb recommended linting rules
-  ...compat.extends('airbnb-base'),
   // recommended linting configs from tseslint (maybe overridden later by "manual" tselint configs with plugin and languageOptions)
   ...tseslint.configs.strict,
   // disable type-aware linting on JS files

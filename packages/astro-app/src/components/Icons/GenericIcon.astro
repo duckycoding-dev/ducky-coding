@@ -1,9 +1,10 @@
 ---
 import type { HTMLAttributes } from 'astro/types';
 import { Icon } from 'astro-icon/components';
-import { cva, type VariantProps } from 'class-variance-authority';
+import { cva, type VariantProps } from 'cva';
 
-const genericIconVariants = cva('', {
+const genericIconVariants = cva({
+  base: '',
   variants: {
     variant: {
       extrasmall: 12.5,
@@ -23,7 +24,7 @@ const genericIconVariants = cva('', {
 export type GenericIconVariantsProps = VariantProps<typeof genericIconVariants>;
 
 export type AstroIconDimensions =
-  ({
+  | {
       size: number;
       width?: undefined;
       height?: undefined;
@@ -39,7 +40,7 @@ export type AstroIconDimensions =
       size?: undefined;
       width?: undefined;
       height?: undefined;
-    } & Pick<GenericIconVariantsProps, 'variant'>));
+    } & Pick<GenericIconVariantsProps, 'variant'>);
 
 export interface AstroIconBasicProps {
   name: string;

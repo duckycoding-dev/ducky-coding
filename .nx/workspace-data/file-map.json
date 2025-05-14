@@ -1,105 +1,45 @@
 {
   "version": "6.0",
-  "nxVersion": "20.3.2",
+  "nxVersion": "20.4.0",
   "pathMappings": {},
   "nxJsonPlugins": [],
   "fileMap": {
     "nonProjectFiles": [
       {
-        "file": ".gitignore",
-        "hash": "15399439811814243080"
-      },
-      {
-        "file": ".nvmrc",
-        "hash": "8178045573189301982"
-      },
-      {
-        "file": ".vscode/extensions.json",
-        "hash": "15925514941962789069"
-      },
-      {
-        "file": ".vscode/settings.json",
-        "hash": "14555463215200406690"
-      },
-      {
-        "file": ".vscode/templates/Astro component/index.ts",
-        "hash": "6873406696161715654"
-      },
-      {
-        "file": ".vscode/templates/Astro component/{{name}}.astro",
-        "hash": "15320984252034070844"
+        "file": "README.md",
+        "hash": "5875129962092260223"
       },
       {
         "file": ".vscode/templates/CustomIconComponent/index.ts",
         "hash": "11203829120804806258"
       },
       {
-        "file": ".vscode/templates/CustomIconComponent/{{name}}Icon.astro",
-        "hash": "5411068881818932178"
+        "file": "best-practices/5 - fast file creation/template-file-example.png",
+        "hash": "16415440486043485004"
       },
       {
-        "file": ".vscode/templates/Database table/index.ts",
-        "hash": "15176808719266407475"
-      },
-      {
-        "file": ".vscode/templates/Database table/{{name}}Table.ts",
-        "hash": "3364801187755627442"
-      },
-      {
-        "file": "README.md",
-        "hash": "5875129962092260223"
-      },
-      {
-        "file": "best-practices/1 - components and folders organization.md",
-        "hash": "15793288547996588664"
-      },
-      {
-        "file": "best-practices/10 - styling markdown content/10 - styling markdown content.md",
-        "hash": "2856701597795270130"
-      },
-      {
-        "file": "best-practices/11 - organizing types in the monorepo/11 - organizing types in the monorepo.md",
-        "hash": "11450427239547167801"
-      },
-      {
-        "file": "best-practices/2 - styling mobile first.md",
-        "hash": "4954630927087209410"
-      },
-      {
-        "file": "best-practices/3 - importing style sheets in astro files.md",
-        "hash": "10814303995603088746"
-      },
-      {
-        "file": "best-practices/4 - defining and exporting components props interfaces.md",
-        "hash": "17534300556861672512"
-      },
-      {
-        "file": "best-practices/5 - fast file creation/5 - fast file creation.md",
-        "hash": "9485852771720135995"
-      },
-      {
-        "file": "best-practices/5 - fast file creation/choose-file-template.png",
-        "hash": "4593674721166483511"
+        "file": "tsconfig.json",
+        "hash": "4954849192512501843"
       },
       {
         "file": "best-practices/5 - fast file creation/create-from-template-option.png",
         "hash": "3062956726042568057"
       },
       {
-        "file": "best-practices/5 - fast file creation/custom-name-for-generated-content.png",
-        "hash": "16387390320808318078"
+        "file": "best-practices/4 - defining and exporting components props interfaces.md",
+        "hash": "17534300556861672512"
       },
       {
-        "file": "best-practices/5 - fast file creation/template-file-example.png",
-        "hash": "16415440486043485004"
+        "file": "best-practices/11 - organizing types in the monorepo/11 - organizing types in the monorepo.md",
+        "hash": "11450427239547167801"
       },
       {
-        "file": "best-practices/6 - organize css and theming/6 - organize css and theming.md",
-        "hash": "8840556845519307697"
+        "file": ".gitignore",
+        "hash": "15399439811814243080"
       },
       {
-        "file": "best-practices/7 - colors/7 - colors.md",
-        "hash": "17107177429169766625"
+        "file": ".vscode/templates/Astro component/index.ts",
+        "hash": "6873406696161715654"
       },
       {
         "file": "best-practices/8 - usable but not completed components/8 - usable but not completed components.md",
@@ -114,35 +54,290 @@
         "hash": "1499382107056979365"
       },
       {
-        "file": "eslint.config.js",
-        "hash": "7819689793607305101"
+        "file": "best-practices/2 - styling mobile first.md",
+        "hash": "4954630927087209410"
+      },
+      {
+        "file": "best-practices/3 - importing style sheets in astro files.md",
+        "hash": "10814303995603088746"
+      },
+      {
+        "file": "package.json",
+        "hash": "18391573179710542370"
+      },
+      {
+        "file": "best-practices/5 - fast file creation/choose-file-template.png",
+        "hash": "4593674721166483511"
+      },
+      {
+        "file": ".vscode/settings.json",
+        "hash": "14555463215200406690"
+      },
+      {
+        "file": "best-practices/5 - fast file creation/5 - fast file creation.md",
+        "hash": "9485852771720135995"
       },
       {
         "file": "lerna.json",
         "hash": "7936728164708575593"
       },
       {
-        "file": "nx.json",
-        "hash": "9947703483355570315"
+        "file": ".nvmrc",
+        "hash": "8178045573189301982"
+      },
+      {
+        "file": ".vscode/templates/CustomIconComponent/{{name}}Icon.astro",
+        "hash": "5411068881818932178"
+      },
+      {
+        "file": ".vscode/templates/Database table/index.ts",
+        "hash": "15176808719266407475"
+      },
+      {
+        "file": "best-practices/10 - styling markdown content/10 - styling markdown content.md",
+        "hash": "2856701597795270130"
+      },
+      {
+        "file": "best-practices/6 - organize css and theming/6 - organize css and theming.md",
+        "hash": "8840556845519307697"
+      },
+      {
+        "file": ".vscode/extensions.json",
+        "hash": "15925514941962789069"
+      },
+      {
+        "file": ".vscode/templates/Database table/{{name}}Table.ts",
+        "hash": "3364801187755627442"
       },
       {
         "file": "package-lock.json",
-        "hash": "10011392704658674396"
+        "hash": "12224222086453396530"
       },
       {
-        "file": "package.json",
-        "hash": "19551896425119491"
+        "file": "eslint.config.js",
+        "hash": "7819689793607305101"
+      },
+      {
+        "file": "best-practices/1 - components and folders organization.md",
+        "hash": "15793288547996588664"
+      },
+      {
+        "file": "best-practices/7 - colors/7 - colors.md",
+        "hash": "17107177429169766625"
+      },
+      {
+        "file": "nx.json",
+        "hash": "9947703483355570315"
       },
       {
         "file": "prettier.config.js",
         "hash": "12592462345202335880"
       },
       {
-        "file": "tsconfig.json",
-        "hash": "4954849192512501843"
+        "file": ".vscode/templates/Astro component/{{name}}.astro",
+        "hash": "15320984252034070844"
+      },
+      {
+        "file": "best-practices/5 - fast file creation/custom-name-for-generated-content.png",
+        "hash": "16387390320808318078"
       }
     ],
     "projectFileMap": {
+      "@ducky-coding/db": [
+        {
+          "file": "packages/db/.env.development",
+          "hash": "1829655067063071216"
+        },
+        {
+          "file": "packages/db/.gitignore",
+          "hash": "2849586214347684921"
+        },
+        {
+          "file": "packages/db/README.md",
+          "hash": "11813210216808045012"
+        },
+        {
+          "file": "packages/db/__tests__/db.test.js",
+          "hash": "4494792525651793812"
+        },
+        {
+          "file": "packages/db/database/content.db",
+          "hash": "18399058383463963289"
+        },
+        {
+          "file": "packages/db/database/db",
+          "hash": "3244421341483603138"
+        },
+        {
+          "file": "packages/db/drizzle.config.ts",
+          "hash": "13513018453318821340"
+        },
+        {
+          "file": "packages/db/dump.sql",
+          "hash": "2156120579762335406"
+        },
+        {
+          "file": "packages/db/package.json",
+          "hash": "3586791013818432097",
+          "deps": [
+            "npm:tsx",
+            "@ducky-coding/types",
+            "@ducky-coding/utils",
+            "npm:@libsql/client",
+            "npm:drizzle-kit",
+            "npm:drizzle-orm",
+            "npm:drizzle-zod"
+          ]
+        },
+        {
+          "file": "packages/db/src/client.ts",
+          "hash": "2633217323187709712"
+        },
+        {
+          "file": "packages/db/src/index.ts",
+          "hash": "17904384581187175374"
+        },
+        {
+          "file": "packages/db/src/mappers/posts.mappers.ts",
+          "hash": "13305374664688577674"
+        },
+        {
+          "file": "packages/db/src/mappers/topics.mappers.ts",
+          "hash": "9445434320125639760"
+        },
+        {
+          "file": "packages/db/src/mappers/users.mappers.ts",
+          "hash": "16126064045208000011"
+        },
+        {
+          "file": "packages/db/src/migrate.ts",
+          "hash": "238621444027474986"
+        },
+        {
+          "file": "packages/db/src/migrations/0000_worried_prowler.sql",
+          "hash": "16240678962406236244"
+        },
+        {
+          "file": "packages/db/src/migrations/custom_queries/dropAllTables.sql",
+          "hash": "17030446232907365021"
+        },
+        {
+          "file": "packages/db/src/migrations/meta/0000_snapshot.json",
+          "hash": "6102306401179485515"
+        },
+        {
+          "file": "packages/db/src/migrations/meta/_journal.json",
+          "hash": "253988100421520829"
+        },
+        {
+          "file": "packages/db/src/models/images.model.ts",
+          "hash": "1952156950783140600"
+        },
+        {
+          "file": "packages/db/src/models/index.ts",
+          "hash": "7016224478444440670"
+        },
+        {
+          "file": "packages/db/src/models/posts.model.ts",
+          "hash": "6296445768750581307"
+        },
+        {
+          "file": "packages/db/src/models/posts_authors.model.ts",
+          "hash": "16916789638952728557"
+        },
+        {
+          "file": "packages/db/src/models/posts_tags.model.ts",
+          "hash": "8400496399431851665"
+        },
+        {
+          "file": "packages/db/src/models/sessions.model.ts",
+          "hash": "3997457862109666450"
+        },
+        {
+          "file": "packages/db/src/models/tags.model.ts",
+          "hash": "249074988526505583"
+        },
+        {
+          "file": "packages/db/src/models/topics.model.ts",
+          "hash": "16428715836776005943"
+        },
+        {
+          "file": "packages/db/src/models/users.model.ts",
+          "hash": "3955315855134829446"
+        },
+        {
+          "file": "packages/db/src/repositories/images.repository.ts",
+          "hash": "1650959201980626528"
+        },
+        {
+          "file": "packages/db/src/repositories/index.ts",
+          "hash": "3244421341483603138"
+        },
+        {
+          "file": "packages/db/src/repositories/posts.repository.ts",
+          "hash": "3922551206669981537"
+        },
+        {
+          "file": "packages/db/src/repositories/sessions.repository.ts",
+          "hash": "8810242638979887354"
+        },
+        {
+          "file": "packages/db/src/repositories/tags.repository.ts",
+          "hash": "7792048991419355392"
+        },
+        {
+          "file": "packages/db/src/repositories/topics.repository.ts",
+          "hash": "1633461847744241403"
+        },
+        {
+          "file": "packages/db/src/repositories/users.repository.ts",
+          "hash": "6597961383904577679"
+        },
+        {
+          "file": "packages/db/src/seed.ts",
+          "hash": "1925283986868864360"
+        },
+        {
+          "file": "packages/db/src/services/images.service.ts",
+          "hash": "1887142613925832541"
+        },
+        {
+          "file": "packages/db/src/services/index.ts",
+          "hash": "5867874611388134082"
+        },
+        {
+          "file": "packages/db/src/services/posts.service.ts",
+          "hash": "7533747109862410614"
+        },
+        {
+          "file": "packages/db/src/services/sessions.service.ts",
+          "hash": "9493136239474374375"
+        },
+        {
+          "file": "packages/db/src/services/tags.service.ts",
+          "hash": "11643918633339647077"
+        },
+        {
+          "file": "packages/db/src/services/topics.service.ts",
+          "hash": "5227012370521660664"
+        },
+        {
+          "file": "packages/db/src/services/users.service.ts",
+          "hash": "5138499618642228758"
+        },
+        {
+          "file": "packages/db/src/types/env.d.ts",
+          "hash": "6406471666292024059"
+        },
+        {
+          "file": "packages/db/src/utils/logger.ts",
+          "hash": "15714336151793491728"
+        },
+        {
+          "file": "packages/db/tsconfig.json",
+          "hash": "13213927288338940486"
+        }
+      ],
       "@ducky-coding/types": [
         {
           "file": "packages/types/README.md",
@@ -154,10 +349,7 @@
         },
         {
           "file": "packages/types/package.json",
-          "hash": "10245076557122728371",
-          "deps": [
-            "npm:zod"
-          ]
+          "hash": "5799250246303838595"
         },
         {
           "file": "packages/types/src/DTOs/image.dto.ts",
@@ -208,6 +400,36 @@
           "hash": "9627634244181504443"
         }
       ],
+      "@ducky-coding/utils": [
+        {
+          "file": "packages/utils/README.md",
+          "hash": "3244421341483603138"
+        },
+        {
+          "file": "packages/utils/__tests__/utils.test.js",
+          "hash": "14453996436464896720"
+        },
+        {
+          "file": "packages/utils/package.json",
+          "hash": "13607954495097513116",
+          "deps": [
+            "@ducky-coding/types",
+            "npm:chalk@5.4.1"
+          ]
+        },
+        {
+          "file": "packages/utils/src/index.ts",
+          "hash": "4355450507543691596"
+        },
+        {
+          "file": "packages/utils/src/logger.ts",
+          "hash": "12074839416718673599"
+        },
+        {
+          "file": "packages/utils/tsconfig.json",
+          "hash": "13213927288338940486"
+        }
+      ],
       "@ducky-coding/astro-app": [
         {
           "file": "packages/astro-app/.env.development",
@@ -235,13 +457,12 @@
         },
         {
           "file": "packages/astro-app/package.json",
-          "hash": "10875178995365166503",
+          "hash": "9585353573059022392",
           "deps": [
-            "npm:@tailwindcss/typography",
-            "npm:typescript",
+            "npm:prettier-plugin-astro",
             "npm:@astrojs/check",
-            "npm:@astrojs/mdx@4.0.6",
-            "npm:@astrojs/netlify@6.1.0",
+            "npm:@astrojs/mdx",
+            "npm:@astrojs/netlify",
             "npm:@astrojs/sitemap",
             "npm:@astrojs/tailwind",
             "@ducky-coding/db",
@@ -255,8 +476,6 @@
             "npm:astro-seo",
             "npm:class-variance-authority",
             "npm:clsx",
-            "npm:drizzle-kit",
-            "npm:drizzle-orm",
             "npm:tailwind-merge",
             "npm:tailwindcss"
           ]
@@ -1116,242 +1335,6 @@
         {
           "file": "packages/astro-app/tsconfig.json",
           "hash": "12242517690920409437"
-        }
-      ],
-      "@ducky-coding/utils": [
-        {
-          "file": "packages/utils/README.md",
-          "hash": "3244421341483603138"
-        },
-        {
-          "file": "packages/utils/__tests__/utils.test.js",
-          "hash": "14453996436464896720"
-        },
-        {
-          "file": "packages/utils/package.json",
-          "hash": "13607954495097513116",
-          "deps": [
-            "@ducky-coding/types",
-            "npm:chalk@5.4.1"
-          ]
-        },
-        {
-          "file": "packages/utils/src/index.ts",
-          "hash": "4355450507543691596"
-        },
-        {
-          "file": "packages/utils/src/logger.ts",
-          "hash": "12074839416718673599"
-        },
-        {
-          "file": "packages/utils/tsconfig.json",
-          "hash": "13213927288338940486"
-        }
-      ],
-      "@ducky-coding/db": [
-        {
-          "file": "packages/db/.env.development",
-          "hash": "1829655067063071216"
-        },
-        {
-          "file": "packages/db/.gitignore",
-          "hash": "2849586214347684921"
-        },
-        {
-          "file": "packages/db/README.md",
-          "hash": "11813210216808045012"
-        },
-        {
-          "file": "packages/db/__tests__/db.test.js",
-          "hash": "4494792525651793812"
-        },
-        {
-          "file": "packages/db/database/content.db",
-          "hash": "3595026249474552179"
-        },
-        {
-          "file": "packages/db/database/content.db-shm",
-          "hash": "15933852539757520349"
-        },
-        {
-          "file": "packages/db/database/content.db-wal",
-          "hash": "9597107585304032482"
-        },
-        {
-          "file": "packages/db/database/db",
-          "hash": "3244421341483603138"
-        },
-        {
-          "file": "packages/db/drizzle.config.ts",
-          "hash": "13513018453318821340"
-        },
-        {
-          "file": "packages/db/dump.sql",
-          "hash": "2156120579762335406"
-        },
-        {
-          "file": "packages/db/package.json",
-          "hash": "14075014205109391047",
-          "deps": [
-            "@ducky-coding/types",
-            "@ducky-coding/utils",
-            "npm:@libsql/client",
-            "npm:@types/jsonwebtoken",
-            "npm:dotenv@16.4.5",
-            "npm:drizzle-kit",
-            "npm:drizzle-orm",
-            "npm:drizzle-zod",
-            "npm:jsonwebtoken",
-            "npm:zod"
-          ]
-        },
-        {
-          "file": "packages/db/src/client.ts",
-          "hash": "2633217323187709712"
-        },
-        {
-          "file": "packages/db/src/index.ts",
-          "hash": "17904384581187175374"
-        },
-        {
-          "file": "packages/db/src/mappers/posts.mappers.ts",
-          "hash": "13305374664688577674"
-        },
-        {
-          "file": "packages/db/src/mappers/topics.mappers.ts",
-          "hash": "9445434320125639760"
-        },
-        {
-          "file": "packages/db/src/mappers/users.mappers.ts",
-          "hash": "16126064045208000011"
-        },
-        {
-          "file": "packages/db/src/migrate.ts",
-          "hash": "238621444027474986"
-        },
-        {
-          "file": "packages/db/src/migrations/0000_worried_prowler.sql",
-          "hash": "16240678962406236244"
-        },
-        {
-          "file": "packages/db/src/migrations/custom_queries/dropAllTables.sql",
-          "hash": "17030446232907365021"
-        },
-        {
-          "file": "packages/db/src/migrations/meta/0000_snapshot.json",
-          "hash": "6102306401179485515"
-        },
-        {
-          "file": "packages/db/src/migrations/meta/_journal.json",
-          "hash": "253988100421520829"
-        },
-        {
-          "file": "packages/db/src/models/images.model.ts",
-          "hash": "1952156950783140600"
-        },
-        {
-          "file": "packages/db/src/models/index.ts",
-          "hash": "7016224478444440670"
-        },
-        {
-          "file": "packages/db/src/models/posts.model.ts",
-          "hash": "6296445768750581307"
-        },
-        {
-          "file": "packages/db/src/models/posts_authors.model.ts",
-          "hash": "16916789638952728557"
-        },
-        {
-          "file": "packages/db/src/models/posts_tags.model.ts",
-          "hash": "8400496399431851665"
-        },
-        {
-          "file": "packages/db/src/models/sessions.model.ts",
-          "hash": "3997457862109666450"
-        },
-        {
-          "file": "packages/db/src/models/tags.model.ts",
-          "hash": "249074988526505583"
-        },
-        {
-          "file": "packages/db/src/models/topics.model.ts",
-          "hash": "16428715836776005943"
-        },
-        {
-          "file": "packages/db/src/models/users.model.ts",
-          "hash": "3955315855134829446"
-        },
-        {
-          "file": "packages/db/src/repositories/images.repository.ts",
-          "hash": "1650959201980626528"
-        },
-        {
-          "file": "packages/db/src/repositories/index.ts",
-          "hash": "3244421341483603138"
-        },
-        {
-          "file": "packages/db/src/repositories/posts.repository.ts",
-          "hash": "3922551206669981537"
-        },
-        {
-          "file": "packages/db/src/repositories/sessions.repository.ts",
-          "hash": "8810242638979887354"
-        },
-        {
-          "file": "packages/db/src/repositories/tags.repository.ts",
-          "hash": "7792048991419355392"
-        },
-        {
-          "file": "packages/db/src/repositories/topics.repository.ts",
-          "hash": "1633461847744241403"
-        },
-        {
-          "file": "packages/db/src/repositories/users.repository.ts",
-          "hash": "6597961383904577679"
-        },
-        {
-          "file": "packages/db/src/seed.ts",
-          "hash": "1925283986868864360"
-        },
-        {
-          "file": "packages/db/src/services/images.service.ts",
-          "hash": "1887142613925832541"
-        },
-        {
-          "file": "packages/db/src/services/index.ts",
-          "hash": "5867874611388134082"
-        },
-        {
-          "file": "packages/db/src/services/posts.service.ts",
-          "hash": "7533747109862410614"
-        },
-        {
-          "file": "packages/db/src/services/sessions.service.ts",
-          "hash": "9493136239474374375"
-        },
-        {
-          "file": "packages/db/src/services/tags.service.ts",
-          "hash": "11643918633339647077"
-        },
-        {
-          "file": "packages/db/src/services/topics.service.ts",
-          "hash": "5227012370521660664"
-        },
-        {
-          "file": "packages/db/src/services/users.service.ts",
-          "hash": "5138499618642228758"
-        },
-        {
-          "file": "packages/db/src/types/env.d.ts",
-          "hash": "6406471666292024059"
-        },
-        {
-          "file": "packages/db/src/utils/logger.ts",
-          "hash": "15714336151793491728"
-        },
-        {
-          "file": "packages/db/tsconfig.json",
-          "hash": "13213927288338940486"
         }
       ]
     }

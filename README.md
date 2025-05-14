@@ -74,7 +74,7 @@ Readings:
 - Good article about differences between .eslintrc (default) and eslint.config.js (flat config):
   - https://www.raulmelo.me/en/blog/migration-eslint-to-flat-config
 
-ESlint job is to lint code: this means finding poorly written code / dangerous code that don't follow the defined guidelines (ours or recommended or from others (for example, Airbnb's guidelines))\
+ESlint job is to lint code: this means finding poorly written code / dangerous code that don't follow the defined guidelines (ours or recommended from others)\
 Install the VSCode extension to see the warnings and errors directly inside the code editor: without extension you would need to run the CLI commands to lint the code.
 
 In the root directory run `npm install --save-dev eslint` and create a basic eslint.config.js file.\
@@ -85,21 +85,9 @@ Since ESlint might depend on the type of code you are writing (different framewo
 Setup the file as preferred\
 Docs for Flat config: https://eslint.org/docs/latest/use/configure/configuration-files-new
 
-Install Airbnb's rules and typescript-eslint tooling (this one enables ESlint to be used with Typescript code) by running
+Install typescript-eslint tooling which enables ESlint to be used with Typescript code by running `npm install --save-dev typescript-eslint`
 
-```
-npm install --save-dev
-  eslint-config-airbnb-base
-  typescript-eslint
-```
-
-Airbnb's base configs ruleset: https://github.com/airbnb/javascript/tree/master/packages/eslint-config-airbnb-base/rules \
 typescript-eslint official installation guide and docs: https://typescript-eslint.io/packages/typescript-eslint/
-
-**_ATTENTION-3!_** As of 03/15/2024 Airbnb's base configs don't support Flat config.\
-Also run `npm install @eslint/eslintrc --save-dev`: this contains a method that lets you use legacy linting configurations from providers that haven't updated their configurations the new Flat config yet: https://www.npmjs.com/package/@eslint/eslintrc \
-
-Check the `eslint.config.js` file to see how Airbnb's legacy configs have been used and how typescript-eslint `config()` method was to wrap the default export to provide typing and intellisense: instead of using this method you could also use the following JSDoc statement with the normal default export `/** @type {import('eslint').Linter.FlatConfig[]} */`
 
 ## Prettier for ESlint
 

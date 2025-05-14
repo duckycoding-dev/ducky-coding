@@ -1,9 +1,10 @@
 ---
 import type { HTMLAttributes } from 'astro/types';
-import { cva, type VariantProps } from 'class-variance-authority';
+import { cva, type VariantProps } from 'cva';
 import { cn } from '@utils/cn';
 
-const toggleSwitchVariants = cva('relative inline-block', {
+const toggleSwitchVariants = cva({
+  base: 'relative inline-block',
   variants: {
     variant: {
       round: '[&>span]:before:rounded-full [&>span]:rounded-full',
@@ -22,22 +23,20 @@ const toggleSwitchVariants = cva('relative inline-block', {
   compoundVariants: [],
 });
 
-const innerSpanVariants = cva(
-  'slider bg-accent-700 peer-checked:bg-accent border-comic before:border-comic before:border-secondary border-secondary absolute h-full w-full cursor-pointer duration-200 before:absolute before:aspect-square before:translate-x-1 before:translate-y-0.5 before:bg-white before:duration-200 peer-checked:before:translate-y-0.5',
-  {
-    variants: {
-      size: {
-        small: 'before:w-4 peer-checked:before:translate-x-4',
-        medium: 'before:w-7 peer-checked:before:translate-x-5',
-        large: 'before:w-9 peer-checked:before:translate-x-9',
-      },
+const innerSpanVariants = cva({
+  base: 'slider bg-accent-700 peer-checked:bg-accent border-comic before:border-comic before:border-secondary border-secondary absolute h-full w-full cursor-pointer duration-200 before:absolute before:aspect-square before:translate-x-1 before:translate-y-0.5 before:bg-white before:duration-200 peer-checked:before:translate-y-0.5',
+  variants: {
+    size: {
+      small: 'before:w-4 peer-checked:before:translate-x-4',
+      medium: 'before:w-7 peer-checked:before:translate-x-5',
+      large: 'before:w-9 peer-checked:before:translate-x-9',
     },
-    defaultVariants: {
-      size: 'medium',
-    },
-    compoundVariants: [],
   },
-);
+  defaultVariants: {
+    size: 'medium',
+  },
+  compoundVariants: [],
+});
 
 export type ToggleSwitchProps = VariantProps<typeof toggleSwitchVariants>;
 
