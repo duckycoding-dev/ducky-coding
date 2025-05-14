@@ -1,9 +1,4 @@
-@import './style-reset.css';
-
-@tailwind base;
+@import 'tailwindcss';
+@import './style-reset.css' layer(base);
 @import './themes/default.css' layer(base);
 @import './themes/dark-theme.css' layer(base);
-
-@tailwind components;
-
-@tailwind utilities;
