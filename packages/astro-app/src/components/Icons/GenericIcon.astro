@@ -23,24 +23,25 @@ const genericIconVariants = cva({
 
 export type GenericIconVariantsProps = VariantProps<typeof genericIconVariants>;
 
-export type AstroIconDimensions =
-  | {
-      size: number;
-      width?: undefined;
-      height?: undefined;
-      variant?: undefined;
-    }
-  | {
-      size?: undefined;
-      width: number;
-      height: number;
-      variant?: undefined;
-    }
-  | ({
-      size?: undefined;
-      width?: undefined;
-      height?: undefined;
-    } & Pick<GenericIconVariantsProps, 'variant'>);
+type AstroIconSizeOnly = {
+  size: number;
+  width?: undefined;
+  height?: undefined;
+  variant?: undefined;
+};
+type AstroIconWidthHeightOnly = {
+  size?: undefined;
+  width: number;
+  height: number;
+  variant?: undefined;
+};
+type AstroIconVariantOnly = {
+  size?: undefined;
+  width?: undefined;
+  height?: undefined;
+} & Pick<GenericIconVariantsProps, 'variant'>;
+
+export type AstroIconDimensions = AstroIconSizeOnly | AstroIconWidthHeightOnly | AstroIconVariantOnly;
 
 export interface AstroIconBasicProps {
   name: string;

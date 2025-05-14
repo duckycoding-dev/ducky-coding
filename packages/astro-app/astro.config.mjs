@@ -92,10 +92,10 @@ export default defineConfig({
       // cssMinify: 'lightningcss',
       sourcemap: true,
     },
+    plugins: [tailwindcss()],
   }, // add Vite configs TODO
   integrations: [
     mdx(),
-    tailwindcss(),
     sitemap(),
     icon({
       iconDir: 'src/assets/icons', // user svgs stored in this path instead of src/icons

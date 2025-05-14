@@ -13,7 +13,7 @@ const { props }: { props: Props } = Astro;
 ---
 
 <label class='flex flex-col gap-1' for={props.id} id={`${props.id}-label`}>
-  <span class='text-primary-900 font-semibold'>
+  <span class='text-secondary-900 font-semibold'>
     <slot />
     {
       props.required && (
