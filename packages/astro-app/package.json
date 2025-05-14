@@ -36,7 +36,6 @@
     "@astrojs/mdx": "^4.2.6",
     "@astrojs/netlify": "^6.3.3",
     "@astrojs/sitemap": "^3.4.0",
-    "@astrojs/tailwind": "^6.0.2",
     "@ducky-coding/db": "*",
     "@ducky-coding/types": "*",
     "@ducky-coding/utils": "*",
@@ -49,7 +48,7 @@
     "clsx": "^2.1.1",
     "cva": "^1.0.0-beta.3",
     "tailwind-merge": "^3.3.0",
-    "tailwindcss": "^4.1.6"
+    "tailwindcss": "^3.4.1"
   },
   "devDependencies": {
     "prettier-plugin-astro": "^0.14.1"
