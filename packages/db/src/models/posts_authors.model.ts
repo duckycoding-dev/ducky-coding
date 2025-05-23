@@ -5,20 +5,20 @@ import { PostsTable } from './posts.model';
 import { UsersTable } from './users.model';
 
 export const PostsAuthorsTable = sqliteTable(
-  'postsAuthors',
+  'posts_authors',
   {
-    postId: integer('postId')
+    postId: integer()
       .notNull()
       .references(() => PostsTable.id),
-    authorId: integer('authorId')
+    authorId: integer()
       .notNull()
       .references(() => UsersTable.id),
   },
-  (table) => ({
-    compositePrimaryKey: primaryKey({
+  (table) => [
+    primaryKey({
       columns: [table.postId, table.authorId],
     }),
-  }),
+  ],
 );
 
 export const PostsAuthorsSchema = z.object({

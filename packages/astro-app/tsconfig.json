@@ -1,7 +1,7 @@
 {
   "extends": ["../../tsconfig.json", "astro/tsconfigs/strict"],
-  "include": [".astro/types.d.ts", "**/*"],
-  "exclude": ["./dist/**/*"],
+  "include": ["src/**/*"],
+  "exclude": ["./dist/**/*", ".netlify", ".astro/types.d.ts"],
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {

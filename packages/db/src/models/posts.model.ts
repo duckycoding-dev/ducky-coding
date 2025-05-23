@@ -11,26 +11,26 @@ import { ImagesTable, ImageSchema } from './images.model';
 import { UserSchema } from './users.model';
 
 export const PostsTable = sqliteTable('posts', {
-  id: integer('id').primaryKey({ autoIncrement: true }),
-  slug: text('slug').notNull(),
-  title: text('title').notNull(),
-  bannerImageId: integer('bannerImageId').references(() => ImagesTable.id),
-  summary: text('summary').notNull(),
-  content: text('content').notNull(),
-  topicTitle: text('topicTitle')
+  id: integer().primaryKey({ autoIncrement: true }),
+  slug: text().notNull(),
+  title: text().notNull(),
+  bannerImageId: integer().references(() => ImagesTable.id),
+  summary: text().notNull(),
+  content: text().notNull(),
+  topicTitle: text()
     .references(() => TopicsTable.title)
     .notNull(),
-  language: text('language').notNull(),
-  timeToRead: integer('timeToRead').notNull().default(1), // value representing minutes
-  status: text('status').$type<ContentStatus>().notNull().default('draft'), // value should be one of [draft, published, deleted] (can't yet use enums )
-  createdAt: integer('createdAt', { mode: 'number' })
+  language: text().notNull(),
+  timeToRead: integer().notNull().default(1), // value representing minutes
+  status: text().$type<ContentStatus>().notNull().default('draft'), // value should be one of [draft, published, deleted] (can't yet use enums )
+  createdAt: integer({ mode: 'number' })
     .notNull()
     .default(sql`(strftime('%s', 'now'))`),
-  updatedAt: integer('updatedAt', { mode: 'number' })
+  updatedAt: integer({ mode: 'number' })
     .notNull()
     .default(sql`(strftime('%s', 'now'))`),
-  publishedAt: integer('publishedAt', { mode: 'number' }),
-  deletedAt: integer('deletedAt', { mode: 'number' }), // need to use date type instead of integer maybe
+  publishedAt: integer({ mode: 'number' }),
+  deletedAt: integer({ mode: 'number' }), // need to use date type instead of integer maybe
 });
 
 export const PostSchema = z.object({

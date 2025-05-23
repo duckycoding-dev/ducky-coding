@@ -28,6 +28,7 @@ export async function getStaticPaths() {
   const syncResults = await Promise.allSettled(syncPromises);
   syncResults.forEach((result, index) => {
     if (result.status === 'rejected') {
+      console.log('Post sync fail reason: ', result.reason);
       failedSyncs.push(postsEntries[index]);
     }
   });
@@ -113,7 +114,7 @@ if (imageToFindPath) {
             <Link
               variant='unstyled'
               href={`/topics/${tag}`}
-              class='text-primary'
+              class='text-secondary'
             >
               <Tag class={`${index % 2 === 0 ? 'bg-accent2' : 'bg-accent'}`}>
                 {tag}

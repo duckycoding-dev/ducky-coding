@@ -70,13 +70,9 @@ The css files need to be imported in the global stylesheet (`global.css` in our 
 /* global.css */
 @import './style-reset.css';
 
-@import 'tailwindcss/base';
+@import 'tailwindcss';
 @import './themes/default.css' layer(base);
 @import './themes/dark-theme.css' layer(base);
-
-@import 'tailwindcss/components';
-
-@import 'tailwindcss/utilities';
 ```
 
 We will first import the stylesheet that handles resetting all the css rules, so that it won't accidentally affect other custom styles we will create.
@@ -86,4 +82,6 @@ Then we import the tailwind styles and our custom ones.\
 The `@import 'path' layer(name)` directive (the second part corresponds to the `@layer name` css directive) imports the css file specified and inserts it inside the specified layer.\
 Layers allow us to organize css rules even more, more info [here](https://developer.mozilla.org/en-US/docs/Web/CSS/@layer)
 
-`@import 'tailwindcss/base'` is the same as doing `@tailwind base`, but the latter introduces some issues using external files with @layer, so we use the first.
+# using tailwind @apply in Astro <style> block
+
+In order to have access to the global css file inside an Astro `<style>` it needs to be referenced like so: `@reference '@styles/global.css'` as shown in [the official Tailwind v4 docs](https://tailwindcss.com/docs/upgrade-guide#using-apply-with-vue-svelte-or-css-modules)

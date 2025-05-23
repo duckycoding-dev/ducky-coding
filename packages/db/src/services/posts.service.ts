@@ -14,15 +14,11 @@ import { UsersService } from './users.service';
 
 const getPost = async (postId: number): Promise<PostDTO | undefined> => {
   const selectedPosts = await PostsRepository.getPosts([postId]);
-  if (selectedPosts.length === 0) return undefined;
-
-  const postDTO: PostDTO = selectedPosts[0];
-  return postDTO;
+  return selectedPosts[0];
 };
 
 const getPostBySlug = async (slug: string): Promise<PostDTO | undefined> => {
   const selectedPosts = await PostsRepository.getPostsBySlug([slug]);
-  if (selectedPosts.length === 0) return undefined;
   return selectedPosts[0];
 };
 

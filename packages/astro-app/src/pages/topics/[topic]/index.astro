@@ -100,7 +100,7 @@ const processedPosts = await Promise.all(
     {
       processedTopic.imageSrc ? (
         <Image
-          class='aspect-square h-10 w-10 [filter:drop-shadow(0px_0px_3px_black)_drop-shadow(0px_0px_5px_black)]'
+          class='aspect-square h-10 w-10 filter-[drop-shadow(0px_0px_3px_black)_drop-shadow(0px_0px_5px_black)]'
           src={processedTopic.imageSrc}
           height={40}
           width={40}
@@ -132,7 +132,7 @@ const processedPosts = await Promise.all(
       </ul>
     ) : (
       <>
-        <h2 class='text-balance text-center text-2xl font-extrabold md:text-left'>
+        <h2 class='text-center text-2xl font-extrabold text-balance md:text-left'>
           {`There isn't any content about ${processedTopic.title} yet :'(`}
         </h2>
         <h3 class='text-center text-xl font-extrabold md:text-left'>

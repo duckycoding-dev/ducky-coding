@@ -29,13 +29,13 @@ const { class: className, ...props }: Props = Astro.props;
       densities={[1.5, 2]}
       class='max-w-none'
     />
-    <h2 class='text-primary text-3xl md:hidden lg:block'>DuckyCoding</h2>
+    <h2 class='text-secondary text-3xl md:hidden lg:block'>DuckyCoding</h2>
   </div>
   <ul class='flex h-full flex-col gap-4 md:flex-row md:items-center'>
     <li>
       <Link
         href={'/'}
-        class={'text-3xl md:text-base text-primary font-medium w-full'}
+        class={'text-3xl md:text-base text-secondary font-medium w-full'}
         >Home</Link
       >
     </li>
@@ -43,7 +43,7 @@ const { class: className, ...props }: Props = Astro.props;
       <Link
         href={'/topics'}
         size={'medium'}
-        class={'text-3xl md:text-base text-primary font-medium w-full'}
+        class={'text-3xl md:text-base text-secondary font-medium w-full'}
         >Topics</Link
       >
     </li>
@@ -51,7 +51,7 @@ const { class: className, ...props }: Props = Astro.props;
       <Link
         href={'/components'}
         size={'medium'}
-        class={'text-3xl md:text-base text-primary font-medium w-full'}
+        class={'text-3xl md:text-base text-secondary font-medium w-full'}
         >Components</Link
       >
     </li>

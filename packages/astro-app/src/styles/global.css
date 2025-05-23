@@ -1,9 +1,90 @@
-@import './style-reset.css';
-
-@import 'tailwindcss/base';
+@import 'tailwindcss';
+@import './style-reset.css' layer(base);
 @import './themes/default.css' layer(base);
 @import './themes/dark-theme.css' layer(base);
 
-@import 'tailwindcss/components';
+@theme {
+  --breakpoint-xs: 375px;
+  --breakpoint-sm: 480px;
+  --breakpoint-md: 768px;
+  --breakpoint-lg: 976px;
+  --breakpoint-xl: 1440px;
 
-@import 'tailwindcss/utilities';
+  --font-inter: 'Inter', 'sans-serif';
+  --font-poppins: 'Poppins', 'sans-serif';
+  --font-roboto: 'Roboto', 'sans-serif';
+
+  --color-primary: var(--color-primary);
+  --color-primary-100: var(--color-primary-100);
+  --color-primary-200: var(--color-primary-200);
+  --color-primary-300: var(--color-primary-300);
+  --color-primary-400: var(--color-primary-400);
+  --color-primary-500: var(--color-primary-500);
+  --color-primary-600: var(--color-primary-600);
+  --color-primary-700: var(--color-primary-700);
+  --color-primary-800: var(--color-primary-800);
+  --color-primary-900: var(--color-primary-900);
+  --color-secondary: var(--color-secondary);
+  --color-secondary-100: var(--color-secondary-100);
+  --color-secondary-200: var(--color-secondary-200);
+  --color-secondary-300: var(--color-secondary-300);
+  --color-secondary-400: var(--color-secondary-400);
+  --color-secondary-500: var(--color-secondary-500);
+  --color-secondary-600: var(--color-secondary-600);
+  --color-secondary-700: var(--color-secondary-700);
+  --color-secondary-800: var(--color-secondary-800);
+  --color-secondary-900: var(--color-secondary-900);
+  --color-accent: var(--color-accent);
+  --color-accent-100: var(--color-accent-100);
+  --color-accent-200: var(--color-accent-200);
+  --color-accent-300: var(--color-accent-300);
+  --color-accent-400: var(--color-accent-400);
+  --color-accent-500: var(--color-accent-500);
+  --color-accent-600: var(--color-accent-600);
+  --color-accent-700: var(--color-accent-700);
+  --color-accent-800: var(--color-accent-800);
+  --color-accent-900: var(--color-accent-900);
+  --color-accent2: var(--color-accent2);
+  --color-accent2-100: var(--color-accent2-100);
+  --color-accent2-200: var(--color-accent2-200);
+  --color-accent2-300: var(--color-accent2-300);
+  --color-accent2-400: var(--color-accent2-400);
+  --color-accent2-500: var(--color-accent2-500);
+  --color-accent2-600: var(--color-accent2-600);
+  --color-accent2-700: var(--color-accent2-700);
+  --color-accent2-800: var(--color-accent2-800);
+  --color-accent2-900: var(--color-accent2-900);
+  --color-accent3: var(--color-accent3);
+  --color-accent3-100: var(--color-accent3-100);
+  --color-accent3-200: var(--color-accent3-200);
+  --color-accent3-300: var(--color-accent3-300);
+  --color-accent3-400: var(--color-accent3-400);
+  --color-accent3-500: var(--color-accent3-500);
+  --color-accent3-600: var(--color-accent3-600);
+  --color-accent3-700: var(--color-accent3-700);
+  --color-accent3-800: var(--color-accent3-800);
+  --color-accent3-900: var(--color-accent3-900);
+  --color-success: var(--color-success);
+  --color-warning: var(--color-warning);
+  --color-danger: var(--color-danger);
+}
+
+@utility shadow-comic {
+  box-shadow: 0.1rem 0.1rem 0rem 0.1rem;
+}
+
+@utility shadow-comic-lg {
+  box-shadow: 0.3rem 0.3rem 0rem 0.1rem;
+}
+
+@utility shadow-comic-xl {
+  box-shadow: 0.5rem 0.65rem 0rem 0.1rem;
+}
+
+@utility shadow-comic-pressed {
+  box-shadow: -0.1rem -0.075rem 0rem 0.1rem;
+}
+
+@utility border-comic {
+  border-width: 2px;
+}

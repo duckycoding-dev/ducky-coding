@@ -68,12 +68,12 @@ const processedTopics = await Promise.all(
   .grid-container {
     grid-template-columns: 1fr;
   }
-  @media (width >= theme('screens.xs')) {
+  @media (width >= var(--breakpoint-xs)) {
     .grid-container {
       grid-template-columns: repeat(2, minmax(100px, 1fr));
     }
   }
-  @media (width >= theme('screens.sm')) {
+  @media (width >= var(--breakpoint-sm)) {
     .grid-container {
       grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
     }

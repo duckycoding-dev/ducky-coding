@@ -40,7 +40,7 @@ const { post, bannerImage, class: className, loading = 'lazy' } = props;
       class='bg-primary-700 h-48 w-full object-cover'
     />
     <footer
-      class='border-secondary flex grow flex-col gap-2 border-t-4 pb-4 pt-2.5'
+      class='border-secondary flex grow flex-col gap-2 border-t-4 pt-2.5 pb-4'
     >
       <h2 class='px-5 text-2xl font-black'>
         {post.data.title}
@@ -72,6 +72,7 @@ const { post, bannerImage, class: className, loading = 'lazy' } = props;
 </Link>
 
 <style>
+  @reference '@styles/global.css';
   .card {
     container-name: card;
     container-type: inline-size;
