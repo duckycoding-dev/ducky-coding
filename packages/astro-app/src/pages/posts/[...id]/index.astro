@@ -28,6 +28,7 @@ export async function getStaticPaths() {
   const syncResults = await Promise.allSettled(syncPromises);
   syncResults.forEach((result, index) => {
     if (result.status === 'rejected') {
+      console.log('Post sync fail reason: ', result.reason);
       failedSyncs.push(postsEntries[index]);
     }
   });
