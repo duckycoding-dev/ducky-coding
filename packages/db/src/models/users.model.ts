@@ -5,15 +5,13 @@ import { sql } from 'drizzle-orm';
 import { ImagesTable } from './images.model';
 
 export const UsersTable = sqliteTable('users', {
-  id: integer('id').primaryKey({ autoIncrement: true }).unique().notNull(),
-  username: text('username').unique().notNull(),
-  email: text('email').unique().notNull(),
-  password: text('password').notNull(),
-  name: text('name').notNull(),
-  lastName: text('lastName'),
-  profilePictureId: integer('profilePictureId').references(
-    () => ImagesTable.id,
-  ),
+  id: integer().primaryKey({ autoIncrement: true }).unique().notNull(),
+  username: text().unique().notNull(),
+  email: text().unique().notNull(),
+  password: text().notNull(),
+  name: text().notNull(),
+  lastName: text(),
+  profilePictureId: integer().references(() => ImagesTable.id),
   bio: text('bio'),
   createdAt: integer('createdAt', { mode: 'number' })
     .notNull()

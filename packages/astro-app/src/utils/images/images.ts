@@ -1,4 +1,5 @@
 import type { ClientLogger, ServerLogger } from '@ducky-coding/utils/logger';
+import type { ImageMetadata } from 'astro';
 
 /**
  *
@@ -17,7 +18,7 @@ export async function matchImageFromGlobImport(
 
   const fullPath = `/src/assets/images/${relativePath}`;
   try {
-    return (await images[fullPath]())?.default;
+    return (await images[fullPath]?.())?.default;
   } catch (err) {
     logger?.error(`Can't find any image with path ${fullPath}`);
   }

@@ -3,10 +3,7 @@ import { TopicsRepository } from '../repositories/topics.repository';
 
 const getTopic = async (topicTitle: string): Promise<TopicDTO | undefined> => {
   const selectedTopics = await TopicsRepository.getTopics([topicTitle]);
-  if (selectedTopics.length === 0) return undefined;
-
-  const topicDTO: TopicDTO = selectedTopics[0];
-  return topicDTO;
+  return selectedTopics[0];
 };
 
 const getTopics = async (topicTitles: string[]): Promise<TopicDTO[]> => {

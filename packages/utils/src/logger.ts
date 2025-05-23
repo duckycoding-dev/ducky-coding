@@ -153,7 +153,7 @@ class ServerImpl extends LoggerImpl implements ServerLogger {
 
   private showColoredOutput: boolean;
 
-  protected logLogic(
+  protected override logLogic(
     level: LogLevel,
     message: string,
     ...args: unknown[]

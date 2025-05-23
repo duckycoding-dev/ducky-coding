@@ -8,10 +8,7 @@ import type { InsertUser } from '../models';
 
 const getUser = async (userId: number): Promise<UserDTO | undefined> => {
   const selectedUsers = await UsersRepository.getUsers([userId]);
-  if (selectedUsers.length === 0) return undefined;
-
-  const userDTO: UserDTO = selectedUsers[0];
-  return userDTO;
+  return selectedUsers[0];
 };
 
 const getUsersByField = async (fieldValuePair: {

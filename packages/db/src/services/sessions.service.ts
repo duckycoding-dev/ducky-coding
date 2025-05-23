@@ -7,10 +7,7 @@ const getSessionByRefreshToken = async (
   sessionTitle: string,
 ): Promise<SessionDTO | undefined> => {
   const selectedSessions = await SessionsRepository.getSessions([sessionTitle]);
-  if (selectedSessions.length === 0) return undefined;
-
-  const sessionDTO: SessionDTO = selectedSessions[0];
-  return sessionDTO;
+  return selectedSessions[0];
 };
 
 const getSessionByRefreshTokenAndUserId = async (
@@ -23,9 +20,7 @@ const getSessionByRefreshTokenAndUserId = async (
       userId,
     );
   if (selectedSessions.length === 0) return undefined;
-
-  const sessionDTO: SessionDTO = selectedSessions[0];
-  return sessionDTO;
+  return selectedSessions[0];
 };
 
 const insertSession = async (

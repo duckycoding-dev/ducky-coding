@@ -2,7 +2,7 @@ import type { TagDTO } from '@ducky-coding/types/DTOs';
 import { sqliteTable, text } from 'drizzle-orm/sqlite-core';
 
 export const TagsTable = sqliteTable('tags', {
-  name: text('name').primaryKey().unique().notNull(),
+  name: text().primaryKey().unique().notNull(),
 });
 
 export type InsertTag = typeof TagsTable.$inferInsert;

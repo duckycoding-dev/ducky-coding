@@ -3,10 +3,7 @@ import { TagsRepository } from '../repositories/tags.repository';
 
 const getTag = async (tagTitle: string): Promise<TagDTO | undefined> => {
   const selectedTags = await TagsRepository.getTags([tagTitle]);
-  if (selectedTags.length === 0) return undefined;
-
-  const tagDTO: TagDTO = selectedTags[0];
-  return tagDTO;
+  return selectedTags[0];
 };
 
 const getTags = async (tagTitles: string[]): Promise<TagDTO[]> => {

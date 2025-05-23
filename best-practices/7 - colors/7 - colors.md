@@ -20,6 +20,8 @@ Now, if I were to change theme, I would want to **NOT CHANGE THE HTML** and to *
 
 ### Text colors
 
+**How it was with Tailwind v3 (left for reference)**
+
 Since, as we said, text colors would mostly use the secondary color most of the times, would it make sense to override the colors just for the texts?\
 The result I'm thinking about would be the following:\
 
@@ -81,3 +83,5 @@ export default {
 ```
 
 We could save all colors and other config object in const variables to clean up the final exported config object as well, for readibility.
+
+**TAILWIND V4 ISSUE:**: I could not figure out how to achieve this using tailwind v4 css config: thus I've reverted it and now `text-primary` points to `--color-primary` and `text-secondary` points to `--color-secondary`

@@ -10,18 +10,16 @@ import { PostsTable } from './posts.model';
 import { TagsTable } from './tags.model';
 
 export const PostsTagsTable = sqliteTable(
-  'postsTags',
+  'posts_tags',
   {
-    postId: integer('postId')
+    postId: integer()
       .notNull()
       .references(() => PostsTable.id),
-    tagName: text('tagName')
+    tagName: text()
       .notNull()
       .references(() => TagsTable.name),
   },
-  (table) => ({
-    compositePrimaryKey: primaryKey({ columns: [table.postId, table.tagName] }),
-  }),
+  (table) => [primaryKey({ columns: [table.postId, table.tagName] })],
 );
 
 export const PostsTagsSchema = z.object({

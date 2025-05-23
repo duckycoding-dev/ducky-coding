@@ -1,9 +1,9 @@
 import { defineConfig } from 'astro/config';
 import mdx from '@astrojs/mdx';
-import tailwind from '@astrojs/tailwind';
 import sitemap from '@astrojs/sitemap';
 import icon from 'astro-icon';
 import netlify from '@astrojs/netlify';
+import tailwindcss from '@tailwindcss/vite';
 // properties without "--DEFAULT--" either use a setting decided by me or/and didn't have a default value
 
 // https://astro.build/config
@@ -92,10 +92,10 @@ export default defineConfig({
       // cssMinify: 'lightningcss',
       sourcemap: true,
     },
+    plugins: [tailwindcss()],
   }, // add Vite configs TODO
   integrations: [
     mdx(),
-    tailwind({ applyBaseStyles: false }),
     sitemap(),
     icon({
       iconDir: 'src/assets/icons', // user svgs stored in this path instead of src/icons

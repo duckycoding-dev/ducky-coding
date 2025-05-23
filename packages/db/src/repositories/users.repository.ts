@@ -171,7 +171,7 @@ const findUserByField = async (fieldValuePair: {
     .from(UsersTable)
     .where(whereClause)
     .limit(1);
-  if (users.length === 0) return false;
+  if (users[0] === undefined) return false;
   return true;
 };
 
@@ -187,7 +187,7 @@ const getUserProfilePicture = async (
     .where(eq(UsersTable.id, userId))
     .limit(1);
 
-  if (image.length === 0) return undefined;
+  if (image[0] === undefined) return undefined;
   return mapToImageDTO(image[0].image);
 };
 

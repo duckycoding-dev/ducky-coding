@@ -26,7 +26,7 @@ const { class: className, ...props }: Props = Astro.props;
       <h2 class='text-center text-2xl font-extrabold md:text-start'>
         Stay in touch
       </h2>
-      <div class='flex justify-center pb-6 pt-8 md:pb-12'>
+      <div class='flex justify-center pt-8 pb-6 md:pb-12'>
         <AnimatedWheel
           itemSize={50}
           spinDuration={10}
@@ -49,7 +49,7 @@ const { class: className, ...props }: Props = Astro.props;
         <li>
           <Link
             href={'/'}
-            class={'text-xl md:text-base text-primary font-medium w-full flex items-center gap-4 '}
+            class={'text-xl md:text-base text-secondary font-medium w-full flex items-center gap-4 '}
           >
             <DuckIcon title='' variant={'small'} class='inline' />
             Home
@@ -58,7 +58,7 @@ const { class: className, ...props }: Props = Astro.props;
         <li>
           <Link
             href={'/md/test'}
-            class={'text-xl md:text-base text-primary font-medium w-full flex items-center gap-4'}
+            class={'text-xl md:text-base text-secondary font-medium w-full flex items-center gap-4'}
           >
             <DuckIcon title='' variant={'small'} class='inline' />
             Test Markdown
@@ -67,7 +67,7 @@ const { class: className, ...props }: Props = Astro.props;
         <li>
           <Link
             href={'/about'}
-            class={'text-xl md:text-base text-primary font-medium w-full flex items-center gap-4'}
+            class={'text-xl md:text-base text-secondary font-medium w-full flex items-center gap-4'}
           >
             <DuckIcon title='' variant={'small'} class='inline' />
             About me
@@ -77,7 +77,7 @@ const { class: className, ...props }: Props = Astro.props;
           <Link
             href={'/topics'}
             size={'medium'}
-            class={'text-xl md:text-base text-primary font-medium w-full flex items-center gap-4'}
+            class={'text-xl md:text-base text-secondary font-medium w-full flex items-center gap-4'}
           >
             <DuckIcon title='' variant={'small'} class='inline' />
             Topics
@@ -87,7 +87,7 @@ const { class: className, ...props }: Props = Astro.props;
           <Link
             href={'/components'}
             size={'medium'}
-            class={'text-xl md:text-base text-primary font-medium w-full flex items-center gap-4'}
+            class={'text-xl md:text-base text-secondary font-medium w-full flex items-center gap-4'}
           >
             <DuckIcon title='' variant={'small'} class='inline' />
             Components
