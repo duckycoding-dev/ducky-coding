@@ -1,5 +1,6 @@
 import type { TagDTO } from '@ducky-coding/types/DTOs';
 import { sqliteTable, text } from 'drizzle-orm/sqlite-core';
+import { z } from 'zod';
 
 export const TagsTable = sqliteTable('tags', {
   name: text().primaryKey().unique().notNull(),
@@ -7,6 +8,10 @@ export const TagsTable = sqliteTable('tags', {
 
 export type InsertTag = typeof TagsTable.$inferInsert;
 export type Tag = typeof TagsTable.$inferSelect;
+
+export const TagSchema = z.object({
+  name: z.string(),
+});
 
 export function mapToTagDTO(selectedTag: Tag): TagDTO {
   return {

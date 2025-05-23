@@ -4,15 +4,10 @@ import type {
   UserDTO,
   UserWithProfilePictureDTO,
 } from '@ducky-coding/types/DTOs';
-import { db } from '../client';
-import {
-  ImagesTable,
-  type InsertUser,
-  mapToImageDTO,
-  mapToUserDTO,
-  UsersTable,
-} from '../models';
-import { mapToUserWithProfilePictureDTO } from '../mappers/users.mappers';
+import { db } from '../../client';
+import { type InsertUser, mapToUserDTO, UsersTable } from './users.model';
+import { ImagesTable, mapToImageDTO } from '../images/images.model';
+import { mapToUserWithProfilePictureDTO } from '../users/users.mappers';
 
 const getUsers = async (userIds: number[]): Promise<UserDTO[]> => {
   const users = await db

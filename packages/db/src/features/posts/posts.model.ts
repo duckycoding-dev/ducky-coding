@@ -6,9 +6,9 @@ import {
   ContentStatusSchema,
 } from '@ducky-coding/types/entities';
 import type { PostDTO } from '@ducky-coding/types/DTOs';
-import { TopicsTable, TopicSchema } from './topics.model';
-import { ImagesTable, ImageSchema } from './images.model';
-import { UserSchema } from './users.model';
+import { TopicsTable, TopicSchema } from '../topics/topics.model';
+import { ImagesTable, ImageSchema } from '../images/images.model';
+import { UserSchema } from '../users/users.model';
 
 export const PostsTable = sqliteTable('posts', {
   id: integer().primaryKey({ autoIncrement: true }),

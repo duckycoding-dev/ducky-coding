@@ -8,9 +8,9 @@ import {
   type PostWithAuthorAndBannerImageAndTagsDTO,
   type PostWithAuthorAndBannerImageDTO,
 } from '@ducky-coding/types/DTOs';
-import { PostsRepository } from '../repositories/posts.repository';
-import type { InsertPost } from '../models';
-import { UsersService } from './users.service';
+import { PostsRepository } from './posts.repository';
+import { UsersService } from '../users/users.service';
+import type { InsertPost } from './posts.model';
 
 const getPost = async (postId: number): Promise<PostDTO | undefined> => {
   const selectedPosts = await PostsRepository.getPosts([postId]);

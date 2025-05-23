@@ -1,5 +1,6 @@
 import type { UserWithProfilePictureDTO } from '@ducky-coding/types/DTOs';
-import { type Image, mapToUserDTO, type User } from '../models';
+import { mapToUserDTO, type User } from './users.model';
+import type { Image } from '../images/images.model';
 
 export function mapToUserWithProfilePictureDTO(
   user: User,

@@ -7,7 +7,7 @@ import {
 import { z } from 'zod';
 import type { PostTagDTO } from '@ducky-coding/types/DTOs';
 import { PostsTable } from './posts.model';
-import { TagsTable } from './tags.model';
+import { TagsTable } from '../tags/tags.model';
 
 export const PostsTagsTable = sqliteTable(
   'posts_tags',

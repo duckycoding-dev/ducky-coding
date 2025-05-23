@@ -2,7 +2,7 @@ import type { UserDTO } from '@ducky-coding/types/DTOs';
 import { text, sqliteTable, integer } from 'drizzle-orm/sqlite-core';
 import { z } from 'zod';
 import { sql } from 'drizzle-orm';
-import { ImagesTable } from './images.model';
+import { ImagesTable } from '../images/images.model';
 
 export const UsersTable = sqliteTable('users', {
   id: integer().primaryKey({ autoIncrement: true }).unique().notNull(),

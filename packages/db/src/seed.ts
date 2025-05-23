@@ -1,5 +1,6 @@
 import { db } from './client';
-import { TagsTable, TopicsTable } from './models';
+import { TagsTable } from './features/tags/tags.model';
+import { TopicsTable } from './features/topics/topics.model';
 
 export default async function seed() {
   // TODO

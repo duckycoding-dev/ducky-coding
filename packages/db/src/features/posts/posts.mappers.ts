@@ -1,12 +1,7 @@
 import type { PostWithAuthorAndBannerImageDTO } from '@ducky-coding/types/DTOs';
-import {
-  type Image,
-  mapToImageDTO,
-  mapToPostDTO,
-  mapToUserDTO,
-  type Post,
-  type User,
-} from '../models';
+import { type Image, mapToImageDTO } from '../images/images.model';
+import { type User, mapToUserDTO } from '../users/users.model';
+import { type Post, mapToPostDTO } from './posts.model';
 
 export function mapToPostWithAuthorAndBannerImageDTO(
   selectedPost: Post,

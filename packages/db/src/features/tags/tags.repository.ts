@@ -1,7 +1,7 @@
 import { inArray } from 'drizzle-orm';
 import type { TagDTO } from '@ducky-coding/types/DTOs';
-import { db } from '../client';
-import { mapToTagDTO, TagsTable } from '../models';
+import { db } from '../../client';
+import { mapToTagDTO, TagsTable } from './tags.model';
 
 const getTags = async (tagNames: string[]): Promise<TagDTO[]> => {
   const tags = await db

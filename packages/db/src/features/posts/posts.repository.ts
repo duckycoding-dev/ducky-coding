@@ -6,22 +6,22 @@ import type {
   PostWithAuthorAndBannerImageAndTagsDTO,
   PostWithAuthorAndBannerImageDTO,
 } from '@ducky-coding/types/DTOs';
-import { db } from '../client';
+import { db } from '../../client';
+import { mapToPostWithAuthorAndBannerImageDTO } from './posts.mappers';
+import { TagsRepository } from '../tags/tags.repository';
+import { ImagesTable } from '../images/images.model';
+import { UsersTable } from '../users/users.model';
+import { PostsTable, mapToPostDTO, type InsertPost } from './posts.model';
 import {
-  ImagesTable,
-  type InsertPost,
-  type InsertPostAuthor,
-  type InsertPostTag,
-  mapToPostAuthorDTO,
-  mapToPostDTO,
-  mapToPostTagDTO,
   PostsAuthorsTable,
-  PostsTable,
+  type InsertPostAuthor,
+  mapToPostAuthorDTO,
+} from './posts_authors.model';
+import {
   PostsTagsTable,
-  UsersTable,
-} from '../models';
-import { mapToPostWithAuthorAndBannerImageDTO } from '../mappers/posts.mappers';
-import { TagsRepository } from './tags.repository';
+  mapToPostTagDTO,
+  type InsertPostTag,
+} from './posts_tags.model';
 
 const getPosts = async (postIds: number[]): Promise<PostDTO[]> => {
   const posts = await db

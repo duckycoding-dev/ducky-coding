@@ -1,8 +1,9 @@
 import { eq, inArray } from 'drizzle-orm';
 import type { TopicDTO, TopicWithImageDTO } from '@ducky-coding/types/DTOs';
-import { db } from '../client';
-import { ImagesTable, mapToTopicDTO, TopicsTable } from '../models';
-import { mapToTopicWithImageDTO } from '../mappers/topics.mappers';
+import { db } from '../../client';
+import { ImagesTable } from '../images/images.model';
+import { mapToTopicWithImageDTO } from './topics.mappers';
+import { TopicsTable, mapToTopicDTO } from './topics.model';
 
 const getTopics = async (topicTitles: string[]): Promise<TopicDTO[]> => {
   const topics = await db

@@ -1,5 +1,5 @@
 import type { TopicDTO, TopicWithImageDTO } from '@ducky-coding/types/DTOs';
-import { TopicsRepository } from '../repositories/topics.repository';
+import { TopicsRepository } from './topics.repository';
 
 const getTopic = async (topicTitle: string): Promise<TopicDTO | undefined> => {
   const selectedTopics = await TopicsRepository.getTopics([topicTitle]);

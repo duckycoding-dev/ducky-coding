@@ -1,5 +1,5 @@
 import type { TagDTO } from '@ducky-coding/types/DTOs';
-import { TagsRepository } from '../repositories/tags.repository';
+import { TagsRepository } from './tags.repository';
 
 const getTag = async (tagTitle: string): Promise<TagDTO | undefined> => {
   const selectedTags = await TagsRepository.getTags([tagTitle]);

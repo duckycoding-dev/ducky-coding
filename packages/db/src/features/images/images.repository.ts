@@ -1,7 +1,7 @@
 import { inArray, sql } from 'drizzle-orm';
 import type { CreateImageDTO, ImageDTO } from '@ducky-coding/types/DTOs';
-import { db } from '../client';
-import { ImagesTable, mapToImageDTO } from '../models';
+import { db } from '../../client';
+import { ImagesTable, mapToImageDTO } from './images.model';
 
 const getImages = async (imageIds: number[]): Promise<ImageDTO[]> => {
   const images = await db

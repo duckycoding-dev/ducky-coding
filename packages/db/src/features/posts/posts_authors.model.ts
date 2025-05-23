@@ -2,7 +2,7 @@ import { sqliteTable, integer, primaryKey } from 'drizzle-orm/sqlite-core';
 import { z } from 'zod';
 import type { PostAuthorDTO } from '@ducky-coding/types/DTOs';
 import { PostsTable } from './posts.model';
-import { UsersTable } from './users.model';
+import { UsersTable } from '../users/users.model';
 
 export const PostsAuthorsTable = sqliteTable(
   'posts_authors',

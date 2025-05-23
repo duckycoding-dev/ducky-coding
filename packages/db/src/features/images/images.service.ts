@@ -3,7 +3,7 @@ import {
   CreateImageDTOSchema,
   type ImageDTO,
 } from '@ducky-coding/types/DTOs';
-import { ImagesRepository } from '../repositories/images.repository';
+import { ImagesRepository } from './images.repository';
 
 const getImage = async (imageId: number): Promise<ImageDTO | undefined> => {
   const selectedImages = await ImagesRepository.getImages([imageId]);

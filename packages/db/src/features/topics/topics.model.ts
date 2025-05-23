@@ -1,8 +1,8 @@
 import { integer, text, sqliteTable } from 'drizzle-orm/sqlite-core';
 import { z } from 'zod';
 import type { TopicDTO } from '@ducky-coding/types/DTOs';
-import { TagsTable } from './tags.model';
-import { ImagesTable } from './images.model';
+import { TagsTable } from '../tags/tags.model';
+import { ImagesTable } from '../images/images.model';
 
 export const TopicsTable = sqliteTable('topics', {
   title: text()
