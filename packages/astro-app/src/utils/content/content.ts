@@ -6,7 +6,13 @@ import {
 import type { CreatePostDTO } from '@ducky-coding/types/DTOs';
 
 export async function syncPostWithDatabase(post: PostContent, slug: string) {
-  let bannerImage = await ImagesService.getImageByPath(post.bannerImage.path);
+  let bannerImage = null;
+  try {
+    bannerImage = await ImagesService.getImageByPath(post.bannerImage.path);
+  } catch (error) {
+    console.log('DAVIDELOG error1', error);
+    throw new Error('Error getting image by path');
+  }
   if (!bannerImage) {
     bannerImage = await ImagesService.upsertImage(post.bannerImage);
   }

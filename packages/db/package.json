@@ -43,7 +43,7 @@
   "dependencies": {
     "@ducky-coding/types": "*",
     "@ducky-coding/utils": "*",
-    "@libsql/client": "^0.7.0",
+    "@libsql/client": "^0.15.7",
     "drizzle-kit": "^0.31.1",
     "drizzle-orm": "^0.43.1",
     "drizzle-zod": "^0.7.1"

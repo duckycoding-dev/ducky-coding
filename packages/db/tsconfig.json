@@ -3,11 +3,12 @@
   "include": ["./src/**/*.ts"],
   "exclude": ["./dist/**/*"],
   "compilerOptions": {
+    "baseUrl": "./",
+    "rootDir": "./src",
     "outDir": "dist",
     "declarationDir": "dist",
-    "module": "ESNext",
-    "moduleResolution": "Bundler",
-    "lib": ["esnext", "dom"],
-    "verbatimModuleSyntax": true,
+    "strict": true,
+    "lib": ["ESNext"],
+    "verbatimModuleSyntax": true
   }
 }

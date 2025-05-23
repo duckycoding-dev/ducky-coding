@@ -3,6 +3,8 @@ import { defineCollection } from 'astro:content';
 import { PostContentSchema } from '@ducky-coding/types/entities';
 import { glob } from 'astro/loaders';
 
+export type PostContent = z.infer<typeof PostContentSchema>;
+
 // 2. Define your collection(s)
 const postsCollection = defineCollection({
   loader: glob({ pattern: '**/[^_]*.{md,mdx}', base: './src/content/posts' }),
@@ -16,7 +18,4 @@ const testCollection = defineCollection({
 
 // 3. Export a single `collections` object to register your collection(s)
 //    This key should match your collection directory name in "src/content"
-export const collections = {
-  posts: postsCollection,
-  md: testCollection,
-};
+export const collections = { posts: postsCollection, md: testCollection };

@@ -71,7 +71,7 @@ const updateSession = async (
     })
     .returning();
 
-  if (updatedSession.length === 0) return undefined;
+  if (updatedSession[0] === undefined) return undefined;
   return mapToSessionDTO(updatedSession[0]);
 };
 

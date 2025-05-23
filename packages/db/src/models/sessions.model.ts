@@ -6,12 +6,12 @@ import { UsersTable } from './users.model';
 // TODO: could add more fields such as IP, user agent, etc.
 
 export const SessionsTable = sqliteTable('sessions', {
-  id: integer('id').notNull().primaryKey(),
-  userId: integer('userId')
+  id: integer().notNull().primaryKey(),
+  userId: integer()
     .notNull()
     .references(() => UsersTable.id),
-  refreshToken: text('refreshToken').notNull(),
-  expiresAt: integer('expiresAt', { mode: 'number' }).notNull(),
+  refreshToken: text().notNull(),
+  expiresAt: integer({ mode: 'number' }).notNull(),
 });
 
 export const SessionSchema = z.object({

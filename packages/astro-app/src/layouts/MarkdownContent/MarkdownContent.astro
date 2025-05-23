@@ -12,7 +12,8 @@ type Props = MarkdownContentProps;
 
 const { entry }: Props = Astro.props;
 
-const { Content, headings } = await render(entry);
+// const { Content, headings } = await render(entry);
+const { Content } = await render(entry);
 
 // if this is not working for some reasons, check mdx v4 changelogs
 ---

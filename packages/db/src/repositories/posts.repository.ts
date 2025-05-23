@@ -358,7 +358,7 @@ const updatePost = async (post: PostDTO): Promise<PostDTO | undefined> => {
     })
     .returning();
 
-  if (updatedPost.length === 0) return undefined;
+  if (updatedPost[0] === undefined) return undefined;
   return mapToPostDTO(updatedPost[0]);
 };
 

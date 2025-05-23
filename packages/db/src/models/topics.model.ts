@@ -5,13 +5,13 @@ import { TagsTable } from './tags.model';
 import { ImagesTable } from './images.model';
 
 export const TopicsTable = sqliteTable('topics', {
-  title: text('title')
+  title: text()
     .primaryKey()
     .unique()
     .notNull()
     .references(() => TagsTable.name),
-  slug: text('slug').unique().notNull(),
-  imageId: integer('imageId').references(() => ImagesTable.id),
+  slug: text().unique().notNull(),
+  imageId: integer().references(() => ImagesTable.id),
 });
 
 export const TopicSchema = z.object({
