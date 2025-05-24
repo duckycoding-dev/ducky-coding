@@ -1,14 +1,14 @@
 ---
 import { getCollection } from 'astro:content';
-import { HolyGrailLayout } from '@layouts/HolyGrailLayout';
+import HolyGrailLayout from '@layouts/HolyGrailLayout/HolyGrailLayout.astro';
 import { syncPostWithDatabase } from '@utils/content/content';
 import { Image } from 'astro:assets';
 import { IMAGE_DENSITIES } from '@utils/globals';
 import type { ImageMetadata } from 'astro';
 import { matchImageFromGlobImport } from '@utils/images/images';
-import { Tag } from '@components/Tag';
-import { Link } from '@components/Link';
-import { MarkdownContent } from '@layouts/MarkdownContent';
+import Tag from '@components/Tag/Tag.astro';
+import Link from '@components/Link/Link.astro';
+import MarkdownContent from '@layouts/MarkdownContent/MarkdownContent.astro';
 
 import { serverLogger } from '@utils/logs/logger';
 

@@ -2,9 +2,9 @@
 import type { CollectionEntry } from 'astro:content';
 import type { HTMLAttributes } from 'astro/types';
 import { cn } from '@utils/cn';
-import { Card } from '../Card';
-import { Link } from '../Link';
-import { Tag } from '../Tag';
+import Card from '@components/Card/Card.astro';
+import Link from '@components/Link/Link.astro';
+import Tag from '@components/Tag/Tag.astro';
 
 export interface BriefPostCardProps extends HTMLAttributes<'a'> {
   post: CollectionEntry<'posts'>;

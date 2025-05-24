@@ -1,8 +1,8 @@
 ---
-import { HolyGrailLayout } from '@layouts/HolyGrailLayout';
+import HolyGrailLayout from '@layouts/HolyGrailLayout/HolyGrailLayout.astro';
 import { Image } from 'astro:assets';
 import duck404 from '@assets/images/404_duck.png';
-import { Link } from '@components/Link';
+import Link from '@components/Link/Link.astro';
 import { IMAGE_DENSITIES } from '@utils/globals';
 ---
 
@@ -23,7 +23,7 @@ import { IMAGE_DENSITIES } from '@utils/globals';
   }}
 >
   <h1
-    class='mx-auto mb-8 text-balance text-center text-3xl font-extrabold md:max-w-[50%]'
+    class='mx-auto mb-8 text-center text-3xl font-extrabold text-balance md:max-w-[50%]'
   >
     The page or resource you requested could not be found <span
       aria-hidden='true'>:(</span
@@ -38,12 +38,12 @@ import { IMAGE_DENSITIES } from '@utils/globals';
     decoding='async'
   />
   <h2
-    class='previous-page mx-auto mt-8 text-balance text-center text-2xl font-extrabold'
+    class='previous-page mx-auto mt-8 text-center text-2xl font-extrabold text-balance'
   >
     Go back to the <Link class='text-2xl' href='/'>previous page</Link>
   </h2>
   <h3
-    class='previous-page mx-auto text-balance text-center text-xl font-extrabold'
+    class='previous-page mx-auto text-center text-xl font-extrabold text-balance'
   >
     or
   </h3>

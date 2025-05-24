@@ -1,8 +1,8 @@
 ---
-import { BaseHtml, type BaseHtmlProps } from '@layouts/BaseHtml';
-import { Footer } from '@layouts/Footer';
-import { Header } from '@layouts/Header';
-import { MainContent } from '@layouts/MainContent';
+import BaseHtml, { type BaseHtmlProps } from '@layouts/BaseHtml/BaseHtml.astro';
+import Footer from '@layouts/Footer/Footer.astro';
+import Header from '@layouts/Header/Header.astro';
+import MainContent from '@layouts/MainContent/MainContent.astro';
 import type { HTMLAttributes } from 'astro/types';
 
 export type HolyGrailLayoutProps = BaseHtmlProps;
@@ -23,8 +23,8 @@ const { ...props }: Props = Astro.props;
 
 <script>
   // Swipe detection variables
-  let touchstartX = 0;
-  let touchendX = 0;
+  let touchStartX = 0;
+  let touchEndX = 0;
   const minSwipeDistance = 50; // Minimum distance to be considered a swipe
 
   const checkbox = document.getElementById(
@@ -32,12 +32,12 @@ const { ...props }: Props = Astro.props;
   ) as HTMLInputElement;
 
   function handleTouchStart(event: TouchEvent) {
-    touchstartX = event.changedTouches[0].screenX;
+    touchStartX = event.changedTouches[0]?.screenX ?? 0;
   }
 
   // Function to determine swipe direction and update checkbox
   function handleSwipe() {
-    const swipeDistance = touchendX - touchstartX;
+    const swipeDistance = touchEndX - touchStartX;
 
     if (Math.abs(swipeDistance) < minSwipeDistance) {
       return; // Not a significant swipe
@@ -53,7 +53,7 @@ const { ...props }: Props = Astro.props;
   }
 
   function handleTouchEnd(event: TouchEvent) {
-    touchendX = event.changedTouches[0].screenX;
+    touchEndX = event.changedTouches[0]?.screenX ?? 0;
     handleSwipe();
   }
 

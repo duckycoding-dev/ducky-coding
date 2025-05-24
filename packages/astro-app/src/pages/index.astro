@@ -1,7 +1,7 @@
 ---
-import { HolyGrailLayout } from '@layouts/HolyGrailLayout';
-import { PostCard } from '@components/PostCard';
-import { BriefPostCard } from '@components/BriefPostCard';
+import HolyGrailLayout from '@layouts/HolyGrailLayout/HolyGrailLayout.astro';
+import PostCard from '@components/PostCard/PostCard.astro';
+import BriefPostCard from '@components/BriefPostCard/BriefPostCard.astro';
 import { getCollection } from 'astro:content';
 import { type ImageMetadata } from 'astro';
 import { matchImageFromGlobImport } from '@utils/images/images';
@@ -133,7 +133,7 @@ const processedPosts = await Promise.all(
       </div>
     ) : (
       <>
-        <h2 class='mb-4 text-balance text-center text-2xl font-extrabold md:text-left'>
+        <h2 class='mb-4 text-center text-2xl font-extrabold text-balance md:text-left'>
           <span class='block'>No content has been published yet :'(</span>
           <span class='block'>I'm working hard on it!</span>
         </h2>
