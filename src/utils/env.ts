@@ -1,4 +1,4 @@
-import { logLevels } from '@utils/logs/logger';
+import { logLevels } from '@utils/logs/logger.js';
 import z from 'zod';
 
 // env variables declared inside the .env file
@@ -12,4 +12,4 @@ const envVariables = z.object({
 });
 
 // ensure that the env variables are defined correctly
-export const envs = envVariables.parse(process.env);
+export const envs = envVariables.parse(import.meta.env);

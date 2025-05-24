@@ -28,6 +28,7 @@
   "main": "dist/index.html",
   "scripts": {
     "dev:astro": "astro dev",
+    "astro:check": "astro check",
     "start:astro": "astro dev",
     "build:astro": "astro check && astro build",
     "build:astro:local": "astro build --mode development",

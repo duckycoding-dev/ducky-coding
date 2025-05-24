@@ -256,7 +256,7 @@ export const getClientLogger = (): ReturnType<typeof createClientLogger> => {
     clientLoggerInstance = createClientLogger({
       showTimestamp: true,
       showLevelLabel: true,
-      logLevel: import.meta.env.CLIENT_LOGS_LEVEL ?? 'info',
+      logLevel: (process.env.CLIENT_LOGS_LEVEL as LogLevel) ?? 'info',
     });
   }
   return clientLoggerInstance;
@@ -274,7 +274,7 @@ export const getServerLogger = (): ReturnType<typeof createServerLogger> => {
       showTimestamp: true,
       showLevelLabel: true,
       showColoredOutput: true,
-      logLevel: import.meta.env.SERVER_LOGS_LEVEL ?? 'warn',
+      logLevel: (process.env.SERVER_LOGS_LEVEL as LogLevel) ?? 'warn',
     });
   }
   return serverLoggerInstance;

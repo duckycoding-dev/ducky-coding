@@ -17,7 +17,6 @@ export default defineConfig({
   base: '/',
   trailingSlash: 'ignore', // --DEFAULT--
   adapter: netlify(),
-  cacheDir: './.astro',
   compressHTML: true, // could be set to false in development using env variables
   scopedStyleStrategy: 'attribute', // --DEFAULT--
   build: {

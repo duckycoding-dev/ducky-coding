@@ -1,4 +1,4 @@
-import type { ClientLogger, ServerLogger } from '@ducky-coding/utils/logger';
+import type { ClientLogger, ServerLogger } from '@utils/logs/logger';
 import type { ImageMetadata } from 'astro';
 
 /**
