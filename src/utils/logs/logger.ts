@@ -1,15 +1,9 @@
 /* eslint-disable max-classes-per-file */
 import chalk from 'chalk';
 
-export const LogLevelSchema = [
-  'log',
-  'info',
-  'warn',
-  'error',
-  'debug',
-] as const;
+export const logLevels = ['log', 'info', 'warn', 'error', 'debug'] as const;
 
-export type LogLevel = (typeof LogLevelSchema)[number];
+export type LogLevel = (typeof logLevels)[number];
 
 interface BaseLoggerConfig {
   showTimestamp: boolean;

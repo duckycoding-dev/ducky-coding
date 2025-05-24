@@ -2,6 +2,7 @@
 import Card from '@components/Card/Card.astro';
 import Link from '@components/Link/Link.astro';
 import { cn } from '@utils/cn';
+import { envs } from '@utils/env';
 import { IMAGE_DENSITIES } from '@utils/globals';
 import type { ImageMetadata } from 'astro';
 import type { HTMLAttributes } from 'astro/types';
@@ -55,7 +56,7 @@ const {
 
 <Link
   variant='unstyled'
-  href={slug && `${import.meta.env.PUBLIC_BASE_SITE_URL}/topics/${slug}`}
+  href={slug && `${envs.BASE_SITE_URL}/topics/${slug}`}
   class={cn('', className)}
   {...props}
 >

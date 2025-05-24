@@ -1,9 +1,10 @@
-import { defineConfig } from 'astro/config';
+import { defineConfig, envField } from 'astro/config';
 import mdx from '@astrojs/mdx';
 import sitemap from '@astrojs/sitemap';
 import icon from 'astro-icon';
 import netlify from '@astrojs/netlify';
 import tailwindcss from '@tailwindcss/vite';
+import { logLevels } from './src/utils/logs/logger';
 // properties without "--DEFAULT--" either use a setting decided by me or/and didn't have a default value
 
 // https://astro.build/config
@@ -102,6 +103,38 @@ export default defineConfig({
     }),
   ],
   experimental: {
-    // actions: true,
+    contentIntellisense: true,
+  },
+  env: {
+    validateSecrets: true,
+    schema: {
+      BASE_SITE_URL: envField.string({
+        context: 'client',
+        access: 'public',
+        url: true,
+      }),
+      SERVER_LOGS_LEVEL: envField.enum({
+        context: 'server',
+        access: 'public',
+        values: logLevels,
+        default: 'info',
+      }),
+      CLIENT_LOGS_LEVEL: envField.enum({
+        context: 'client',
+        access: 'public',
+        values: logLevels,
+        default: 'info',
+      }),
+      TURSO_DATABASE_URL: envField.string({
+        context: 'server',
+        access: 'secret',
+        url: true,
+      }),
+      TURSO_AUTH_TOKEN: envField.string({
+        context: 'server',
+        access: 'secret',
+        optional: true,
+      }),
+    },
   },
 });
