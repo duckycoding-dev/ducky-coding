@@ -1,31 +1,9 @@
 # How was this project initiated:
 
-## Lerna, Typescript and NX:
+## Typescript:
 
-- `npx lerna init`
 - `npm i typescript --save-dev`
 - `npx tsc --init`
-- `npx nx init`
-- edit the package.json and tsconfig files with personal config options: set the "name" property in the package.json as "_@ducky-coding/root_"; this will be used to identifiy the root directory as the root of the monorepo.
-- set _useNx_ true inide lerna.json
-- set different options inside nx.json, such as commands dependencies.
-
-## Monorepo Packages
-
-For each package of the monorepo run the following (example for the "_astro-app_" package)
-
-- `npx lerna create astro-app` (creates the package directory and basic sub directories and package.json)
-- `cd packages/astro-app`
-- `npm create astro@latest`
-
-Inside each package we had to configure the package.json and tsconfig files.\
-For each pacakge you can declare the "name" property in the package.json as \*@ducky-coding/_package_name_"\
-For the tsconfig file, we can extend the one from the root of the monorepo, to have the same configs shared between all the packages.
-You will most likely need to change the "files", "directories" and "main" properties in each package.json
-
-## NPM packages
-
-Node packages from NPM can be installed both inside the root of the monorepo, making them accessible by every package, ensuring consistent versions among all of them, or inside a single package, useful for example if a package uses a framework and needs a package that works only for that framework.\
 
 ## Prettier
 
@@ -99,3 +77,80 @@ Import the prettier plugin by adding it to the flat config eslint configuration 
 You can actually add some other custom objects after the Prettier plugin to override some ESlint rule or to add even more!
 
 Official installation guide: https://github.com/prettier/eslint-plugin-prettier
+
+# Database
+
+This package is used to define everything related to the database of DuckyCoding.dev, from content data to user related data, exporting services functions, DTO types, schema types, etc,...
+
+## Folder structure
+
+```
+  packages/
+  │   ├── db/
+  │   │   ├── src/
+  │   │   │   ├── models/
+  │   │   │   │   ├── user.ts
+  │   │   │   │   |── content.ts
+  │   │   │   │   └── index.ts
+  │   │   │   ├── repositories/
+  │   │   │   │   ├── user.repository.ts
+  │   │   │   │   |── content.repository.ts
+  │   │   │   │   └── index.ts
+  │   │   │   ├── services/
+  │   │   │   │   ├── user.service.ts
+  │   │   │   │   |── content.service.ts
+  │   │   │   │   └── index.ts
+  |   │   │   ├── client.ts
+  |   │   │   ├── migrations/
+  |   │   │   |   ├── migrations/
+  │   │   │   └── index.ts
+  │   │   ├── [__tests__]/
+  │   │   ├── database/
+  │   │   │   ├── content.db
+  │   │   │   ├── content.db-shm
+  │   │   │   └── content.db-wal
+  │   │   ├── env.development
+  │   │   ├── drizzle.config.ts
+  │   │   ├── package.json
+  │   │   └── tsconfig.json
+  |   |__ ...
+  |   |__ ...
+  |   |__ ...
+....
+```
+
+- `database/` : where the sqlite database files are generated
+- `src/models/`: where tables schemas are defined, together with their basic TS types
+- `src/repositories/`: where sql queries (raw or by using drizzle) are created and exported to use
+- `src/services/`: where repositories queries are called from, together with other data handling related actions (eg. sanitizing content before running the queries)
+- `src/client.ts`: exports the database client that will be used by repositories functions
+
+## What gets exported for external use
+
+This package will only export the `models/` and `services/` contents: everything else is for internal use only, so there is no need to export them.
+
+### Future
+
+We might want to consider switching to a structure like the following instead, following a "Feature-Based" project structure:
+
+```
+src/
+├── topics/
+│   ├── topics.model.ts
+│   ├── topics.service.ts
+│   ├── topics.repository.ts
+│   └── topics.schema.ts
+├── images/
+│   ├── images.model.ts
+│   ├── images.service.ts
+│   ├── images.repository.ts
+│   └── images.schema.ts
+├── shared/
+│   ├── types.ts
+│   └── utils.ts
+└── database/
+    ├── client.ts
+    └── migrations/
+```
+
+I like the idea of having everything together in a single folder, but for now I'll stick to ther previously explained structure, since that's what I use at work and thus I'm more familiar with it at the moment.

@@ -1,0 +1,38 @@
+import {
+  sqliteTable,
+  integer,
+  primaryKey,
+  text,
+} from 'drizzle-orm/sqlite-core';
+import { z } from 'zod';
+import type { PostTagDTO } from '@custom-types/DTOs';
+import { PostsTable } from './posts.model';
+import { TagsTable } from '../tags/tags.model';
+
+export const PostsTagsTable = sqliteTable(
+  'posts_tags',
+  {
+    postId: integer()
+      .notNull()
+      .references(() => PostsTable.id),
+    tagName: text()
+      .notNull()
+      .references(() => TagsTable.name),
+  },
+  (table) => [primaryKey({ columns: [table.postId, table.tagName] })],
+);
+
+export const PostsTagsSchema = z.object({
+  postId: z.number(),
+  tagName: z.string(),
+});
+
+export type InsertPostTag = typeof PostsTagsTable.$inferInsert;
+export type PostTag = typeof PostsTagsTable.$inferSelect;
+
+export function mapToPostTagDTO(selectedPostTag: PostTag): PostTagDTO {
+  return {
+    postId: selectedPostTag.postId,
+    tagName: selectedPostTag.tagName,
+  };
+}
