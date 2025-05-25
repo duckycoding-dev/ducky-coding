@@ -1,48 +1,39 @@
 import { eq, inArray } from 'drizzle-orm';
-import type { TopicDTO, TopicWithImageDTO } from '@custom-types/DTOs';
 import { db } from '../../client';
-import { ImagesTable } from '../images/images.model';
-import { mapToTopicWithImageDTO } from './topics.mappers';
-import { TopicsTable, mapToTopicDTO } from './topics.model';
+import { imagesTable, type Image } from '../images/images.model';
+import { topicsTable, type Topic } from './topics.model';
 
-const getTopics = async (topicTitles: string[]): Promise<TopicDTO[]> => {
+const getTopics = async (topicTitles: string[]): Promise<Topic[]> => {
   const topics = await db
     .select()
-    .from(TopicsTable)
-    .where(inArray(TopicsTable.title, topicTitles));
+    .from(topicsTable)
+    .where(inArray(topicsTable.title, topicTitles));
 
-  const topicDTOs: TopicDTO[] = topics.map((topic) => {
-    return mapToTopicDTO(topic);
-  });
-
-  return topicDTOs;
+  return topics;
 };
 
-const getAllTopics = async (): Promise<TopicDTO[]> => {
-  const topics = await db.select().from(TopicsTable).all();
-  const topicDTOs: TopicDTO[] = topics.map((topic) => {
-    return mapToTopicDTO(topic);
-  });
+const getAllTopics = async (): Promise<Topic[]> => {
+  const topics = await db.select().from(topicsTable).all();
 
-  return topicDTOs;
+  return topics;
 };
 
-const getAllTopicsWithImage = async (): Promise<TopicWithImageDTO[]> => {
-  const topics = await db
-    .select()
-    .from(TopicsTable)
-    .leftJoin(ImagesTable, eq(TopicsTable.imageId, ImagesTable.id))
+const getAllTopicsWithImage = async (): Promise<
+  (Topic & { image: Image | null })[]
+> => {
+  const topicsWithImages = await db
+    .select({
+      topic: topicsTable,
+      image: imagesTable,
+    })
+    .from(topicsTable)
+    .leftJoin(imagesTable, eq(topicsTable.imageId, imagesTable.id))
     .all();
 
-  const topicWithImageDTOs: TopicWithImageDTO[] = topics.map(
-    (topicWithImage) => {
-      return mapToTopicWithImageDTO(
-        topicWithImage.topics,
-        topicWithImage.images ?? undefined,
-      );
-    },
-  );
-  return topicWithImageDTOs;
+  return topicsWithImages.map((row) => ({
+    ...row.topic,
+    image: row.image,
+  }));
 };
 
 export const TopicsRepository = {

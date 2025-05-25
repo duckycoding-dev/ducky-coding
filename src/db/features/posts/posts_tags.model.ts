@@ -4,35 +4,31 @@ import {
   primaryKey,
   text,
 } from 'drizzle-orm/sqlite-core';
+import {
+  createSelectSchema,
+  createInsertSchema,
+  createUpdateSchema,
+} from 'drizzle-zod';
+import { postsTable } from './posts.model';
+import { tagsTable } from '../tags/tags.model';
 import { z } from 'zod';
-import type { PostTagDTO } from '@custom-types/DTOs';
-import { PostsTable } from './posts.model';
-import { TagsTable } from '../tags/tags.model';
 
-export const PostsTagsTable = sqliteTable(
+export const postsTagsTable = sqliteTable(
   'posts_tags',
   {
     postId: integer()
       .notNull()
-      .references(() => PostsTable.id),
+      .references(() => postsTable.id),
     tagName: text()
       .notNull()
-      .references(() => TagsTable.name),
+      .references(() => tagsTable.name),
   },
   (table) => [primaryKey({ columns: [table.postId, table.tagName] })],
 );
 
-export const PostsTagsSchema = z.object({
-  postId: z.number(),
-  tagName: z.string(),
-});
-
-export type InsertPostTag = typeof PostsTagsTable.$inferInsert;
-export type PostTag = typeof PostsTagsTable.$inferSelect;
-
-export function mapToPostTagDTO(selectedPostTag: PostTag): PostTagDTO {
-  return {
-    postId: selectedPostTag.postId,
-    tagName: selectedPostTag.tagName,
-  };
-}
+export const postTagsSchema = createSelectSchema(postsTagsTable);
+export const insertPostTagsSchema = createInsertSchema(postsTagsTable);
+export const updatePostTagsSchema = createUpdateSchema(postsTagsTable);
+export type PostTag = z.infer<typeof postTagsSchema>;
+export type InsertPostTag = z.infer<typeof insertPostTagsSchema>;
+export type UpdatePostTag = z.infer<typeof updatePostTagsSchema>;

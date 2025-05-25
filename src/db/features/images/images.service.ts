@@ -1,40 +1,35 @@
-import {
-  type CreateImageDTO,
-  CreateImageDTOSchema,
-  type ImageDTO,
-} from '@custom-types/DTOs';
+import type { Image, InsertImage } from './images.model';
 import { ImagesRepository } from './images.repository';
 
-const getImage = async (imageId: number): Promise<ImageDTO | undefined> => {
+const getImage = async (imageId: number): Promise<Image | undefined> => {
   const selectedImages = await ImagesRepository.getImages([imageId]);
   return selectedImages[0];
 };
 
-const getImageByPath = async (path: string): Promise<ImageDTO | undefined> => {
+const getImageByPath = async (path: string): Promise<Image | undefined> => {
   const selectedImages = await ImagesRepository.getImagesByPaths([path]);
   return selectedImages[0];
 };
 
-const getImages = async (imageIds: number[]): Promise<ImageDTO[]> => {
+const getImages = async (imageIds: number[]): Promise<Image[]> => {
   const selectedImages = await ImagesRepository.getImages(imageIds);
   return selectedImages;
 };
 
-const getImagesByPaths = async (paths: string[]): Promise<ImageDTO[]> => {
+const getImagesByPaths = async (paths: string[]): Promise<Image[]> => {
   const selectedImages = await ImagesRepository.getImagesByPaths(paths);
   return selectedImages;
 };
 
-const getAllImages = async (): Promise<ImageDTO[]> => {
+const getAllImages = async (): Promise<Image[]> => {
   const selectedImages = await ImagesRepository.getAllImages();
   return selectedImages;
 };
 
 const upsertImage = async (
-  image: CreateImageDTO,
-): Promise<ImageDTO | undefined> => {
-  const parsedImage = CreateImageDTOSchema.parse(image);
-  const upsertedImages = await ImagesRepository.upsertImage([parsedImage]);
+  image: InsertImage,
+): Promise<InsertImage | undefined> => {
+  const upsertedImages = await ImagesRepository.upsertImage([image]);
   if (upsertedImages[0] === undefined) return undefined; // throw new Error('Failed to upsert image');
   return upsertedImages[0];
 };
@@ -48,5 +43,3 @@ export const ImagesService = {
 
   upsertImage,
 };
-
-// Add more methods as needed

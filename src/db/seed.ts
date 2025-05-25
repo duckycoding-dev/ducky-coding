@@ -1,11 +1,11 @@
 import { db } from './client';
-import { TagsTable } from './features/tags/tags.model';
-import { TopicsTable } from './features/topics/topics.model';
+import { tagsTable } from './features/tags/tags.model';
+import { topicsTable } from './features/topics/topics.model';
 
 export default async function seed() {
   // TODO
   await db
-    .insert(TagsTable)
+    .insert(tagsTable)
     .values([
       { name: 'Astro' },
       { name: 'React' },
@@ -17,7 +17,7 @@ export default async function seed() {
       { name: 'SQL' },
     ]);
 
-  await db.insert(TopicsTable).values([
+  await db.insert(topicsTable).values([
     {
       title: 'Astro',
       slug: 'astro',

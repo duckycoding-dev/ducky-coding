@@ -1,25 +1,19 @@
 import { inArray } from 'drizzle-orm';
-import type { TagDTO } from '@custom-types/DTOs';
 import { db } from '../../client';
-import { mapToTagDTO, TagsTable } from './tags.model';
+import { tagsTable, type Tag } from './tags.model';
 
-const getTags = async (tagNames: string[]): Promise<TagDTO[]> => {
+const getTags = async (tagNames: string[]): Promise<Tag[]> => {
   const tags = await db
     .select()
-    .from(TagsTable)
-    .where(inArray(TagsTable.name, tagNames));
-  const tagDTOs = tags.map((tag) => {
-    return mapToTagDTO(tag);
-  });
-  return tagDTOs;
+    .from(tagsTable)
+    .where(inArray(tagsTable.name, tagNames));
+
+  return tags;
 };
 
-const getAllTags = async (): Promise<TagDTO[]> => {
-  const tags = await db.select().from(TagsTable).all();
-  const tagDTOs = tags.map((tag) => {
-    return mapToTagDTO(tag);
-  });
-  return tagDTOs;
+const getAllTags = async (): Promise<Tag[]> => {
+  const tags = await db.select().from(tagsTable).all();
+  return tags;
 };
 
 export const TagsRepository = {

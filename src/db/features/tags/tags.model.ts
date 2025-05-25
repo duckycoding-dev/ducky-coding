@@ -1,20 +1,19 @@
-import type { TagDTO } from '@custom-types/DTOs';
 import { sqliteTable, text } from 'drizzle-orm/sqlite-core';
+import {
+  createSelectSchema,
+  createInsertSchema,
+  createUpdateSchema,
+} from 'drizzle-zod';
 import { z } from 'zod';
 
-export const TagsTable = sqliteTable('tags', {
+export const tagsTable = sqliteTable('tags', {
   name: text().primaryKey().unique().notNull(),
 });
 
-export type InsertTag = typeof TagsTable.$inferInsert;
-export type Tag = typeof TagsTable.$inferSelect;
+export const tagSchema = createSelectSchema(tagsTable);
+export const insertTagSchema = createInsertSchema(tagsTable);
+export const updateTagSchema = createUpdateSchema(tagsTable);
 
-export const TagSchema = z.object({
-  name: z.string(),
-});
-
-export function mapToTagDTO(selectedTag: Tag): TagDTO {
-  return {
-    name: selectedTag.name,
-  };
-}
+export type Tag = z.infer<typeof tagSchema>;
+export type InsertTag = z.infer<typeof insertTagSchema>;
+export type UpdateTag = z.infer<typeof updateTagSchema>;

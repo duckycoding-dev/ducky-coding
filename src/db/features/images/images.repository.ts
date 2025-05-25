@@ -1,53 +1,41 @@
 import { inArray, sql } from 'drizzle-orm';
-import type { CreateImageDTO, ImageDTO } from '@custom-types/DTOs';
 import { db } from '../../client';
-import { ImagesTable, mapToImageDTO } from './images.model';
+import { imagesTable, type Image, type InsertImage } from './images.model';
 
-const getImages = async (imageIds: number[]): Promise<ImageDTO[]> => {
+const getImages = async (imageIds: number[]): Promise<Image[]> => {
   const images = await db
     .select()
-    .from(ImagesTable)
-    .where(inArray(ImagesTable.id, imageIds));
+    .from(imagesTable)
+    .where(inArray(imagesTable.id, imageIds));
 
-  const imageDTOs: ImageDTO[] = images.map((image) => {
-    return mapToImageDTO(image);
-  });
-
-  return imageDTOs;
+  return images;
 };
 
-const getImagesByPaths = async (paths: string[]): Promise<ImageDTO[]> => {
+const getImagesByPaths = async (paths: string[]): Promise<Image[]> => {
   const images = await db
     .select()
-    .from(ImagesTable)
-    .where(inArray(ImagesTable.path, paths));
+    .from(imagesTable)
+    .where(inArray(imagesTable.path, paths));
 
-  const imageDTOs: ImageDTO[] = images.map((image) => {
-    return mapToImageDTO(image);
-  });
-
-  return imageDTOs;
+  return images;
 };
 
-const getAllImages = async (): Promise<ImageDTO[]> => {
-  const images = await db.select().from(ImagesTable).all();
-  const imageDTOs: ImageDTO[] = images.map((image) => {
-    return mapToImageDTO(image);
-  });
+const getAllImages = async (): Promise<Image[]> => {
+  const images = await db.select().from(imagesTable).all();
 
-  return imageDTOs;
+  return images;
 };
 
-const upsertImage = async (images: CreateImageDTO[]): Promise<ImageDTO[]> => {
+const upsertImage = async (images: InsertImage[]): Promise<InsertImage[]> => {
   const upsertedImages = await db
-    .insert(ImagesTable)
+    .insert(imagesTable)
     .values(images)
     .onConflictDoUpdate({
-      target: ImagesTable.path,
-      set: { alt: sql.raw(`excluded.${ImagesTable.alt}`) },
+      target: imagesTable.path,
+      set: { alt: sql.raw(`excluded.${imagesTable.alt}`) },
     })
     .returning();
-  return upsertedImages.map((upsertedImage) => mapToImageDTO(upsertedImage));
+  return upsertedImages;
 };
 
 export const ImagesRepository = {

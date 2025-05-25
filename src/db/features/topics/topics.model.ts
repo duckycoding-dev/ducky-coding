@@ -1,32 +1,27 @@
 import { integer, text, sqliteTable } from 'drizzle-orm/sqlite-core';
+import { tagsTable } from '../tags/tags.model';
+import { imagesTable } from '../images/images.model';
+import {
+  createSelectSchema,
+  createInsertSchema,
+  createUpdateSchema,
+} from 'drizzle-zod';
 import { z } from 'zod';
-import type { TopicDTO } from '@custom-types/DTOs';
-import { TagsTable } from '../tags/tags.model';
-import { ImagesTable } from '../images/images.model';
 
-export const TopicsTable = sqliteTable('topics', {
+export const topicsTable = sqliteTable('topics', {
   title: text()
     .primaryKey()
     .unique()
     .notNull()
-    .references(() => TagsTable.name),
+    .references(() => tagsTable.name),
   slug: text().unique().notNull(),
-  imageId: integer().references(() => ImagesTable.id),
+  imageId: integer().references(() => imagesTable.id),
 });
 
-export const TopicSchema = z.object({
-  title: z.string(),
-  slug: z.string(),
-  imageId: z.number().nullable(),
-});
+export const topicSchema = createSelectSchema(topicsTable);
+export const insertTopic = createInsertSchema(topicsTable);
+export const updateTopic = createUpdateSchema(topicsTable);
 
-export type InsertTopic = typeof TopicsTable.$inferInsert;
-export type Topic = typeof TopicsTable.$inferSelect; // we defined the entity type as what is selectable from the table, which reflects both TopicsTable and TopicSchema: would be nice if we could create the TopicSchema directly from the TopcisTable definition using drizzle-zod, but this is not currently working
-
-export function mapToTopicDTO(selectedTopic: Topic): TopicDTO {
-  return {
-    title: selectedTopic.title,
-    imageId: selectedTopic.imageId ?? undefined,
-    slug: selectedTopic.slug,
-  };
-}
+export type Topic = z.infer<typeof insertTopic>;
+export type InsertTopic = z.infer<typeof insertTopic>;
+export type UpdateTopic = z.infer<typeof updateTopic>;
