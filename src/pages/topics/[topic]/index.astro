@@ -47,7 +47,7 @@ const postsEntries = await getCollection('posts');
 
 const filteredRelatedPosts = postsEntries.filter((entry) => {
   return (
-    entry.data.topic.title === processedTopic.title &&
+    entry.data.topicTitle === processedTopic.title &&
     entry.data.status === 'published'
   );
 });
@@ -55,7 +55,7 @@ const filteredRelatedPosts = postsEntries.filter((entry) => {
 const processedPosts = await Promise.all(
   filteredRelatedPosts.map(async (post) => {
     let processedImage: ImageMetadata | undefined;
-    const imageToFindPath = `${post.data.bannerImage.path}`;
+    const imageToFindPath = `${post.data.bannerImagePath}`;
     if (imageToFindPath) {
       const images = import.meta.glob<{ default: ImageMetadata }>(
         `/src/assets/images/posts/**/*.{jpeg,jpg,png,gif,webp,svg}`,

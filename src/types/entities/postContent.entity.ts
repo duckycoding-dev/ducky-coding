@@ -1,20 +1,20 @@
 import { z } from 'astro:content';
 
-export const ContentStatusSchema = z
+const ContentStatusSchema = z
   .enum(['draft', 'published', 'deleted'])
   .default('draft');
-export type ContentStatus = z.infer<typeof ContentStatusSchema>;
 
 export const PostContentSchema = z.object({
-  title: z.string(),
-  bannerImage: z.object({ path: z.string(), alt: z.string().optional() }),
-  summary: z.string(),
-  content: z.string(),
-  authors: z.array(z.object({ username: z.string() })).min(1),
-  topic: z.object({ title: z.string() }),
-  tags: z.array(z.string()).min(1),
-  language: z.string().default('en'),
-  timeToRead: z.number(),
+  title: z.string().min(1),
+  bannerImagePath: z.string().optional(),
+  summary: z.string().min(1),
+  content: z.string().min(1),
+  author: z.string().min(1).default('DuckyCoding'),
+  topicTitle: z.string().min(1),
+  language: z.string().min(1).default('en'),
+  timeToRead: z.number().int().min(1).default(1), // value representing minutes
   status: ContentStatusSchema,
+  tags: z.array(z.string()).min(1),
 });
+
 export type PostContent = z.infer<typeof PostContentSchema>;

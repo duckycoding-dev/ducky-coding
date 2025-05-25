@@ -1,6 +1,5 @@
 import { text, sqliteTable, integer } from 'drizzle-orm/sqlite-core';
 import { sql } from 'drizzle-orm';
-import { type ContentStatus } from '@custom-types/entities';
 import {
   createSelectSchema,
   createInsertSchema,
@@ -10,17 +9,23 @@ import { imagesTable } from '../images/images.model';
 import { topicsTable } from '../topics/topics.model';
 import { z } from 'zod';
 
+export const ContentStatusSchema = z
+  .enum(['draft', 'published', 'deleted'])
+  .default('draft');
+export type ContentStatus = z.infer<typeof ContentStatusSchema>;
+
 export const postsTable = sqliteTable('posts', {
   id: integer().primaryKey({ autoIncrement: true }),
   slug: text().notNull(),
   title: text().notNull(),
-  bannerImageId: integer().references(() => imagesTable.id),
+  bannerImagePath: text().references(() => imagesTable.path),
   summary: text().notNull(),
   content: text().notNull(),
+  author: text().notNull().default('DuckyCoding'),
   topicTitle: text()
     .references(() => topicsTable.title)
     .notNull(),
-  language: text().notNull(),
+  language: text().notNull().default('en'),
   timeToRead: integer().notNull().default(1), // value representing minutes
   status: text().$type<ContentStatus>().notNull().default('draft'), // value should be one of [draft, published, deleted] (can't yet use enums )
   createdAt: integer({ mode: 'number' })

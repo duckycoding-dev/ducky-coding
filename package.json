@@ -27,18 +27,17 @@
   ],
   "main": "dist/index.html",
   "scripts": {
-    "dev:astro": "astro dev",
     "astro:check": "astro check",
-    "start:astro": "astro dev",
-    "build:astro": "astro check && astro build",
-    "build:astro:local": "astro build --mode development",
-    "preview:astro": "astro preview",
-    "dev:db": "turso dev --db-file database/content.db && tsc -w",
-    "build:db": "tsc && npm run db:migrate",
-    "db:migrate": "tsx ./src/migrate.ts",
+    "astro:dev": "astro dev",
+    "astro:build": "astro check && astro build",
+    "astro:build:local": "astro build --mode development",
+    "astro:preview": "astro preview",
+    "db:dev": "turso dev --db-file database/content.db && tsc -w",
+    "db:migrate:local": "tsx --env-file=.env.development ./src/db/migrate.ts",
+    "db:migrate": "tsx --env-file=.env.production ./src/db/migrate.ts",
     "drizzle:generate_migrations": "drizzle-kit generate",
     "drizzle:studio": "npx drizzle-kit studio",
-    "drizzle:seed": "node --loader esbuild-register/loader -r esbuild-register ./db/seed.ts"
+    "drizzle:seed": "tsx --env-file=.env.development ./src/db/seed.ts"
   },
   "dependencies": {
     "@astrojs/check": "^0.9.4",

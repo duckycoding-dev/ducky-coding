@@ -2,11 +2,11 @@ import { inArray, sql } from 'drizzle-orm';
 import { db } from '../../client';
 import { imagesTable, type Image, type InsertImage } from './images.model';
 
-const getImages = async (imageIds: number[]): Promise<Image[]> => {
+const getImages = async (imagePaths: string[]): Promise<Image[]> => {
   const images = await db
     .select()
     .from(imagesTable)
-    .where(inArray(imagesTable.id, imageIds));
+    .where(inArray(imagesTable.path, imagePaths));
 
   return images;
 };

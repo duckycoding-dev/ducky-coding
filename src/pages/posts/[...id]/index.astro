@@ -1,7 +1,6 @@
 ---
 import { getCollection } from 'astro:content';
 import HolyGrailLayout from '@layouts/HolyGrailLayout/HolyGrailLayout.astro';
-import { syncPostWithDatabase } from '@utils/content/content';
 import { Image } from 'astro:assets';
 import { IMAGE_DENSITIES } from '@utils/globals';
 import type { ImageMetadata } from 'astro';
@@ -9,6 +8,7 @@ import { matchImageFromGlobImport } from '@utils/images/images';
 import Tag from '@components/Tag/Tag.astro';
 import Link from '@components/Link/Link.astro';
 import MarkdownContent from '@layouts/MarkdownContent/MarkdownContent.astro';
+import type { Image as BannerImage } from '@db/features/images/images.model'; // import { syncPostWithDatabase } from '@utils/content/content';
 
 import { serverLogger } from '@utils/logs/logger';
 
@@ -20,8 +20,8 @@ export async function getStaticPaths() {
 
   const syncPromises: Promise<void>[] = [];
   if (import.meta.env.PROD) {
-    postsEntries.forEach((post) => {
-      syncPromises.push(syncPostWithDatabase(post.data, post.id));
+    postsEntries.forEach((_post) => {
+      // syncPromises.push(syncPostWithDatabase(post.data, post.id)); // TODO add back when the sync function is implemented
     });
   }
 
@@ -29,7 +29,9 @@ export async function getStaticPaths() {
   syncResults.forEach((result, index) => {
     if (result.status === 'rejected') {
       console.log('Post sync fail reason: ', result.reason);
-      failedSyncs.push(postsEntries[index]);
+      if (postsEntries[index]) {
+        failedSyncs.push(postsEntries[index]);
+      }
     }
   });
 
@@ -42,16 +44,21 @@ export async function getStaticPaths() {
     serverLogger.log('All posts synced with database');
   }
 
+  const bannerImage: BannerImage | undefined = {
+    path: '/assets/images/posts/banner.jpg',
+    alt: 'Banner image for posts section',
+  }; // TODO replace with fetched image data from db
+
   return postsEntries.map((entry) => ({
     params: { id: decodeURI(entry.id) },
-    props: { entry },
+    props: { entry, bannerImage },
   }));
 }
 // 2. For your template, you can get the entry directly from the prop
-const { entry } = Astro.props;
+const { entry, bannerImage } = Astro.props;
 
 let processedImage: ImageMetadata | undefined;
-const imageToFindPath = entry.data.bannerImage?.path;
+const imageToFindPath = bannerImage?.path;
 if (imageToFindPath) {
   const images = import.meta.glob<{ default: ImageMetadata }>(
     `/src/assets/images/posts/**/*.{jpeg,jpg,png,gif,webp,svg}`,
@@ -79,12 +86,12 @@ if (imageToFindPath) {
 >
   <section class='flex flex-col gap-4'>
     {
-      processedImage ? (
+      bannerImage && processedImage ? (
         <Image
           src={processedImage}
           alt={
-            entry.data.bannerImage.alt ??
-            `Post banner cover related to ${entry.data.topic.title}`
+            bannerImage.alt ??
+            `Post banner cover related to ${entry.data.topicTitle}`
           }
           loading={'eager'}
           decoding={'async'}
@@ -96,11 +103,7 @@ if (imageToFindPath) {
     <h1 class='text-center text-4xl font-extrabold'>{entry.data.title}</h1>
     <section class='flex flex-col gap-2'>
       <p class='text-center text-lg font-semibold'>
-        <span
-          >Written by: {
-            entry.data.authors.map((author) => author.username).join(', ')
-          }</span
-        >
+        <span>Written by: {entry.data.author}</span>
       </p>
       <p class='text-center text-base italic'>
         Read time: {entry.data.timeToRead}

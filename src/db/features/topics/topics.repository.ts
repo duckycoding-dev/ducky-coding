@@ -27,7 +27,7 @@ const getAllTopicsWithImage = async (): Promise<
       image: imagesTable,
     })
     .from(topicsTable)
-    .leftJoin(imagesTable, eq(topicsTable.imageId, imagesTable.id))
+    .leftJoin(imagesTable, eq(topicsTable.imagePath, imagesTable.path))
     .all();
 
   return topicsWithImages.map((row) => ({

@@ -1,8 +1,8 @@
 import type { Image, InsertImage } from './images.model';
 import { ImagesRepository } from './images.repository';
 
-const getImage = async (imageId: number): Promise<Image | undefined> => {
-  const selectedImages = await ImagesRepository.getImages([imageId]);
+const getImage = async (imagePath: string): Promise<Image | undefined> => {
+  const selectedImages = await ImagesRepository.getImages([imagePath]);
   return selectedImages[0];
 };
 
@@ -11,8 +11,8 @@ const getImageByPath = async (path: string): Promise<Image | undefined> => {
   return selectedImages[0];
 };
 
-const getImages = async (imageIds: number[]): Promise<Image[]> => {
-  const selectedImages = await ImagesRepository.getImages(imageIds);
+const getImages = async (imagePaths: string[]): Promise<Image[]> => {
+  const selectedImages = await ImagesRepository.getImages(imagePaths);
   return selectedImages;
 };
 

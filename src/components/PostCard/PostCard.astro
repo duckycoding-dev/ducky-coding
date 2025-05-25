@@ -13,6 +13,7 @@ import Tag from '@components/Tag/Tag.astro';
 export interface PostCardProps extends HTMLAttributes<'a'> {
   post: CollectionEntry<'posts'>;
   bannerImage?: ImageMetadata | null;
+  imageAlt?: string | null;
   loading?: 'eager' | 'lazy';
 }
 
@@ -20,7 +21,13 @@ interface Props extends PostCardProps {}
 
 const { props }: { props: Props } = Astro;
 
-const { post, bannerImage, class: className, loading = 'lazy' } = props;
+const {
+  post,
+  bannerImage,
+  class: className,
+  loading = 'lazy',
+  imageAlt,
+} = props;
 ---
 
 <Link variant='unstyled' href={`/posts/${post.id}`} class={cn(className)}>
@@ -33,7 +40,7 @@ const { post, bannerImage, class: className, loading = 'lazy' } = props;
       height={bannerImage
         ? Math.floor(bannerImage.height / 3)
         : Math.floor(DuckyCodingLogo.height / 3)}
-      alt={post.data.bannerImage.alt ?? 'Post banner image'}
+      alt={imageAlt ?? 'Post banner image'}
       densities={IMAGE_DENSITIES}
       loading={loading}
       decoding={'async'}
@@ -47,11 +54,7 @@ const { post, bannerImage, class: className, loading = 'lazy' } = props;
       </h2>
       <section>
         <p class='border-secondary px-5 text-base font-semibold'>
-          <span
-            >Written by: {
-              post.data.authors.map((author) => author.username).join(', ')
-            }</span
-          >
+          <span>Written by: {post.data.author}</span>
         </p>
         <p class='px-5 text-sm italic'>
           Read time: {post.data.timeToRead}

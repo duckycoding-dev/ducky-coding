@@ -1,4 +1,4 @@
-import { text, sqliteTable, integer } from 'drizzle-orm/sqlite-core';
+import { text, sqliteTable } from 'drizzle-orm/sqlite-core';
 import {
   createSelectSchema,
   createInsertSchema,
@@ -7,8 +7,7 @@ import {
 import { z } from 'zod';
 
 export const imagesTable = sqliteTable('images', {
-  id: integer().primaryKey({ autoIncrement: true }),
-  path: text().notNull().unique(), // Relative path from src/assets/images
+  path: text().primaryKey(), // Relative path from src/assets/images
   alt: text(),
   // credits: text('credits'), // TODO Possible text to add if needed, to give credit to the creator / original publisher of the image
 });

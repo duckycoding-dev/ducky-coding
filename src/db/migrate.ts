@@ -10,7 +10,9 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 async function main() {
   serverLogger.log('⏳ Running migrations...');
   try {
-    await migrate(db, { migrationsFolder: join(__dirname, 'migrations') });
+    const migrationDirectory = join(__dirname, 'migrations');
+    console.log('Migrations folder:', migrationDirectory);
+    await migrate(db, { migrationsFolder: migrationDirectory });
     serverLogger.log('✅⌛️ Migrated successfully');
   } catch (err) {
     serverLogger.error('❌⌛️ Migration failed');
@@ -18,4 +20,6 @@ async function main() {
   }
 }
 
-main();
+main().then(() => {
+  console.log('Migration script completed');
+});

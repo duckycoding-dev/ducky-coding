@@ -1,4 +1,4 @@
-import { integer, text, sqliteTable } from 'drizzle-orm/sqlite-core';
+import { text, sqliteTable } from 'drizzle-orm/sqlite-core';
 import { tagsTable } from '../tags/tags.model';
 import { imagesTable } from '../images/images.model';
 import {
@@ -15,7 +15,7 @@ export const topicsTable = sqliteTable('topics', {
     .notNull()
     .references(() => tagsTable.name),
   slug: text().unique().notNull(),
-  imageId: integer().references(() => imagesTable.id),
+  imagePath: text().references(() => imagesTable.path),
 });
 
 export const topicSchema = createSelectSchema(topicsTable);

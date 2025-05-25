@@ -1,23 +1,16 @@
 {
   "version": "6",
   "dialect": "sqlite",
-  "id": "4927108b-d2b1-4a72-adb9-27d30661f257",
+  "id": "041d34c5-6562-4f95-b0ff-94e842544a7e",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
     "images": {
       "name": "images",
       "columns": {
-        "id": {
-          "name": "id",
-          "type": "integer",
-          "primaryKey": true,
-          "notNull": true,
-          "autoincrement": true
-        },
         "path": {
           "name": "path",
           "type": "text",
-          "primaryKey": false,
+          "primaryKey": true,
           "notNull": true,
           "autoincrement": false
         },
@@ -29,89 +22,24 @@
           "autoincrement": false
         }
       },
-      "indexes": {
-        "images_path_unique": {
-          "name": "images_path_unique",
-          "columns": [
-            "path"
-          ],
-          "isUnique": true
-        }
-      },
+      "indexes": {},
       "foreignKeys": {},
       "compositePrimaryKeys": {},
-      "uniqueConstraints": {}
+      "uniqueConstraints": {},
+      "checkConstraints": {}
     },
-    "postsAuthors": {
-      "name": "postsAuthors",
+    "posts_tags": {
+      "name": "posts_tags",
       "columns": {
-        "postId": {
-          "name": "postId",
+        "post_id": {
+          "name": "post_id",
           "type": "integer",
           "primaryKey": false,
           "notNull": true,
           "autoincrement": false
         },
-        "authorId": {
-          "name": "authorId",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        }
-      },
-      "indexes": {},
-      "foreignKeys": {
-        "postsAuthors_postId_posts_id_fk": {
-          "name": "postsAuthors_postId_posts_id_fk",
-          "tableFrom": "postsAuthors",
-          "tableTo": "posts",
-          "columnsFrom": [
-            "postId"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
-        },
-        "postsAuthors_authorId_users_id_fk": {
-          "name": "postsAuthors_authorId_users_id_fk",
-          "tableFrom": "postsAuthors",
-          "tableTo": "users",
-          "columnsFrom": [
-            "authorId"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
-        }
-      },
-      "compositePrimaryKeys": {
-        "postsAuthors_postId_authorId_pk": {
-          "columns": [
-            "authorId",
-            "postId"
-          ],
-          "name": "postsAuthors_postId_authorId_pk"
-        }
-      },
-      "uniqueConstraints": {}
-    },
-    "postsTags": {
-      "name": "postsTags",
-      "columns": {
-        "postId": {
-          "name": "postId",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "tagName": {
-          "name": "tagName",
+        "tag_name": {
+          "name": "tag_name",
           "type": "text",
           "primaryKey": false,
           "notNull": true,
@@ -120,12 +48,12 @@
       },
       "indexes": {},
       "foreignKeys": {
-        "postsTags_postId_posts_id_fk": {
-          "name": "postsTags_postId_posts_id_fk",
-          "tableFrom": "postsTags",
+        "posts_tags_post_id_posts_id_fk": {
+          "name": "posts_tags_post_id_posts_id_fk",
+          "tableFrom": "posts_tags",
           "tableTo": "posts",
           "columnsFrom": [
-            "postId"
+            "post_id"
           ],
           "columnsTo": [
             "id"
@@ -133,12 +61,12 @@
           "onDelete": "no action",
           "onUpdate": "no action"
         },
-        "postsTags_tagName_tags_name_fk": {
-          "name": "postsTags_tagName_tags_name_fk",
-          "tableFrom": "postsTags",
+        "posts_tags_tag_name_tags_name_fk": {
+          "name": "posts_tags_tag_name_tags_name_fk",
+          "tableFrom": "posts_tags",
           "tableTo": "tags",
           "columnsFrom": [
-            "tagName"
+            "tag_name"
           ],
           "columnsTo": [
             "name"
@@ -148,15 +76,16 @@
         }
       },
       "compositePrimaryKeys": {
-        "postsTags_postId_tagName_pk": {
+        "posts_tags_post_id_tag_name_pk": {
           "columns": [
-            "postId",
-            "tagName"
+            "post_id",
+            "tag_name"
           ],
-          "name": "postsTags_postId_tagName_pk"
+          "name": "posts_tags_post_id_tag_name_pk"
         }
       },
-      "uniqueConstraints": {}
+      "uniqueConstraints": {},
+      "checkConstraints": {}
     },
     "posts": {
       "name": "posts",
@@ -182,9 +111,9 @@
           "notNull": true,
           "autoincrement": false
         },
-        "bannerImageId": {
-          "name": "bannerImageId",
-          "type": "integer",
+        "banner_image_path": {
+          "name": "banner_image_path",
+          "type": "text",
           "primaryKey": false,
           "notNull": false,
           "autoincrement": false
@@ -203,8 +132,16 @@
           "notNull": true,
           "autoincrement": false
         },
-        "topicTitle": {
-          "name": "topicTitle",
+        "author": {
+          "name": "author",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": "'DuckyCoding'"
+        },
+        "topic_title": {
+          "name": "topic_title",
           "type": "text",
           "primaryKey": false,
           "notNull": true,
@@ -215,10 +152,11 @@
           "type": "text",
           "primaryKey": false,
           "notNull": true,
-          "autoincrement": false
+          "autoincrement": false,
+          "default": "'en'"
         },
-        "timeToRead": {
-          "name": "timeToRead",
+        "time_to_read": {
+          "name": "time_to_read",
           "type": "integer",
           "primaryKey": false,
           "notNull": true,
@@ -233,31 +171,31 @@
           "autoincrement": false,
           "default": "'draft'"
         },
-        "createdAt": {
-          "name": "createdAt",
+        "created_at": {
+          "name": "created_at",
           "type": "integer",
           "primaryKey": false,
           "notNull": true,
           "autoincrement": false,
           "default": "(strftime('%s', 'now'))"
         },
-        "updatedAt": {
-          "name": "updatedAt",
+        "updated_at": {
+          "name": "updated_at",
           "type": "integer",
           "primaryKey": false,
           "notNull": true,
           "autoincrement": false,
           "default": "(strftime('%s', 'now'))"
         },
-        "publishedAt": {
-          "name": "publishedAt",
+        "published_at": {
+          "name": "published_at",
           "type": "integer",
           "primaryKey": false,
           "notNull": false,
           "autoincrement": false
         },
-        "deletedAt": {
-          "name": "deletedAt",
+        "deleted_at": {
+          "name": "deleted_at",
           "type": "integer",
           "primaryKey": false,
           "notNull": false,
@@ -266,25 +204,25 @@
       },
       "indexes": {},
       "foreignKeys": {
-        "posts_bannerImageId_images_id_fk": {
-          "name": "posts_bannerImageId_images_id_fk",
+        "posts_banner_image_path_images_path_fk": {
+          "name": "posts_banner_image_path_images_path_fk",
           "tableFrom": "posts",
           "tableTo": "images",
           "columnsFrom": [
-            "bannerImageId"
+            "banner_image_path"
           ],
           "columnsTo": [
-            "id"
+            "path"
           ],
           "onDelete": "no action",
           "onUpdate": "no action"
         },
-        "posts_topicTitle_topics_title_fk": {
-          "name": "posts_topicTitle_topics_title_fk",
+        "posts_topic_title_topics_title_fk": {
+          "name": "posts_topic_title_topics_title_fk",
           "tableFrom": "posts",
           "tableTo": "topics",
           "columnsFrom": [
-            "topicTitle"
+            "topic_title"
           ],
           "columnsTo": [
             "title"
@@ -294,58 +232,8 @@
         }
       },
       "compositePrimaryKeys": {},
-      "uniqueConstraints": {}
-    },
-    "sessions": {
-      "name": "sessions",
-      "columns": {
-        "id": {
-          "name": "id",
-          "type": "integer",
-          "primaryKey": true,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "userId": {
-          "name": "userId",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "refreshToken": {
-          "name": "refreshToken",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "expiresAt": {
-          "name": "expiresAt",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        }
-      },
-      "indexes": {},
-      "foreignKeys": {
-        "sessions_userId_users_id_fk": {
-          "name": "sessions_userId_users_id_fk",
-          "tableFrom": "sessions",
-          "tableTo": "users",
-          "columnsFrom": [
-            "userId"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
-        }
-      },
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {}
+      "uniqueConstraints": {},
+      "checkConstraints": {}
     },
     "tags": {
       "name": "tags",
@@ -369,7 +257,8 @@
       },
       "foreignKeys": {},
       "compositePrimaryKeys": {},
-      "uniqueConstraints": {}
+      "uniqueConstraints": {},
+      "checkConstraints": {}
     },
     "topics": {
       "name": "topics",
@@ -388,9 +277,9 @@
           "notNull": true,
           "autoincrement": false
         },
-        "imageId": {
-          "name": "imageId",
-          "type": "integer",
+        "image_path": {
+          "name": "image_path",
+          "type": "text",
           "primaryKey": false,
           "notNull": false,
           "autoincrement": false
@@ -426,148 +315,26 @@
           "onDelete": "no action",
           "onUpdate": "no action"
         },
-        "topics_imageId_images_id_fk": {
-          "name": "topics_imageId_images_id_fk",
+        "topics_image_path_images_path_fk": {
+          "name": "topics_image_path_images_path_fk",
           "tableFrom": "topics",
           "tableTo": "images",
           "columnsFrom": [
-            "imageId"
+            "image_path"
           ],
           "columnsTo": [
-            "id"
+            "path"
           ],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
       },
       "compositePrimaryKeys": {},
-      "uniqueConstraints": {}
-    },
-    "users": {
-      "name": "users",
-      "columns": {
-        "id": {
-          "name": "id",
-          "type": "integer",
-          "primaryKey": true,
-          "notNull": true,
-          "autoincrement": true
-        },
-        "username": {
-          "name": "username",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "email": {
-          "name": "email",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "password": {
-          "name": "password",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "name": {
-          "name": "name",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "lastName": {
-          "name": "lastName",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
-        },
-        "profilePictureId": {
-          "name": "profilePictureId",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
-        },
-        "bio": {
-          "name": "bio",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
-        },
-        "createdAt": {
-          "name": "createdAt",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false,
-          "default": "(strftime('%s', 'now'))"
-        },
-        "updatedAt": {
-          "name": "updatedAt",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false,
-          "default": "(strftime('%s', 'now'))"
-        },
-        "deletedAt": {
-          "name": "deletedAt",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
-        }
-      },
-      "indexes": {
-        "users_id_unique": {
-          "name": "users_id_unique",
-          "columns": [
-            "id"
-          ],
-          "isUnique": true
-        },
-        "users_username_unique": {
-          "name": "users_username_unique",
-          "columns": [
-            "username"
-          ],
-          "isUnique": true
-        },
-        "users_email_unique": {
-          "name": "users_email_unique",
-          "columns": [
-            "email"
-          ],
-          "isUnique": true
-        }
-      },
-      "foreignKeys": {
-        "users_profilePictureId_images_id_fk": {
-          "name": "users_profilePictureId_images_id_fk",
-          "tableFrom": "users",
-          "tableTo": "images",
-          "columnsFrom": [
-            "profilePictureId"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
-        }
-      },
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {}
+      "uniqueConstraints": {},
+      "checkConstraints": {}
     }
   },
+  "views": {},
   "enums": {},
   "_meta": {
     "schemas": {},
