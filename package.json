@@ -41,25 +41,22 @@
     "drizzle:seed": "node --loader esbuild-register/loader -r esbuild-register ./db/seed.ts"
   },
   "dependencies": {
-    "@libsql/client": "^0.15.7",
-    "drizzle-kit": "^0.31.1",
-    "drizzle-orm": "^0.43.1",
-    "drizzle-zod": "^0.7.1",
     "@astrojs/check": "^0.9.4",
-    "@astrojs/mdx": "^4.2.6",
-    "@astrojs/netlify": "^6.3.3",
+    "@astrojs/mdx": "^4.3.0",
+    "@astrojs/netlify": "^6.3.4",
     "@astrojs/sitemap": "^3.4.0",
-    "@ducky-coding/db": "*",
-    "@custom-types": "*",
-    "@ducky-coding/utils": "*",
     "@iconify-json/mdi": "^1.1.66",
     "@iconify-json/ph": "^1.1.13",
+    "@libsql/client": "^0.15.7",
     "@tailwindcss/vite": "^4.1.6",
     "astro": "^5.8.0",
     "astro-icon": "^1.1.5",
     "astro-seo": "^0.8.4",
     "clsx": "^2.1.1",
     "cva": "^1.0.0-beta.4",
+    "drizzle-kit": "^0.31.1",
+    "drizzle-orm": "^0.43.1",
+    "drizzle-zod": "^0.7.1",
     "tailwind-merge": "^3.3.0",
     "tailwindcss": "^4.1.6"
   },
@@ -72,10 +69,10 @@
     "lightningcss": "^1.30.1",
     "nx": "18.0.7",
     "prettier": "^3.5.3",
+    "prettier-plugin-astro": "^0.14.1",
     "prettier-plugin-tailwindcss": "^0.6.10",
-    "typescript": "^5.8.3",
-    "typescript-eslint": "^8.32.1",
     "tsx": "^4.19.2",
-    "prettier-plugin-astro": "^0.14.1"
+    "typescript": "^5.8.3",
+    "typescript-eslint": "^8.32.1"
   }
 }

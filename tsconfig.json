@@ -1,14 +1,7 @@
 {
   "extends": ["astro/tsconfigs/strict"],
-  "include": ["src/**/*"],
-  "exclude": [
-    "./node_modules",
-    "*.config.js",
-    "./dist",
-    "./dist/**/*",
-    ".netlify",
-    ".astro/"
-  ],
+  "include": ["src/**/*", ".astro/types.d.ts"],
+  "exclude": ["dist"],
   "compilerOptions": {
     "baseUrl": ".",
     "rootDir": "src",
