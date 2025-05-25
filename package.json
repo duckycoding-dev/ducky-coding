@@ -1,8 +1,8 @@
 {
   "version": "0.0.1",
-  "name": "@ducky-coding/root",
+  "name": "ducky-coding-dev",
   "author": "DuckyCoding <duckycoding.dev@gmail.com>",
-  "description": "Monorepo for developing and managing Ducky Codings's website and other packages",
+  "description": "Ducky Codings's blog website, built with Astro",
   "private": true,
   "license": "MIT",
   "workspaces": [
@@ -12,8 +12,8 @@
   "keywords": [
     "duckycoding",
     "webdev",
-    "monorepo",
-    "root"
+    "astro",
+    "drizzle"
   ],
   "repository": {
     "type": "git",
@@ -21,6 +21,43 @@
   },
   "bugs": {
     "url": "https://github.com/duckycoding-dev/ducky-coding/issues"
+  },
+  "files": [
+    "dist"
+  ],
+  "main": "dist/index.html",
+  "scripts": {
+    "astro:check": "astro check",
+    "astro:dev": "astro dev",
+    "astro:build": "astro check && astro build",
+    "astro:build:local": "astro build --mode development",
+    "astro:preview": "astro preview",
+    "db:dev": "turso dev --db-file database/content.db && tsc -w",
+    "db:migrate:local": "tsx --env-file=.env.development ./src/db/migrate.ts",
+    "db:migrate": "tsx --env-file=.env.production ./src/db/migrate.ts",
+    "drizzle:generate_migrations": "drizzle-kit generate",
+    "drizzle:studio": "npx drizzle-kit studio",
+    "drizzle:seed": "tsx --env-file=.env.development ./src/db/seed.ts"
+  },
+  "dependencies": {
+    "@astrojs/check": "^0.9.4",
+    "@astrojs/mdx": "^4.3.0",
+    "@astrojs/netlify": "^6.3.4",
+    "@astrojs/sitemap": "^3.4.0",
+    "@iconify-json/mdi": "^1.1.66",
+    "@iconify-json/ph": "^1.1.13",
+    "@libsql/client": "^0.15.7",
+    "@tailwindcss/vite": "^4.1.6",
+    "astro": "^5.8.0",
+    "astro-icon": "^1.1.5",
+    "astro-seo": "^0.8.4",
+    "clsx": "^2.1.1",
+    "cva": "^1.0.0-beta.4",
+    "drizzle-kit": "^0.31.1",
+    "drizzle-orm": "^0.43.1",
+    "drizzle-zod": "^0.7.1",
+    "tailwind-merge": "^3.3.0",
+    "tailwindcss": "^4.1.6"
   },
   "devDependencies": {
     "eslint": "^9.26.0",
@@ -31,23 +68,10 @@
     "lightningcss": "^1.30.1",
     "nx": "18.0.7",
     "prettier": "^3.5.3",
+    "prettier-plugin-astro": "^0.14.1",
     "prettier-plugin-tailwindcss": "^0.6.10",
+    "tsx": "^4.19.2",
     "typescript": "^5.8.3",
     "typescript-eslint": "^8.32.1"
-  },
-  "scripts": {
-    "dev": "npx lerna run dev",
-    "dev:astro": "npx lerna run dev --scope=@ducky-coding/astro-app",
-    "dev:db": "npx lerna run dev --scope=@ducky-coding/db",
-    "build": "npx lerna run build",
-    "build:astro": "npx lerna run build --scope=@ducky-coding/astro-app",
-    "build:types": "npx lerna run build --scope=@ducky-coding/types",
-    "build:utils": "npx lerna run build --scope=@ducky-coding/utils",
-    "build:db": "npx lerna run build --scope=@ducky-coding/db",
-    "start": "npx lerna run start",
-    "start:astro": "npx lerna run start --scope=@ducky-coding/astro-app"
-  },
-  "dependencies": {
-    "zod": "3.24.0"
   }
 }

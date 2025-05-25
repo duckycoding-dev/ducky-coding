@@ -1,2 +1,0 @@
-export { type HeaderProps } from './Header.astro';
-export { default as Header } from './Header.astro';

@@ -1,0 +1,32 @@
+---
+import type { HTMLAttributes } from 'astro/types';
+import Input from '@components/Form/Input/Input.astro';
+
+export interface InputWithLabelProps {}
+
+interface Props
+  extends InputWithLabelProps,
+    HTMLAttributes<'input'>,
+    HTMLAttributes<'label'> {}
+
+const { props }: { props: Props } = Astro;
+---
+
+<label class='flex flex-col gap-1' for={props.id} id={`${props.id}-label`}>
+  <span class='text-secondary-900 font-semibold'>
+    <slot />
+    {
+      props.required && (
+        <span title='This field is required!' class='text-danger'>
+          *
+        </span>
+      )
+    }
+  </span>
+  <Input
+    {...props}
+    placeholder={props.required === false
+      ? `${props.placeholder} (optional)`
+      : props.placeholder}
+  />
+</label>

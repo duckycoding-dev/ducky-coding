@@ -1,0 +1,132 @@
+---
+import { getCollection } from 'astro:content';
+import HolyGrailLayout from '@layouts/HolyGrailLayout/HolyGrailLayout.astro';
+import { Image } from 'astro:assets';
+import { IMAGE_DENSITIES } from '@utils/globals';
+import type { ImageMetadata } from 'astro';
+import { matchImageFromGlobImport } from '@utils/images/images';
+import Tag from '@components/Tag/Tag.astro';
+import Link from '@components/Link/Link.astro';
+import MarkdownContent from '@layouts/MarkdownContent/MarkdownContent.astro';
+import type { Image as BannerImage } from '@db/features/images/images.model'; // import { syncPostWithDatabase } from '@utils/content/content';
+
+import { serverLogger } from '@utils/logs/logger';
+
+// 1. Generate a new path for every collection entry
+export async function getStaticPaths() {
+  const postsEntries = await getCollection('posts');
+  serverLogger.log('Posts entries', JSON.stringify(postsEntries, null, 2));
+  const failedSyncs: typeof postsEntries = [];
+
+  const syncPromises: Promise<void>[] = [];
+  if (import.meta.env.PROD) {
+    postsEntries.forEach((_post) => {
+      // syncPromises.push(syncPostWithDatabase(post.data, post.id)); // TODO add back when the sync function is implemented
+    });
+  }
+
+  const syncResults = await Promise.allSettled(syncPromises);
+  syncResults.forEach((result, index) => {
+    if (result.status === 'rejected') {
+      console.log('Post sync fail reason: ', result.reason);
+      if (postsEntries[index]) {
+        failedSyncs.push(postsEntries[index]);
+      }
+    }
+  });
+
+  if (failedSyncs.length > 0) {
+    serverLogger.error(
+      'Failed to sync the following posts with database',
+      failedSyncs.map((post) => post.id).join(', '),
+    );
+  } else {
+    serverLogger.log('All posts synced with database');
+  }
+
+  const bannerImage: BannerImage | undefined = {
+    path: '/assets/images/posts/banner.jpg',
+    alt: 'Banner image for posts section',
+  }; // TODO replace with fetched image data from db
+
+  return postsEntries.map((entry) => ({
+    params: { id: decodeURI(entry.id) },
+    props: { entry, bannerImage },
+  }));
+}
+// 2. For your template, you can get the entry directly from the prop
+const { entry, bannerImage } = Astro.props;
+
+let processedImage: ImageMetadata | undefined;
+const imageToFindPath = bannerImage?.path;
+if (imageToFindPath) {
+  const images = import.meta.glob<{ default: ImageMetadata }>(
+    `/src/assets/images/posts/**/*.{jpeg,jpg,png,gif,webp,svg}`,
+  );
+  processedImage = await matchImageFromGlobImport(
+    images,
+    imageToFindPath,
+    serverLogger,
+  );
+}
+---
+
+<HolyGrailLayout
+  seoProps={{
+    description: entry.data.summary,
+    extend: {
+      meta: [
+        {
+          name: 'keywords',
+          content: entry.data.tags.join(', '),
+        },
+      ],
+    },
+  }}
+>
+  <section class='flex flex-col gap-4'>
+    {
+      bannerImage && processedImage ? (
+        <Image
+          src={processedImage}
+          alt={
+            bannerImage.alt ??
+            `Post banner cover related to ${entry.data.topicTitle}`
+          }
+          loading={'eager'}
+          decoding={'async'}
+          class='border-comic border-secondary shadow-comic-lg w-full'
+          densities={IMAGE_DENSITIES}
+        />
+      ) : null
+    }
+    <h1 class='text-center text-4xl font-extrabold'>{entry.data.title}</h1>
+    <section class='flex flex-col gap-2'>
+      <p class='text-center text-lg font-semibold'>
+        <span>Written by: {entry.data.author}</span>
+      </p>
+      <p class='text-center text-base italic'>
+        Read time: {entry.data.timeToRead}
+        {entry.data.timeToRead > 1 ? 'minutes' : 'minute'}
+      </p>
+    </section>
+    {
+      entry.data.tags.length > 0 ? (
+        <section class='flex flex-wrap gap-2'>
+          {entry.data.tags.map((tag, index) => (
+            <Link
+              variant='unstyled'
+              href={`/topics/${tag}`}
+              class='text-secondary'
+            >
+              <Tag class={`${index % 2 === 0 ? 'bg-accent2' : 'bg-accent'}`}>
+                {tag}
+              </Tag>
+            </Link>
+          ))}
+        </section>
+      ) : null
+    }
+    <MarkdownContent entry={entry} />
+  </section>
+</HolyGrailLayout>
