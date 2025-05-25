@@ -1,3 +1,4 @@
+import { serverLogger } from '@utils/logs/logger';
 import { db } from './client';
 import { imagesTable } from './features/images/images.model';
 import { postsTable } from './features/posts/posts.model';
@@ -78,7 +79,7 @@ export default async function seed() {
     },
   ]);
 
-  console.log('✅ Database seeded successfully');
+  serverLogger.info('✅ Database seeded successfully');
 }
 
 seed();

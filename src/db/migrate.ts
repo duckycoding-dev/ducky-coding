@@ -13,13 +13,11 @@ async function main() {
     const migrationDirectory = join(__dirname, 'migrations');
     console.log('Migrations folder:', migrationDirectory);
     await migrate(db, { migrationsFolder: migrationDirectory });
-    serverLogger.log('✅⌛️ Migrated successfully');
+    serverLogger.info('✅⌛️ Migrated successfully');
   } catch (err) {
     serverLogger.error('❌⌛️ Migration failed');
     serverLogger.error(err);
   }
 }
 
-main().then(() => {
-  console.log('Migration script completed');
-});
+main();
