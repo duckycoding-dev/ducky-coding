@@ -1,0 +1,200 @@
+---
+import Link from '@components/Link/Link.astro';
+import StackOverflowIcon from '@components/Icons/StackOverflowIcon/StackOverflowIcon.astro';
+import XIcon from '@components/Icons/XIcon/XIcon.astro';
+import GitHubIcon from '@components/Icons/GitHubIcon/GitHubIcon.astro';
+import InstagramIcon from '@components/Icons/InstagramIcon/InstagramIcon.astro';
+import RedditIcon from '@components/Icons/RedditIcon/RedditIcon.astro';
+import TikTokIcon from '@components/Icons/TikTokIcon/TikTokIcon.astro';
+import YouTubeIcon from '@components/Icons/YouTubeIcon/YouTubeIcon.astro';
+import type { HTMLAttributes } from 'astro/types';
+
+export type AnimatedWheelProps = {
+  itemSize: number;
+  wheelDegreeInclination?: number;
+  itemBackgroundColor?: string;
+  itemBacksideColor?: string;
+  itemRadius?: `${number}%` | `${number}px`;
+  perspective?: number;
+  spinDuration?: number;
+  wheelRadius?: string | number;
+  wheelType?: 'circle' | 'spiral';
+  flat?: boolean; // if true, the .slider wrapper becomes display grid, styled in a certain way
+  flatStyle?: 'row' | 'column';
+};
+
+interface Props extends HTMLAttributes<'div'>, AnimatedWheelProps {}
+
+const {
+  itemSize,
+  wheelDegreeInclination = 0,
+  wheelRadius = itemSize,
+  wheelType = 'circle',
+  itemBackgroundColor = 'transparent',
+  itemBacksideColor = 'transparent',
+  itemRadius,
+  perspective = 1000,
+  spinDuration = 5,
+  flat = false,
+  class: className,
+}: Props = Astro.props;
+---
+
+<div class=`slider ${flat ? 'flat' : ''} ${className}` style='--quantity: 7'>
+  <div class='item' style='--position: 1'>
+    <span></span>
+    <Link href='https://github.com/duckycoding-dev' variant={'unstyled'}>
+      <GitHubIcon size={itemSize} />
+    </Link>
+  </div>
+  <div class='item' style='--position: 2'>
+    <span></span>
+    <Link href='https://x.com/ducky_coding' variant={'unstyled'}>
+      <XIcon size={itemSize} />
+    </Link>
+  </div>
+  <div class='item' style='--position: 3'>
+    <span></span>
+    <Link href='https://www.instagram.com/ducky.coding/' variant={'unstyled'}>
+      <InstagramIcon size={itemSize} />
+    </Link>
+  </div>
+  <div class='item' style='--position: 4'>
+    <span></span>
+    <Link
+      href='https://stackoverflow.com/users/23628435/ducky-coding'
+      variant={'unstyled'}
+    >
+      <StackOverflowIcon size={itemSize} />
+    </Link>
+  </div>
+  <div class='item' style='--position: 5'>
+    <span></span>
+    <Link
+      href='https://www.reddit.com/user/DuckyCodingDev/'
+      variant={'unstyled'}
+    >
+      <RedditIcon size={itemSize} />
+    </Link>
+  </div>
+  <div class='item' style='--position: 6'>
+    <span></span>
+    <Link href='https://www.tiktok.com/@ducky.coding' variant={'unstyled'}>
+      <TikTokIcon size={itemSize} />
+    </Link>
+  </div>
+  <div class='item' style='--position: 7'>
+    <span></span>
+    <Link href='https://www.youtube.com/@ducky.coding' variant={'unstyled'}>
+      <YouTubeIcon size={itemSize} />
+    </Link>
+  </div>
+</div>
+
+<style
+  define:vars={{
+    itemSize: `${itemSize}px`,
+    itemBackgroundColor,
+    itemBacksideColor,
+    itemRadius: `${itemRadius}`,
+    wheelDegreeInclination: `${wheelDegreeInclination}deg`,
+    perspective: `${perspective}px`,
+    spinDuration: `${spinDuration}s`,
+    wheelRadius:
+      typeof wheelRadius === 'string' ? wheelRadius : `${wheelRadius}px`,
+    wheelType: wheelType === 'circle' ? 'grid' : 'block',
+  }}
+>
+  .slider:focus-within,
+  .slider:hover {
+    animation-play-state: paused;
+  }
+
+  .slider {
+    position: relative;
+    display: var(--wheelType);
+    will-change: transform;
+    transform-style: preserve-3d;
+    transform: perspective(var(--perspective));
+    animation: autoRotate var(--spinDuration) linear infinite running;
+  }
+
+  .flat.slider {
+    transform: none;
+    animation: none;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(50px, 1fr));
+    justify-items: center;
+    gap: 1rem;
+  }
+
+  @keyframes autoRotate {
+    from {
+      transform: perspective(var(--perspective))
+        rotateX(var(--wheelDegreeInclination)) rotateY(0deg);
+    }
+    to {
+      transform: perspective(var(--perspective))
+        rotateX(var(--wheelDegreeInclination)) rotateY(360deg);
+    }
+  }
+
+  .item {
+    border-radius: 50%;
+    display: grid;
+    grid-column: 1;
+    grid-row: 1;
+    inset: 0 0 0 0;
+    will-change: transform;
+    transform: rotateY(
+        calc((var(--position) - 1) * (360 / var(--quantity)) * 1deg)
+      )
+      translateZ(var(--wheelRadius));
+    transform-style: preserve-3d;
+  }
+
+  .flat .item {
+    grid-column: unset;
+    grid-row: unset;
+    transform: none;
+  }
+
+  .item > a {
+    border-radius: var(--itemRadius);
+    grid-column: 1;
+    grid-row: 1;
+    overflow: hidden;
+    width: fit-content;
+  }
+
+  .item > span {
+    border-radius: var(--itemRadius);
+    grid-column: 1;
+    grid-row: 1;
+    overflow: hidden;
+    background-color: var(--itemBacksideColor);
+    width: var(--itemSize);
+    transform: translateZ(-0.1px);
+  }
+  svg {
+    position: relative;
+    background-color: var(--itemBackgroundColor);
+  }
+
+  @media (prefers-reduced-motion) {
+    .item {
+      grid-column: unset;
+      grid-row: unset;
+      transform: none;
+    }
+
+    .slider {
+      transform: none;
+      animation: none;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(50px, 1fr));
+      gap: 1rem;
+      justify-items: center;
+    }
+  }
+</style>

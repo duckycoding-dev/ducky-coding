@@ -45,6 +45,7 @@
   "[astro]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
+  "astro.content-intellisense": true,
   "materialdesigniconsIntellisense.selector": [
     "javascript",
     "typescript",

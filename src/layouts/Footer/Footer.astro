@@ -1,0 +1,102 @@
+---
+import type { HTMLAttributes } from 'astro/types';
+import AnimatedWheel from '@components/AnimatedWheel/AnimatedWheel.astro';
+import Link from '@components/Link/Link.astro';
+import DuckIcon from '@components/Icons/DuckIcon/DuckIcon.astro';
+import { cn } from '@utils/cn';
+
+export interface FooterProps {}
+
+interface Props extends HTMLAttributes<'footer'>, FooterProps {}
+
+const { class: className, ...props }: Props = Astro.props;
+---
+
+<footer
+  class={cn(
+    'bg-primary-700 border-comic border-secondary py-8 [grid-area:footer] border-x-0 border-b-0',
+    className,
+  )}
+  {...props}
+>
+  <div
+    class='mx-auto grid w-full max-w-7xl items-stretch gap-8 px-8 md:grid-cols-3'
+  >
+    <section class='bg-primary-700 min-h-8 w-full px-8 md:col-span-2'>
+      <h2 class='text-center text-2xl font-extrabold md:text-start'>
+        Stay in touch
+      </h2>
+      <div class='flex justify-center pt-8 pb-6 md:pb-12'>
+        <AnimatedWheel
+          itemSize={50}
+          spinDuration={10}
+          itemBackgroundColor={'var(--color-primary-700)'}
+          itemBacksideColor={'var(--color-primary-800)'}
+          itemRadius='50%'
+          wheelDegreeInclination={-5}
+          class='w-full'
+          wheelType='circle'
+        />
+      </div>
+    </section>
+    <nav
+      class='flex min-h-12 w-full flex-col items-center justify-center gap-8 md:justify-end'
+    >
+      <h2 class='text-center text-2xl font-extrabold md:text-start'>
+        Quick links
+      </h2>
+      <ul class='flex h-full flex-col gap-4'>
+        <li>
+          <Link
+            href={'/'}
+            class={'text-xl md:text-base text-secondary font-medium w-full flex items-center gap-4 '}
+          >
+            <DuckIcon title='' variant={'small'} class='inline' />
+            Home
+          </Link>
+        </li>
+        <li>
+          <Link
+            href={'/md/test'}
+            class={'text-xl md:text-base text-secondary font-medium w-full flex items-center gap-4'}
+          >
+            <DuckIcon title='' variant={'small'} class='inline' />
+            Test Markdown
+          </Link>
+        </li>
+        <li>
+          <Link
+            href={'/about'}
+            class={'text-xl md:text-base text-secondary font-medium w-full flex items-center gap-4'}
+          >
+            <DuckIcon title='' variant={'small'} class='inline' />
+            About me
+          </Link>
+        </li>
+        <li>
+          <Link
+            href={'/topics'}
+            size={'medium'}
+            class={'text-xl md:text-base text-secondary font-medium w-full flex items-center gap-4'}
+          >
+            <DuckIcon title='' variant={'small'} class='inline' />
+            Topics
+          </Link>
+        </li>
+        <li>
+          <Link
+            href={'/components'}
+            size={'medium'}
+            class={'text-xl md:text-base text-secondary font-medium w-full flex items-center gap-4'}
+          >
+            <DuckIcon title='' variant={'small'} class='inline' />
+            Components
+          </Link>
+        </li>
+      </ul>
+    </nav>
+    <section class='flex justify-center md:col-span-full'>
+      <small>Copyright &copy; 2024 - DuckyCoding - All Rights Reserved</small>
+    </section>
+  </div>
+</footer>

@@ -1,7 +1,26 @@
 {
+  "extends": ["astro/tsconfigs/strict"],
+  "include": ["src/**/*", ".astro/types.d.ts"],
+  "exclude": ["dist"],
   "compilerOptions": {
+    "baseUrl": ".",
+    "rootDir": "src",
+    "paths": {
+      "@components/*": ["src/components/*"],
+      "@layouts/*": ["src/layouts/*"],
+      "@content/*": ["src/content/*"],
+      "@utils/*": ["src/utils/*"],
+      "@styles/*": ["src/styles/*"],
+      "@assets/*": ["src/assets/*"],
+      "@services/*": ["src/services/*"],
+      "@custom-types/*": ["src/types/*"],
+      "@db/*": ["src/db/*"]
+    },
     /* Emit */
-    "declaration": true /* Generate .d.ts files from TypeScript and JavaScript files in your project. */,
+    "declaration": true /* Generate .d.ts files from TypeScript and JavaScript files in your project.
+     */,
+    // "declaration": false, //set this to false, else I get the error (1): don't need many .ts files in the astro package anyways, so it's not a big problem to not have d.ts files
+    // "declarationMap": false,
     "declarationMap": true /* Create sourcemaps for d.ts files. */,
     "sourceMap": true /* Create source map files for emitted JavaScript files. */,
 
@@ -34,6 +53,12 @@
 
     /* Completeness */
     "skipLibCheck": true /* Skip type checking all .d.ts files. */
-  },
-  "exclude": ["./node_modules", "*.config.js", "./dist"]
+  }
 }
+
+
+/* (1)
+The inferred type of 'ExampleTable' cannot be named without a reference to '../../../../node_modules/@astrojs/db/dist/_internal/core/types'.
+This is likely not portable. A type annotation is necessary.ts(2742)
+https://stackoverflow.com/questions/76415855/error-ts2742-the-inferred-type-of-orderservice-cannot-be-named-without-a-refe
+*/

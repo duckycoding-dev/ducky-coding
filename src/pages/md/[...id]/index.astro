@@ -1,0 +1,31 @@
+---
+import { getCollection, render } from 'astro:content';
+import HolyGrailLayout from '@layouts/HolyGrailLayout/HolyGrailLayout.astro';
+import { MarkdownComponents } from '@components/Markdown';
+import '@styles/markdown.css';
+
+// 1. Generate a new path for every collection entry
+export async function getStaticPaths() {
+  const postsEntries = await getCollection('md');
+
+  return postsEntries.map((entry) => ({
+    params: { id: decodeURI(entry.id) },
+    props: { entry },
+  }));
+}
+// 2. For your template, you can get the entry directly from the prop
+const { entry } = Astro.props;
+const { Content } = await render(entry);
+---
+
+<HolyGrailLayout
+  seoProps={{
+    description: entry.data.summary,
+  }}
+>
+  <section class='flex flex-col gap-4'>
+    <article class='markdown-content'>
+      <Content components={MarkdownComponents} />
+    </article>
+  </section>
+</HolyGrailLayout>

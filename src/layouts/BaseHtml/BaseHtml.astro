@@ -1,0 +1,50 @@
+---
+import type { HTMLAttributes } from 'astro/types';
+import BaseHead, { type BaseHeadProps } from '@layouts/BaseHead/BaseHead.astro';
+
+import '@styles/global.css';
+import './BaseHtml.style.module.css';
+
+export type CSSTheme = 'default' | 'dark-theme';
+
+export interface BaseHtmlProps extends BaseHeadProps {
+  theme?: CSSTheme;
+}
+
+interface Props extends HTMLAttributes<'html'>, BaseHtmlProps {}
+
+const { theme = 'default', title, seoProps, ...props }: Props = Astro.props;
+---
+
+<!doctype html>
+<html data-theme={theme} lang='en' class='bg-primary' {...props}>
+  <title>{title ? `${title} - DuckyCoding` : 'DuckyCoding'}</title>
+
+  <meta charset='utf-8' />
+  <link
+    rel='apple-touch-icon'
+    sizes='180x180'
+    href='/images/apple-touch-icon.png'
+  />
+  <link rel='icon' type='image/x-icon' href='/images/favicon.ico' />
+  <link
+    rel='icon'
+    type='image/png'
+    sizes='32x32'
+    href='/images/favicon-32x32.png'
+  />
+  <link
+    rel='icon'
+    type='image/png'
+    sizes='16x16'
+    href='/images/favicon-16x16.png'
+  />
+  <meta name='viewport' content='width=device-width, initial-scale=1' />
+  <meta name='generator' content={Astro.generator} />
+
+  <BaseHead seoProps={seoProps} />
+
+  <body class=`min-h-dvh`>
+    <slot />
+  </body>
+</html>
