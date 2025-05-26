@@ -50,7 +50,16 @@ const processedTopics = await Promise.all(
   }}
 >
   <h1 class='mb-8 text-center text-4xl font-extrabold'>Topics</h1>
-  <section class='grid-container grid grid-cols-1 gap-5'>
+  <section
+    class='xs:grid-cols-2 grid grid-cols-1 gap-5 sm:grid-cols-[repeat(auto-fill,minmax(150px,1fr))]'
+  >
+    {
+      processedTopics.length === 0 && (
+        <p class='col-span-full text-center text-lg font-semibold'>
+          No topics available at the moment.
+        </p>
+      )
+    }
     {
       processedTopics.map((topic) => (
         <TopicCard
@@ -63,19 +72,3 @@ const processedTopics = await Promise.all(
     }
   </section>
 </HolyGrailLayout>
-
-<style>
-  .grid-container {
-    grid-template-columns: 1fr;
-  }
-  @media (width >= var(--breakpoint-xs)) {
-    .grid-container {
-      grid-template-columns: repeat(2, minmax(100px, 1fr));
-    }
-  }
-  @media (width >= var(--breakpoint-sm)) {
-    .grid-container {
-      grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-    }
-  }
-</style>

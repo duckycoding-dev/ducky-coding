@@ -116,7 +116,7 @@ if (imageToFindPath) {
           {entry.data.tags.map((tag, index) => (
             <Link
               variant='unstyled'
-              href={`/topics/${tag}`}
+              href={`/topics/${tag.toLowerCase()}`}
               class='text-secondary'
             >
               <Tag class={`${index % 2 === 0 ? 'bg-accent2' : 'bg-accent'}`}>
