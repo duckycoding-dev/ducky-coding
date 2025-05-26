@@ -14,7 +14,7 @@ const { class: className, ...props }: Props = Astro.props;
 
 <nav
   class={cn(
-    'overflow-y-visible overflow-x-hidden md:overflow-x-visible bg-primary-700 top-0 left-0 md:top-0 md:left-0 fixed md:static h-dvh w-full flex flex-col md:h-auto md:flex-row gap-x-8 px-8 md:px-0 pb-8 pt-16 md:py-0 max-w-96 gap-y-4 border-comic border-secondary border-y-0 border-l-0 md:border-none md:justify-end',
+    'overflow-y-visible overflow-x-hidden md:overflow-x-visible bg-primary-700 top-0 left-0 md:top-0 md:left-0 fixed md:static h-dvh w-full flex flex-col md:h-auto md:flex-row gap-x-8 px-8 md:px-0 pb-8 pt-16 md:py-0 max-w-96 gap-y-4 border-comic border-secondary border-y-0 border-l-0 md:border-none md:justify-end min-w-fit',
     className,
   )}
   {...props}
@@ -31,7 +31,7 @@ const { class: className, ...props }: Props = Astro.props;
     />
     <h2 class='text-secondary text-3xl md:hidden lg:block'>DuckyCoding</h2>
   </div>
-  <ul class='flex h-full flex-col gap-4 md:flex-row md:items-center'>
+  <ul class='flex h-full min-w-fit flex-col gap-4 md:flex-row md:items-center'>
     <li>
       <Link
         href={'/'}
@@ -46,6 +46,24 @@ const { class: className, ...props }: Props = Astro.props;
         variant={'default'}
         class={'text-3xl md:text-base text-secondary font-medium w-full'}
         >Topics</Link
+      >
+    </li>
+    <li>
+      <Link
+        href={'/about-me'}
+        size={'medium'}
+        variant={'default'}
+        class={'text-3xl md:text-base text-secondary font-medium w-full'}
+        >About me</Link
+      >
+    </li>
+    <li>
+      <Link
+        href={'/my-projects'}
+        size={'medium'}
+        variant={'default'}
+        class={'text-3xl md:text-base text-secondary font-medium w-full'}
+        >My projects</Link
       >
     </li>
     <li>

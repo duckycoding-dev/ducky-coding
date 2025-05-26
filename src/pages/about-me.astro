@@ -1,0 +1,397 @@
+---
+import HolyGrailLayout from '@layouts/HolyGrailLayout/HolyGrailLayout.astro';
+import Card from '@components/Card/Card.astro';
+import Link from '@components/Link/Link.astro';
+import Button from '@components/Button/Button.astro';
+import DuckIcon from '../components/Icons/DuckIcon/DuckIcon.astro';
+---
+
+<HolyGrailLayout
+  seoProps={{
+    title: 'About Me - DuckyCoding',
+    description:
+      'Learn more about the developer behind DuckyCoding - a passionate web developer crafting modern digital experiences.',
+    extend: {
+      meta: [
+        {
+          name: 'keywords',
+          content:
+            'DuckyCoding, about, developer, web development, portfolio, bio',
+        },
+      ],
+    },
+  }}
+>
+  <!-- Hero Section -->
+  <section class='mb-16'>
+    <div class='grid grid-cols-1 items-center gap-8 lg:grid-cols-2'>
+      <div class='order-2 lg:order-1'>
+        <h1
+          class='text-secondary mb-6 text-4xl leading-tight font-black md:text-5xl lg:text-6xl'
+        >
+          Hi, I'm <span class='text-accent'>DuckyCoding</span>
+        </h1>
+        <p class='text-secondary mb-8 text-lg leading-relaxed md:text-xl'>
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do
+          eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad
+          minim veniam, quis nostrud exercitation ullamco laboris.
+        </p>
+      </div>
+      <div class='order-1 lg:order-2'>
+        <Card
+          class='flex h-64 w-full items-center justify-center bg-red-500 md:h-80 lg:h-96'
+        >
+          <span class='text-2xl font-bold text-white'>Profile Image</span>
+        </Card>
+      </div>
+    </div>
+  </section>
+
+  <!-- About Cards Grid -->
+  <section class='mb-16'>
+    <h2 class='text-secondary mb-8 text-center text-3xl font-black md:text-4xl'>
+      What I Do
+    </h2>
+    <div class='grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3'>
+      <Card class='bg-accent2-100 p-6 transition-transform hover:scale-105'>
+        <div
+          class='mb-4 flex h-16 w-16 items-center justify-center rounded-lg bg-red-500'
+        >
+          <span class='font-bold text-white'>🎨</span>
+        </div>
+        <h3 class='text-secondary mb-3 text-xl font-bold'>
+          Frontend Development
+        </h3>
+        <p class='text-secondary'>
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do
+          eiusmod tempor incididunt ut labore et dolore magna aliqua.
+        </p>
+      </Card>
+
+      <Card class='bg-accent3-100 p-6 transition-transform hover:scale-105'>
+        <div
+          class='mb-4 flex h-16 w-16 items-center justify-center rounded-lg bg-red-500'
+        >
+          <span class='font-bold text-white'>⚙️</span>
+        </div>
+        <h3 class='text-secondary mb-3 text-xl font-bold'>
+          Backend Development
+        </h3>
+        <p class='text-secondary'>
+          Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris
+          nisi ut aliquip ex ea commodo consequat.
+        </p>
+      </Card>
+
+      <Card
+        class='bg-accent-100 p-6 transition-transform hover:scale-105 md:col-span-2 lg:col-span-1'
+      >
+        <div
+          class='mb-4 flex h-16 w-16 items-center justify-center rounded-lg bg-red-500'
+        >
+          <span class='font-bold text-white'>🚀</span>
+        </div>
+        <h3 class='text-secondary mb-3 text-xl font-bold'>
+          Full Stack Solutions
+        </h3>
+        <p class='text-secondary'>
+          Duis aute irure dolor in reprehenderit in voluptate velit esse cillum
+          dolore eu fugiat nulla pariatur.
+        </p>
+      </Card>
+    </div>
+  </section>
+
+  <!-- Skills Section -->
+  <section class='mb-16'>
+    <h2 class='text-secondary mb-8 text-center text-3xl font-black md:text-4xl'>
+      Skills & Technologies
+    </h2>
+    <div class='grid grid-cols-1 gap-8 lg:grid-cols-2'>
+      <Card class='p-6'>
+        <h3 class='text-secondary mb-6 text-2xl font-bold'>Frontend</h3>
+        <div class='grid grid-cols-2 gap-4 sm:grid-cols-3'>
+          {
+            ['TypeScript', 'React', 'Astro', 'Tailwind', 'Vue', 'Next.js'].map(
+              (skill) => (
+                <div class='bg-accent text-secondary hover:bg-accent-700 rounded-lg px-3 py-2 text-center font-semibold transition-colors'>
+                  {skill}
+                </div>
+              ),
+            )
+          }
+        </div>
+      </Card>
+
+      <Card class='p-6'>
+        <h3 class='text-secondary mb-6 text-2xl font-bold'>Backend & Tools</h3>
+        <div class='grid grid-cols-2 gap-4 sm:grid-cols-3'>
+          {
+            ['Node.js', 'Python', 'PostgreSQL', 'Docker', 'Git', 'AWS'].map(
+              (skill) => (
+                <div class='bg-accent2 text-secondary hover:bg-accent2-700 rounded-lg px-3 py-2 text-center font-semibold transition-colors'>
+                  {skill}
+                </div>
+              ),
+            )
+          }
+        </div>
+      </Card>
+    </div>
+  </section>
+
+  <!-- Experience Timeline -->
+  <section class='mb-16'>
+    <h2 class='text-secondary mb-8 text-center text-3xl font-black md:text-4xl'>
+      My Journey
+    </h2>
+    <div class='space-y-8'>
+      <Card class='relative p-6'>
+        <div class='flex flex-col gap-6 md:flex-row'>
+          <div
+            class='flex h-20 w-20 flex-shrink-0 items-center justify-center rounded-xl bg-red-500 md:h-24 md:w-24'
+          >
+            <span class='text-2xl font-bold text-white'>2024</span>
+          </div>
+          <div class='flex-1'>
+            <h3 class='text-secondary mb-2 text-xl font-bold'>
+              Senior Full Stack Developer
+            </h3>
+            <p class='text-accent mb-3 font-semibold'>Tech Company Inc.</p>
+            <p class='text-secondary'>
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do
+              eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
+              enim ad minim veniam, quis nostrud exercitation.
+            </p>
+          </div>
+        </div>
+      </Card>
+
+      <Card class='relative p-6'>
+        <div class='flex flex-col gap-6 md:flex-row'>
+          <div
+            class='flex h-20 w-20 flex-shrink-0 items-center justify-center rounded-xl bg-red-500 md:h-24 md:w-24'
+          >
+            <span class='text-2xl font-bold text-white'>2022</span>
+          </div>
+          <div class='flex-1'>
+            <h3 class='text-secondary mb-2 text-xl font-bold'>
+              Frontend Developer
+            </h3>
+            <p class='text-accent mb-3 font-semibold'>Digital Agency</p>
+            <p class='text-secondary'>
+              Duis aute irure dolor in reprehenderit in voluptate velit esse
+              cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat
+              cupidatat non proident.
+            </p>
+          </div>
+        </div>
+      </Card>
+
+      <Card class='relative p-6'>
+        <div class='flex flex-col gap-6 md:flex-row'>
+          <div
+            class='flex h-20 w-20 flex-shrink-0 items-center justify-center rounded-xl bg-red-500 md:h-24 md:w-24'
+          >
+            <span class='text-2xl font-bold text-white'>2020</span>
+          </div>
+          <div class='flex-1'>
+            <h3 class='text-secondary mb-2 text-xl font-bold'>
+              Junior Developer
+            </h3>
+            <p class='text-accent mb-3 font-semibold'>StartUp Solutions</p>
+            <p class='text-secondary'>
+              Sed ut perspiciatis unde omnis iste natus error sit voluptatem
+              accusantium doloremque laudantium, totam rem aperiam, eaque ipsa
+              quae ab illo inventore.
+            </p>
+          </div>
+        </div>
+      </Card>
+    </div>
+  </section>
+
+  <!-- Fun Facts -->
+  <section class='mb-16'>
+    <h2 class='text-secondary mb-8 text-center text-3xl font-black md:text-4xl'>
+      Fun Facts About Me
+    </h2>
+    <div class='grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4'>
+      <Card class='bg-accent3-100 p-6 text-center hover:rotate-2'>
+        <div
+          class='mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-red-500'
+        >
+          <span class='text-2xl text-white'>☕</span>
+        </div>
+        <h3 class='text-secondary mb-2 text-lg font-bold'>Coffee Lover</h3>
+        <p class='text-secondary text-sm'>500+ cups per year</p>
+      </Card>
+
+      <Card class='bg-accent2-100 p-6 text-center hover:rotate-2'>
+        <div
+          class='mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-red-500'
+        >
+          <span class='text-2xl text-white'>🎮</span>
+        </div>
+        <h3 class='text-secondary mb-2 text-lg font-bold'>Gamer</h3>
+        <p class='text-secondary text-sm'>Indie games enthusiast</p>
+      </Card>
+
+      <Card class='bg-accent-100 p-6 text-center hover:rotate-2'>
+        <div
+          class='mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-red-500'
+        >
+          <span class='text-2xl text-white'>📚</span>
+        </div>
+        <h3 class='text-secondary mb-2 text-lg font-bold'>Learner</h3>
+        <p class='text-secondary text-sm'>Always exploring new tech</p>
+      </Card>
+
+      <Card class='bg-primary-200 p-6 text-center hover:rotate-2'>
+        <div
+          class='mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-red-500'
+        >
+          <span class='text-2xl text-white'>🌍</span>
+        </div>
+        <h3 class='text-secondary mb-2 text-lg font-bold'>Explorer</h3>
+        <p class='text-secondary text-sm'>Love discovering new places</p>
+      </Card>
+    </div>
+  </section>
+
+  <!-- Get In Touch Section -->
+
+  <!-- CTA Section -->
+  <section class='mb-16 text-center'>
+    <Card class='from-accent2-100 to-accent3-100 bg-gradient-to-br p-8 md:p-12'>
+      <h2 class='text-secondary mb-6 text-3xl font-black md:text-4xl'>
+        Let's Work Together!
+      </h2>
+      <p class='text-secondary mx-auto mb-8 max-w-2xl text-lg md:text-xl'>
+        Ready to bring your ideas to life? Check out my work and let's discuss
+        your next project.
+      </p>
+      <div class='flex flex-wrap justify-center gap-4'>
+        <Link
+          href='/my-projects'
+          variant='contained'
+          size='large'
+          class='px-8 py-4'
+        >
+          View My Projects 🚀
+        </Link>
+      </div>
+    </Card>
+  </section>
+  <section id='contact' class='mb-16'>
+    <!-- Contact Form -->
+    <Card class='p-6 md:p-8'>
+      <h2
+        class='text-secondary mb-6 text-center text-3xl font-black md:text-4xl'
+      >
+        Send Me a Message
+      </h2>
+      <form class='space-y-6' action='#' method='POST'>
+        <div>
+          <label for='name' class='text-secondary mb-2 block font-semibold'>
+            Name *
+          </label>
+          <input
+            type='text'
+            id='name'
+            name='name'
+            required
+            class='text-secondary-900 bg-primary-100 border-comic border-secondary focus:ring-accent w-full rounded-lg px-4 py-3 focus:ring-2 focus:outline-none'
+            placeholder='Your Name'
+          />
+        </div>
+
+        <div>
+          <label for='email' class='text-secondary mb-2 block font-semibold'>
+            Email *
+          </label>
+          <input
+            type='email'
+            id='email'
+            name='email'
+            required
+            class='text-secondary-900 bg-primary-100 border-comic border-secondary focus:ring-accent w-full rounded-lg px-4 py-3 focus:ring-2 focus:outline-none'
+            placeholder='your.email@example.com'
+          />
+        </div>
+
+        <div>
+          <label for='subject' class='text-secondary mb-2 block font-semibold'>
+            Subject
+          </label>
+          <input
+            type='text'
+            id='subject'
+            name='subject'
+            class='text-secondary-900 bg-primary-100 border-comic border-secondary focus:ring-accent w-full rounded-lg px-4 py-3 focus:ring-2 focus:outline-none'
+            placeholder="What's this about?"
+          />
+        </div>
+
+        <div>
+          <label for='message' class='text-secondary mb-2 block font-semibold'>
+            Message *
+          </label>
+          <textarea
+            id='message'
+            name='message'
+            rows='5'
+            required
+            class='text-secondary-900 bg-primary-100 border-comic border-secondary focus:ring-accent w-full rounded-lg px-4 py-3 focus:ring-2 focus:outline-none'
+            placeholder='Tell me about your project or just say hi!'
+          >
+          </textarea>
+        </div>
+
+        <Button
+          type='submit'
+          variant='contained'
+          size='large'
+          class='flex w-full justify-center gap-4 px-8 py-4'
+        >
+          <DuckIcon class='inline-block h-8 w-8' />Send Message<DuckIcon
+            class='inline-block h-8 w-8'
+          />
+        </Button>
+      </form>
+    </Card>
+  </section>
+</HolyGrailLayout>
+
+<style>
+  /* Custom animations for enhanced interactivity */
+  @keyframes float {
+    0%,
+    100% {
+      transform: translateY(0px);
+    }
+    50% {
+      transform: translateY(-10px);
+    }
+  }
+
+  /* Add floating animation to fun facts cards on larger screens */
+  @media (min-width: 768px) {
+    section:nth-of-type(5) .grid > :nth-child(1) {
+      animation: float 3s ease-in-out infinite;
+      animation-delay: 0s;
+    }
+    section:nth-of-type(5) .grid > :nth-child(2) {
+      animation: float 3s ease-in-out infinite;
+      animation-delay: 0.5s;
+    }
+    section:nth-of-type(5) .grid > :nth-child(3) {
+      animation: float 3s ease-in-out infinite;
+      animation-delay: 1s;
+    }
+    section:nth-of-type(5) .grid > :nth-child(4) {
+      animation: float 3s ease-in-out infinite;
+      animation-delay: 1.5s;
+    }
+  }
+</style>
