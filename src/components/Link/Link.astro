@@ -8,11 +8,11 @@ const linkVariants = cva({
   variants: {
     variant: {
       default:
-        'inline-block text-accent bg-transparent hover:text-accent-700 focus:text-accent-700 border-transparent before:content-[""] before:absolute before:w-full before:h-0.5 before:rounded before:bg-accent-700 before:origin-right before:transition-transform before:duration-[0.1s] before:ease-in-out before:scale-x-0 before:left-0 before:-bottom-0.5 hover:before:origin-left focus:before:origin-left hover:before:scale-x-100 focus:before:scale-x-100 relative',
+        'inline-block text-accent bg-transparent hover:text-accent-700 focus:text-accent-700 border-transparent before:content-[""] before:absolute before:w-full before:h-0.5 before:rounded before:bg-accent-700 before:origin-right before:transition-transform before:duration-[0.1s] before:ease-in-out before:scale-x-0 before:left-0 before:-bottom-0.5 hover:before:origin-left focus:before:origin-left hover:before:scale-x-100 focus:before:scale-x-100 relative transition-colors duration-[0.1s] ease-in-out',
       contained:
         'inline-block text-secondary font-semibold bg-accent rounded-md border-comic border-secondary shadow-comic shadow-secondary -translate-x-0.5 -translate-y-0.5 transition-all hover:bg-accent-700 focus:bg-accent-700 focus:translate-x-0 focus:translate-y-0 focus:scale-95 focus:shadow-comic-pressed',
       outlined:
-        'inline-flex items-center relative text-accent font-semibold bg-transparent rounded-md border-comic border-accent transition-all overflow-hidden hover:text-secondary focus:text-secondary hover:border-secondary focus:border-secondary before:content-[""] before:absolute before:h-full before:w-full before:-z-10 before:bg-accent-700 before:transition-transform before:duration-[0.15s] before:ease-in-out before:-translate-x-full hover:before:-translate-x-4 focus:before:-translate-x-4 ]',
+        'inline-flex items-center relative text-accent font-semibold bg-transparent rounded-md border-comic border-accent transition-all overflow-hidden hover:text-secondary focus:text-secondary hover:border-secondary focus:border-secondary before:content-[""] before:absolute before:h-full before:w-full before:-z-10 before:bg-accent-700 before:transition-transform before:duration-[0.15s] transition-colors duration-[0.15s] ease-in-out before:ease-in-out before:-translate-x-full hover:before:-translate-x-4 focus:before:-translate-x-4 ]',
       unstyled: '',
     },
     size: {
@@ -20,10 +20,15 @@ const linkVariants = cva({
       medium: ['text-base'],
       large: ['text-3xl'],
     },
+    isActive: {
+      true: 'active',
+      false: '',
+    },
   },
   defaultVariants: {
     variant: 'default',
     size: 'medium',
+    isActive: false,
   },
   compoundVariants: [
     { variant: ['contained', 'outlined'], size: 'small', class: 'py-1 px-2' },
@@ -38,6 +43,24 @@ const linkVariants = cva({
       size: 'medium',
       class: 'before:-translate-x-[calc(100%+1rem)]',
     },
+    {
+      variant: 'default',
+      isActive: true,
+      class:
+        'text-accent-700 before:left-0 before:-bottom-0.5 before:origin-left before:scale-x-100',
+    },
+    {
+      variant: 'outlined',
+      isActive: true,
+      class:
+        'text-secondary border-secondary before:bg-accent-700 before:transition-transform before:-translate-x-4',
+    },
+    {
+      variant: 'contained',
+      isActive: true,
+      class:
+        'bg-accent-700 translate-x-0 translate-y-0 scale-95 shadow-comic-pressed',
+    },
   ],
 });
 
@@ -48,22 +71,34 @@ interface Props extends HTMLAttributes<'a'>, LinkProps {}
  * For Astro components, we recommend setting your defaultVariants within
  * Astro.props (which are `undefined` by default)
  */
-const { class: className, variant, size, href, ...props }: Props = Astro.props;
+const {
+  class: className,
+  variant,
+  size,
+  href,
+  isActive = false,
+  ...props
+}: Props = Astro.props;
 const currentPath = Astro.url.pathname;
+
+console.log(isActive);
 ---
 
 {/* to avoid ciruclar links */}
 {
-  href && currentPath !== href ? (
+  href && currentPath !== href && !isActive ? (
     <a
       href={href}
-      class={cn(linkVariants({ variant, size }), className)}
+      class={cn(linkVariants({ variant, size, isActive: false }), className)}
       {...props}
     >
       <slot />
     </a>
   ) : (
-    <span class={cn(linkVariants({ variant, size }), className)} {...props}>
+    <span
+      class={cn(linkVariants({ variant, size, isActive: true }), className)}
+      {...props}
+    >
       <slot />
     </span>
   )

@@ -21,6 +21,7 @@ export async function matchImageFromGlobImport(
     return (await images[fullPath]?.())?.default;
   } catch (err) {
     logger?.error(`Can't find any image with path ${fullPath}`);
+    logger?.debug(err);
   }
 
   return undefined;
