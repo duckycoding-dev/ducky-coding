@@ -57,7 +57,11 @@ const bannerImage: BannerImage | undefined = {
     },
   }}
 >
-  <h1 class='mb-8 text-center text-4xl font-extrabold'>Welcome to my blog</h1>
+  <h1
+    class='decoration-accent mb-8 text-center text-4xl font-extrabold underline underline-offset-4'
+  >
+    Welcome to my blog
+  </h1>
   <p class='mb-8 text-center text-lg'>
     Here you will find articles and guides on web development, fullstack
     development, and more. Enjoy!
@@ -66,7 +70,7 @@ const bannerImage: BannerImage | undefined = {
     processedPosts.length > 0 ? (
       <div class='grid-layout gap-8'>
         <section class='[grid-area:latest]'>
-          <h2 class='border-comic border-secondary bg-accent mb-4 rounded-xl px-4 py-2 text-4xl font-extrabold'>
+          <h2 class='border-comic border-secondary from-accent-200 to-accent2-200 shadow-comic mb-4 rounded-xl border-4 bg-gradient-to-br px-4 py-2 text-4xl font-extrabold'>
             Latest posts
           </h2>
           <ul class='latest-grid-layout grid items-baseline gap-8'>
@@ -120,7 +124,7 @@ const bannerImage: BannerImage | undefined = {
           </ul>
         </section>
         <section class='trending'>
-          <h2 class='border-comic border-secondary bg-accent2 mb-4 rounded-xl px-4 py-2 text-4xl font-extrabold'>
+          <h2 class='border-comic border-secondary shadow-comic from-accent-100 to-accent3-100 mb-4 rounded-xl bg-gradient-to-br px-4 py-2 text-4xl font-extrabold'>
             Trending
           </h2>
           <ol class='flex flex-col gap-4'>

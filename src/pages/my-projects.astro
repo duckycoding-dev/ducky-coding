@@ -1,0 +1,316 @@
+---
+import HolyGrailLayout from '@layouts/HolyGrailLayout/HolyGrailLayout.astro';
+import Card from '@components/Card/Card.astro';
+import Link from '@components/Link/Link.astro';
+import ProjectCard from '@components/ProjectCard/ProjectCard.astro';
+
+// Mock project data - replace with your actual projects
+const projects = [
+  {
+    title: 'E-Commerce Platform',
+    summary:
+      'A modern e-commerce platform built with Next.js and Stripe integration for seamless payment processing.',
+    technologies: ['Next.js', 'TypeScript', 'Stripe', 'PostgreSQL', 'Tailwind'],
+    projectUrl: 'https://github.com/duckycoding/ecommerce-platform',
+    linkType: 'GitHub',
+  },
+  {
+    title: 'Task Management App',
+    summary:
+      'Real-time collaborative task management application with team features and Socket.io integration.',
+    technologies: ['React', 'Socket.io', 'Node.js', 'MongoDB', 'Express'],
+    projectUrl: 'https://taskapp-demo.netlify.app',
+    linkType: 'Live Demo',
+  },
+  {
+    title: 'Weather Dashboard',
+    summary:
+      'Beautiful weather dashboard with interactive charts and detailed forecasting using multiple APIs.',
+    technologies: ['Vue.js', 'Chart.js', 'API Integration', 'PWA', 'Vuex'],
+    projectUrl: 'https://github.com/duckycoding/weather-dashboard',
+    linkType: 'GitHub',
+  },
+  {
+    title: 'Portfolio Website',
+    summary:
+      'Fast, modern portfolio website showcasing projects and skills, built with Astro and optimized for performance.',
+    technologies: ['Astro', 'Tailwind', 'TypeScript', 'SEO', 'MDX'],
+    projectUrl: 'https://duckycoding.dev',
+    linkType: 'Live Site',
+  },
+  {
+    title: 'Mobile Fitness App',
+    summary:
+      'Cross-platform fitness tracking mobile application with workout plans, progress tracking, and social features.',
+    technologies: [
+      'React Native',
+      'Firebase',
+      'Redux',
+      'Health API',
+      'Push Notifications',
+    ],
+    projectUrl: 'https://github.com/duckycoding/fitness-app',
+    linkType: 'GitHub',
+  },
+  {
+    title: 'AI Chat Bot',
+    summary:
+      'Intelligent chatbot with natural language understanding, built using Python and machine learning frameworks.',
+    technologies: ['Python', 'TensorFlow', 'NLP', 'FastAPI', 'Docker'],
+    projectUrl: 'https://github.com/duckycoding/ai-chatbot',
+    linkType: 'GitHub',
+  },
+];
+---
+
+<HolyGrailLayout
+  seoProps={{
+    title: 'My Projects - DuckyCoding',
+    description:
+      'Explore the portfolio of DuckyCoding - showcasing various web development projects, applications, and experiments.',
+    extend: {
+      meta: [
+        {
+          name: 'keywords',
+          content:
+            'DuckyCoding, projects, portfolio, web development, applications, GitHub',
+        },
+      ],
+    },
+  }}
+>
+  <!-- Hero Section -->
+  <section class='mb-16 text-center'>
+    <h1
+      class='text-secondary mb-6 text-4xl leading-tight font-black md:text-5xl lg:text-6xl'
+    >
+      My <span class='text-accent'>Projects</span>
+    </h1>
+    <Card
+      class='from-accent3-100 to-accent2-100 mb-8 bg-gradient-to-r p-6 md:p-8'
+    >
+      <h2 class='text-secondary mb-4 text-2xl font-bold md:text-3xl'>
+        🚀 Featured Work
+      </h2>
+      <p class='text-secondary mb-6'>
+        Here's a collection of projects that showcase my skills in web
+        development, from frontend interfaces to full-stack applications, CLI
+        tools, scripts and much more.
+      </p>
+      <div class='flex flex-wrap justify-center gap-4'>
+        <Link
+          href='#projects'
+          variant='contained'
+          size='large'
+          class='px-8 py-4'
+        >
+          Browse Projects
+        </Link>
+      </div>
+    </Card>
+  </section>
+
+  <!-- Projects Grid -->
+  <section id='projects' class='mb-16'>
+    <h2 class='text-secondary mb-8 text-center text-3xl font-black md:text-4xl'>
+      Project Showcase
+    </h2>
+    <div class='grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3'>
+      {
+        projects.map((project, index) => (
+          <Link
+            href={project.projectUrl || '#'}
+            variant='unstyled'
+            class='group block'
+            target='_blank'
+            rel='noopener noreferrer'
+          >
+            <ProjectCard
+              title={project.title}
+              summary={project.summary}
+              technologies={project.technologies}
+              projectUrl={project.projectUrl}
+              linkType={project.linkType}
+              bannerImage={null}
+              imageAlt={`Banner image for ${project.title}`}
+              loading={index < 3 ? 'eager' : 'lazy'}
+              class='h-full transition-transform duration-300 group-hover:scale-105'
+            />
+          </Link>
+        ))
+      }
+    </div>
+  </section>
+
+  <!-- Technologies Section -->
+  <section id='technologies' class='mb-16'>
+    <h2 class='text-secondary mb-8 text-center text-3xl font-black md:text-4xl'>
+      Technologies I <span class='text-accent'>USE</span>
+    </h2>
+    <div class='grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4'>
+      <Card class='bg-accent-100 p-6 text-center hover:rotate-2'>
+        <div
+          class='mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-lg bg-red-500'
+        >
+          <span class='text-2xl font-bold text-white'>⚛️</span>
+        </div>
+        <h3 class='text-secondary mb-2 text-lg font-bold'>Frontend</h3>
+        <p class='text-secondary text-sm'>React, Vue, Astro, TypeScript</p>
+      </Card>
+
+      <Card class='bg-accent2-100 p-6 text-center hover:rotate-2'>
+        <div
+          class='mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-lg bg-red-500'
+        >
+          <span class='text-2xl font-bold text-white'>🔧</span>
+        </div>
+        <h3 class='text-secondary mb-2 text-lg font-bold'>Backend</h3>
+        <p class='text-secondary text-sm'>Node.js, Python, PostgreSQL</p>
+      </Card>
+
+      <Card class='bg-accent3-100 p-6 text-center hover:rotate-2'>
+        <div
+          class='mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-lg bg-red-500'
+        >
+          <span class='text-2xl font-bold text-white'>📱</span>
+        </div>
+        <h3 class='text-secondary mb-2 text-lg font-bold'>Mobile</h3>
+        <p class='text-secondary text-sm'>React Native, PWA</p>
+      </Card>
+
+      <Card class='bg-primary-200 p-6 text-center hover:rotate-2'>
+        <div
+          class='mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-lg bg-red-500'
+        >
+          <span class='text-2xl font-bold text-white'>☁️</span>
+        </div>
+        <h3 class='text-secondary mb-2 text-lg font-bold'>Cloud</h3>
+        <p class='text-secondary text-sm'>AWS, Docker, CI/CD</p>
+      </Card>
+    </div>
+  </section>
+
+  <!-- Contact CTA -->
+  <section class='text-center'>
+    <Card class='from-accent-100 to-accent3-100 bg-gradient-to-br p-8 md:p-12'>
+      <h2 class='text-secondary mb-6 text-3xl font-black md:text-4xl'>
+        Let's Build Something Amazing!
+      </h2>
+      <p class='text-secondary mx-auto mb-8 max-w-2xl text-lg md:text-xl'>
+        This is just a glimpse of my work. If you're interested in
+        collaborating, have a project idea, or just want to chat about tech, I'd
+        love to hear from you!
+      </p>
+      <Link
+        href='/about-me#contact'
+        variant='contained'
+        size='large'
+        class='px-8 py-4'
+      >
+        Get In Touch
+      </Link>
+    </Card>
+  </section>
+</HolyGrailLayout>
+
+<style>
+  /* Custom animations for project interactions */
+  @keyframes pulse-border {
+    0%,
+    100% {
+      border-color: var(--color-accent);
+      box-shadow: 0 0 0 0 rgba(255, 61, 233, 0.4);
+    }
+    50% {
+      border-color: var(--color-accent-700);
+      box-shadow: 0 0 0 8px rgba(255, 61, 233, 0);
+    }
+  }
+
+  /* Add subtle animations to filter buttons */
+  section:nth-of-type(2) button:hover {
+    animation: pulse-border 1.5s infinite;
+  }
+
+  /* Stagger animation for project cards on page load */
+  @media (min-width: 768px) {
+    section:nth-of-type(3) .grid > :nth-child(1) {
+      animation: slideInUp 0.6s ease-out;
+      animation-delay: 0.1s;
+      animation-fill-mode: both;
+    }
+    section:nth-of-type(3) .grid > :nth-child(2) {
+      animation: slideInUp 0.6s ease-out;
+      animation-delay: 0.2s;
+      animation-fill-mode: both;
+    }
+    section:nth-of-type(3) .grid > :nth-child(3) {
+      animation: slideInUp 0.6s ease-out;
+      animation-delay: 0.3s;
+      animation-fill-mode: both;
+    }
+    section:nth-of-type(3) .grid > :nth-child(4) {
+      animation: slideInUp 0.6s ease-out;
+      animation-delay: 0.4s;
+      animation-fill-mode: both;
+    }
+    section:nth-of-type(3) .grid > :nth-child(5) {
+      animation: slideInUp 0.6s ease-out;
+      animation-delay: 0.5s;
+      animation-fill-mode: both;
+    }
+    section:nth-of-type(3) .grid > :nth-child(6) {
+      animation: slideInUp 0.6s ease-out;
+      animation-delay: 0.6s;
+      animation-fill-mode: both;
+    }
+  }
+
+  @keyframes slideInUp {
+    from {
+      opacity: 0;
+      transform: translateY(30px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  /* Responsive grid adjustments */
+  @media (max-width: 768px) {
+    section:nth-of-type(3) .grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  @keyframes float {
+    0%,
+    100% {
+      transform: translateY(0px);
+    }
+    50% {
+      transform: translateY(-10px);
+    }
+  }
+
+  /* Add floating animation to fun facts cards on larger screens */
+  @media (min-width: 768px) {
+    #technologies > div > :nth-child(1) {
+      animation: float 3s ease-in-out infinite;
+      animation-delay: 0s;
+    }
+    #technologies > div > :nth-child(2) {
+      animation: float 3s ease-in-out infinite;
+      animation-delay: 0.5s;
+    }
+    #technologies > div > :nth-child(3) {
+      animation: float 3s ease-in-out infinite;
+      animation-delay: 1s;
+    }
+    #technologies > div > :nth-child(4) {
+      animation: float 3s ease-in-out infinite;
+      animation-delay: 1.5s;
+    }
+  }
+</style>

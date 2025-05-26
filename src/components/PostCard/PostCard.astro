@@ -54,7 +54,13 @@ const {
       </h2>
       <section>
         <p class='border-secondary px-5 text-base font-semibold'>
-          <span>Written by: {post.data.author}</span>
+          <span
+            >Written by: {
+              post.data.author.toLowerCase() === 'duckycoding'
+                ? 'DuckyCoding (me)'
+                : post.data.author
+            }</span
+          >
         </p>
         <p class='px-5 text-sm italic'>
           Read time: {post.data.timeToRead}

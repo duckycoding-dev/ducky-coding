@@ -1,0 +1,107 @@
+---
+import { Image } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+import type { HTMLAttributes } from 'astro/types';
+import { cn } from '@utils/cn';
+import { IMAGE_DENSITIES } from '@utils/globals';
+import Card from '@components/Card/Card.astro';
+import Tag from '@components/Tag/Tag.astro';
+
+export interface ProjectCardProps extends HTMLAttributes<'div'> {
+  title: string;
+  summary: string;
+  technologies: string[];
+  bannerImage?: ImageMetadata | null;
+  imageAlt?: string;
+  loading?: 'eager' | 'lazy';
+  projectUrl?: string;
+  linkType?: string;
+}
+
+interface Props extends ProjectCardProps {}
+
+const {
+  title,
+  summary,
+  technologies,
+  bannerImage,
+  class: className,
+  loading = 'lazy',
+  imageAlt,
+  projectUrl,
+  linkType = 'View Project',
+  ...rest
+} = Astro.props;
+---
+
+<Card class={cn('card flex h-full flex-col group', className)} {...rest}>
+  <!-- Project Image/Banner -->
+  <div class='relative overflow-hidden'>
+    {
+      bannerImage ? (
+        <Image
+          src={bannerImage}
+          width={Math.floor(bannerImage.width / 3)}
+          height={Math.floor(bannerImage.height / 3)}
+          alt={imageAlt ?? `${title} project banner`}
+          densities={IMAGE_DENSITIES}
+          loading={loading}
+          decoding={'async'}
+          class='bg-primary-700 h-48 w-full object-cover transition-transform duration-300 group-hover:scale-105'
+        />
+      ) : (
+        <div class='from-accent to-accent2 flex h-48 w-full items-center justify-center bg-gradient-to-br transition-transform duration-300 group-hover:scale-105'>
+          <div class='flex h-20 w-20 items-center justify-center rounded-lg bg-red-500'>
+            <span class='text-2xl font-bold text-white'>🚀</span>
+          </div>
+        </div>
+      )
+    }
+  </div>
+
+  <!-- Project Content -->
+  <div class='border-secondary flex grow flex-col gap-3 border-t-4 p-5'>
+    <!-- Title -->
+    <h3 class='text-xl leading-tight font-black'>{title}</h3>
+
+    <!-- Summary -->
+    <p class='text-secondary flex-1 text-sm leading-relaxed'>{summary}</p>
+
+    <!-- Technologies -->
+    <div class='flex flex-wrap gap-2'>
+      {
+        technologies.map((tech, index) => (
+          <Tag
+            class={`text-xs ${index % 2 === 0 ? 'bg-accent' : 'bg-accent2'}`}
+          >
+            {tech}
+          </Tag>
+        ))
+      }
+    </div>
+
+    <!-- Project Link Badge -->
+    {
+      projectUrl && (
+        <div class='mt-2 text-center'>
+          <span class='bg-accent3 text-secondary group-hover:bg-accent3-700 inline-block rounded-lg px-3 py-1 text-xs font-semibold transition-colors'>
+            {linkType} →
+          </span>
+        </div>
+      )
+    }
+  </div>
+</Card>
+
+<style>
+  @reference '@styles/global.css';
+  .card {
+    container-name: card;
+    container-type: inline-size;
+  }
+  @container card (width > 400px) {
+    .tags {
+      @apply text-base;
+    }
+  }
+</style>
