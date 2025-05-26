@@ -17,13 +17,13 @@ const { class: className, ...props }: Props = Astro.props;
 
 <header
   class={cn(
-    'bg-primary-700 border-comic border-secondary sticky top-0 z-10 [grid-area:header] border-x-0 border-t-0',
+    'bg-primary-700 border-4 border-secondary sticky top-0 z-10 [grid-area:header] border-x-0 border-t-0',
     className,
   )}
   {...props}
 >
   <div
-    class='mx-auto flex max-w-7xl items-stretch justify-between gap-x-8 px-4 py-2 md:px-8'
+    class='mx-auto flex max-w-7xl items-center justify-between gap-x-8 px-4 py-2 md:px-8'
   >
     <HamburgerToggle
       id='site_side_navigation_menu_id'
@@ -31,11 +31,11 @@ const { class: className, ...props }: Props = Astro.props;
       class='peer absolute z-20 shrink-0 md:hidden'
       variant={'small'}
     />
-    <div class='mx-auto md:mx-0' aria-hidden='true'>
+    <div class='mx-auto h-[42px] md:mx-0' aria-hidden='true'>
       <Link
         href='/'
-        variant='unstyled'
-        class='md:justify-start'
+        variant='contained'
+        class='rounded-full p-0 md:justify-start'
         id='logo'
         tabindex={-1}
       >
@@ -50,7 +50,7 @@ const { class: className, ...props }: Props = Astro.props;
     </div>
     <Navbar
       id='primary-navigation'
-      class='fixed z-10 overflow-hidden transition-transform peer-checked:flex peer-checked:translate-x-0 peer-[:not(checked)]:-translate-x-full md:ml-auto md:peer-[:not(checked)]:translate-x-0'
+      class='fixed z-10 transition-transform peer-checked:flex peer-checked:translate-x-0 peer-[:not(checked)]:-translate-x-full md:ml-auto md:peer-[:not(checked)]:translate-x-0'
     />
   </div>
 </header>

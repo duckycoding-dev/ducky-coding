@@ -14,7 +14,7 @@ const { class: className, ...props }: Props = Astro.props;
 
 <nav
   class={cn(
-    'bg-primary-700 top-0 left-0 md:top-0 md:left-0 fixed md:static h-dvh w-full flex flex-col md:h-auto md:flex-row gap-x-8 px-8 md:px-0 pb-8 pt-16 md:py-0 max-w-96 gap-y-4 border-comic border-secondary border-y-0 border-l-0 md:border-none md:justify-end',
+    'overflow-y-visible bg-primary-700 top-0 left-0 md:top-0 md:left-0 fixed md:static h-dvh w-full flex flex-col md:h-auto md:flex-row gap-x-8 px-8 md:px-0 pb-8 pt-16 md:py-0 max-w-96 gap-y-4 border-comic border-secondary border-y-0 border-l-0 md:border-none md:justify-end',
     className,
   )}
   {...props}
@@ -43,6 +43,7 @@ const { class: className, ...props }: Props = Astro.props;
       <Link
         href={'/topics'}
         size={'medium'}
+        variant={'default'}
         class={'text-3xl md:text-base text-secondary font-medium w-full'}
         >Topics</Link
       >
