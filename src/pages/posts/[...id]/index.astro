@@ -100,7 +100,11 @@ if (imageToFindPath) {
         />
       ) : null
     }
-    <h1 class='text-center text-4xl font-extrabold'>{entry.data.title}</h1>
+    <h1
+      class='decoration-accent text-center text-4xl font-extrabold underline underline-offset-4'
+    >
+      {entry.data.title}
+    </h1>
     <section class='flex flex-col gap-2'>
       <p class='text-center text-lg font-semibold'>
         <span>Written by: {entry.data.author}</span>
@@ -115,9 +119,9 @@ if (imageToFindPath) {
         <section class='flex flex-wrap gap-2'>
           {entry.data.tags.map((tag, index) => (
             <Link
-              variant='unstyled'
+              variant='contained'
               href={`/topics/${tag.toLowerCase()}`}
-              class='text-secondary'
+              class='border-secondary rounded-full border-none p-0'
             >
               <Tag class={`${index % 2 === 0 ? 'bg-accent2' : 'bg-accent'}`}>
                 {tag}
@@ -127,6 +131,6 @@ if (imageToFindPath) {
         </section>
       ) : null
     }
-    <MarkdownContent entry={entry} />
   </section>
+  <MarkdownContent entry={entry} />
 </HolyGrailLayout>

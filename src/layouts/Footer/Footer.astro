@@ -17,27 +17,51 @@ const { class: className, ...props }: Props = Astro.props;
 
 <footer
   class={cn(
-    'grid gap-y-4 bg-primary-700 border-comic border-secondary py-8 [grid-area:footer] border-x-0 border-b-0',
+    'grid gap-y-4 bg-primary-700 border-4 border-secondary py-8 [grid-area:footer] border-x-0 border-b-0 px-8',
     className,
   )}
   {...props}
 >
-  <h2 class='text-center text-2xl font-extrabold'>Stay in touch</h2>
+  <h2
+    class='decoration-accent text-center text-2xl font-extrabold underline underline-offset-6'
+  >
+    Stay in touch
+  </h2>
 
-  <nav class='mx-auto flex min-h-12 max-w-7xl items-center gap-8 px-8'>
-    <Link href='https://github.com/duckycoding-dev' variant={'unstyled'}>
+  <nav class='mx-auto flex min-h-12 max-w-7xl flex-wrap items-center gap-x-6'>
+    <Link
+      href='https://github.com/duckycoding-dev'
+      variant={'default'}
+      class='text-secondary'
+    >
       <GitHubIcon size={50} />
     </Link>
-    <Link href='https://x.com/ducky_coding' variant={'unstyled'}>
+    <Link
+      href='https://x.com/ducky_coding'
+      variant={'default'}
+      class='text-secondary'
+    >
       <XIcon size={50} />
     </Link>
-    <Link href='https://www.instagram.com/ducky.coding/' variant={'unstyled'}>
+    <Link
+      href='https://www.instagram.com/ducky.coding/'
+      variant={'default'}
+      class='text-secondary'
+    >
       <InstagramIcon size={50} />
     </Link>
-    <Link href='https://www.tiktok.com/@ducky.coding' variant={'unstyled'}>
+    <Link
+      href='https://www.tiktok.com/@ducky.coding'
+      variant={'default'}
+      class='text-secondary'
+    >
       <TikTokIcon size={50} />
     </Link>
-    <Link href='https://www.youtube.com/@ducky.coding' variant={'unstyled'}>
+    <Link
+      href='https://www.youtube.com/@ducky.coding'
+      variant={'default'}
+      class='text-secondary'
+    >
       <YouTubeIcon size={50} />
     </Link>
   </nav>
