@@ -91,19 +91,19 @@ const processedPosts = await Promise.all(
     },
   }}
 >
-  <span
-    class='bg-accent border-comic border-secondary mb-8 flex items-center gap-4 px-4 py-2'
+  <section
+    class='bg-accent2 shadow-comic relative grid h-[25dvh] grid-cols-1 grid-rows-1 flex-col place-items-center gap-4 overflow-hidden border-4 md:h-[35dvh]'
   >
-    <h1 class='text-center text-4xl font-extrabold md:text-left'>
+    <h1
+      class='bg-primary-700 border-secondary shadow-comic text-8 z-1 [grid-column:1/1] [grid-row:1/1] border-4 px-6 text-center text-[clamp(0.75rem,10vw,6rem)] font-extrabold md:text-left [@media(max-height:425px)]:text-[clamp(0.75rem,10vw,4.5rem)]'
+    >
       {processedTopic.title}
     </h1>
     {
       processedTopic.imageSrc ? (
         <Image
-          class='aspect-square h-10 w-10 filter-[drop-shadow(0px_0px_3px_black)_drop-shadow(0px_0px_5px_black)]'
+          class='[grid-column:1/1] [grid-row:1/1] h-[150%] w-min object-cover md:mx-0 md:h-[200%]'
           src={processedTopic.imageSrc}
-          height={40}
-          width={40}
           alt={
             processedTopic.image?.alt ??
             `${processedTopic.title} representation`
@@ -112,10 +112,10 @@ const processedPosts = await Promise.all(
         />
       ) : null
     }
-  </span>
+  </section>
   {
     processedPosts.length > 0 ? (
-      <ul class='grid-container grid gap-8'>
+      <ul class='grid-container mt-8 grid gap-8'>
         {processedPosts.map((post) => {
           return (
             <li class='mb-8 last-of-type:mb-0 md:last-of-type:mb-8'>
@@ -132,11 +132,11 @@ const processedPosts = await Promise.all(
       </ul>
     ) : (
       <>
-        <h2 class='text-center text-2xl font-extrabold text-balance md:text-left'>
+        <h2 class='mt-8 text-center text-2xl font-extrabold text-balance md:text-left'>
           {`There isn't any content about ${processedTopic.title} yet :'(`}
         </h2>
         <h3 class='text-center text-xl font-extrabold md:text-left'>
-          Check again soon!
+          Please check again soon!
         </h3>
       </>
     )

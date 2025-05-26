@@ -91,7 +91,7 @@ if (imageToFindPath) {
     },
   }}
 >
-  <section class='bg-accent2-300 flex flex-col gap-4 border-4'>
+  <section class='bg-accent2 shadow-comic flex flex-col gap-4 border-4'>
     <div
       class=`grid ${bannerImage ? 'md:grid-cols-[1fr_minmax(max-content,250px)]' : ''} items-center`
     >
@@ -111,7 +111,7 @@ if (imageToFindPath) {
         ) : null
       }
       <section
-        class='flex flex-col justify-center gap-2 self-stretch justify-self-center px-8 pt-0 pb-8 md:pb-0'
+        class='flex flex-col justify-center gap-2 self-stretch justify-self-center px-8 pt-0 pb-4 md:pb-0'
       >
         <h1
           class='decoration-accent text-center text-4xl font-extrabold underline underline-offset-4'
@@ -119,7 +119,13 @@ if (imageToFindPath) {
           {entry.data.title}
         </h1>
         <p class='text-center text-lg font-semibold'>
-          <span>Written by: {entry.data.author}</span>
+          <span
+            >Written by: {
+              entry.data.author.toLowerCase() === 'duckycoding'
+                ? 'DuckyCoding (me)'
+                : entry.data.author
+            }</span
+          >
         </p>
         <p class='text-center text-base italic'>
           Read time: {entry.data.timeToRead}

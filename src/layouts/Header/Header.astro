@@ -50,13 +50,13 @@ const { class: className, ...props }: Props = Astro.props;
     </div>
     <Navbar
       id='primary-navigation'
-      class='fixed z-10 transition-transform peer-checked:flex peer-checked:translate-x-0 peer-[:not(checked)]:-translate-x-full md:ml-auto md:peer-[:not(checked)]:translate-x-0'
+      class='fixed z-10 transition-transform peer-checked:flex peer-checked:translate-x-0 peer-[:not(checked)]:-translate-x-full md:ml-auto md:transition-none md:peer-[:not(checked)]:translate-x-0'
     />
   </div>
 </header>
 
 <style>
   #logo:checked {
-    transform: translateX(1000px);
+    /* transform: translateX(1000px); */
   }
 </style>

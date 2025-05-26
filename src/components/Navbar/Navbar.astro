@@ -14,7 +14,7 @@ const { class: className, ...props }: Props = Astro.props;
 
 <nav
   class={cn(
-    'overflow-y-visible bg-primary-700 top-0 left-0 md:top-0 md:left-0 fixed md:static h-dvh w-full flex flex-col md:h-auto md:flex-row gap-x-8 px-8 md:px-0 pb-8 pt-16 md:py-0 max-w-96 gap-y-4 border-comic border-secondary border-y-0 border-l-0 md:border-none md:justify-end',
+    'overflow-y-visible overflow-x-hidden md:overflow-x-visible bg-primary-700 top-0 left-0 md:top-0 md:left-0 fixed md:static h-dvh w-full flex flex-col md:h-auto md:flex-row gap-x-8 px-8 md:px-0 pb-8 pt-16 md:py-0 max-w-96 gap-y-4 border-comic border-secondary border-y-0 border-l-0 md:border-none md:justify-end',
     className,
   )}
   {...props}
@@ -57,4 +57,15 @@ const { class: className, ...props }: Props = Astro.props;
       </Link>
     </li>
   </ul>
+  <p id='scroll-tip' class='hidden text-center text-base italic md:hidden'>
+    Did you know: You can swipe right to open the side menu and left to close
+    it.
+  </p>
 </nav>
+
+<script>
+  if ('ontouchstart' in document.documentElement) {
+    const scrollTip = document.getElementById('scroll-tip');
+    scrollTip?.classList?.remove('hidden');
+  }
+</script>
