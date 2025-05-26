@@ -11,6 +11,7 @@ import MarkdownContent from '@layouts/MarkdownContent/MarkdownContent.astro';
 import type { Image as BannerImage } from '@db/features/images/images.model'; // import { syncPostWithDatabase } from '@utils/content/content';
 
 import { serverLogger } from '@utils/logs/logger';
+import { ImagesService } from '../../../db/features/images/images.service';
 
 // 1. Generate a new path for every collection entry
 export async function getStaticPaths() {
@@ -44,14 +45,20 @@ export async function getStaticPaths() {
     serverLogger.log('All posts synced with database');
   }
 
-  const bannerImage: BannerImage | undefined = {
-    path: '/assets/images/posts/banner.jpg',
-    alt: 'Banner image for posts section',
-  }; // TODO replace with fetched image data from db
+  const bannerImagesPromises = postsEntries.map((entry) => {
+    const imagePath = entry.data.bannerImagePath;
+    if (imagePath) {
+      return ImagesService.getImageByPath(imagePath);
+    }
+    return Promise.resolve(undefined);
+  });
 
-  return postsEntries.map((entry) => ({
+  const bannerImages: (BannerImage | undefined)[] =
+    await Promise.all(bannerImagesPromises);
+
+  return postsEntries.map((entry, id) => ({
     params: { id: decodeURI(entry.id) },
-    props: { entry, bannerImage },
+    props: { entry, bannerImage: bannerImages[id] },
   }));
 }
 // 2. For your template, you can get the entry directly from the prop
@@ -84,53 +91,61 @@ if (imageToFindPath) {
     },
   }}
 >
-  <section class='flex flex-col gap-4'>
-    {
-      bannerImage && processedImage ? (
-        <Image
-          src={processedImage}
-          alt={
-            bannerImage.alt ??
-            `Post banner cover related to ${entry.data.topicTitle}`
-          }
-          loading={'eager'}
-          decoding={'async'}
-          class='border-comic border-secondary shadow-comic-lg w-full'
-          densities={IMAGE_DENSITIES}
-        />
-      ) : null
-    }
-    <h1
-      class='decoration-accent text-center text-4xl font-extrabold underline underline-offset-4'
+  <section class='bg-accent2-300 flex flex-col gap-4 border-4'>
+    <div
+      class=`grid ${bannerImage ? 'md:grid-cols-[1fr_minmax(max-content,250px)]' : ''} items-center`
     >
-      {entry.data.title}
-    </h1>
-    <section class='flex flex-col gap-2'>
-      <p class='text-center text-lg font-semibold'>
-        <span>Written by: {entry.data.author}</span>
-      </p>
-      <p class='text-center text-base italic'>
-        Read time: {entry.data.timeToRead}
-        {entry.data.timeToRead > 1 ? 'minutes' : 'minute'}
-      </p>
-    </section>
-    {
-      entry.data.tags.length > 0 ? (
-        <section class='flex flex-wrap gap-2'>
-          {entry.data.tags.map((tag, index) => (
-            <Link
-              variant='contained'
-              href={`/topics/${tag.toLowerCase()}`}
-              class='border-secondary rounded-full border-none p-0'
-            >
-              <Tag class={`${index % 2 === 0 ? 'bg-accent2' : 'bg-accent'}`}>
-                {tag}
-              </Tag>
-            </Link>
-          ))}
-        </section>
-      ) : null
-    }
+      {
+        bannerImage && processedImage ? (
+          <Image
+            src={processedImage}
+            alt={
+              bannerImage.alt ??
+              `Post banner cover related to ${entry.data.topicTitle}`
+            }
+            loading={'eager'}
+            decoding={'async'}
+            class='border-accent self-stretch object-cover p-4'
+            densities={IMAGE_DENSITIES}
+          />
+        ) : null
+      }
+      <section
+        class='flex flex-col justify-center gap-2 self-stretch justify-self-center px-8 pt-0 pb-8 md:pb-0'
+      >
+        <h1
+          class='decoration-accent text-center text-4xl font-extrabold underline underline-offset-4'
+        >
+          {entry.data.title}
+        </h1>
+        <p class='text-center text-lg font-semibold'>
+          <span>Written by: {entry.data.author}</span>
+        </p>
+        <p class='text-center text-base italic'>
+          Read time: {entry.data.timeToRead}
+          {entry.data.timeToRead > 1 ? 'minutes' : 'minute'}
+        </p>
+        {
+          entry.data.tags.length > 0 ? (
+            <div class='flex flex-wrap justify-center gap-2'>
+              {entry.data.tags.map((tag, index) => (
+                <Link
+                  variant='contained'
+                  href={`/topics/${tag.toLowerCase()}`}
+                  class='border-secondary rounded-full border-none p-0'
+                >
+                  <Tag
+                    class={`${index % 2 === 0 ? 'bg-accent2' : 'bg-accent'}`}
+                  >
+                    {tag}
+                  </Tag>
+                </Link>
+              ))}
+            </div>
+          ) : null
+        }
+      </section>
+    </div>
   </section>
   <MarkdownContent entry={entry} />
 </HolyGrailLayout>
