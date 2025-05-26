@@ -86,13 +86,6 @@ const projects = [
     >
       My <span class='text-accent'>Projects</span>
     </h1>
-    <p
-      class='text-secondary mx-auto mb-8 max-w-3xl text-lg leading-relaxed md:text-xl'
-    >
-      Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod
-      tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim
-      veniam, quis nostrud exercitation.
-    </p>
     <Card
       class='from-accent3-100 to-accent2-100 mb-8 bg-gradient-to-r p-6 md:p-8'
     >
@@ -101,7 +94,8 @@ const projects = [
       </h2>
       <p class='text-secondary mb-6'>
         Here's a collection of projects that showcase my skills in web
-        development, from frontend interfaces to full-stack applications.
+        development, from frontend interfaces to full-stack applications, CLI
+        tools, scripts and much more.
       </p>
       <div class='flex flex-wrap justify-center gap-4'>
         <Link
@@ -112,33 +106,6 @@ const projects = [
         >
           Browse Projects
         </Link>
-      </div>
-    </Card>
-  </section>
-
-  <!-- Filter Section -->
-  <section class='mb-12'>
-    <Card class='p-6'>
-      <h3 class='text-secondary mb-4 text-center text-xl font-bold'>
-        Filter by Technology
-      </h3>
-      <div class='flex flex-wrap justify-center gap-3'>
-        {
-          [
-            'All',
-            'React',
-            'Vue.js',
-            'Astro',
-            'TypeScript',
-            'Node.js',
-            'Python',
-            'Full Stack',
-          ].map((tech) => (
-            <button class='bg-accent2 text-secondary hover:bg-accent2-700 border-comic border-secondary shadow-comic hover:shadow-comic-lg rounded-lg px-4 py-2 font-semibold transition-colors'>
-              {tech}
-            </button>
-          ))
-        }
       </div>
     </Card>
   </section>
@@ -176,14 +143,12 @@ const projects = [
   </section>
 
   <!-- Technologies Section -->
-  <section class='mb-16'>
+  <section id='technologies' class='mb-16'>
     <h2 class='text-secondary mb-8 text-center text-3xl font-black md:text-4xl'>
-      Technologies I Use
+      Technologies I <span class='text-accent'>USE</span>
     </h2>
     <div class='grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4'>
-      <Card
-        class='bg-accent-100 p-6 text-center transition-transform hover:scale-105'
-      >
+      <Card class='bg-accent-100 p-6 text-center hover:rotate-2'>
         <div
           class='mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-lg bg-red-500'
         >
@@ -193,9 +158,7 @@ const projects = [
         <p class='text-secondary text-sm'>React, Vue, Astro, TypeScript</p>
       </Card>
 
-      <Card
-        class='bg-accent2-100 p-6 text-center transition-transform hover:scale-105'
-      >
+      <Card class='bg-accent2-100 p-6 text-center hover:rotate-2'>
         <div
           class='mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-lg bg-red-500'
         >
@@ -205,9 +168,7 @@ const projects = [
         <p class='text-secondary text-sm'>Node.js, Python, PostgreSQL</p>
       </Card>
 
-      <Card
-        class='bg-accent3-100 p-6 text-center transition-transform hover:scale-105'
-      >
+      <Card class='bg-accent3-100 p-6 text-center hover:rotate-2'>
         <div
           class='mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-lg bg-red-500'
         >
@@ -217,9 +178,7 @@ const projects = [
         <p class='text-secondary text-sm'>React Native, PWA</p>
       </Card>
 
-      <Card
-        class='bg-primary-200 p-6 text-center transition-transform hover:scale-105'
-      >
+      <Card class='bg-primary-200 p-6 text-center hover:rotate-2'>
         <div
           class='mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-lg bg-red-500'
         >
@@ -238,8 +197,9 @@ const projects = [
         Let's Build Something Amazing!
       </h2>
       <p class='text-secondary mx-auto mb-8 max-w-2xl text-lg md:text-xl'>
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod
-        tempor incididunt ut labore et dolore magna aliqua.
+        This is just a glimpse of my work. If you're interested in
+        collaborating, have a project idea, or just want to chat about tech, I'd
+        love to hear from you!
       </p>
       <Link
         href='/about-me#contact'
@@ -321,6 +281,36 @@ const projects = [
   @media (max-width: 768px) {
     section:nth-of-type(3) .grid {
       grid-template-columns: 1fr;
+    }
+  }
+
+  @keyframes float {
+    0%,
+    100% {
+      transform: translateY(0px);
+    }
+    50% {
+      transform: translateY(-10px);
+    }
+  }
+
+  /* Add floating animation to fun facts cards on larger screens */
+  @media (min-width: 768px) {
+    #technologies > div > :nth-child(1) {
+      animation: float 3s ease-in-out infinite;
+      animation-delay: 0s;
+    }
+    #technologies > div > :nth-child(2) {
+      animation: float 3s ease-in-out infinite;
+      animation-delay: 0.5s;
+    }
+    #technologies > div > :nth-child(3) {
+      animation: float 3s ease-in-out infinite;
+      animation-delay: 1s;
+    }
+    #technologies > div > :nth-child(4) {
+      animation: float 3s ease-in-out infinite;
+      animation-delay: 1.5s;
     }
   }
 </style>
