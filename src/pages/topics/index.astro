@@ -65,12 +65,13 @@ const processedTopics = await Promise.all(
       )
     }
     {
-      processedTopics.map((topic) => (
+      processedTopics.map((topic, index) => (
         <TopicCard
           imageSrc={topic.imageSrc || DuckyCodingLogo}
           imageAlt={topic.image?.alt ?? `${topic.title} representation`}
           title={topic.title}
           slug={topic.slug}
+          loading={index < 4 ? 'eager' : 'lazy'}
         />
       ))
     }
