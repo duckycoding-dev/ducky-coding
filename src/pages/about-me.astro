@@ -32,7 +32,7 @@ import Link from '../components/Link/Link.astro';
         <h1
           class='text-secondary mb-6 text-4xl leading-tight font-black md:text-5xl lg:text-6xl'
         >
-          Hi, I'm <span class='text-accent'>DuckyCoding</span>
+          Hi, I'm <span class='text-accent-700'>DuckyCoding</span>
         </h1>
         <p class='text-secondary mb-8 text-lg leading-relaxed md:text-xl'>
           Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do
@@ -65,7 +65,7 @@ import Link from '../components/Link/Link.astro';
     <div class='grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3'>
       <Card class='bg-accent2-100 p-6 transition-transform hover:scale-105'>
         <div
-          class='mb-4 flex h-16 w-16 items-center justify-center rounded-lg bg-red-500'
+          class='bg-danger mb-4 flex h-16 w-16 items-center justify-center rounded-lg'
         >
           <span class='font-bold text-white'>🎨</span>
         </div>
@@ -80,7 +80,7 @@ import Link from '../components/Link/Link.astro';
 
       <Card class='bg-accent3-100 p-6 transition-transform hover:scale-105'>
         <div
-          class='mb-4 flex h-16 w-16 items-center justify-center rounded-lg bg-red-500'
+          class='bg-danger mb-4 flex h-16 w-16 items-center justify-center rounded-lg'
         >
           <span class='font-bold text-white'>⚙️</span>
         </div>
@@ -97,7 +97,7 @@ import Link from '../components/Link/Link.astro';
         class='bg-accent-100 p-6 transition-transform hover:scale-105 md:col-span-2 lg:col-span-1'
       >
         <div
-          class='mb-4 flex h-16 w-16 items-center justify-center rounded-lg bg-red-500'
+          class='bg-danger mb-4 flex h-16 w-16 items-center justify-center rounded-lg'
         >
           <span class='font-bold text-white'>🚀</span>
         </div>
@@ -159,15 +159,21 @@ import Link from '../components/Link/Link.astro';
       <Card class='relative p-6'>
         <div class='flex flex-col gap-6 md:flex-row'>
           <div
-            class='flex h-20 w-20 flex-shrink-0 items-center justify-center rounded-xl bg-red-500 md:h-24 md:w-24'
+            class='bg-danger flex h-20 w-20 flex-shrink-0 items-center justify-center rounded-xl md:h-24 md:w-24'
           >
             <span class='text-2xl font-bold text-white'>2024</span>
           </div>
-          <div class='flex-1'>
+          <div>
             <h3 class='text-secondary mb-2 text-xl font-bold'>
               Senior Full Stack Developer
             </h3>
-            <p class='text-accent mb-3 font-semibold'>Tech Company Inc.</p>
+            <p
+              class='bg-accent3 border-comic border-secondary mb-3 px-2 py-1 font-semibold whitespace-break-spaces md:w-fit'
+            >
+              {
+                'Tech Company Inc.' /* wrapped in brackets to avoid newline issues */
+              }
+            </p>
             <p class='text-secondary'>
               Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do
               eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
@@ -180,15 +186,21 @@ import Link from '../components/Link/Link.astro';
       <Card class='relative p-6'>
         <div class='flex flex-col gap-6 md:flex-row'>
           <div
-            class='flex h-20 w-20 flex-shrink-0 items-center justify-center rounded-xl bg-red-500 md:h-24 md:w-24'
+            class='bg-danger flex h-20 w-20 flex-shrink-0 items-center justify-center rounded-xl md:h-24 md:w-24'
           >
             <span class='text-2xl font-bold text-white'>2022</span>
           </div>
-          <div class='flex-1'>
+          <div>
             <h3 class='text-secondary mb-2 text-xl font-bold'>
               Frontend Developer
             </h3>
-            <p class='text-accent mb-3 font-semibold'>Digital Agency</p>
+            <p
+              class='bg-accent3 border-comic border-secondary mb-3 px-2 py-1 font-semibold whitespace-break-spaces md:w-fit'
+            >
+              {
+                'Digital Agency' /* wrapped in brackets to avoid newline issues */
+              }
+            </p>
             <p class='text-secondary'>
               Duis aute irure dolor in reprehenderit in voluptate velit esse
               cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat
@@ -201,15 +213,21 @@ import Link from '../components/Link/Link.astro';
       <Card class='relative p-6'>
         <div class='flex flex-col gap-6 md:flex-row'>
           <div
-            class='flex h-20 w-20 flex-shrink-0 items-center justify-center rounded-xl bg-red-500 md:h-24 md:w-24'
+            class='bg-danger flex h-20 w-20 flex-shrink-0 items-center justify-center rounded-xl md:h-24 md:w-24'
           >
             <span class='text-2xl font-bold text-white'>2020</span>
           </div>
-          <div class='flex-1'>
+          <div>
             <h3 class='text-secondary mb-2 text-xl font-bold'>
               Junior Developer
             </h3>
-            <p class='text-accent mb-3 font-semibold'>StartUp Solutions</p>
+            <p
+              class='bg-accent3 border-comic border-secondary mb-3 px-2 py-1 font-semibold whitespace-break-spaces md:w-fit'
+            >
+              {
+                'StartUp Solutions' /* wrapped in brackets to avoid newline issues */
+              }
+            </p>
             <p class='text-secondary'>
               Sed ut perspiciatis unde omnis iste natus error sit voluptatem
               accusantium doloremque laudantium, totam rem aperiam, eaque ipsa
@@ -229,7 +247,7 @@ import Link from '../components/Link/Link.astro';
     <div class='grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4'>
       <Card class='bg-accent3-100 p-6 text-center hover:rotate-2'>
         <div
-          class='mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-red-500'
+          class='bg-danger mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full'
         >
           <span class='text-2xl text-white'>☕</span>
         </div>
@@ -239,7 +257,7 @@ import Link from '../components/Link/Link.astro';
 
       <Card class='bg-accent2-100 p-6 text-center hover:rotate-2'>
         <div
-          class='mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-red-500'
+          class='bg-danger mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full'
         >
           <span class='text-2xl text-white'>🎮</span>
         </div>
@@ -249,7 +267,7 @@ import Link from '../components/Link/Link.astro';
 
       <Card class='bg-accent-100 p-6 text-center hover:rotate-2'>
         <div
-          class='mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-red-500'
+          class='bg-danger mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full'
         >
           <span class='text-2xl text-white'>📚</span>
         </div>
@@ -259,7 +277,7 @@ import Link from '../components/Link/Link.astro';
 
       <Card class='bg-primary-200 p-6 text-center hover:rotate-2'>
         <div
-          class='mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-red-500'
+          class='bg-danger mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full'
         >
           <span class='text-2xl text-white'>🌍</span>
         </div>

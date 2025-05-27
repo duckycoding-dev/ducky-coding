@@ -50,7 +50,7 @@
     "noImplicitOverride": true /* Ensure overriding members in derived classes are marked with an override modifier. */,
     "allowUnusedLabels": false /* Disable error reporting for unused labels. */,
     "allowUnreachableCode": false /* Disable error reporting for unreachable code. */,
-
+    "erasableSyntaxOnly": true,
     /* Completeness */
     "skipLibCheck": true /* Skip type checking all .d.ts files. */
   }
