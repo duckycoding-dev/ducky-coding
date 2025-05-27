@@ -27,30 +27,31 @@ import Link from '../components/Link/Link.astro';
 >
   <!-- Hero Section -->
   <section class='mb-16'>
-    <div class='grid grid-cols-1 items-center gap-8 md:grid-cols-2'>
-      <div class='order-2 lg:order-1'>
+    <div
+      class='grid grid-cols-1 gap-8 sm:grid-cols-[repeat(auto-fit,minmax(300px,1fr))] md:grid-cols-[1fr_auto]'
+    >
+      <div>
         <h1
-          class='text-secondary mb-6 text-4xl leading-tight font-black md:text-5xl lg:text-6xl'
+          class='text-secondary mb-6 text-3xl leading-tight font-black md:text-4xl lg:text-6xl'
         >
-          Hi, I'm <span class='text-accent-700'>DuckyCoding</span>
+          Hi, I'm <span class='text-accent-700 wrap-break-word sm:wrap-normal'
+            >DuckyCoding</span
+          >
         </h1>
-        <p class='text-secondary mb-8 text-lg leading-relaxed md:text-xl'>
+        <p class='text-secondary text-lg leading-relaxed md:text-xl'>
           Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do
           eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad
           minim veniam, quis nostrud exercitation ullamco laboris.
         </p>
       </div>
-      <div class='order-1 md:order-2'>
-        <Card
-          class='flex h-64 w-full items-center md:h-80 md:items-baseline lg:h-96'
-        >
+      <div class='aspect-square md:h-80 lg:h-96'>
+        <Card class='flex h-full w-full items-baseline md:items-baseline'>
           <Image
             densities={IMAGE_DENSITIES}
             loading={'eager'}
-            decoding={'async'}
             src={headshotDavide}
             alt='Davide - DuckyCoding'
-            class='mt-52 md:mt-0'
+            class='h-fit'
           />
         </Card>
       </div>
@@ -63,7 +64,7 @@ import Link from '../components/Link/Link.astro';
       What I Do
     </h2>
     <div class='grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3'>
-      <Card class='bg-accent2-100 p-6 transition-transform hover:scale-105'>
+      <Card class='bg-accent2-100 p-6'>
         <div
           class='bg-danger mb-4 flex h-16 w-16 items-center justify-center rounded-lg'
         >
@@ -78,7 +79,7 @@ import Link from '../components/Link/Link.astro';
         </p>
       </Card>
 
-      <Card class='bg-accent3-100 p-6 transition-transform hover:scale-105'>
+      <Card class='bg-accent3-100 p-6'>
         <div
           class='bg-danger mb-4 flex h-16 w-16 items-center justify-center rounded-lg'
         >
@@ -93,9 +94,7 @@ import Link from '../components/Link/Link.astro';
         </p>
       </Card>
 
-      <Card
-        class='bg-accent-100 p-6 transition-transform hover:scale-105 md:col-span-2 lg:col-span-1'
-      >
+      <Card class='bg-accent-100 p-6 md:col-span-2 lg:col-span-1'>
         <div
           class='bg-danger mb-4 flex h-16 w-16 items-center justify-center rounded-lg'
         >
@@ -115,7 +114,7 @@ import Link from '../components/Link/Link.astro';
   <!-- Skills Section -->
   <section class='mb-16'>
     <h2 class='text-secondary mb-8 text-center text-3xl font-black md:text-4xl'>
-      Skills & Technologies
+      <span class='text-accent-700'>Skills</span> & Technologies
     </h2>
     <div class='grid grid-cols-1 gap-8 lg:grid-cols-2'>
       <Card class='p-6'>
@@ -124,7 +123,7 @@ import Link from '../components/Link/Link.astro';
           {
             ['TypeScript', 'React', 'Astro', 'Tailwind', 'Vue', 'Next.js'].map(
               (skill) => (
-                <div class='bg-accent text-secondary hover:bg-accent-700 rounded-lg px-3 py-2 text-center font-semibold transition-colors'>
+                <div class='bg-accent text-secondary hover:bg-accent-700 border-comic border-secondary rounded-lg px-3 py-2 text-center font-semibold transition-colors'>
                   {skill}
                 </div>
               ),
@@ -139,7 +138,7 @@ import Link from '../components/Link/Link.astro';
           {
             ['Node.js', 'Python', 'PostgreSQL', 'Docker', 'Git', 'AWS'].map(
               (skill) => (
-                <div class='bg-accent2 text-secondary hover:bg-accent2-700 rounded-lg px-3 py-2 text-center font-semibold transition-colors'>
+                <div class='bg-accent2 text-secondary hover:bg-accent2-700 border-comic border-secondary rounded-lg px-3 py-2 text-center font-semibold transition-colors'>
                   {skill}
                 </div>
               ),
@@ -153,7 +152,7 @@ import Link from '../components/Link/Link.astro';
   <!-- Experience Timeline -->
   <section class='mb-16'>
     <h2 class='text-secondary mb-8 text-center text-3xl font-black md:text-4xl'>
-      My Journey
+      My <span class='text-accent-700'>Journey</span> so Far
     </h2>
     <div class='space-y-8'>
       <Card class='relative p-6'>
@@ -242,7 +241,7 @@ import Link from '../components/Link/Link.astro';
   <!-- Fun Facts -->
   <section id='fun-facts' class='mb-16'>
     <h2 class='text-secondary mb-8 text-center text-3xl font-black md:text-4xl'>
-      Fun Facts About Me
+      <span class='text-accent-700'>Fun Facts</span> About Me
     </h2>
     <div class='grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4'>
       <Card class='bg-accent3-100 p-6 text-center hover:rotate-2'>
@@ -296,15 +295,16 @@ import Link from '../components/Link/Link.astro';
         Let's Work Together!
       </h2>
       <p class='text-secondary mx-auto mb-8 max-w-2xl text-lg md:text-xl'>
-        Ready to bring your ideas to life? Check out my work and let's discuss
-        our next project together.
+        Ready to bring your ideas to life?
+        <br />
+        Check out my work and see if I'm a good fit for you and your team!
       </p>
       <div class='flex flex-wrap justify-center gap-4'>
         <Link
           href='/my-projects'
           variant='contained'
           size='large'
-          class='px-8 py-4'
+          class='px-8 py-4 text-xl text-balance sm:text-3xl'
         >
           View My Projects 🚀
         </Link>
@@ -330,7 +330,7 @@ import Link from '../components/Link/Link.astro';
             name='name'
             required
             class='text-secondary-900 bg-primary-100 border-comic border-secondary focus:ring-accent w-full rounded-lg px-4 py-3 focus:ring-2 focus:outline-none'
-            placeholder='Your Name'
+            placeholder={'Your Name'}
           />
         </div>
 
@@ -344,7 +344,7 @@ import Link from '../components/Link/Link.astro';
             name='email'
             required
             class='text-secondary-900 bg-primary-100 border-comic border-secondary focus:ring-accent w-full rounded-lg px-4 py-3 focus:ring-2 focus:outline-none'
-            placeholder='your.email@example.com'
+            placeholder={'your.email@example.com'}
           />
         </div>
 
@@ -357,10 +357,7 @@ import Link from '../components/Link/Link.astro';
             id='subject'
             name='subject'
             class='text-secondary-900 bg-primary-100 border-comic border-secondary focus:ring-accent w-full rounded-lg px-4 py-3 focus:ring-2 focus:outline-none'
-            placeholder="
-            What's
-            this
-            about?"
+            placeholder={"What's this about?"}
           />
         </div>
 
@@ -374,7 +371,7 @@ import Link from '../components/Link/Link.astro';
             rows='5'
             required
             class='text-secondary-900 bg-primary-100 border-comic border-secondary focus:ring-accent w-full rounded-lg px-4 py-3 focus:ring-2 focus:outline-none'
-            placeholder='Tell me about your project or just say hi!'
+            placeholder={'Tell me about your project or just say hi!'}
           >
           </textarea>
         </div>
@@ -383,10 +380,10 @@ import Link from '../components/Link/Link.astro';
           type='submit'
           variant='contained'
           size='large'
-          class='flex w-full justify-center gap-4 px-8 py-4'
+          class='flex w-full items-center justify-center gap-4 px-8 py-4 text-xl sm:text-3xl'
         >
-          <DuckIcon class='inline-block h-8 w-8' />Send Message<DuckIcon
-            class='inline-block h-8 w-8'
+          <DuckIcon class='hidden h-8 w-8 sm:inline-block' />Send message<DuckIcon
+            class='hidden h-8 w-8 sm:inline-block'
           />
         </Button>
       </form>

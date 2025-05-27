@@ -102,7 +102,7 @@ const projects = [
           href='#projects'
           variant='contained'
           size='large'
-          class='px-8 py-4'
+          class='px-8 py-4 text-2xl sm:text-3xl'
         >
           Browse Projects
         </Link>
@@ -134,7 +134,6 @@ const projects = [
               bannerImage={null}
               imageAlt={`Banner image for ${project.title}`}
               loading={index < 3 ? 'eager' : 'lazy'}
-              class='h-full transition-transform duration-300 group-hover:scale-105'
             />
           </Link>
         ))
@@ -150,7 +149,7 @@ const projects = [
     <div class='grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4'>
       <Card class='bg-accent-100 p-6 text-center hover:rotate-2'>
         <div
-          class='mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-lg bg-red-500'
+          class='bg-danger mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-lg'
         >
           <span class='text-2xl font-bold text-white'>⚛️</span>
         </div>
@@ -160,7 +159,7 @@ const projects = [
 
       <Card class='bg-accent2-100 p-6 text-center hover:rotate-2'>
         <div
-          class='mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-lg bg-red-500'
+          class='bg-danger mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-lg'
         >
           <span class='text-2xl font-bold text-white'>🔧</span>
         </div>
@@ -170,7 +169,7 @@ const projects = [
 
       <Card class='bg-accent3-100 p-6 text-center hover:rotate-2'>
         <div
-          class='mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-lg bg-red-500'
+          class='bg-danger mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-lg'
         >
           <span class='text-2xl font-bold text-white'>📱</span>
         </div>
@@ -180,7 +179,7 @@ const projects = [
 
       <Card class='bg-primary-200 p-6 text-center hover:rotate-2'>
         <div
-          class='mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-lg bg-red-500'
+          class='bg-danger mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-lg'
         >
           <span class='text-2xl font-bold text-white'>☁️</span>
         </div>
@@ -197,15 +196,16 @@ const projects = [
         Let's Build Something Amazing!
       </h2>
       <p class='text-secondary mx-auto mb-8 max-w-2xl text-lg md:text-xl'>
-        This is just a glimpse of my work. If you're interested in
-        collaborating, have a project idea, or just want to chat about tech, I'd
-        love to hear from you!
+        This is just a glimpse of my work.
+        <br />
+        If you're interested in collaborating, have a project idea, or just want
+        to chat about tech, I'd love to hear from you!
       </p>
       <Link
         href='/about-me#contact'
         variant='contained'
         size='large'
-        class='px-8 py-4'
+        class='px-8 py-4 text-2xl sm:text-3xl'
       >
         Get In Touch
       </Link>
