@@ -10,9 +10,7 @@
   --breakpoint-lg: 976px;
   --breakpoint-xl: 1440px;
 
-  --font-inter: 'Inter', 'sans-serif';
-  --font-poppins: 'Poppins', 'sans-serif';
-  --font-roboto: 'Roboto', 'sans-serif';
+  --font-inter: 'Inter', system-ui, -apple-system, sans-serif;
 
   --color-primary: var(--color-primary);
   --color-primary-100: var(--color-primary-100);
