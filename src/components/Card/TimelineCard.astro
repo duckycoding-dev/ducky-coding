@@ -1,20 +1,25 @@
 ---
 import type { ComponentProps, HTMLAttributes } from 'astro/types';
-import Link from '../Link/Link.astro';
+import Link from '@components/Link/Link.astro';
 import Card from './Card.astro';
+import Image from 'astro/components/Image.astro';
 
 interface Props extends ComponentProps<typeof Card> {
+  logo: string | ImageMetadata;
+  logoAltText?: string; // alt text for the logo image
   place?: string;
   link?: string; // a place link can be provided only if place is defined
   roleTitle: string;
-  year: number | `${number} - ${number}`;
+  period: number | `${number} - ${number}` | `${number} - Present`;
   target?: HTMLAttributes<'a'>['target'];
 }
 
 const {
+  logo,
   place,
   roleTitle,
-  year,
+  logoAltText,
+  period,
   link,
   target = '_blank',
   ...props
@@ -37,15 +42,24 @@ const wrapperProps = link
   <Card class='p-6'>
     <div class='timeline_card'>
       <div
-        class='bg-danger flex h-20 w-20 flex-shrink-0 items-center justify-center rounded-xl [grid-area:logo] md:h-24 md:w-24'
+        class={`${typeof logo === 'string' ? 'bg-danger' : ''} flex h-20 w-20 flex-shrink-0 items-center justify-center rounded-xl [grid-area:logo] md:h-24 md:w-24`}
       >
-        <span class='text-2xl font-bold text-white'>{year}</span>
+        {
+          typeof logo === 'string' ? (
+            <span class='text-4xl font-bold text-white md:text-5xl'>
+              {logo}
+            </span>
+          ) : (
+            <Image src={logo} alt={logoAltText || 'Logo'} /> // TODO improve this image with more props
+          )
+        }
       </div>
-      <h3
-        class='text-secondary self-center text-xl font-bold [grid-area:title]'
-      >
-        {roleTitle}
-      </h3>
+      <header class='self-center [grid-area:title]'>
+        <h3 class='text-secondary text-xl font-bold'>
+          {roleTitle}
+        </h3>
+        <p class='text-sm italic'>{period}</p>
+      </header>
       <section>
         {
           place ? (
