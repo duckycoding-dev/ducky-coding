@@ -2,9 +2,7 @@
 import { cn } from '@utils/cn';
 import type { HTMLAttributes } from 'astro/types';
 
-export interface CardProps {}
-
-interface Props extends HTMLAttributes<'div'>, CardProps {}
+interface Props extends HTMLAttributes<'div'> {}
 
 const { class: className, ...props }: Props = Astro.props;
 ---

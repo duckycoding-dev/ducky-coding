@@ -7,6 +7,7 @@ import InstagramIcon from '../../components/Icons/InstagramIcon/InstagramIcon.as
 import TikTokIcon from '../../components/Icons/TikTokIcon/TikTokIcon.astro';
 import XIcon from '../../components/Icons/XIcon/XIcon.astro';
 import YouTubeIcon from '../../components/Icons/YouTubeIcon/YouTubeIcon.astro';
+import LinkedInIcon from '../../components/Icons/LinkedInIcon/LinkedInIcon.astro';
 
 export interface FooterProps {}
 
@@ -30,6 +31,7 @@ const { class: className, ...props }: Props = Astro.props;
 
   <nav class='mx-auto flex min-h-12 max-w-7xl flex-wrap items-center gap-x-6'>
     <Link
+      target='_blank'
       href='https://github.com/duckycoding-dev'
       variant={'default'}
       class='text-secondary'
@@ -37,6 +39,7 @@ const { class: className, ...props }: Props = Astro.props;
       <GitHubIcon size={50} />
     </Link>
     <Link
+      target='_blank'
       href='https://x.com/ducky_coding'
       variant={'default'}
       class='text-secondary'
@@ -44,6 +47,15 @@ const { class: className, ...props }: Props = Astro.props;
       <XIcon size={50} />
     </Link>
     <Link
+      target='_blank'
+      href='https://www.linkedin.com/in/davide-m-997874254/'
+      variant={'default'}
+      class='text-secondary'
+    >
+      <LinkedInIcon size={50} />
+    </Link>
+    <Link
+      target='_blank'
       href='https://www.instagram.com/ducky.coding/'
       variant={'default'}
       class='text-secondary'
@@ -51,6 +63,7 @@ const { class: className, ...props }: Props = Astro.props;
       <InstagramIcon size={50} />
     </Link>
     <Link
+      target='_blank'
       href='https://www.tiktok.com/@ducky.coding'
       variant={'default'}
       class='text-secondary'
@@ -58,6 +71,7 @@ const { class: className, ...props }: Props = Astro.props;
       <TikTokIcon size={50} />
     </Link>
     <Link
+      target='_blank'
       href='https://www.youtube.com/@ducky.coding'
       variant={'default'}
       class='text-secondary'

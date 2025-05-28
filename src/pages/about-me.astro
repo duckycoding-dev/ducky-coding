@@ -7,6 +7,35 @@ import headshotDavide from '@assets/images/head-shot-davide.jpg';
 import DuckIcon from '../components/Icons/DuckIcon/DuckIcon.astro';
 import { IMAGE_DENSITIES } from '../utils/globals';
 import Link from '../components/Link/Link.astro';
+import type { ComponentProps } from 'astro/types';
+import TimelineCard from '../components/Card/TimelineCard.astro';
+
+const timelineObjects: ComponentProps<typeof TimelineCard>[] = [
+  {
+    roleTitle: 'Senior Full Stack Developer',
+    year: 2024,
+    place: 'Tech Company Inc.',
+    link: 'https://techcompany.com',
+    children:
+      'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation.',
+  },
+  {
+    roleTitle: 'Frontend Developer',
+    year: 2022,
+    place: 'Digital Agency',
+    link: 'https://digitalagency.com',
+    children:
+      'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation.',
+  },
+  {
+    roleTitle: 'Junior Developer',
+    year: 2020,
+    place: 'StartUp Solutions',
+    link: 'https://startupsolutions.com',
+    children:
+      'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation.',
+  },
+];
 ---
 
 <HolyGrailLayout
@@ -61,7 +90,7 @@ import Link from '../components/Link/Link.astro';
   <!-- About Cards Grid -->
   <section class='mb-16'>
     <h2 class='text-secondary mb-8 text-center text-3xl font-black md:text-4xl'>
-      What I Do
+      What I do
     </h2>
     <div class='grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3'>
       <Card class='bg-accent2-100 p-6'>
@@ -155,103 +184,40 @@ import Link from '../components/Link/Link.astro';
       My <span class='text-accent-700'>Journey</span> so Far
     </h2>
     <div class='space-y-8'>
-      <Card class='relative p-6'>
-        <div class='flex flex-col gap-6 md:flex-row'>
-          <div
-            class='bg-danger flex h-20 w-20 flex-shrink-0 items-center justify-center rounded-xl md:h-24 md:w-24'
+      {
+        timelineObjects.map((item) => (
+          <TimelineCard
+            class='block'
+            roleTitle={item.roleTitle}
+            year={item.year}
+            place={item.place}
+            link={item.link}
           >
-            <span class='text-2xl font-bold text-white'>2024</span>
-          </div>
-          <div>
-            <h3 class='text-secondary mb-2 text-xl font-bold'>
-              Senior Full Stack Developer
-            </h3>
-            <p
-              class='bg-accent3 border-comic border-secondary mb-3 px-2 py-1 font-semibold whitespace-break-spaces md:w-fit'
-            >
-              {
-                'Tech Company Inc.' /* wrapped in brackets to avoid newline issues */
-              }
-            </p>
-            <p class='text-secondary'>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do
-              eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
-              enim ad minim veniam, quis nostrud exercitation.
-            </p>
-          </div>
-        </div>
-      </Card>
-
-      <Card class='relative p-6'>
-        <div class='flex flex-col gap-6 md:flex-row'>
-          <div
-            class='bg-danger flex h-20 w-20 flex-shrink-0 items-center justify-center rounded-xl md:h-24 md:w-24'
-          >
-            <span class='text-2xl font-bold text-white'>2022</span>
-          </div>
-          <div>
-            <h3 class='text-secondary mb-2 text-xl font-bold'>
-              Frontend Developer
-            </h3>
-            <p
-              class='bg-accent3 border-comic border-secondary mb-3 px-2 py-1 font-semibold whitespace-break-spaces md:w-fit'
-            >
-              {
-                'Digital Agency' /* wrapped in brackets to avoid newline issues */
-              }
-            </p>
-            <p class='text-secondary'>
-              Duis aute irure dolor in reprehenderit in voluptate velit esse
-              cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat
-              cupidatat non proident.
-            </p>
-          </div>
-        </div>
-      </Card>
-
-      <Card class='relative p-6'>
-        <div class='flex flex-col gap-6 md:flex-row'>
-          <div
-            class='bg-danger flex h-20 w-20 flex-shrink-0 items-center justify-center rounded-xl md:h-24 md:w-24'
-          >
-            <span class='text-2xl font-bold text-white'>2020</span>
-          </div>
-          <div>
-            <h3 class='text-secondary mb-2 text-xl font-bold'>
-              Junior Developer
-            </h3>
-            <p
-              class='bg-accent3 border-comic border-secondary mb-3 px-2 py-1 font-semibold whitespace-break-spaces md:w-fit'
-            >
-              {
-                'StartUp Solutions' /* wrapped in brackets to avoid newline issues */
-              }
-            </p>
-            <p class='text-secondary'>
-              Sed ut perspiciatis unde omnis iste natus error sit voluptatem
-              accusantium doloremque laudantium, totam rem aperiam, eaque ipsa
-              quae ab illo inventore.
-            </p>
-          </div>
-        </div>
-      </Card>
+            {typeof item.children === 'string' ? (
+              <p class='text-secondary'>{item.children}</p>
+            ) : (
+              item.children
+            )}
+          </TimelineCard>
+        ))
+      }
     </div>
   </section>
 
   <!-- Fun Facts -->
   <section id='fun-facts' class='mb-16'>
     <h2 class='text-secondary mb-8 text-center text-3xl font-black md:text-4xl'>
-      <span class='text-accent-700'>Fun Facts</span> About Me
+      <span class='text-accent-700'>Fun facts</span> about me
     </h2>
     <div class='grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4'>
       <Card class='bg-accent3-100 p-6 text-center hover:rotate-2'>
         <div
           class='bg-danger mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full'
         >
-          <span class='text-2xl text-white'>☕</span>
+          <span class='text-2xl text-white'>👨‍🌾</span>
         </div>
-        <h3 class='text-secondary mb-2 text-lg font-bold'>Coffee Lover</h3>
-        <p class='text-secondary text-sm'>500+ cups per year</p>
+        <h3 class='text-secondary mb-2 text-lg font-bold'>Gardener</h3>
+        <p class='text-secondary text-sm'>Hot peppers enjoyer</p>
       </Card>
 
       <Card class='bg-accent2-100 p-6 text-center hover:rotate-2'>
@@ -261,7 +227,7 @@ import Link from '../components/Link/Link.astro';
           <span class='text-2xl text-white'>🎮</span>
         </div>
         <h3 class='text-secondary mb-2 text-lg font-bold'>Gamer</h3>
-        <p class='text-secondary text-sm'>Indie games enthusiast</p>
+        <p class='text-secondary text-sm'>Since I was a little kid</p>
       </Card>
 
       <Card class='bg-accent-100 p-6 text-center hover:rotate-2'>
@@ -278,10 +244,10 @@ import Link from '../components/Link/Link.astro';
         <div
           class='bg-danger mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full'
         >
-          <span class='text-2xl text-white'>🌍</span>
+          <span class='text-2xl text-white'>🦆</span>
         </div>
-        <h3 class='text-secondary mb-2 text-lg font-bold'>Explorer</h3>
-        <p class='text-secondary text-sm'>Love discovering new places</p>
+        <h3 class='text-secondary mb-2 text-lg font-bold'>Duck lover</h3>
+        <p class='text-secondary text-sm'>Quack quack quack</p>
       </Card>
     </div>
   </section>
@@ -292,7 +258,7 @@ import Link from '../components/Link/Link.astro';
   <section class='mb-16 text-center'>
     <Card class='from-accent2-100 to-accent3-100 bg-gradient-to-br p-8 md:p-12'>
       <h2 class='text-secondary mb-6 text-3xl font-black md:text-4xl'>
-        Let's Work Together!
+        Let's work <span class='text-accent-700'>together!</span>
       </h2>
       <p class='text-secondary mx-auto mb-8 max-w-2xl text-lg md:text-xl'>
         Ready to bring your ideas to life?
@@ -306,7 +272,7 @@ import Link from '../components/Link/Link.astro';
           size='large'
           class='px-8 py-4 text-xl text-balance sm:text-3xl'
         >
-          View My Projects 🚀
+          View my projects 🚀
         </Link>
       </div>
     </Card>
@@ -317,12 +283,12 @@ import Link from '../components/Link/Link.astro';
       <h2
         class='text-secondary mb-6 text-center text-3xl font-black md:text-4xl'
       >
-        Send Me a Message
+        Send me a message
       </h2>
       <form class='space-y-6' action='#' method='POST'>
         <div>
           <label for='name' class='text-secondary mb-2 block font-semibold'>
-            Name *
+            Name
           </label>
           <input
             type='text'
@@ -336,7 +302,7 @@ import Link from '../components/Link/Link.astro';
 
         <div>
           <label for='email' class='text-secondary mb-2 block font-semibold'>
-            Email *
+            Email
           </label>
           <input
             type='email'
@@ -356,6 +322,7 @@ import Link from '../components/Link/Link.astro';
             type='text'
             id='subject'
             name='subject'
+            required
             class='text-secondary-900 bg-primary-100 border-comic border-secondary focus:ring-accent w-full rounded-lg px-4 py-3 focus:ring-2 focus:outline-none'
             placeholder={"What's this about?"}
           />
@@ -363,7 +330,7 @@ import Link from '../components/Link/Link.astro';
 
         <div>
           <label for='message' class='text-secondary mb-2 block font-semibold'>
-            Message *
+            Message
           </label>
           <textarea
             id='message'
@@ -372,8 +339,7 @@ import Link from '../components/Link/Link.astro';
             required
             class='text-secondary-900 bg-primary-100 border-comic border-secondary focus:ring-accent w-full rounded-lg px-4 py-3 focus:ring-2 focus:outline-none'
             placeholder={'Tell me about your project or just say hi!'}
-          >
-          </textarea>
+          ></textarea>
         </div>
 
         <Button
