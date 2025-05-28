@@ -29,27 +29,71 @@ const wrapperProps = link
       variant: 'unstyled',
     }
   : {};
+
+// TODO ADD IMAGE FOR BACKGROUND OF THE YEAR SQUARE OR BACKGROUDN IMAGE FOR THE CARD
 ---
 
 <Wrapper {...props} {...wrapperProps}>
   <Card class='p-6'>
-    <div class='flex flex-col gap-6 md:flex-row'>
+    <div class='timeline_card'>
       <div
-        class='bg-danger flex h-20 w-20 flex-shrink-0 items-center justify-center rounded-xl md:h-24 md:w-24'
+        class='bg-danger flex h-20 w-20 flex-shrink-0 items-center justify-center rounded-xl [grid-area:logo] md:h-24 md:w-24'
       >
         <span class='text-2xl font-bold text-white'>{year}</span>
       </div>
-      <div>
-        <h3 class='text-secondary mb-2 text-xl font-bold'>{roleTitle}</h3>
+      <h3
+        class='text-secondary self-center text-xl font-bold [grid-area:title]'
+      >
+        {roleTitle}
+      </h3>
+      <section>
         {
           place ? (
-            <p class='bg-accent3 border-comic border-secondary mb-3 px-2 py-1 font-semibold whitespace-break-spaces md:w-fit'>
+            <p class='bg-accent3 border-comic border-secondary mb-3 px-2 py-1 font-semibold whitespace-break-spaces [grid-area:place] md:w-fit'>
               {place}
             </p>
           ) : null
         }
-        <slot />
-      </div>
+        <footer class='[grid-area:content]'>
+          <slot />
+        </footer>
+      </section>
     </div>
   </Card>
 </Wrapper>
+
+<style>
+  .timeline_card {
+    column-gap: 1.5rem;
+    row-gap: 1.5rem;
+    display: grid;
+    grid-template-columns: auto 1fr;
+    grid-template-areas:
+      'logo title'
+      'placeAndContent placeAndContent';
+  }
+
+  @media (min-width: 768px) {
+    .timeline_card {
+      row-gap: 0;
+      grid-template-areas:
+        'logo title'
+        'logo placeAndContent';
+    }
+  }
+
+  section {
+    grid-area: placeAndContent;
+    display: grid;
+    grid-template-areas: 'place place' 'content content';
+  }
+
+  @media (min-width: 768px) {
+    section {
+      margin-top: 0.5rem;
+      grid-template-areas:
+        'place'
+        'content';
+    }
+  }
+</style>
