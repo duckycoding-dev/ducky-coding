@@ -12,28 +12,31 @@ import TimelineCard from '../components/Card/TimelineCard.astro';
 
 const timelineObjects: ComponentProps<typeof TimelineCard>[] = [
   {
-    roleTitle: 'Senior Full Stack Developer',
-    year: 2024,
-    place: 'Tech Company Inc.',
-    link: 'https://techcompany.com',
+    roleTitle: 'Fullstack web developer',
+    period: '2023 - Present',
+    logo: '🏄‍♂️',
+    place: 'Wavelop',
+    link: 'https://wavelop.com/en',
     children:
       'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation.',
   },
   {
-    roleTitle: 'Frontend Developer',
-    year: 2022,
-    place: 'Digital Agency',
-    link: 'https://digitalagency.com',
+    roleTitle: 'Fullstack web developer - internship',
+    logo: '🏄‍♂️',
+    period: 2023,
+    place: 'Wavelop',
+    link: 'https://wavelop.com/en',
     children:
       'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation.',
   },
   {
-    roleTitle: 'Junior Developer',
-    year: 2020,
-    place: 'StartUp Solutions',
-    link: 'https://startupsolutions.com',
+    roleTitle: 'Bachelor degree in Computer Science',
+    logo: '📚',
+    period: '2019 - 2023',
+    place: 'University of Padua',
+    link: 'https://informatica.math.unipd.it/en/bachelor/',
     children:
-      'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation.',
+      "During my Bachelor's degree in Computer Science at the University of Padua, I gained a solid foundation in programming, algorithms, data structures, and software engineering. I explored topics such as web development, databases, computer networks, and mathematics, and worked on a few group projects that strengthened my problem-solving and teamwork skills.",
   },
 ];
 ---
@@ -187,9 +190,10 @@ const timelineObjects: ComponentProps<typeof TimelineCard>[] = [
       {
         timelineObjects.map((item) => (
           <TimelineCard
+            logo={item.logo}
             class='block'
             roleTitle={item.roleTitle}
-            year={item.year}
+            period={item.period}
             place={item.place}
             link={item.link}
           >
