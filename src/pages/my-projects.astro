@@ -3,6 +3,8 @@ import HolyGrailLayout from '@layouts/HolyGrailLayout/HolyGrailLayout.astro';
 import Card from '@components/Card/Card.astro';
 import Link from '@components/Link/Link.astro';
 import ProjectCard from '@components/ProjectCard/ProjectCard.astro';
+import XIcon from '../components/Icons/XIcon/XIcon.astro';
+import LinkedInIcon from '../components/Icons/LinkedInIcon/LinkedInIcon.astro';
 
 // Mock project data - replace with your actual projects
 const projects = [
@@ -93,9 +95,9 @@ const projects = [
         🚀 Featured Work
       </h2>
       <p class='text-secondary mb-6'>
-        Here's a collection of projects that showcase my skills in web
-        development, from frontend interfaces to full-stack applications, CLI
-        tools, scripts and much more.
+        Here's a collection of projects that showcase my skills and experience
+        in web development, from frontend interfaces to full-stack applications,
+        CLI tools, scripts and much more.
       </p>
       <div class='flex flex-wrap justify-center gap-4'>
         <Link
@@ -201,14 +203,24 @@ const projects = [
         If you're interested in collaborating, have a project idea, or just want
         to chat about tech, I'd love to hear from you!
       </p>
-      <Link
-        href='/#contact'
-        variant='contained'
-        size='large'
-        class='px-8 py-4 text-2xl sm:text-3xl'
-      >
-        Get In Touch
-      </Link>
+      <div class='flex justify-center gap-4'>
+        <Link
+          target='_blank'
+          href='https://x.com/ducky_coding'
+          variant={'outlined'}
+          class='text-secondary border-secondary'
+        >
+          <XIcon size={50} />
+        </Link>
+        <Link
+          target='_blank'
+          href='https://www.linkedin.com/in/davide-m-997874254/'
+          variant={'outlined'}
+          class='text-secondary border-secondary'
+        >
+          <LinkedInIcon size={50} />
+        </Link>
+      </div>
     </Card>
   </section>
 </HolyGrailLayout>
@@ -311,6 +323,12 @@ const projects = [
     #technologies > div > :nth-child(4) {
       animation: float 3s ease-in-out infinite;
       animation-delay: 1.5s;
+    }
+  }
+
+  @media (prefers-reduced-motion) {
+    section:nth-of-type(3) .grid > :nth-child(n) {
+      animation: none;
     }
   }
 </style>

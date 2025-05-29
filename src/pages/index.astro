@@ -111,7 +111,7 @@ const backendAndToolsTechnologies = [
   }}
 >
   <!-- Hero Section -->
-  <section class='mb-16'>
+  <section class='mb-8 md:mb-12'>
     <div
       class='grid grid-cols-1 gap-8 sm:grid-cols-[repeat(auto-fit,minmax(300px,1fr))] md:grid-cols-[1fr_auto]'
     >
@@ -131,8 +131,8 @@ const backendAndToolsTechnologies = [
           <br />
           <span
             >Whether you're here to learn more about my journey, read some
-            articles, explore my projects, or just say hello, I'm glad you
-            stopped by! 😃</span
+            articles, explore my projects, or are just passing by, I'm glad you
+            are here! 😃</span
           >
         </p>
       </div>
@@ -160,7 +160,7 @@ const backendAndToolsTechnologies = [
         <div
           class='bg-danger mb-4 flex h-16 w-16 items-center justify-center rounded-lg'
         >
-          <span class='font-bold text-white'>🎨</span>
+          <span class='text-3xl font-bold text-white'>🎨</span>
         </div>
         <h3 class='text-secondary mb-3 text-xl font-bold'>
           Frontend Development
@@ -177,7 +177,7 @@ const backendAndToolsTechnologies = [
         <div
           class='bg-danger mb-4 flex h-16 w-16 items-center justify-center rounded-lg'
         >
-          <span class='font-bold text-white'>⚙️</span>
+          <span class='text-3xl font-bold text-white'>⚙️</span>
         </div>
         <h3 class='text-secondary mb-3 text-xl font-bold'>
           Backend Development
@@ -194,7 +194,7 @@ const backendAndToolsTechnologies = [
         <div
           class='bg-danger mb-4 flex h-16 w-16 items-center justify-center rounded-lg'
         >
-          <span class='font-bold text-white'>🚀</span>
+          <span class='text-3xl font-bold text-white'>🚀</span>
         </div>
         <h3 class='text-secondary mb-3 text-xl font-bold'>
           Full Stack Solutions
@@ -218,9 +218,9 @@ const backendAndToolsTechnologies = [
         <div class='grid grid-cols-2 gap-4 sm:grid-cols-3'>
           {
             frontendTechnologies.map((skill) => (
-              <div class='bg-accent text-secondary hover:bg-accent-700 border-comic border-secondary rounded-lg px-3 py-2 text-center font-semibold transition-colors'>
+              <p class='bg-accent text-secondary hover:bg-accent-700 border-comic border-secondary place-content-center rounded-lg px-3 py-2 text-center font-semibold transition-colors'>
                 {skill}
-              </div>
+              </p>
             ))
           }
         </div>
@@ -231,9 +231,9 @@ const backendAndToolsTechnologies = [
         <div class='grid grid-cols-2 gap-4 sm:grid-cols-3'>
           {
             backendAndToolsTechnologies.map((skill) => (
-              <div class='bg-accent2 text-secondary hover:bg-accent2-700 border-comic border-secondary rounded-lg px-3 py-2 text-center font-semibold transition-colors'>
+              <p class='bg-accent2 text-secondary hover:bg-accent2-700 border-comic border-secondary place-content-center rounded-lg px-3 py-2 text-center font-semibold transition-colors'>
                 {skill}
-              </div>
+              </p>
             ))
           }
         </div>
@@ -353,7 +353,8 @@ const backendAndToolsTechnologies = [
   </section>
 
   <!-- Contact Form Section -->
-  <section id='contact'>
+  {
+    /*<section id='contact'>
     <!-- Contact Form -->
     <Card class='p-6 md:p-8'>
       <h2
@@ -430,7 +431,8 @@ const backendAndToolsTechnologies = [
         </Button>
       </form>
     </Card>
-  </section>
+  </section>*/
+  }
 </HolyGrailLayout>
 
 <style>
@@ -462,6 +464,12 @@ const backendAndToolsTechnologies = [
     #fun-facts > div > :nth-child(4) {
       animation: float 3s ease-in-out infinite;
       animation-delay: 1.5s;
+    }
+  }
+
+  @media (prefers-reduced-motion) {
+    #fun-facts > div > :nth-child(n) {
+      animation: none;
     }
   }
 </style>
