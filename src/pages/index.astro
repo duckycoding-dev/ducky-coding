@@ -140,7 +140,10 @@ const funFacts: ComponentProps<typeof FunfactCard>[] = [
           <Image
             densities={IMAGE_DENSITIES}
             loading={'eager'}
+            decoding={'async'}
             src={headshotDavide}
+            width={350}
+            height={350}
             alt='Davide - DuckyCoding'
             class='h-fit'
           />

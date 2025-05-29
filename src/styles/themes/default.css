@@ -3,8 +3,9 @@
 /* Color palette used for primary, secondary, accent, accent2, accent3: https://coolors.co/f4f0fa-00020a-ff3de9-36e6ff-e6ff36*/
 @font-face {
   font-family: 'Inter';
+
   src: url('/fonts/Inter/Inter-VariableFont_slnt,wght.ttf');
-  font-display: swap;
+  font-display: optional; /* Use 'optional' to improve loading performance and avoid layout shifts: on second page render the correct font will be found in cache and used */
 }
 
 html,
