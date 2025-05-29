@@ -3,10 +3,18 @@ import type { ComponentProps, HTMLAttributes } from 'astro/types';
 import Link from '@components/Link/Link.astro';
 import Card from './Card.astro';
 import Image from 'astro/components/Image.astro';
+import { IMAGE_DENSITIES } from '../../utils/globals';
 
 interface Props extends ComponentProps<typeof Card> {
-  logo: string | ImageMetadata;
-  logoAltText?: string; // alt text for the logo image
+  logo?:
+    | string
+    | {
+        src: string | ImageMetadata;
+        alt?: string;
+        loading?: HTMLAttributes<'img'>['loading'];
+        decoding?: HTMLAttributes<'img'>['decoding'];
+        class?: string;
+      }; // additional props for the logo image
   place?: string;
   link?: string; // a place link can be provided only if place is defined
   roleTitle: string;
@@ -18,7 +26,6 @@ const {
   logo,
   place,
   roleTitle,
-  logoAltText,
   period,
   link,
   target = '_blank',
@@ -34,8 +41,6 @@ const wrapperProps = link
       variant: 'unstyled',
     }
   : {};
-
-// TODO ADD IMAGE FOR BACKGROUND OF THE YEAR SQUARE OR BACKGROUDN IMAGE FOR THE CARD
 ---
 
 <Wrapper {...props} {...wrapperProps}>
@@ -49,9 +54,29 @@ const wrapperProps = link
             <span class='text-4xl font-bold text-white md:text-5xl'>
               {logo}
             </span>
-          ) : (
-            <Image src={logo} alt={logoAltText || 'Logo'} /> // TODO improve this image with more props
-          )
+          ) : logo ? (
+            typeof logo.src === 'string' ? (
+              <Image
+                src={logo.src}
+                width={96}
+                height={96}
+                densities={IMAGE_DENSITIES}
+                alt={logo.alt || 'Logo'}
+                loading={logo.loading}
+                decoding={logo.decoding}
+                class={logo.class}
+              />
+            ) : (
+              <Image
+                src={logo.src}
+                alt={logo.alt || 'Logo'}
+                loading={logo.loading}
+                decoding={logo.decoding}
+                densities={IMAGE_DENSITIES}
+                class={logo.class || ''}
+              />
+            )
+          ) : null
         }
       </div>
       <header class='self-center [grid-area:title]'>
