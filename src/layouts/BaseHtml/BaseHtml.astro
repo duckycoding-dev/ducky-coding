@@ -14,6 +14,7 @@ export interface BaseHtmlProps extends BaseHeadProps {
 interface Props extends HTMLAttributes<'html'>, BaseHtmlProps {}
 
 const { theme = 'default', title, seoProps, ...props }: Props = Astro.props;
+console.log('DAVIDELOG title:', title);
 ---
 
 <!doctype html>
@@ -42,7 +43,12 @@ const { theme = 'default', title, seoProps, ...props }: Props = Astro.props;
   <meta name='viewport' content='width=device-width, initial-scale=1' />
   <meta name='generator' content={Astro.generator} />
 
-  <BaseHead seoProps={seoProps} />
+  <BaseHead
+    seoProps={{
+      ...seoProps,
+      title: title ? `${title} - DuckyCoding` : 'DuckyCoding',
+    }}
+  />
 
   <body class=`min-h-dvh`>
     <slot />
