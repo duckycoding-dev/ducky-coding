@@ -58,7 +58,7 @@ const {
   </div>
 
   <!-- Project Content -->
-  <div class='border-secondary z-1 flex flex-col gap-3 border-t-4 p-4'>
+  <div class='border-secondary z-1 flex h-full flex-col gap-3 border-t-4 p-4'>
     <!-- Title -->
     <h3 class='text-xl font-black'>{title}</h3>
 
@@ -66,7 +66,7 @@ const {
     <p class='text-secondary text-sm leading-relaxed'>{summary}</p>
 
     <!-- Technologies -->
-    <div class='flex flex-wrap gap-2'>
+    <div class='mb-2 flex flex-wrap gap-2'>
       {
         technologies.map((tech, index) => (
           <Tag
@@ -81,7 +81,7 @@ const {
     <!-- Project Link Badge -->
     {
       projectUrl && (
-        <div class='mt-2 text-center'>
+        <div class='mt-auto text-center'>
           <span class='bg-accent3 text-secondary group-hover:bg-accent3-700 rounded-lg px-3 py-1 text-xs font-semibold transition-colors'>
             {linkType} →
           </span>
