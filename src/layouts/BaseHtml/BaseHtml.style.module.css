@@ -32,9 +32,10 @@ body {
   }
 }
 
-@media (max-width: 1280px) {
+@media (max-width: 1300px) {
   body {
     grid-template-columns: 0 1fr 0;
+    column-gap: 0;
   }
 
   .aside--left,

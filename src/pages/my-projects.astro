@@ -2,11 +2,14 @@
 import HolyGrailLayout from '@layouts/HolyGrailLayout/HolyGrailLayout.astro';
 import Card from '@components/Card/Card.astro';
 import Link from '@components/Link/Link.astro';
-import ProjectCard from '@components/Card/ProjectCard.astro';
-import XIcon from '../components/Icons/XIcon/XIcon.astro';
-import LinkedInIcon from '../components/Icons/LinkedInIcon/LinkedInIcon.astro';
+import ProjectCard, {
+  type ProjectCardProps,
+} from '@components/Card/ProjectCard.astro';
+import XIcon from '@components/Icons/XIcon/XIcon.astro';
+import LinkedInIcon from '@components/Icons/LinkedInIcon/LinkedInIcon.astro';
 import type { ComponentProps } from 'astro/types';
-import TechnologyCard from '../components/Card/TechnologyCard.astro';
+import TechnologyCard from '@components/Card/TechnologyCard.astro';
+import pentaNewsLogo from '@assets/images/penta_news_logo.png';
 
 const frontendTechnologies = [
   'HTML',
@@ -68,67 +71,83 @@ const technologies: ComponentProps<typeof TechnologyCard>[] = [
 ];
 
 // Mock project data - replace with your actual projects
-const projects = [
+const projects: ProjectCardProps[] = [
   {
-    title: 'E-Commerce Platform',
+    title: 'duckycoding.dev (this website)',
     summary:
-      'A modern e-commerce platform built with Next.js and Stripe integration for seamless payment processing.',
-    technologies: ['Next.js', 'TypeScript', 'Stripe', 'PostgreSQL', 'Tailwind'],
-    projectUrl: 'https://github.com/duckycoding/ecommerce-platform',
-    linkType: 'GitHub',
-  },
-  {
-    title: 'Task Management App',
-    summary:
-      'Real-time collaborative task management application with team features and Socket.io integration.',
-    technologies: ['React', 'Socket.io', 'Node.js', 'MongoDB', 'Express'],
-    projectUrl: 'https://taskapp-demo.netlify.app',
-    linkType: 'Live Demo',
-  },
-  {
-    title: 'Weather Dashboard',
-    summary:
-      'Beautiful weather dashboard with interactive charts and detailed forecasting using multiple APIs.',
-    technologies: ['Vue.js', 'Chart.js', 'API Integration', 'PWA', 'Vuex'],
-    projectUrl: 'https://github.com/duckycoding/weather-dashboard',
-    linkType: 'GitHub',
-  },
-  {
-    title: 'Portfolio Website',
-    summary:
-      'Fast, modern portfolio website showcasing projects and skills, built with Astro and optimized for performance.',
-    technologies: ['Astro', 'Tailwind', 'TypeScript', 'SEO', 'MDX'],
+      'Fast, modern portfolio website showcasing projects and skills, built with Astro and optimized for performance, easy management and SEO.',
+    technologies: [
+      'Astro',
+      'Netlify',
+      'Tailwind',
+      'TypeScript',
+      'SEO',
+      'MDX',
+      'Drizzle ORM',
+      'SQLite',
+    ],
     projectUrl: 'https://duckycoding.dev',
     linkType: 'Live Site',
   },
   {
-    title: 'Mobile Fitness App',
+    title: 'Task Manager App',
     summary:
-      'Cross-platform fitness tracking mobile application with workout plans, progress tracking, and social features.',
+      'This is a monorepo which contains the code for the backend of a task manager app, which will be reused in many other frontend packages to test different frontend libraries while mantaining a standard backend logic: this will allow me to develop mini projects faster and experiment with new technologies.',
     technologies: [
-      'React Native',
-      'Firebase',
-      'Redux',
-      'Health API',
-      'Push Notifications',
+      'Hono',
+      'Drizzle ORM',
+      'Zod',
+      'REST API',
+      'React',
+      'Shadcn/ui',
+      'more...',
     ],
-    projectUrl: 'https://github.com/duckycoding/fitness-app',
+    projectUrl:
+      'https://github.com/duckycoding-dev/reusable_task_manager_backend',
     linkType: 'GitHub',
   },
   {
-    title: 'AI Chat Bot',
+    title: 'LeetCode solutions',
     summary:
-      'Intelligent chatbot with natural language understanding, built using Python and machine learning frameworks.',
-    technologies: ['Python', 'TensorFlow', 'NLP', 'FastAPI', 'Docker'],
-    projectUrl: 'https://github.com/duckycoding/ai-chatbot',
+      "My repository of LeetCode problems solutions that I've written, showcasing problem-solving skills and algorithmic thinking.",
+    technologies: ['Algorithms', 'Data Structures', 'JavaScript', 'Python'],
+    projectUrl:
+      'https://github.com/duckycoding-dev/neecode-leetcode-roadmap-exercises',
+    linkType: 'GitHub',
+  },
+  {
+    title: 'CLI Templater',
+    summary:
+      'Customizable and interactive CLI tool that aids in setting up repetitive files with a common structure.',
+    technologies: ['CLI', 'CommanderJS', 'inquirer', 'TypeScript', 'Bun'],
+    projectUrl: 'https://github.com/duckycoding-dev/cli-templater',
+    linkType: 'GitHub',
+  },
+  {
+    title: 'PentaNews',
+    bannerImage: pentaNewsLogo,
+    imageAlt: 'PentaNews logo',
+    summary:
+      "My first ever web development project, done for my web development course at Padua's university with three friends. It's an online journalism platform that allows users to read and comment on news articles, and admins to create such articles. It's built with PHP, bare minimum vanilla JavaScript, tons of CSS, MySQL and great emphasis on responsive design and accessibility. (unfortunately, the website is no longer online, but the code is still available on my friend's GitHub repo)",
+    technologies: ['PHP', 'JavaScript', 'CSS', 'MySQL'],
+    projectUrl: 'https://github.com/0xCaso/penta-news',
+    linkType: 'GitHub',
+  },
+  {
+    title: 'Chartpp',
+    summary:
+      "My first solo project, done for my OOP course at Padua's university. It's a GUI application built with Qt that allows you to create and edit charts, export them as CSV and JSON, with a focus on object-oriented programming principles.",
+    technologies: ['C++', 'OOP', 'Qt', 'JSON'],
+    projectUrl: 'https://github.com/Davide-Milan/Chartpp',
     linkType: 'GitHub',
   },
 ];
 ---
 
 <HolyGrailLayout
+  title={'My Projects'}
   seoProps={{
-    title: 'My Projects - DuckyCoding',
+    title: 'My Projects',
     description:
       'Explore the portfolio of DuckyCoding - showcasing various web development projects, applications, and experiments.',
     extend: {
@@ -147,7 +166,7 @@ const projects = [
     <h1
       class='text-secondary mb-6 text-4xl leading-tight font-black md:text-5xl lg:text-6xl'
     >
-      My <span class='text-accent-700'>Projects</span>
+      My <span class='text-accent-700'>projects</span>
     </h1>
     <Card
       class='from-accent3-100 to-accent2-100 mb-8 bg-gradient-to-r p-6 md:p-8'
@@ -194,7 +213,7 @@ const projects = [
               technologies={project.technologies}
               projectUrl={project.projectUrl}
               linkType={project.linkType}
-              bannerImage={null}
+              bannerImage={project.bannerImage}
               imageAlt={`Banner image for ${project.title}`}
               loading={index < 3 ? 'eager' : 'lazy'}
             />
