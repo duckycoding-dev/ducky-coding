@@ -2,9 +2,70 @@
 import HolyGrailLayout from '@layouts/HolyGrailLayout/HolyGrailLayout.astro';
 import Card from '@components/Card/Card.astro';
 import Link from '@components/Link/Link.astro';
-import ProjectCard from '@components/ProjectCard/ProjectCard.astro';
+import ProjectCard from '@components/Card/ProjectCard.astro';
 import XIcon from '../components/Icons/XIcon/XIcon.astro';
 import LinkedInIcon from '../components/Icons/LinkedInIcon/LinkedInIcon.astro';
+import type { ComponentProps } from 'astro/types';
+import TechnologyCard from '../components/Card/TechnologyCard.astro';
+
+const frontendTechnologies = [
+  'HTML',
+  'Modern CSS',
+  'Astro',
+  'Tailwind CSS',
+  'React',
+  'Hooks',
+  'Context API',
+  'Redux',
+  'Next.js',
+  'Styled Components',
+];
+
+const backendTechnologies = [
+  'Node.js',
+  'Hono',
+  'SQL',
+  'Drizzle ORM',
+  'AWS Lambda',
+];
+
+const tools = [
+  'Git',
+  'CLI',
+  'Zod',
+  'clean code',
+  'VSCode',
+  'Postman',
+  'ESLint',
+  'Prettier',
+];
+
+const technologies: ComponentProps<typeof TechnologyCard>[] = [
+  {
+    emoji: '⚛️',
+    title: 'Frontend',
+    description: `${frontendTechnologies.join(', ')} and more...`,
+    class: 'bg-accent-100',
+  },
+  {
+    emoji: '💻',
+    title: 'Backend',
+    description: `${backendTechnologies.join(', ')} and more...`,
+    class: 'bg-accent2-100',
+  },
+  {
+    emoji: '🔠',
+    title: 'Programming languages',
+    description: 'Modern JS, TypeScript, OOP with C++ and a sprinkle of PHP',
+    class: 'bg-accent3-100',
+  },
+  {
+    emoji: '🔧',
+    title: 'Tools',
+    description: `${tools.join(', ')} and more...`,
+    class: 'bg-primary-200',
+  },
+];
 
 // Mock project data - replace with your actual projects
 const projects = [
@@ -95,9 +156,9 @@ const projects = [
         🚀 Featured Work
       </h2>
       <p class='text-secondary mb-6'>
-        Here's a collection of projects that showcase my skills and experience
-        in web development, from frontend interfaces to full-stack applications,
-        CLI tools, scripts and much more.
+        Here you will find a collection of projects that showcase my skills and
+        experience in web development, from frontend interfaces to full-stack
+        applications, CLI tools, scripts and much more.
       </p>
       <div class='flex flex-wrap justify-center gap-4'>
         <Link
@@ -149,45 +210,7 @@ const projects = [
       Technologies I <span class='text-accent-700'>USE</span>
     </h2>
     <div class='grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4'>
-      <Card class='bg-accent-100 p-6 text-center hover:rotate-2'>
-        <div
-          class='bg-danger mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-lg'
-        >
-          <span class='text-2xl font-bold text-white'>⚛️</span>
-        </div>
-        <h3 class='text-secondary mb-2 text-lg font-bold'>Frontend</h3>
-        <p class='text-secondary text-sm'>React, Vue, Astro, TypeScript</p>
-      </Card>
-
-      <Card class='bg-accent2-100 p-6 text-center hover:rotate-2'>
-        <div
-          class='bg-danger mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-lg'
-        >
-          <span class='text-2xl font-bold text-white'>🔧</span>
-        </div>
-        <h3 class='text-secondary mb-2 text-lg font-bold'>Backend</h3>
-        <p class='text-secondary text-sm'>Node.js, Python, PostgreSQL</p>
-      </Card>
-
-      <Card class='bg-accent3-100 p-6 text-center hover:rotate-2'>
-        <div
-          class='bg-danger mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-lg'
-        >
-          <span class='text-2xl font-bold text-white'>📱</span>
-        </div>
-        <h3 class='text-secondary mb-2 text-lg font-bold'>Mobile</h3>
-        <p class='text-secondary text-sm'>React Native, PWA</p>
-      </Card>
-
-      <Card class='bg-primary-200 p-6 text-center hover:rotate-2'>
-        <div
-          class='bg-danger mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-lg'
-        >
-          <span class='text-2xl font-bold text-white'>☁️</span>
-        </div>
-        <h3 class='text-secondary mb-2 text-lg font-bold'>Cloud</h3>
-        <p class='text-secondary text-sm'>AWS, Docker, CI/CD</p>
-      </Card>
+      {technologies.map((tech) => <TechnologyCard {...tech} />)}
     </div>
   </section>
 

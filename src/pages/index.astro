@@ -1,15 +1,14 @@
 ---
 import HolyGrailLayout from '@layouts/HolyGrailLayout/HolyGrailLayout.astro';
 import Card from '@components/Card/Card.astro';
-import Button from '@components/Button/Button.astro';
 import { Image } from 'astro:assets';
 import headshotDavide from '@assets/images/head-shot-davide.jpg';
-import DuckIcon from '../components/Icons/DuckIcon/DuckIcon.astro';
 import { IMAGE_DENSITIES } from '../utils/globals';
 import Link from '../components/Link/Link.astro';
 import type { ComponentProps } from 'astro/types';
 import TimelineCard from '../components/Card/TimelineCard.astro';
 import '@styles/markdown.css';
+import FunfactCard from '../components/Card/FunfactCard.astro';
 
 const timelineObjects: ComponentProps<typeof TimelineCard>[] = [
   {
@@ -66,31 +65,31 @@ const timelineObjects: ComponentProps<typeof TimelineCard>[] = [
   },
 ];
 
-const frontendTechnologies = [
-  'HTML',
-  'Modern CSS',
-  'JavaScript',
-  'TypeScript',
-  'Astro',
-  'Tailwind CSS',
-  'React',
-  'Hooks',
-  'Context API',
-  'Redux',
-  'Next.js',
-  'Styled Components',
-];
-
-const backendAndToolsTechnologies = [
-  'Node.js',
-  'Hono',
-  'SQL',
-  'Drizzle ORM',
-  'AWS Lambda',
-  'Zod',
-  'TypeScript',
-  'ES6+ JavaScript',
-  'Clean code',
+const funFacts: ComponentProps<typeof FunfactCard>[] = [
+  {
+    emoji: '👨‍🌾',
+    title: 'Gardener',
+    description: 'Hot peppers enjoyer',
+    class: 'bg-accent-100',
+  },
+  {
+    emoji: '🎮',
+    title: 'Gamer',
+    description: 'Since I was a little kid',
+    class: 'bg-accent2-100',
+  },
+  {
+    emoji: '📚',
+    title: 'Learner',
+    description: 'Always exploring new tech',
+    class: 'bg-accent3-100',
+  },
+  {
+    emoji: '🦆',
+    title: 'Duck lover',
+    description: 'Quack quack quack',
+    class: 'bg-primary-200',
+  },
 ];
 ---
 
@@ -207,37 +206,13 @@ const backendAndToolsTechnologies = [
     </div>
   </section>
 
-  <!-- Skills Section -->
-  <section class='mb-16'>
+  <!-- Fun Facts -->
+  <section id='fun-facts' class='mb-16'>
     <h2 class='text-secondary mb-8 text-center text-3xl font-black md:text-4xl'>
-      <span class='text-accent-700'>Skills</span> & Technologies
+      <span class='text-accent-700'>Fun facts</span> about me
     </h2>
-    <div class='grid grid-cols-1 gap-8 lg:grid-cols-2'>
-      <Card class='p-6'>
-        <h3 class='text-secondary mb-6 text-2xl font-bold'>Frontend</h3>
-        <div class='grid grid-cols-2 gap-4 sm:grid-cols-3'>
-          {
-            frontendTechnologies.map((skill) => (
-              <p class='bg-accent text-secondary hover:bg-accent-700 border-comic border-secondary place-content-center rounded-lg px-3 py-2 text-center font-semibold transition-colors'>
-                {skill}
-              </p>
-            ))
-          }
-        </div>
-      </Card>
-
-      <Card class='p-6'>
-        <h3 class='text-secondary mb-6 text-2xl font-bold'>Backend & Tools</h3>
-        <div class='grid grid-cols-2 gap-4 sm:grid-cols-3'>
-          {
-            backendAndToolsTechnologies.map((skill) => (
-              <p class='bg-accent2 text-secondary hover:bg-accent2-700 border-comic border-secondary place-content-center rounded-lg px-3 py-2 text-center font-semibold transition-colors'>
-                {skill}
-              </p>
-            ))
-          }
-        </div>
-      </Card>
+    <div class='grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4'>
+      {funFacts.map((fact) => <FunfactCard {...fact} />)}
     </div>
   </section>
 
@@ -275,54 +250,6 @@ const backendAndToolsTechnologies = [
           </TimelineCard>
         ))
       }
-    </div>
-  </section>
-
-  <!-- Fun Facts -->
-  <section id='fun-facts' class='mb-16'>
-    <h2 class='text-secondary mb-8 text-center text-3xl font-black md:text-4xl'>
-      <span class='text-accent-700'>Fun facts</span> about me
-    </h2>
-    <div class='grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4'>
-      <Card class='bg-accent3-100 p-6 text-center hover:rotate-2'>
-        <div
-          class='bg-danger mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full'
-        >
-          <span class='text-2xl text-white'>👨‍🌾</span>
-        </div>
-        <h3 class='text-secondary mb-2 text-lg font-bold'>Gardener</h3>
-        <p class='text-secondary text-sm'>Hot peppers enjoyer</p>
-      </Card>
-
-      <Card class='bg-accent2-100 p-6 text-center hover:rotate-2'>
-        <div
-          class='bg-danger mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full'
-        >
-          <span class='text-2xl text-white'>🎮</span>
-        </div>
-        <h3 class='text-secondary mb-2 text-lg font-bold'>Gamer</h3>
-        <p class='text-secondary text-sm'>Since I was a little kid</p>
-      </Card>
-
-      <Card class='bg-accent-100 p-6 text-center hover:rotate-2'>
-        <div
-          class='bg-danger mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full'
-        >
-          <span class='text-2xl text-white'>📚</span>
-        </div>
-        <h3 class='text-secondary mb-2 text-lg font-bold'>Learner</h3>
-        <p class='text-secondary text-sm'>Always exploring new tech</p>
-      </Card>
-
-      <Card class='bg-primary-200 p-6 text-center hover:rotate-2'>
-        <div
-          class='bg-danger mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full'
-        >
-          <span class='text-2xl text-white'>🦆</span>
-        </div>
-        <h3 class='text-secondary mb-2 text-lg font-bold'>Duck lover</h3>
-        <p class='text-secondary text-sm'>Quack quack quack</p>
-      </Card>
     </div>
   </section>
 
