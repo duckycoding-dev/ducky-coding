@@ -9,6 +9,7 @@ import { IMAGE_DENSITIES } from '../utils/globals';
 import Link from '../components/Link/Link.astro';
 import type { ComponentProps } from 'astro/types';
 import TimelineCard from '../components/Card/TimelineCard.astro';
+import '@styles/markdown.css';
 
 const timelineObjects: ComponentProps<typeof TimelineCard>[] = [
   {
@@ -17,8 +18,33 @@ const timelineObjects: ComponentProps<typeof TimelineCard>[] = [
     logo: '🏄‍♂️',
     place: 'Wavelop',
     link: 'https://wavelop.com/en',
-    children:
-      'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation.',
+    children: `
+    <p class='text-secondary'>
+      As a Junior fullstack developer, I worked on multiple web applications for one of our clients, including:</p>
+      <ul>
+      <li>B2B web applications</li>
+      <li>An IoT client web app</li>
+      <li>A corporate site</li>
+      </ul>
+
+<p>In my role, I’ve covered a variety of tasks, including:</p>
+<ul>
+<li>Fixing bugs and improving existing features</li>
+<li>Analyzing client requests and planning implementations</li>
+<li>Developing new features based on client requirements</li>
+<li>Writing unit tests to ensure code reliability</li>
+<li>Reviewing merge requests and collaborating with teammates</li>
+<li>Managing manual deployments in DEV and PROD environments</li>
+<li>Communicating with clients when needed</li>
+</ul>
+
+<p>I've worked with monorepos, using mostly:</p>
+<ul>
+<li>Frontend: React ⚛️, Next.js, Styled Components, Redux</li>
+<li>Backend: Node.js with a controller-service-repository architecture, MySQL 🛢️, Jest for testing</li>
+<li>Tools: TypeScript, Git</li>
+</ul>
+<p>I also laid the foundation for the company’s latest website using Next.js, Tailwind, and Strapi 🏗️ <br/>Throughout my work, I’ve used TypeScript extensively on both the frontend and backend.</p>`,
   },
   {
     roleTitle: 'Fullstack web developer - internship',
@@ -27,7 +53,7 @@ const timelineObjects: ComponentProps<typeof TimelineCard>[] = [
     place: 'Wavelop',
     link: 'https://wavelop.com/en',
     children:
-      'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation.',
+      "Internship as a fullstack web developer required by my university course in order to graduate. I've gained first hand experience in web development, working on a real project. This has been my first real job experience in the field, and I have had the chance to try out many different technologies and tools, such as React, TypeScript, Node.js and more.",
   },
   {
     roleTitle: 'Bachelor degree in Computer Science',
@@ -38,6 +64,33 @@ const timelineObjects: ComponentProps<typeof TimelineCard>[] = [
     children:
       "During my Bachelor's degree in Computer Science at the University of Padua, I gained a solid foundation in programming, algorithms, data structures, and software engineering. I explored topics such as web development, databases, computer networks, and mathematics, and worked on a few group projects that strengthened my problem-solving and teamwork skills.",
   },
+];
+
+const frontendTechnologies = [
+  'HTML',
+  'Modern CSS',
+  'JavaScript',
+  'TypeScript',
+  'Astro',
+  'Tailwind CSS',
+  'React',
+  'Hooks',
+  'Context API',
+  'Redux',
+  'Next.js',
+  'Styled Components',
+];
+
+const backendAndToolsTechnologies = [
+  'Node.js',
+  'Hono',
+  'SQL',
+  'Drizzle ORM',
+  'AWS Lambda',
+  'Zod',
+  'TypeScript',
+  'ES6+ JavaScript',
+  'Clean code',
 ];
 ---
 
@@ -71,9 +124,16 @@ const timelineObjects: ComponentProps<typeof TimelineCard>[] = [
           >
         </h1>
         <p class='text-secondary text-lg leading-relaxed md:text-xl'>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do
-          eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad
-          minim veniam, quis nostrud exercitation ullamco laboris.
+          <span
+            >I'm Davide, a passionate web developer from Italy 🇮🇹 who loves
+            building modern, user-friendly digital experiences.</span
+          >
+          <br />
+          <span
+            >Whether you're here to learn more about my journey, read some
+            articles, explore my projects, or just say hello, I'm glad you
+            stopped by! 😃</span
+          >
         </p>
       </div>
       <div class='aspect-square md:h-80 lg:h-96'>
@@ -106,8 +166,10 @@ const timelineObjects: ComponentProps<typeof TimelineCard>[] = [
           Frontend Development
         </h3>
         <p class='text-secondary'>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do
-          eiusmod tempor incididunt ut labore et dolore magna aliqua.
+          I enjoy crafting beautiful, responsive user interfaces that provide a
+          seamless experience across devices.
+          <br />
+          Writing clean, maintainable code is my priority (...and I love using CSS!)
         </p>
       </Card>
 
@@ -121,8 +183,10 @@ const timelineObjects: ComponentProps<typeof TimelineCard>[] = [
           Backend Development
         </h3>
         <p class='text-secondary'>
-          Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris
-          nisi ut aliquip ex ea commodo consequat.
+          I always strive to build robust and 100% typesafe backend systems that
+          power the applications I create.
+          <br />
+          I enjoy working with Node.js, TypeScript and modern libraries.
         </p>
       </Card>
 
@@ -136,8 +200,8 @@ const timelineObjects: ComponentProps<typeof TimelineCard>[] = [
           Full Stack Solutions
         </h3>
         <p class='text-secondary'>
-          Duis aute irure dolor in reprehenderit in voluptate velit esse cillum
-          dolore eu fugiat nulla pariatur.
+          Be it frontend or backend, I love building full stack applications
+          that deliver a complete user experience, from start to finish.
         </p>
       </Card>
     </div>
@@ -153,13 +217,11 @@ const timelineObjects: ComponentProps<typeof TimelineCard>[] = [
         <h3 class='text-secondary mb-6 text-2xl font-bold'>Frontend</h3>
         <div class='grid grid-cols-2 gap-4 sm:grid-cols-3'>
           {
-            ['TypeScript', 'React', 'Astro', 'Tailwind', 'Vue', 'Next.js'].map(
-              (skill) => (
-                <div class='bg-accent text-secondary hover:bg-accent-700 border-comic border-secondary rounded-lg px-3 py-2 text-center font-semibold transition-colors'>
-                  {skill}
-                </div>
-              ),
-            )
+            frontendTechnologies.map((skill) => (
+              <div class='bg-accent text-secondary hover:bg-accent-700 border-comic border-secondary rounded-lg px-3 py-2 text-center font-semibold transition-colors'>
+                {skill}
+              </div>
+            ))
           }
         </div>
       </Card>
@@ -168,13 +230,11 @@ const timelineObjects: ComponentProps<typeof TimelineCard>[] = [
         <h3 class='text-secondary mb-6 text-2xl font-bold'>Backend & Tools</h3>
         <div class='grid grid-cols-2 gap-4 sm:grid-cols-3'>
           {
-            ['Node.js', 'Python', 'PostgreSQL', 'Docker', 'Git', 'AWS'].map(
-              (skill) => (
-                <div class='bg-accent2 text-secondary hover:bg-accent2-700 border-comic border-secondary rounded-lg px-3 py-2 text-center font-semibold transition-colors'>
-                  {skill}
-                </div>
-              ),
-            )
+            backendAndToolsTechnologies.map((skill) => (
+              <div class='bg-accent2 text-secondary hover:bg-accent2-700 border-comic border-secondary rounded-lg px-3 py-2 text-center font-semibold transition-colors'>
+                {skill}
+              </div>
+            ))
           }
         </div>
       </Card>
@@ -198,7 +258,17 @@ const timelineObjects: ComponentProps<typeof TimelineCard>[] = [
             link={item.link}
           >
             {typeof item.children === 'string' ? (
-              <p class='text-secondary'>{item.children}</p>
+              item.children.trim().startsWith('<') &&
+              item.children.trim().endsWith('>') ? (
+                // If children is HTML, render it as HTML
+                <div
+                  class='markdown-content'
+                  set:html={item.children}
+                  class='text-secondary'
+                />
+              ) : (
+                <p class='text-secondary'>{item.children}</p>
+              )
             ) : (
               item.children
             )}
@@ -281,6 +351,8 @@ const timelineObjects: ComponentProps<typeof TimelineCard>[] = [
       </div>
     </Card>
   </section>
+
+  <!-- Contact Form Section -->
   <section id='contact' class='mb-16'>
     <!-- Contact Form -->
     <Card class='p-6 md:p-8'>
