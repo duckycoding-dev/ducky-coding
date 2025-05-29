@@ -41,20 +41,20 @@ const { class: className, ...props }: Props = Astro.props;
     </li>
     <li>
       <Link
+        href={'/blog'}
+        size={'medium'}
+        variant={'default'}
+        class={'text-3xl md:text-base text-secondary font-medium w-full'}
+        >Blog</Link
+      >
+    </li>
+    <li>
+      <Link
         href={'/topics'}
         size={'medium'}
         variant={'default'}
         class={'text-3xl md:text-base text-secondary font-medium w-full'}
         >Topics</Link
-      >
-    </li>
-    <li>
-      <Link
-        href={'/about-me'}
-        size={'medium'}
-        variant={'default'}
-        class={'text-3xl md:text-base text-secondary font-medium w-full'}
-        >About me</Link
       >
     </li>
     <li>
