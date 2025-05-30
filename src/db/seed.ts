@@ -5,6 +5,11 @@ import { postsTable } from './features/posts/posts.model';
 import { postsTagsTable } from './features/posts/posts_tags.model';
 import { tagsTable } from './features/tags/tags.model';
 import { topicsTable } from './features/topics/topics.model';
+import reactJSON from '../content/topics/react.json';
+import cssJSON from '../content/topics/css.json';
+import typescriptJSON from '../content/topics/typescript.json';
+import astroJSON from '../content/topics/astro.json';
+import leetcodeJSON from '../content/topics/leetcode.json';
 
 export default async function seed() {
   // TODO
@@ -29,28 +34,9 @@ export default async function seed() {
       { name: 'React' },
     ]);
 
-  await db.insert(topicsTable).values([
-    {
-      title: 'Astro',
-      slug: 'astro',
-      imagePath: 'topics/astro-icon-light-gradient.png',
-    },
-    {
-      title: 'React',
-      slug: 'react',
-      imagePath: 'topics/react-logo.png',
-    },
-    {
-      title: 'CSS',
-      slug: 'css',
-      imagePath: 'topics/css3-logo.png',
-    },
-    {
-      title: 'TypeScript',
-      slug: 'typescript',
-      imagePath: 'topics/typescript-logo.png',
-    },
-  ]);
+  await db
+    .insert(topicsTable)
+    .values([reactJSON, cssJSON, typescriptJSON, astroJSON, leetcodeJSON]);
 
   await db.insert(postsTable).values([
     {

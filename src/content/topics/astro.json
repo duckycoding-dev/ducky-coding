@@ -1,0 +1,8 @@
+{
+  "title": "Astro",
+  "slug": "astro",
+  "imagePath": "topics/astro-icon-light-gradient.png",
+  "description": "Modern web framework for building fast, content-focused websites",
+  "backgroundGradient": "",
+  "externalLink": "https://astro.build"
+}
