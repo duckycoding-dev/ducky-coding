@@ -1,4 +1,4 @@
-import { text, sqliteTable } from 'drizzle-orm/sqlite-core';
+import { text, sqliteTable, integer } from 'drizzle-orm/sqlite-core';
 import { tagsTable } from '../tags/tags.model';
 import { imagesTable } from '../images/images.model';
 import {
@@ -16,6 +16,16 @@ export const topicsTable = sqliteTable('topics', {
     .references(() => tagsTable.name),
   slug: text().unique().notNull(),
   imagePath: text().references(() => imagesTable.path),
+  // Enhanced metadata fields
+  description: text(),
+  backgroundGradient: text(), // Tailwind gradient classes
+  externalLink: text(),
+  // Analytics fields
+  postCount: integer().default(0),
+  lastPostDate: integer(), // Timestamp of last post in this topic
+  // Timestamps
+  createdAt: integer().default(Date.now()),
+  updatedAt: integer().default(Date.now()),
 });
 
 export const topicSchema = createSelectSchema(topicsTable);

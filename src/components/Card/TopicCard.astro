@@ -18,6 +18,7 @@ export type TopicCardProps = HTMLAttributes<'a'> &
         loading?: undefined;
         decoding?: undefined;
         slug: string;
+        backgroundGradient?: string;
       }
     | {
         title?: undefined;
@@ -27,6 +28,7 @@ export type TopicCardProps = HTMLAttributes<'a'> &
         loading?: 'eager' | 'lazy';
         decoding?: 'async' | 'auto' | 'sync';
         slug: string;
+        backgroundGradient?: string;
       }
     | {
         title: string;
@@ -36,6 +38,7 @@ export type TopicCardProps = HTMLAttributes<'a'> &
         loading?: 'eager' | 'lazy';
         decoding?: 'async' | 'auto' | 'sync';
         slug: string;
+        backgroundGradient?: string;
       }
   );
 
@@ -50,6 +53,7 @@ const {
   imageSrc,
   imageAlt,
   slug,
+  backgroundGradient = 'from-accent-100 to-accent3-100 bg-gradient-to-br',
   ...props
 }: Props = Astro.props;
 ---
@@ -70,7 +74,7 @@ const {
             alt={imageAlt}
             loading={loading}
             decoding={decoding}
-            class='from-accent-100 to-accent3-100 aspect-square w-full bg-gradient-to-br object-contain'
+            class={`${backgroundGradient} aspect-square w-full object-contain`}
             width={200}
             height={200}
             densities={IMAGE_DENSITIES}
@@ -81,7 +85,7 @@ const {
             alt={imageAlt}
             loading={loading}
             decoding={decoding}
-            class='from-accent-100 to-accent3-100 aspect-square w-full bg-gradient-to-br object-contain'
+            class={`${backgroundGradient} aspect-square w-full object-contain`}
             densities={IMAGE_DENSITIES}
           />
         ))
