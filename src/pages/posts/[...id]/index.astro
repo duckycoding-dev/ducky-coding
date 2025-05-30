@@ -16,34 +16,6 @@ import { ImagesService } from '../../../db/features/images/images.service';
 // 1. Generate a new path for every collection entry
 export async function getStaticPaths() {
   const postsEntries = await getCollection('posts');
-  serverLogger.log('Posts entries', JSON.stringify(postsEntries, null, 2));
-  const failedSyncs: typeof postsEntries = [];
-
-  const syncPromises: Promise<void>[] = [];
-  if (import.meta.env.PROD) {
-    postsEntries.forEach((_post) => {
-      // syncPromises.push(syncPostWithDatabase(post.data, post.id)); // TODO add back when the sync function is implemented
-    });
-  }
-
-  const syncResults = await Promise.allSettled(syncPromises);
-  syncResults.forEach((result, index) => {
-    if (result.status === 'rejected') {
-      console.log('Post sync fail reason: ', result.reason);
-      if (postsEntries[index]) {
-        failedSyncs.push(postsEntries[index]);
-      }
-    }
-  });
-
-  if (failedSyncs.length > 0) {
-    serverLogger.error(
-      'Failed to sync the following posts with database',
-      failedSyncs.map((post) => post.id).join(', '),
-    );
-  } else {
-    serverLogger.log('All posts synced with database');
-  }
 
   const bannerImagesPromises = postsEntries.map((entry) => {
     const imagePath = entry.data.bannerImagePath;

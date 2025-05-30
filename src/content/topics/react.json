@@ -1,0 +1,8 @@
+{
+  "title": "React",
+  "slug": "react",
+  "imagePath": "topics/react-logo.png",
+  "description": "A JavaScript library for building user interfaces",
+  "backgroundGradient": "",
+  "externalLink": "https://react.dev"
+}

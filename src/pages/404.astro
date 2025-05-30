@@ -4,6 +4,13 @@ import { Image } from 'astro:assets';
 import duck404 from '@assets/images/404_duck.png';
 import Link from '@components/Link/Link.astro';
 import { IMAGE_DENSITIES } from '@utils/globals';
+import { syncAllContent, syncImages } from '../db/sync/contentSync';
+
+// Content syncing is done here because this is the first page that gets rendered in the build process. (because pages are renrdered in alphabetical order)
+if (import.meta.env.PROD) {
+  await syncImages();
+  await syncAllContent();
+}
 ---
 
 <HolyGrailLayout

@@ -2,11 +2,17 @@
 import { defineCollection } from 'astro:content';
 import { glob } from 'astro/loaders';
 import { PostContentSchema } from '@custom-types/entities';
+import { TopicContentSchema } from '@custom-types/entities/topicContent.entity';
 
 // 2. Define your collection(s)
 const posts = defineCollection({
   loader: glob({ pattern: '**/*.{md,mdx}', base: './src/content/posts' }),
   schema: PostContentSchema,
+});
+
+const topics = defineCollection({
+  loader: glob({ pattern: '**/*.json', base: './src/content/topics' }),
+  schema: TopicContentSchema,
 });
 
 const md = defineCollection({
@@ -15,4 +21,4 @@ const md = defineCollection({
 
 // 3. Export a single `collections` object to register your collection(s)
 //    This key should match your collection directory name in "src/content"
-export const collections = { posts, md };
+export const collections = { posts, topics, md };
