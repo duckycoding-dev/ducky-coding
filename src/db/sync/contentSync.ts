@@ -8,6 +8,7 @@ import { topicsTable } from '../features/topics/topics.model';
 
 import { sql } from 'drizzle-orm';
 import { eq } from 'drizzle-orm';
+import { imagesTable } from '../features/images/images.model';
 
 /**
  * Syncs topics from content collection to database
@@ -188,6 +189,7 @@ export async function syncContentToDatabase(): Promise<
               .where(eq(postsTable.id, existingPost.id));
             dbPost = { ...existingPost, ...postContentData };
           }
+          dbPost = existingPost; // Use existing post if no changes
         } else {
           // Insert new post
           const [insertedPost] = await db
@@ -279,12 +281,6 @@ export async function updateTopicAnalytics() {
       lastPostDate: number | null;
     }[];
 
-    console.log(
-      'Topic stats:',
-      topicStats,
-      'postCount is of type: ',
-      typeof topicStats[0]?.postCount,
-    );
     for (const stat of topicStats) {
       await db
         .update(topicsTable)
@@ -361,67 +357,52 @@ export async function syncAllContent() {
   }
 }
 
-/**
- * Verifies that topics referenced in posts exist in the database
- */
-export async function ensureTopicsExist() {
+export const syncImages = async (): Promise<{
+  message?: string;
+  imagesAdded: number;
+}> => {
   try {
-    const posts = await getCollection('posts');
-    const uniqueTopics = [
-      ...new Set(posts.map((post) => post.data.topicTitle)),
-    ];
+    serverLogger.info('🔄 Starting image sync to database...');
+    const images = import.meta.glob(
+      '../../assets/images/**/*.{png,jpg,jpeg,gif,svg}',
+      {
+        eager: true,
+        import: 'default',
+      },
+    );
+    const relativePathsToAddToDb = Object.keys(images)
+      .map((key) => key.split('assets/images/').pop())
+      .filter((path) => path !== undefined);
 
-    for (const topicTitle of uniqueTopics) {
-      const existingTopic = await db
-        .select()
-        .from(topicsTable)
-        .where(eq(topicsTable.title, topicTitle))
-        .get();
-
-      if (!existingTopic) {
-        serverLogger.warn(
-          `⚠️  Topic "${topicTitle}" referenced in posts but doesn't exist in database`,
-        );
-        // Optionally auto-create missing topics
-        // await db.insert(topicsTable).values({
-        //   title: topicTitle,
-        //   slug: topicTitle.toLowerCase().replace(/\s+/g, '-'),
-        // });
-      }
+    serverLogger.info(
+      `🎨 Found ${relativePathsToAddToDb.length} images to sync:`,
+      relativePathsToAddToDb,
+    );
+    if (relativePathsToAddToDb.length === 0) {
+      serverLogger.info('No images found to sync.');
+      return { imagesAdded: 0, message: 'No images found to sync.' };
     }
-  } catch (error) {
-    serverLogger.error('Failed to verify topics:', error);
-  }
-}
 
-/**
- * Gets sync statistics
- */
-export async function getSyncStats() {
-  try {
-    const [collectionCount] = await Promise.all([
-      getCollection('posts').then((posts) => posts.length),
-    ]);
+    const resultOfInsert = await db
+      .insert(imagesTable)
+      .values(relativePathsToAddToDb.map((path) => ({ path })))
+      .onConflictDoNothing();
 
-    const resCount = await db.select({ count: sql`COUNT(*)` }).from(postsTable);
-    const dbCount = (resCount[0]?.count as number) || 0;
-
-    const resPublishedCount = await db
-      .select({ publishedCount: sql`COUNT(*)` })
-      .from(postsTable)
-      .where(eq(postsTable.status, 'published'));
-
-    const publishedCount =
-      (resPublishedCount[0]?.publishedCount as number) || 0;
-
+    if (resultOfInsert.rowsAffected > 0) {
+      serverLogger.info(
+        `🎨 Synced ${resultOfInsert.rowsAffected} new images to database.`,
+      );
+      serverLogger.info(`New images: ${resultOfInsert.rowsAffected}`);
+      serverLogger.info(
+        'CAREFUL: alt texts must be added manually to the db (or think about managing images as json collections as done with topics!)',
+      );
+    }
     return {
-      collectionPosts: collectionCount,
-      databasePosts: dbCount,
-      publishedPosts: publishedCount,
-      isInSync: collectionCount === dbCount,
+      imagesAdded: resultOfInsert.rowsAffected,
+      message: 'Images synced successfully.',
     };
   } catch (error) {
-    serverLogger.error('Failed to get sync stats:', error);
-    return null;
+    serverLogger.error('Failed to sync images:', error);
+    throw new Error('Failed to sync images');
   }
-}
+};

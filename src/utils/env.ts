@@ -1,4 +1,4 @@
-import { logLevels } from '@utils/logs/logger.js';
+import { logLevels } from '@utils/logs/logger';
 import z from 'zod';
 
 // env variables declared inside the .env file

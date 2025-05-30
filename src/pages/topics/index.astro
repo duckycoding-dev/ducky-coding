@@ -71,6 +71,7 @@ const processedTopics = await Promise.all(
           imageAlt={topic.image?.alt ?? `${topic.title} representation`}
           title={topic.title}
           slug={topic.slug}
+          backgroundGradient={topic.backgroundGradient || undefined}
           loading={index < 4 ? 'eager' : 'lazy'}
         />
       ))
