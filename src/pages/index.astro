@@ -64,6 +64,18 @@ const timelineObjects: ComponentProps<typeof TimelineCard>[] = [
       "During my Bachelor's degree in Computer Science at the University of Padua, I gained a solid foundation in programming, algorithms, data structures, and software engineering. I explored topics such as web development, databases, computer networks, and mathematics, and worked on a few group projects that strengthened my problem-solving and teamwork skills.",
   },
 ];
+const images = import.meta.glob('../assets/images/DuckyCoding_logo.png', {
+  eager: true,
+  import: 'default',
+  exhaustive: true,
+});
+const DuckyCodingLogo = Object.values(images)[0] as {
+  src: string;
+  width: number;
+  height: number;
+  format: 'png';
+};
+const dateWhenOpenGraphsAreAdded = new Date(2025, 4, 31, 1).toISOString();
 
 const funFacts: ComponentProps<typeof FunfactCard>[] = [
   {
@@ -91,18 +103,67 @@ const funFacts: ComponentProps<typeof FunfactCard>[] = [
     class: 'bg-primary-200',
   },
 ];
+
+const { href: pageUrl } = new URL(Astro.url);
 ---
 
 <HolyGrailLayout
+  title='Homepage'
   seoProps={{
+    title: 'Homepage',
     description:
-      'Learn more about the developer behind DuckyCoding - a passionate web developer crafting modern digital experiences.',
+      "Welcome to my blog about web development - I'm Davide, aka DuckyCoding, a passionate web developer crafting modern digital experiences, sharing what I learn along my path.",
+    openGraph: {
+      basic: {
+        title: "DuckyCoding's blog",
+        type: 'website',
+        url: pageUrl,
+        image: '/assets/images/og-image.png',
+      },
+      optional: {
+        description:
+          "Welcome to my blog about web development - I'm Davide, aka DuckyCoding, a passionate web developer crafting modern digital experiences, sharing what I learn along my path.",
+        locale: 'en_US',
+        siteName: 'DuckyCoding',
+        determiner: 'the',
+        audio: undefined,
+        localeAlternate: ['en_GB'],
+        video: undefined,
+      },
+      image: {
+        url: DuckyCodingLogo.src,
+        secureUrl: DuckyCodingLogo.src,
+        height: DuckyCodingLogo.height,
+        width: DuckyCodingLogo.width,
+        type: `image/${DuckyCodingLogo.format}`,
+        alt: "DuckyCoding's logo",
+      },
+      article: {
+        publishedTime: dateWhenOpenGraphsAreAdded,
+        modifiedTime: dateWhenOpenGraphsAreAdded,
+        section: 'Web Development',
+        authors: ['DuckyCoding', 'Davide'],
+        tags: [
+          'DuckyCoding, Davide, developer, web development, blog, frontend, backend, journey',
+        ],
+      },
+    },
+    twitter: {
+      card: 'summary_large_image',
+      site: '@ducky_coding',
+      creator: '@ducky_coding',
+      title: "DuckyCoding's blog",
+      description:
+        "Welcome to my blog about web development - I'm Davide, aka DuckyCoding, a passionate web developer crafting modern digital experiences, sharing what I learn along my path.",
+      image: DuckyCodingLogo.src,
+      imageAlt: "DuckyCoding's logo",
+    },
     extend: {
       meta: [
         {
           name: 'keywords',
           content:
-            'DuckyCoding, about, developer, web development, portfolio, bio',
+            'DuckyCoding, Davide, developer, web development, blog, frontend, backend, journey',
         },
       ],
     },
