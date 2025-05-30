@@ -15,6 +15,7 @@ export const PostContentSchema = z.object({
   timeToRead: z.number().int().min(1).default(1), // value representing minutes
   status: ContentStatusSchema,
   tags: z.array(z.string()).min(1),
+  isFeatured: z.boolean().default(false),
 });
 
 export type PostContent = z.infer<typeof PostContentSchema>;

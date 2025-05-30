@@ -1,32 +1,33 @@
 ---
-import type { CollectionEntry } from 'astro:content';
 import type { HTMLAttributes } from 'astro/types';
 import { cn } from '@utils/cn';
 import Card from '@components/Card/Card.astro';
 import Link from '@components/Link/Link.astro';
 import Tag from '@components/Tag/Tag.astro';
+import type { Post } from '@db/features/posts/posts.model';
 
 export interface BriefPostCardProps extends HTMLAttributes<'a'> {
-  post: CollectionEntry<'posts'>;
+  post: Post;
+  tags: string[];
 }
 
 interface Props extends BriefPostCardProps {}
 
 const { props }: { props: Props } = Astro;
 
-const { post, class: className } = props;
+const { post, tags, class: className } = props;
 ---
 
-<Link variant='unstyled' href={`/posts/${post.id}`} class={cn(className)}>
+<Link variant='unstyled' href={`/posts/${post.slug}`} class={cn(className)}>
   <Card class='card flex h-full grow flex-col gap-2 py-2.5'>
     <h2 class='px-5 text-xl font-semibold [text-wrap:unset]'>
-      {post.data.title}
+      {post.title}
     </h2>
     <section
       class='tags border-secondary mt-auto flex flex-wrap justify-end gap-2 px-5 text-sm font-semibold'
     >
       {
-        post.data.tags.map((tag) => (
+        tags.map((tag) => (
           <Tag class='odd:bg-accent even:bg-accent2'>{tag}</Tag>
         ))
       }

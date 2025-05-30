@@ -1,8 +1,10 @@
 import type { APIRoute } from 'astro';
 import { serverLogger } from '@utils/logs/logger';
-import { ImagesService } from '../../../db/features/images/images.service';
-import { syncImages } from '../../../db/sync/contentSync';
+import { ImagesService } from '@db/features/images/images.service';
+import { syncImages } from '@db/sync/contentSync';
 import { TURSO_AUTH_TOKEN } from 'astro:env/server';
+
+export const prerender = false; // Disable prerendering for this API route
 
 export const GET: APIRoute = async ({ url }) => {
   const pathOfImageDataToFetch = url.searchParams.get('path');
@@ -48,7 +50,10 @@ export const GET: APIRoute = async ({ url }) => {
 };
 
 export const POST: APIRoute = async ({ request }) => {
-  if (request.headers.get('Authorization') !== `Bearer ${TURSO_AUTH_TOKEN}`) {
+  if (
+    request.headers.get('Authorization') !== `Bearer ${TURSO_AUTH_TOKEN}` &&
+    import.meta.env.MODE === 'production'
+  ) {
     return new Response(JSON.stringify({ error: 'Unauthorized' }), {
       status: 401,
       headers: {
