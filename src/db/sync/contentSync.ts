@@ -38,7 +38,7 @@ export async function syncTopicsToDatabase(): Promise<
           .where(eq(topicsTable.title, topic.data.title))
           .get();
 
-        const topicData = {
+        const topicJsonData = {
           title: topic.data.title,
           slug: topic.data.slug,
           imagePath: topic.data.imagePath || null,
@@ -50,16 +50,29 @@ export async function syncTopicsToDatabase(): Promise<
 
         if (existingTopic) {
           // Update existing topic (preserve analytics fields)
-          await db
-            .update(topicsTable)
-            .set(topicData)
-            .where(eq(topicsTable.title, existingTopic.title));
+          let someDataChanged = false;
+          if (
+            existingTopic.slug !== topicJsonData.slug ||
+            existingTopic.imagePath !== topicJsonData.imagePath ||
+            existingTopic.description !== topicJsonData.description ||
+            existingTopic.backgroundGradient !==
+              topicJsonData.backgroundGradient ||
+            existingTopic.externalLink !== topicJsonData.externalLink
+          ) {
+            someDataChanged = true;
+          }
+          if (someDataChanged) {
+            await db
+              .update(topicsTable)
+              .set(topicJsonData)
+              .where(eq(topicsTable.title, existingTopic.title));
 
-          serverLogger.debug(`🔄 Updated topic: ${topic.data.title}`);
+            serverLogger.debug(`🔄 Updated topic: ${topic.data.title}`);
+          }
         } else {
           // Insert new topic
           await db.insert(topicsTable).values({
-            ...topicData,
+            ...topicJsonData,
             postCount: 0,
             lastPostDate: null,
             createdAt: Math.floor(Date.now() / 1000),
@@ -71,7 +84,9 @@ export async function syncTopicsToDatabase(): Promise<
             .values({ name: topic.data.title })
             .onConflictDoNothing();
 
-          serverLogger.debug(`✨ Created topic: ${topic.data.title}`);
+          serverLogger.debug(
+            `✨ Created topic and corresponding tag: ${topic.data.title}`,
+          );
         }
 
         syncedCount++;
@@ -135,7 +150,7 @@ export async function syncContentToDatabase(): Promise<
           .where(eq(postsTable.slug, post.id))
           .get();
 
-        const postData = {
+        const postContentData = {
           slug: post.id,
           title: post.data.title,
           summary: post.data.summary,
@@ -146,28 +161,39 @@ export async function syncContentToDatabase(): Promise<
           timeToRead: post.data.timeToRead || 1,
           status: post.data.status,
           bannerImagePath: post.data.bannerImagePath,
-          // Convert dates to timestamps if they exist
-          publishedAt:
-            post.data.status === 'published'
-              ? Math.floor(Date.now() / 1000)
-              : null,
-          updatedAt: Math.floor(Date.now() / 1000),
         };
 
         let dbPost;
         if (existingPost) {
           // Update existing post
-          await db
-            .update(postsTable)
-            .set(postData)
-            .where(eq(postsTable.id, existingPost.id));
-          dbPost = { ...existingPost, ...postData };
+          let someDataChanged = false;
+          if (
+            existingPost.title !== postContentData.title ||
+            existingPost.summary !== postContentData.summary ||
+            existingPost.content !== postContentData.content ||
+            existingPost.author !== postContentData.author ||
+            existingPost.topicTitle !== postContentData.topicTitle ||
+            existingPost.language !== postContentData.language ||
+            existingPost.timeToRead !== postContentData.timeToRead ||
+            existingPost.status !== postContentData.status ||
+            existingPost.bannerImagePath !== postContentData.bannerImagePath
+          ) {
+            someDataChanged = true;
+          }
+
+          if (someDataChanged) {
+            await db
+              .update(postsTable)
+              .set(postContentData)
+              .where(eq(postsTable.id, existingPost.id));
+            dbPost = { ...existingPost, ...postContentData };
+          }
         } else {
           // Insert new post
           const [insertedPost] = await db
             .insert(postsTable)
             .values({
-              ...postData,
+              ...postContentData,
               content: post.body ?? '', // Store full content for search
             })
             .returning();
@@ -239,7 +265,7 @@ export async function updateTopicAnalytics() {
     serverLogger.info('📊 Updating topic analytics...');
 
     // Get post counts and last post dates per topic
-    const topicStats = await db
+    const topicStats = (await db
       .select({
         topicTitle: postsTable.topicTitle,
         postCount: sql`COUNT(*)`,
@@ -247,8 +273,18 @@ export async function updateTopicAnalytics() {
       })
       .from(postsTable)
       .where(eq(postsTable.status, 'published'))
-      .groupBy(postsTable.topicTitle);
+      .groupBy(postsTable.topicTitle)) as {
+      topicTitle: string;
+      postCount: number;
+      lastPostDate: number | null;
+    }[];
 
+    console.log(
+      'Topic stats:',
+      topicStats,
+      'postCount is of type: ',
+      typeof topicStats[0]?.postCount,
+    );
     for (const stat of topicStats) {
       await db
         .update(topicsTable)
