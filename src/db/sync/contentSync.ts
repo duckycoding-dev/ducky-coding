@@ -71,6 +71,12 @@ export async function syncTopicsToDatabase(): Promise<
             serverLogger.debug(`🔄 Updated topic: ${topic.data.title}`);
           }
         } else {
+          // A tag with the same name must exist before inserting a new topic
+          await db
+            .insert(tagsTable)
+            .values({ name: topic.data.title })
+            .onConflictDoNothing();
+
           // Insert new topic
           await db.insert(topicsTable).values({
             ...topicJsonData,
@@ -78,12 +84,6 @@ export async function syncTopicsToDatabase(): Promise<
             lastPostDate: null,
             createdAt: Math.floor(Date.now() / 1000),
           });
-
-          // Also create corresponding tag
-          await db
-            .insert(tagsTable)
-            .values({ name: topic.data.title })
-            .onConflictDoNothing();
 
           serverLogger.debug(
             `✨ Created topic and corresponding tag: ${topic.data.title}`,
