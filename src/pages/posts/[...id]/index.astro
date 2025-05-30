@@ -54,7 +54,9 @@ const postFromDb = await postsService.getPostBySlug(entry.id); // in astro 5 "sl
 ---
 
 <HolyGrailLayout
+  title={entry.data.title}
   seoProps={{
+    title: entry.data.title,
     description: entry.data.summary,
     extend: {
       meta: [
