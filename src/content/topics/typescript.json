@@ -1,7 +1,7 @@
 {
   "title": "TypeScript",
   "slug": "typescript",
-  "imagePath": "topics/typescript-logo.png",
+  "imagePath": "topics/typescript_logo.png",
   "description": "Typed superset of JavaScript that compiles to plain JavaScript",
   "backgroundGradient": "",
   "externalLink": "https://www.typescriptlang.org"

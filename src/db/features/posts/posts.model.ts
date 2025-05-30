@@ -36,6 +36,7 @@ export const postsTable = sqliteTable('posts', {
     .default(sql`(strftime('%s', 'now'))`),
   publishedAt: integer({ mode: 'number' }),
   deletedAt: integer({ mode: 'number' }), // need to use date type instead of integer maybe
+  isFeatured: integer({ mode: 'boolean' }).notNull().default(false),
 });
 
 export const postSchema = createSelectSchema(postsTable);

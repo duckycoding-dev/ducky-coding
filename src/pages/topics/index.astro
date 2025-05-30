@@ -9,28 +9,40 @@ import { serverLogger } from '@utils/logs/logger';
 
 const topicsWithImages = await TopicsService.getAllTopicsWithImage();
 // Process topics and match with images
-const processedTopics = await Promise.all(
-  topicsWithImages.map(async (topic) => {
-    let processedImage: ImageMetadata | undefined;
-    const imageToFindPath = topic.image?.path;
-    if (imageToFindPath) {
-      const images = import.meta.glob<{ default: ImageMetadata }>(
-        `/src/assets/images/topics/**/*.{jpeg,jpg,png,gif,webp,svg}`,
-      );
-      processedImage = await matchImageFromGlobImport(
-        images,
-        imageToFindPath,
-        serverLogger,
-      );
-    }
+const processedTopics = (
+  await Promise.all(
+    topicsWithImages.map(async (topic) => {
+      let processedImage: ImageMetadata | undefined;
+      const imageToFindPath = topic.image?.path;
+      if (imageToFindPath) {
+        const images = import.meta.glob<{ default: ImageMetadata }>(
+          `/src/assets/images/topics/**/*.{jpeg,jpg,png,gif,webp,svg}`,
+        );
+        processedImage = await matchImageFromGlobImport(
+          images,
+          imageToFindPath,
+          serverLogger,
+        );
+      }
 
-    const processedTopic = {
-      ...topic,
-      imageSrc: processedImage ?? null,
-    };
-    return processedTopic;
-  }),
-);
+      const processedTopic = {
+        ...topic,
+        imageSrc: processedImage ?? null,
+      };
+      return processedTopic;
+    }),
+  )
+).sort((topicA, topicB) => {
+  // First, sort by lastPostDate (descending)
+  const dateA = topicA.lastPostDate ?? 0;
+  const dateB = topicB.lastPostDate ?? 0;
+  if (dateA > dateB) return -1;
+  if (dateA < dateB) return 1;
+  // If lastPostDate is equal, sort by title (ascending)
+  const titleA = topicA.title?.toLowerCase() ?? '';
+  const titleB = topicB.title?.toLowerCase() ?? '';
+  return titleA.localeCompare(titleB);
+});
 ---
 
 <HolyGrailLayout
@@ -50,12 +62,15 @@ const processedTopics = await Promise.all(
   }}
 >
   <h1
-    class='decoration-accent mb-8 text-center text-4xl font-extrabold underline underline-offset-4'
+    class='decoration-accent mb-2 text-center text-4xl font-extrabold underline underline-offset-4'
   >
     Topics
   </h1>
+  <small class='mb-8 block text-center italic'
+    >Ordered by topic with the newest post first</small
+  >
   <section
-    class='xs:grid-cols-2 grid grid-cols-1 gap-5 sm:grid-cols-[repeat(auto-fill,minmax(150px,1fr))]'
+    class='xs:grid-cols-2 grid grid-cols-1 gap-5 sm:grid-cols-[repeat(auto-fill,minmax(200px,1fr))]'
   >
     {
       processedTopics.length === 0 && (

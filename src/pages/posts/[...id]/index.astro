@@ -11,7 +11,8 @@ import MarkdownContent from '@layouts/MarkdownContent/MarkdownContent.astro';
 import type { Image as BannerImage } from '@db/features/images/images.model'; // import { syncPostWithDatabase } from '@utils/content/content';
 
 import { serverLogger } from '@utils/logs/logger';
-import { ImagesService } from '../../../db/features/images/images.service';
+import { ImagesService } from '@db/features/images/images.service';
+import { postsService } from '../../../db/features/posts/posts.service';
 
 // 1. Generate a new path for every collection entry
 export async function getStaticPaths() {
@@ -48,6 +49,8 @@ if (imageToFindPath) {
     serverLogger,
   );
 }
+
+const postFromDb = await postsService.getPostBySlug(entry.id); // in astro 5 "slug" became "id", which corresponds to the filename of the content file
 ---
 
 <HolyGrailLayout
@@ -85,7 +88,7 @@ if (imageToFindPath) {
         ) : null
       }
       <section
-        class='flex flex-col justify-center gap-2 self-stretch justify-self-center px-8 pt-0 pb-4 md:pb-0'
+        class='flex flex-col justify-center gap-2 self-stretch justify-self-center px-8 pt-0 pb-4 md:pt-4'
       >
         <h1
           class='decoration-accent text-center text-4xl font-extrabold underline underline-offset-4'
@@ -101,10 +104,19 @@ if (imageToFindPath) {
             }</span
           >
         </p>
-        <p class='text-center text-base italic'>
-          Read time: {entry.data.timeToRead}
-          {entry.data.timeToRead > 1 ? 'minutes' : 'minute'}
-        </p>
+        <div>
+          <p class='text-center text-base italic'>
+            Read time: {entry.data.timeToRead}
+            {entry.data.timeToRead > 1 ? 'minutes' : 'minute'}
+          </p>
+          {
+            postFromDb?.createdAt ? (
+              <p class='text-center text-base italic'>
+                {`Published on: ${new Date(postFromDb.createdAt).toLocaleDateString()}`}
+              </p>
+            ) : null
+          }
+        </div>
         {
           entry.data.tags.length > 0 ? (
             <div class='flex flex-wrap justify-center gap-2'>
@@ -128,4 +140,15 @@ if (imageToFindPath) {
     </div>
   </section>
   <MarkdownContent entry={entry} />
+  {
+    postFromDb?.updatedAt && postFromDb.updatedAt !== postFromDb?.createdAt ? (
+      <p class='mt-8 text-center text-base italic'>
+        {`Last updated on: ${new Date(postFromDb.updatedAt).toLocaleDateString()}`}
+      </p>
+    ) : postFromDb?.createdAt ? (
+      <p class='mt-8 text-center text-base italic'>
+        {`Published on: ${new Date(postFromDb.createdAt).toLocaleDateString()}`}
+      </p>
+    ) : null
+  }
 </HolyGrailLayout>

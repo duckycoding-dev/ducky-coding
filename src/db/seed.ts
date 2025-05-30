@@ -19,9 +19,9 @@ export default async function seed() {
       path: 'default_profile_icon.png',
       alt: 'Default profile icon for every new user',
     },
-    { path: 'topics/css3-logo.png', alt: 'Logo of the third version of CSS' },
-    { path: 'topics/typescript-logo.png', alt: 'Logo of TypeScript' },
-    { path: 'topics/react-logo.png', alt: 'Logo of ReactJS' },
+    { path: 'topics/css3_logo.png', alt: 'Logo of the third version of CSS' },
+    { path: 'topics/typescript_logo.png', alt: 'Logo of TypeScript' },
+    { path: 'topics/react_logo.png', alt: 'Logo of ReactJS' },
     { path: 'posts/test-banner.png', alt: 'Test image for a post' },
     { path: 'DuckyCoding_logo.png', alt: 'Official logo of DuckyCoding' },
   ]);

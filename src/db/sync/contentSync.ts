@@ -46,7 +46,7 @@ export async function syncTopicsToDatabase(): Promise<
           description: topic.data.description,
           backgroundGradient: topic.data.backgroundGradient || null,
           externalLink: topic.data.externalLink || null,
-          updatedAt: Math.floor(Date.now() / 1000),
+          updatedAt: Date.now(),
         };
 
         if (existingTopic) {
@@ -82,7 +82,7 @@ export async function syncTopicsToDatabase(): Promise<
             ...topicJsonData,
             postCount: 0,
             lastPostDate: null,
-            createdAt: Math.floor(Date.now() / 1000),
+            createdAt: Date.now(),
           });
 
           serverLogger.debug(
@@ -185,7 +185,7 @@ export async function syncContentToDatabase(): Promise<
           if (someDataChanged) {
             await db
               .update(postsTable)
-              .set(postContentData)
+              .set({ ...postContentData, updatedAt: Date.now() })
               .where(eq(postsTable.id, existingPost.id));
             dbPost = { ...existingPost, ...postContentData };
           }
@@ -287,7 +287,7 @@ export async function updateTopicAnalytics() {
         .set({
           postCount: Number(stat.postCount),
           lastPostDate: stat.lastPostDate as number,
-          updatedAt: Math.floor(Date.now() / 1000),
+          updatedAt: Date.now(),
         })
         .where(eq(topicsTable.title, stat.topicTitle));
     }
@@ -296,7 +296,7 @@ export async function updateTopicAnalytics() {
     await db.update(topicsTable).set({
       postCount: 0,
       lastPostDate: null,
-      updatedAt: Math.floor(Date.now() / 1000),
+      updatedAt: Date.now(),
     }).where(sql`${topicsTable.title} NOT IN (
         SELECT DISTINCT ${postsTable.topicTitle}
         FROM ${postsTable}

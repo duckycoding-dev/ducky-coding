@@ -10,6 +10,7 @@ import LinkedInIcon from '@components/Icons/LinkedInIcon/LinkedInIcon.astro';
 import type { ComponentProps } from 'astro/types';
 import TechnologyCard from '@components/Card/TechnologyCard.astro';
 import pentaNewsLogo from '@assets/images/penta_news_logo.png';
+import leetCodeLogo from '@assets/images/topics/leetcode_logo.png';
 
 const frontendTechnologies = [
   'HTML',
@@ -108,12 +109,15 @@ const projects: ProjectCardProps[] = [
   },
   {
     title: 'LeetCode solutions',
+    bannerImage: leetCodeLogo,
+    imageAlt: "LeetCode's platform logo",
     summary:
       "My repository of LeetCode problems solutions that I've written, showcasing problem-solving skills and algorithmic thinking.",
     technologies: ['Algorithms', 'Data Structures', 'JavaScript', 'Python'],
     projectUrl:
       'https://github.com/duckycoding-dev/neecode-leetcode-roadmap-exercises',
     linkType: 'GitHub',
+    bannerImageClass: 'from-danger to-accent2 bg-gradient-to-tl',
   },
   {
     title: 'CLI Templater',
@@ -215,6 +219,7 @@ const projects: ProjectCardProps[] = [
               projectUrl={project.projectUrl}
               linkType={project.linkType}
               bannerImage={project.bannerImage}
+              bannerImageClass={project.bannerImageClass}
               imageAlt={`Banner image for ${project.title}`}
               loading={index < 3 ? 'eager' : 'lazy'}
             />

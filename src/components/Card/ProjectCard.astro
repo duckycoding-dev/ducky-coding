@@ -13,6 +13,7 @@ export interface ProjectCardProps extends HTMLAttributes<'div'> {
   summary: string;
   technologies: string[];
   bannerImage?: ImageMetadata | null;
+  bannerImageClass?: string;
   imageAlt?: string;
   loading?: 'eager' | 'lazy';
   projectUrl?: string;
@@ -26,6 +27,7 @@ const {
   summary,
   technologies,
   bannerImage,
+  bannerImageClass,
   class: className,
   loading = 'lazy',
   imageAlt,
@@ -39,7 +41,10 @@ const {
   <!-- Project Image/Banner -->
 
   <div
-    class='from-accent to-accent2 z-0 flex h-48 min-h-48 w-full items-center justify-center bg-gradient-to-br transition-transform'
+    class={cn(
+      'from-accent to-accent2 z-0 flex h-48 min-h-48 w-full items-center justify-center bg-gradient-to-br transition-transform',
+      bannerImageClass,
+    )}
   >
     {
       (
