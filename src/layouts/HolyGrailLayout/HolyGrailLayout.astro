@@ -1,13 +1,11 @@
 ---
-import BaseHtml, { type BaseHtmlProps } from '@layouts/BaseHtml/BaseHtml.astro';
+import BaseHtml from '@layouts/BaseHtml/BaseHtml.astro';
 import Footer from '@layouts/Footer/Footer.astro';
 import Header from '@layouts/Header/Header.astro';
 import MainContent from '@layouts/MainContent/MainContent.astro';
-import type { HTMLAttributes } from 'astro/types';
+import type { ComponentProps } from 'astro/types';
 
-export type HolyGrailLayoutProps = BaseHtmlProps;
-
-interface Props extends HTMLAttributes<'html'>, HolyGrailLayoutProps {}
+interface Props extends ComponentProps<typeof BaseHtml> {}
 
 const { ...props }: Props = Astro.props;
 ---
@@ -22,42 +20,11 @@ const { ...props }: Props = Astro.props;
 </BaseHtml>
 
 <script>
-  // Swipe detection variables
-  let touchStartX = 0;
-  let touchEndX = 0;
-  const minSwipeDistance = 50; // Minimum distance to be considered a swipe
+  import { swipeToTriggerCheckbox } from '@utils/scripts/swipeToTriggerCheckbox';
 
   const checkbox = document.getElementById(
     'site_side_navigation_menu_id',
   ) as HTMLInputElement;
 
-  function handleTouchStart(event: TouchEvent) {
-    touchStartX = event.changedTouches[0]?.screenX ?? 0;
-  }
-
-  // Function to determine swipe direction and update checkbox
-  function handleSwipe() {
-    const swipeDistance = touchEndX - touchStartX;
-
-    if (Math.abs(swipeDistance) < minSwipeDistance) {
-      return; // Not a significant swipe
-    }
-
-    if (swipeDistance > 0) {
-      // Right swipe
-      checkbox.checked = true;
-    } else {
-      // Left swipe
-      checkbox.checked = false;
-    }
-  }
-
-  function handleTouchEnd(event: TouchEvent) {
-    touchEndX = event.changedTouches[0]?.screenX ?? 0;
-    handleSwipe();
-  }
-
-  // Add event listeners
-  document.addEventListener('touchstart', handleTouchStart, false);
-  document.addEventListener('touchend', handleTouchEnd, false);
+  swipeToTriggerCheckbox(checkbox);
 </script>

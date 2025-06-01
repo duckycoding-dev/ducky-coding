@@ -10,7 +10,7 @@ import { IMAGE_DENSITIES } from '@utils/globals';
 
 export interface HeaderProps {}
 
-interface Props extends HTMLAttributes<'header'>, HeaderProps {}
+export interface Props extends HTMLAttributes<'header'>, HeaderProps {}
 
 const { class: className, ...props }: Props = Astro.props;
 ---

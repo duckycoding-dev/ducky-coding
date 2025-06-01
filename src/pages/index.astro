@@ -108,7 +108,6 @@ const { href: pageUrl } = new URL(Astro.url);
 ---
 
 <HolyGrailLayout
-  title='Homepage'
   seoProps={{
     title: 'Homepage',
     description:
@@ -118,7 +117,7 @@ const { href: pageUrl } = new URL(Astro.url);
         title: "DuckyCoding's blog",
         type: 'website',
         url: pageUrl,
-        image: '/assets/images/og-image.png',
+        image: DuckyCodingLogo.src,
       },
       optional: {
         description:
