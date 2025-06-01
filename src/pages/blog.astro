@@ -7,6 +7,8 @@ import { type ImageMetadata } from 'astro';
 import { matchImageFromGlobImport } from '@utils/images/images';
 import { serverLogger } from '@utils/logs/logger';
 import { postsService } from '../db/features/posts/posts.service';
+import DuckyCodingLogo from '@assets/images/DuckyCoding_logo.png';
+import { WEBSITE_FIRST_PUBLISHING_DATE } from '@utils/globals';
 
 const postsCollection = (await getCollection('posts')).map((entry) => ({
   id: entry.id,
@@ -20,47 +22,116 @@ const postsWithBannerImage = (
   (postWithBannerImage) => postWithBannerImage.post.status === 'published',
 );
 
-const processedPostsWithImages = await Promise.all(
-  postsWithBannerImage.map(async (post) => {
-    let processedImage: ImageMetadata | undefined;
-    const imageToFindPath = `${post.post.bannerImagePath}`;
-    if (imageToFindPath) {
-      const images = import.meta.glob<{ default: ImageMetadata }>(
-        `/src/assets/images/posts/**/*.{jpeg,jpg,png,gif,webp,svg}`,
-      );
-      processedImage = await matchImageFromGlobImport(
-        images,
-        imageToFindPath,
-        serverLogger,
-      );
-    }
+const processedPostsWithImages = (
+  await Promise.all(
+    postsWithBannerImage.map(async (post) => {
+      let processedImage: ImageMetadata | undefined;
+      const imageToFindPath = `${post.post.bannerImagePath}`;
+      if (imageToFindPath) {
+        const images = import.meta.glob<{ default: ImageMetadata }>(
+          `/src/assets/images/posts/**/*.{jpeg,jpg,png,gif,webp,svg}`,
+        );
+        processedImage = await matchImageFromGlobImport(
+          images,
+          imageToFindPath,
+          serverLogger,
+        );
+      }
 
-    const postTags =
-      postsCollection.find((p) => p.id === post.post.slug)?.tags || [];
+      const postTags =
+        postsCollection.find((p) => p.id === post.post.slug)?.tags || [];
 
-    return {
-      ...post,
-      processedBannerImage: processedImage ?? null,
-      tags: postTags,
-    };
-  }),
-);
+      return {
+        ...post,
+        processedBannerImage: processedImage ?? null,
+        tags: postTags,
+      };
+    }),
+  )
+).sort((postA, postB) => {
+  // First, sort by lastPostDate (descending)
+  const dateA = postA.post.publishedAt ?? 0;
+  const dateB = postB.post.publishedAt ?? 0;
+  if (dateA > dateB) return -1;
+  if (dateA < dateB) return 1;
+  // If lastPostDate is equal, sort by title (ascending)
+  const titleA = postA.post.title?.toLowerCase() ?? '';
+  const titleB = postB.post.title?.toLowerCase() ?? '';
+  return titleA.localeCompare(titleB);
+});
+
+const lastPostDateAsISOString = processedPostsWithImages[0]?.post.publishedAt
+  ? new Date(processedPostsWithImages[0].post.publishedAt).toISOString()
+  : WEBSITE_FIRST_PUBLISHING_DATE;
 
 const featuredPosts = processedPostsWithImages.filter(
   ({ post }) => post.isFeatured,
 );
+
+const pageUrl = Astro.url.href;
 ---
 
 <HolyGrailLayout
   seoProps={{
     title: 'Blog',
     description:
-      "Welcome to DuckyCoding's blog: web development articles and guides at your fingertips.",
+      "Welcome to the section with my latests articles about web development - here you can find guides, opinions and tips and tricks which I've learned and I want to share with the community.",
+    openGraph: {
+      basic: {
+        title: "DuckyCoding's blog",
+        type: 'website',
+        url: pageUrl,
+        image: DuckyCodingLogo.src,
+      },
+      optional: {
+        description:
+          "Welcome to the section with my latests articles about web development - here you can find guides, opinions and tips and tricks which I've learned and I want to share with the community.",
+        locale: 'en_US',
+        siteName: 'DuckyCoding',
+        localeAlternate: ['en_GB'],
+        determiner: '',
+        audio: undefined,
+        video: undefined,
+      },
+      image: {
+        url: DuckyCodingLogo.src,
+        secureUrl: DuckyCodingLogo.src,
+        height: DuckyCodingLogo.height,
+        width: DuckyCodingLogo.width,
+        type: `image/${DuckyCodingLogo.format}`,
+        alt: "DuckyCoding's logo",
+      },
+      article: {
+        publishedTime: WEBSITE_FIRST_PUBLISHING_DATE,
+        modifiedTime: lastPostDateAsISOString,
+        section: 'Web Development',
+        authors: ['DuckyCoding', 'Davide'],
+        tags: [
+          'DuckyCoding',
+          'web development',
+          'blog',
+          'articles',
+          'guides',
+          'posts',
+        ],
+      },
+    },
+    twitter: {
+      card: 'summary_large_image',
+      site: '@ducky_coding',
+      creator: '@ducky_coding',
+      title: "DuckyCoding's blog",
+      description:
+        "Welcome to the section with my latests articles about web development - here you can find guides, opinions and tips and tricks which I've learned and I want to share with the community.",
+      image: DuckyCodingLogo.src,
+      imageAlt: "DuckyCoding's logo",
+    },
     extend: {
       meta: [
         {
           name: 'keywords',
-          content: 'DuckyCoding, web development, astro, fullstack',
+          content:
+            'DuckyCoding, web development, blog, articles, guides, posts',
         },
       ],
     },
