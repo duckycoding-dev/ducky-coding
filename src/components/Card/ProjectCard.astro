@@ -17,7 +17,7 @@ export interface ProjectCardProps extends HTMLAttributes<'div'> {
   imageAlt?: string;
   loading?: 'eager' | 'lazy';
   projectUrl?: string;
-  linkType?: string;
+  linkActionTitle?: string;
 }
 
 interface Props extends ProjectCardProps {}
@@ -32,7 +32,7 @@ const {
   loading = 'lazy',
   imageAlt,
   projectUrl,
-  linkType = 'View Project',
+  linkActionTitle = 'View Project',
   ...rest
 } = Astro.props;
 ---
@@ -88,7 +88,7 @@ const {
       projectUrl && (
         <div class='mt-auto text-center'>
           <span class='bg-accent3 text-secondary group-hover:bg-accent3-700 rounded-lg px-3 py-1 text-xs font-semibold transition-colors'>
-            {linkType} →
+            {linkActionTitle} →
           </span>
         </div>
       )

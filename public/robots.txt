@@ -1,4 +1,5 @@
 User-agent: *
-Disallow: /
+Disallow: /md/
+Noindex: /
 
 Sitemap: https://duckycoding.dev/sitemap-index.xml
