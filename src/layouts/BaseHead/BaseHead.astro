@@ -1,19 +1,116 @@
 ---
 import type { SEOProps } from 'astro-seo';
 import { SEO } from 'astro-seo';
+import { Schema } from 'astro-seo-schema';
+import type { ComponentProps } from 'astro/types';
 
 export type BaseHeadProps = {
   seoProps?: SEOProps;
+  jsonLd?: ComponentProps<typeof Schema>;
 };
 
 type Props = BaseHeadProps;
-const { seoProps }: Props = Astro.props;
+const { seoProps, jsonLd }: Props = Astro.props;
+
+const images = import.meta.glob('../../assets/images/DuckyCoding_logo.png', {
+  eager: true,
+  import: 'default',
+  exhaustive: true,
+});
+const DuckyCodingLogo = Object.values(images)[0] as {
+  src: string;
+  width: number;
+  height: number;
+  format: 'png';
+};
+
+const seoPropsWithDefaults: SEOProps = {
+  charset: seoProps?.charset || 'utf-8',
+  canonical: seoProps?.canonical || Astro.url.href,
+  titleDefault: seoProps?.titleDefault || 'DuckyCoding',
+  openGraph: {
+    ...seoProps?.openGraph,
+    basic: {
+      title:
+        seoProps?.openGraph?.basic.title || seoProps?.title || 'DuckyCoding',
+      type: seoProps?.openGraph?.basic.type || 'website',
+      url:
+        seoProps?.openGraph?.basic.url || seoProps?.canonical || Astro.url.href,
+      image: seoProps?.openGraph?.basic?.image || DuckyCodingLogo.src,
+    },
+    image: {
+      url: seoProps?.openGraph?.image?.url || DuckyCodingLogo.src,
+      secureUrl: seoProps?.openGraph?.image?.secureUrl || DuckyCodingLogo.src,
+      height: seoProps?.openGraph?.image?.height || DuckyCodingLogo.height,
+      width: seoProps?.openGraph?.image?.width || DuckyCodingLogo.width,
+      type:
+        seoProps?.openGraph?.image?.type || `image/${DuckyCodingLogo.format}`,
+      alt: seoProps?.openGraph?.image?.alt || "DuckyCoding's logo",
+    },
+    optional: {
+      locale: seoProps?.openGraph?.optional?.locale || 'en_US',
+      localeAlternate: seoProps?.openGraph?.optional?.localeAlternate || [
+        'en_GB',
+      ],
+      siteName: seoProps?.openGraph?.optional?.siteName || 'DuckyCoding',
+      determiner: seoProps?.openGraph?.optional?.determiner || 'the',
+      description: seoProps?.openGraph?.optional?.description,
+      audio: seoProps?.openGraph?.optional?.audio,
+      video: seoProps?.openGraph?.optional?.video,
+    },
+    article: seoProps?.openGraph?.article,
+  },
+  twitter: {
+    card: seoProps?.twitter?.card || 'summary_large_image',
+    site: seoProps?.twitter?.site || '@ducky_coding',
+    creator: seoProps?.twitter?.creator || '@ducky_coding',
+    title: seoProps?.twitter?.title || "DuckyCoding's blog",
+    image: seoProps?.twitter?.image || DuckyCodingLogo.src,
+    imageAlt: seoProps?.twitter?.imageAlt || "DuckyCoding's logo",
+    description: seoProps?.twitter?.description,
+  },
+  title: seoProps?.title,
+  description: seoProps?.description,
+  extend: seoProps?.extend,
+  languageAlternates: seoProps?.languageAlternates,
+  nofollow: seoProps?.nofollow,
+  noindex: seoProps?.noindex,
+  surpressWarnings: seoProps?.surpressWarnings,
+  titleTemplate: seoProps?.titleTemplate,
+};
 ---
+
+<title>
+  {seoProps?.title ? `${seoProps.title} - DuckyCoding` : 'DuckyCoding'}
+</title>
+
+<meta charset='utf-8' />
+<link
+  rel='apple-touch-icon'
+  sizes='180x180'
+  href='/images/apple-touch-icon.png'
+/>
+<link rel='icon' type='image/x-icon' href='/images/favicon.ico' />
+<link
+  rel='icon'
+  type='image/png'
+  sizes='32x32'
+  href='/images/favicon-32x32.png'
+/>
+<link
+  rel='icon'
+  type='image/png'
+  sizes='16x16'
+  href='/images/favicon-16x16.png'
+/>
+<meta name='viewport' content='width=device-width, initial-scale=1' />
+<meta name='generator' content={Astro.generator} />
 
 <link rel='sitemap' href='/sitemap-index.xml' />
 <link rel='manifest' href='/site.webmanifest' />
-<meta name='theme-color' content='#ff3de9' />
+<meta name='theme-color' content='#ff8af2' />
 <meta name='viewport' content='width=device-width, initial-scale=1.0' />
-<SEO {...seoProps} />
+<SEO {...seoPropsWithDefaults} />
+{jsonLd ? <Schema {...jsonLd} /> : null}
 
 {/* Other meta tags */}

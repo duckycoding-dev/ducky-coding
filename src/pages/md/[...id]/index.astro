@@ -19,8 +19,9 @@ const { Content } = await render(entry);
 ---
 
 <HolyGrailLayout
-  title={'Test markdown'}
   seoProps={{
+    nofollow: true,
+    noindex: true,
     title: 'Test markdown',
     description: entry.data.summary,
   }}
