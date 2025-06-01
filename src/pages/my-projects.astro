@@ -12,6 +12,8 @@ import TechnologyCard from '@components/Card/TechnologyCard.astro';
 import pentaNewsLogo from '@assets/images/penta_news_logo.png';
 import leetCodeLogo from '@assets/images/topics/leetcode_logo.png';
 
+const thisWebsiteOrigin = Astro.url.origin;
+
 const frontendTechnologies = [
   'HTML',
   'Modern CSS',
@@ -88,7 +90,7 @@ const projects: ProjectCardProps[] = [
       'SQLite',
     ],
     projectUrl: 'https://duckycoding.dev',
-    linkType: 'Live Site',
+    linkActionTitle: 'Live Site',
   },
   {
     title: 'Task Manager App',
@@ -105,7 +107,7 @@ const projects: ProjectCardProps[] = [
     ],
     projectUrl:
       'https://github.com/duckycoding-dev/reusable_task_manager_backend',
-    linkType: 'GitHub',
+    linkActionTitle: 'GitHub',
   },
   {
     title: 'LeetCode solutions',
@@ -116,7 +118,7 @@ const projects: ProjectCardProps[] = [
     technologies: ['Algorithms', 'Data Structures', 'JavaScript', 'Python'],
     projectUrl:
       'https://github.com/duckycoding-dev/neecode-leetcode-roadmap-exercises',
-    linkType: 'GitHub',
+    linkActionTitle: 'GitHub',
     bannerImageClass: 'from-danger to-accent2 bg-gradient-to-tl',
   },
   {
@@ -125,7 +127,7 @@ const projects: ProjectCardProps[] = [
       'Customizable and interactive CLI tool that aids in setting up repetitive files with a common structure.',
     technologies: ['CLI', 'CommanderJS', 'inquirer', 'TypeScript', 'Bun'],
     projectUrl: 'https://github.com/duckycoding-dev/cli-templater',
-    linkType: 'GitHub',
+    linkActionTitle: 'GitHub',
   },
   {
     title: 'PentaNews',
@@ -135,7 +137,7 @@ const projects: ProjectCardProps[] = [
       "My first ever web development project, done for my web development course at Padua's university with three friends. It's an online journalism platform that allows users to read and comment on news articles, and admins to create such articles. It's built with PHP, bare minimum vanilla JavaScript, tons of CSS, MySQL and great emphasis on responsive design and accessibility. (unfortunately, the website is no longer online, but the code is still available on my friend's GitHub repo)",
     technologies: ['PHP', 'JavaScript', 'CSS', 'MySQL'],
     projectUrl: 'https://github.com/0xCaso/penta-news',
-    linkType: 'GitHub',
+    linkActionTitle: 'GitHub',
   },
   {
     title: 'Chartpp',
@@ -143,7 +145,7 @@ const projects: ProjectCardProps[] = [
       "My first solo project, done for my OOP course at Padua's university. It's a GUI application built with Qt that allows you to create and edit charts, export them as CSV and JSON, with a focus on object-oriented programming principles.",
     technologies: ['C++', 'OOP', 'Qt', 'JSON'],
     projectUrl: 'https://github.com/Davide-Milan/Chartpp',
-    linkType: 'GitHub',
+    linkActionTitle: 'GitHub',
   },
 ];
 ---
@@ -208,7 +210,9 @@ const projects: ProjectCardProps[] = [
             href={project.projectUrl || '#'}
             variant='unstyled'
             class='group block'
-            target='_blank'
+            target={
+              project.projectUrl === thisWebsiteOrigin ? '_self' : '_blank'
+            }
             rel='noopener noreferrer'
           >
             <ProjectCard
@@ -216,7 +220,7 @@ const projects: ProjectCardProps[] = [
               summary={project.summary}
               technologies={project.technologies}
               projectUrl={project.projectUrl}
-              linkType={project.linkType}
+              linkActionTitle={project.linkActionTitle}
               bannerImage={project.bannerImage}
               bannerImageClass={project.bannerImageClass}
               imageAlt={`Banner image for ${project.title}`}
