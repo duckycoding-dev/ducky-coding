@@ -3,6 +3,7 @@ import type { SEOProps } from 'astro-seo';
 import { SEO } from 'astro-seo';
 import { Schema } from 'astro-seo-schema';
 import type { ComponentProps } from 'astro/types';
+import DuckyCodingLogo from '@assets/images/DuckyCoding_logo.png';
 
 export type BaseHeadProps = {
   seoProps?: SEOProps;
@@ -11,18 +12,6 @@ export type BaseHeadProps = {
 
 type Props = BaseHeadProps;
 const { seoProps, jsonLd }: Props = Astro.props;
-
-const images = import.meta.glob('../../assets/images/DuckyCoding_logo.png', {
-  eager: true,
-  import: 'default',
-  exhaustive: true,
-});
-const DuckyCodingLogo = Object.values(images)[0] as {
-  src: string;
-  width: number;
-  height: number;
-  format: 'png';
-};
 
 const seoPropsWithDefaults: SEOProps = {
   charset: seoProps?.charset || 'utf-8',
