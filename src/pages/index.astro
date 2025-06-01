@@ -3,12 +3,16 @@ import HolyGrailLayout from '@layouts/HolyGrailLayout/HolyGrailLayout.astro';
 import Card from '@components/Card/Card.astro';
 import { Image } from 'astro:assets';
 import headshotDavide from '@assets/images/head-shot-davide.jpg';
-import { IMAGE_DENSITIES } from '../utils/globals';
+import {
+  IMAGE_DENSITIES,
+  WEBSITE_FIRST_PUBLISHING_DATE,
+} from '../utils/globals';
 import Link from '../components/Link/Link.astro';
 import type { ComponentProps } from 'astro/types';
 import TimelineCard from '../components/Card/TimelineCard.astro';
 import '@styles/markdown.css';
 import FunfactCard from '../components/Card/FunfactCard.astro';
+import DuckyCodingLogo from '@assets/images/DuckyCoding_logo.png';
 
 const timelineObjects: ComponentProps<typeof TimelineCard>[] = [
   {
@@ -64,18 +68,6 @@ const timelineObjects: ComponentProps<typeof TimelineCard>[] = [
       "During my Bachelor's degree in Computer Science at the University of Padua, I gained a solid foundation in programming, algorithms, data structures, and software engineering. I explored topics such as web development, databases, computer networks, and mathematics, and worked on a few group projects that strengthened my problem-solving and teamwork skills.",
   },
 ];
-const images = import.meta.glob('../assets/images/DuckyCoding_logo.png', {
-  eager: true,
-  import: 'default',
-  exhaustive: true,
-});
-const DuckyCodingLogo = Object.values(images)[0] as {
-  src: string;
-  width: number;
-  height: number;
-  format: 'png';
-};
-const dateWhenOpenGraphsAreAdded = new Date(2025, 4, 31, 1).toISOString();
 
 const funFacts: ComponentProps<typeof FunfactCard>[] = [
   {
@@ -104,7 +96,7 @@ const funFacts: ComponentProps<typeof FunfactCard>[] = [
   },
 ];
 
-const { href: pageUrl } = new URL(Astro.url);
+const pageUrl = Astro.url.href;
 ---
 
 <HolyGrailLayout
@@ -124,9 +116,9 @@ const { href: pageUrl } = new URL(Astro.url);
           "Welcome to my blog about web development - I'm Davide, aka DuckyCoding, a passionate web developer crafting modern digital experiences, sharing what I learn along my path.",
         locale: 'en_US',
         siteName: 'DuckyCoding',
-        determiner: 'the',
-        audio: undefined,
         localeAlternate: ['en_GB'],
+        determiner: '',
+        audio: undefined,
         video: undefined,
       },
       image: {
@@ -138,12 +130,19 @@ const { href: pageUrl } = new URL(Astro.url);
         alt: "DuckyCoding's logo",
       },
       article: {
-        publishedTime: dateWhenOpenGraphsAreAdded,
-        modifiedTime: dateWhenOpenGraphsAreAdded,
+        publishedTime: WEBSITE_FIRST_PUBLISHING_DATE,
+        modifiedTime: WEBSITE_FIRST_PUBLISHING_DATE,
         section: 'Web Development',
         authors: ['DuckyCoding', 'Davide'],
         tags: [
-          'DuckyCoding, Davide, developer, web development, blog, frontend, backend, journey',
+          'DuckyCoding',
+          'Davide',
+          'developer',
+          'web development',
+          'blog',
+          'frontend',
+          'backend',
+          'journey',
         ],
       },
     },

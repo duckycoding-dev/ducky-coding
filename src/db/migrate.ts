@@ -11,7 +11,7 @@ async function main() {
   serverLogger.log('⏳ Running migrations...');
   try {
     const migrationDirectory = join(__dirname, 'migrations');
-    console.log('Migrations folder:', migrationDirectory);
+    serverLogger.log('Migrations folder:', migrationDirectory);
     await migrate(db, { migrationsFolder: migrationDirectory });
     serverLogger.info('✅⌛️ Migrated successfully');
   } catch (err) {
