@@ -11,6 +11,8 @@ import type { ComponentProps } from 'astro/types';
 import TechnologyCard from '@components/Card/TechnologyCard.astro';
 import pentaNewsLogo from '@assets/images/penta_news_logo.png';
 import leetCodeLogo from '@assets/images/topics/leetcode_logo.png';
+import DuckyCodingLogo from '@assets/images/topics/DuckyCoding_logo.png';
+import { WEBSITE_FIRST_PUBLISHING_DATE } from '@utils/globals';
 
 const thisWebsiteOrigin = Astro.url.origin;
 
@@ -148,6 +150,8 @@ const projects: ProjectCardProps[] = [
     linkActionTitle: 'GitHub',
   },
 ];
+
+const pageUrl = Astro.url.href;
 ---
 
 <HolyGrailLayout
@@ -155,6 +159,57 @@ const projects: ProjectCardProps[] = [
     title: 'My Projects',
     description:
       'Explore the portfolio of DuckyCoding - showcasing various web development projects, applications, and experiments.',
+    openGraph: {
+      basic: {
+        title: "DuckyCoding's projects",
+        type: 'website',
+        url: pageUrl,
+        image: DuckyCodingLogo.src,
+      },
+      optional: {
+        description:
+          'Explore the portfolio of DuckyCoding - showcasing various web development projects, applications, and experiments.',
+        locale: 'en_US',
+        siteName: 'DuckyCoding',
+        localeAlternate: ['en_GB'],
+        determiner: '',
+        audio: undefined,
+        video: undefined,
+      },
+      image: {
+        url: DuckyCodingLogo.src,
+        secureUrl: DuckyCodingLogo.src,
+        height: DuckyCodingLogo.height,
+        width: DuckyCodingLogo.width,
+        type: `image/${DuckyCodingLogo.format}`,
+        alt: "DuckyCoding's logo",
+      },
+      article: {
+        publishedTime: WEBSITE_FIRST_PUBLISHING_DATE,
+        modifiedTime: WEBSITE_FIRST_PUBLISHING_DATE,
+        section: 'Web Development',
+        authors: ['DuckyCoding', 'Davide'],
+        tags: [
+          'DuckyCoding',
+          'Davide',
+          'projects',
+          'portfolio',
+          'web development',
+          'applications',
+          'GitHub',
+        ],
+      },
+    },
+    twitter: {
+      card: 'summary_large_image',
+      site: '@ducky_coding',
+      creator: '@ducky_coding',
+      title: "DuckyCoding's projects",
+      description:
+        'Explore the portfolio of DuckyCoding - showcasing various web development projects, applications, and experiments.',
+      image: DuckyCodingLogo.src,
+      imageAlt: "DuckyCoding's logo",
+    },
     extend: {
       meta: [
         {

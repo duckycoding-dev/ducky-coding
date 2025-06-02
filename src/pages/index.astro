@@ -103,7 +103,7 @@ const pageUrl = Astro.url.href;
   seoProps={{
     title: 'Homepage',
     description:
-      "Welcome to my blog about web development - I'm Davide, aka DuckyCoding, a passionate web developer crafting modern digital experiences, sharing what I learn along my path.",
+      "I'm Davide, aka DuckyCoding, a passionate web developer who loves crafting modern digital experiences, sharing what I learn along my path with everyone online.",
     openGraph: {
       basic: {
         title: "DuckyCoding's blog",
@@ -113,7 +113,7 @@ const pageUrl = Astro.url.href;
       },
       optional: {
         description:
-          "Welcome to my blog about web development - I'm Davide, aka DuckyCoding, a passionate web developer crafting modern digital experiences, sharing what I learn along my path.",
+          "I'm Davide, aka DuckyCoding, a passionate web developer who loves crafting modern digital experiences, sharing what I learn along my path with everyone online.",
         locale: 'en_US',
         siteName: 'DuckyCoding',
         localeAlternate: ['en_GB'],
@@ -152,7 +152,7 @@ const pageUrl = Astro.url.href;
       creator: '@ducky_coding',
       title: "DuckyCoding's blog",
       description:
-        "Welcome to my blog about web development - I'm Davide, aka DuckyCoding, a passionate web developer crafting modern digital experiences, sharing what I learn along my path.",
+        "I'm Davide, aka DuckyCoding, a passionate web developer who loves crafting modern digital experiences, sharing what I learn along my path with everyone online.",
       image: DuckyCodingLogo.src,
       imageAlt: "DuckyCoding's logo",
     },
@@ -177,7 +177,7 @@ const pageUrl = Astro.url.href;
           class='text-secondary mb-6 text-3xl leading-tight font-black md:text-4xl lg:text-6xl'
         >
           Hi, I'm <span class='text-accent-700 wrap-break-word sm:wrap-normal'
-            >DuckyCoding</span
+            >DuckyCoding!</span
           >
         </h1>
         <p class='text-secondary text-lg leading-relaxed md:text-xl'>
@@ -199,6 +199,7 @@ const pageUrl = Astro.url.href;
             densities={IMAGE_DENSITIES}
             loading={'eager'}
             decoding={'async'}
+            title={'Davide - DuckyCoding'}
             src={headshotDavide}
             width={350}
             height={350}

@@ -10,10 +10,13 @@ import { postsService } from '../db/features/posts/posts.service';
 import DuckyCodingLogo from '@assets/images/DuckyCoding_logo.png';
 import { WEBSITE_FIRST_PUBLISHING_DATE } from '@utils/globals';
 
-const postsCollection = (await getCollection('posts')).map((entry) => ({
-  id: entry.id,
-  tags: entry.data.tags,
-})); // in astro 5 "slug" became "id", which corresponds to the filename of the content file
+const postsCollection = (await getCollection('posts'))
+  .map((entry) => ({
+    id: entry.id,
+    tags: entry.data.tags,
+    status: entry.data.status,
+  }))
+  .filter((post) => post.status === 'published'); // in astro 5 "slug" became "id", which corresponds to the filename of the content file
 const postsWithBannerImage = (
   await postsService.getPostsWithBannerBySlugs(
     postsCollection.map((post) => post.id),

@@ -6,6 +6,7 @@ import type { ImageMetadata } from 'astro';
 import { matchImageFromGlobImport } from '@utils/images/images';
 import DuckyCodingLogo from '@assets/images/DuckyCoding_logo.png';
 import { serverLogger } from '@utils/logs/logger';
+import { WEBSITE_FIRST_PUBLISHING_DATE } from '@utils/globals';
 
 const topicsWithImages = await TopicsService.getAllTopicsWithImage();
 // Process topics and match with images
@@ -43,13 +44,62 @@ const processedTopics = (
   const titleB = topicB.title?.toLowerCase() ?? '';
   return titleA.localeCompare(titleB);
 });
+
+const pageUrl = Astro.url.href;
+
+const lastTopicDateAsISOString = topicsWithImages[0]?.lastPostDate
+  ? new Date(topicsWithImages[0].lastPostDate).toISOString()
+  : WEBSITE_FIRST_PUBLISHING_DATE;
 ---
 
 <HolyGrailLayout
   seoProps={{
     title: 'Topics',
     description:
-      "Here's a list of all the topics I've written about in my posts: find what you need in a nicely organized way.",
+      'Explore web development topics on DuckyCoding - from JavaScript and TypeScript to React, Vue, and more. Find detailed tutorials and practical guides.',
+    openGraph: {
+      basic: {
+        title: "DuckyCoding's blog posts topics",
+        type: 'website',
+        url: pageUrl,
+        image: DuckyCodingLogo.src,
+      },
+      optional: {
+        description:
+          'Explore web development topics on DuckyCoding - from JavaScript and TypeScript to React, Vue, and more. Find detailed tutorials and practical guides.',
+        locale: 'en_US',
+        siteName: 'DuckyCoding',
+        localeAlternate: ['en_GB'],
+        determiner: '',
+        audio: undefined,
+        video: undefined,
+      },
+      image: {
+        url: DuckyCodingLogo.src,
+        secureUrl: DuckyCodingLogo.src,
+        height: DuckyCodingLogo.height,
+        width: DuckyCodingLogo.width,
+        type: `image/${DuckyCodingLogo.format}`,
+        alt: "DuckyCoding's logo",
+      },
+      article: {
+        publishedTime: WEBSITE_FIRST_PUBLISHING_DATE,
+        modifiedTime: lastTopicDateAsISOString,
+        section: 'Web Development',
+        authors: ['DuckyCoding', 'Davide'],
+        tags: ['DuckyCoding', 'web development', 'topics', 'posts'],
+      },
+    },
+    twitter: {
+      card: 'summary_large_image',
+      site: '@ducky_coding',
+      creator: '@ducky_coding',
+      title: "DuckyCoding's blog posts topics",
+      description:
+        'Explore web development topics on DuckyCoding - from JavaScript and TypeScript to React, Vue, and more. Find detailed tutorials and practical guides.',
+      image: DuckyCodingLogo.src,
+      imageAlt: "DuckyCoding's logo",
+    },
     extend: {
       meta: [
         {
