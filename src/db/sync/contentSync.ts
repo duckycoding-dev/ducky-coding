@@ -166,6 +166,12 @@ export async function syncContentToDatabase(): Promise<
 
         let dbPost;
         if (existingPost) {
+          const postTagsFromDb = (
+            await db
+              .select()
+              .from(postsTagsTable)
+              .where(eq(postsTagsTable.postId, existingPost.id))
+          ).map(({ tagName }) => tagName);
           // Update existing post
           let someDataChanged = false;
           if (
@@ -178,6 +184,16 @@ export async function syncContentToDatabase(): Promise<
             existingPost.timeToRead !== postContentData.timeToRead ||
             existingPost.status !== postContentData.status ||
             existingPost.bannerImagePath !== postContentData.bannerImagePath
+          ) {
+            someDataChanged = true;
+          }
+
+          const newTagsSet = new Set(post.data.tags || []);
+          const existingTagsSet = new Set(postTagsFromDb);
+          const tagsDifference = newTagsSet.difference(existingTagsSet);
+          if (
+            tagsDifference.size > 0 ||
+            newTagsSet.size !== existingTagsSet.size
           ) {
             someDataChanged = true;
           }
@@ -227,6 +243,7 @@ export async function syncContentToDatabase(): Promise<
             tagName: tagName,
           }));
 
+          // Insert new tag relations
           await db.insert(postsTagsTable).values(tagRelations);
         }
 
