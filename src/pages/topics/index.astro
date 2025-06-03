@@ -9,7 +9,7 @@ import { serverLogger } from '@utils/logs/logger';
 import { WEBSITE_FIRST_PUBLISHING_DATE, WEBSITE_ROOT } from '@utils/globals';
 
 const topicsWithImages = (await TopicsService.getAllTopicsWithImage()).filter(
-  (topic) => topic.postCount > 0,
+  (topic) => topic.postCount ?? 0 > 0,
 );
 // Process topics and match with images
 const processedTopics = (
@@ -52,6 +52,59 @@ const pageUrl = Astro.url.href;
 const lastTopicDateAsISOString = topicsWithImages[0]?.lastPostDate
   ? new Date(topicsWithImages[0].lastPostDate).toISOString()
   : WEBSITE_FIRST_PUBLISHING_DATE;
+
+// JSON-LD structured data for topics page
+const topicsPageJsonLd = {
+  item: {
+    '@context': 'https://schema.org',
+    '@type': 'CollectionPage',
+    '@id': pageUrl,
+    name: 'Topics - DuckyCoding',
+    url: pageUrl,
+    description:
+      'Explore web development topics on DuckyCoding - from JavaScript and TypeScript to React, Vue, and more. Find detailed tutorials and practical guides.',
+    mainEntity: {
+      '@type': 'ItemList',
+      numberOfItems: processedTopics.length,
+      itemListElement: processedTopics.map(
+        (topic, index) =>
+          ({
+            '@type': 'ListItem',
+            position: index + 1,
+            item: {
+              '@type': 'Thing',
+              name: topic.title,
+              '@id': `${WEBSITE_ROOT}/topics/${topic.slug}`,
+              url: `${WEBSITE_ROOT}/topics/${topic.slug}`,
+              description:
+                topic.description ||
+                `Articles and tutorials about ${topic.title}`,
+              image: topic.imageSrc
+                ? new URL(topic.imageSrc.src, WEBSITE_ROOT).href
+                : undefined,
+            },
+          }) as const,
+      ),
+    },
+    breadcrumb: {
+      '@type': 'BreadcrumbList',
+      itemListElement: [
+        {
+          '@type': 'ListItem',
+          position: 1,
+          name: 'Home',
+          item: WEBSITE_ROOT,
+        },
+        {
+          '@type': 'ListItem',
+          position: 2,
+          name: 'Topics',
+          item: pageUrl,
+        },
+      ],
+    },
+  },
+} as const;
 ---
 
 <HolyGrailLayout
@@ -111,6 +164,7 @@ const lastTopicDateAsISOString = topicsWithImages[0]?.lastPostDate
       ],
     },
   }}
+  jsonLd={topicsPageJsonLd}
 >
   <h1
     class='decoration-accent mb-2 text-center text-4xl font-extrabold underline underline-offset-4'

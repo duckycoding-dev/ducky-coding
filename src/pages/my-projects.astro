@@ -13,6 +13,7 @@ import pentaNewsLogo from '@assets/images/penta_news_logo.png';
 import leetCodeLogo from '@assets/images/topics/leetcode_logo.png';
 import DuckyCodingLogo from '@assets/images/DuckyCoding_logo.png';
 import { WEBSITE_FIRST_PUBLISHING_DATE, WEBSITE_ROOT } from '@utils/globals';
+import { DuckyCodingPerson } from '@utils/jsonld/person';
 
 const thisWebsiteOrigin = Astro.url.origin;
 
@@ -152,11 +153,41 @@ const projects: ProjectCardProps[] = [
 ];
 
 const pageUrl = Astro.url.href;
+
+// JSON-LD structured data for projects page
+const projectsPageJsonLd = {
+  item: {
+    '@context': 'https://schema.org',
+    '@type': 'CollectionPage',
+    '@id': pageUrl,
+    name: "DuckyCoding's projects",
+    url: pageUrl,
+    description:
+      'Explore the portfolio of DuckyCoding - showcasing various web development projects, applications, and experiments.',
+    breadcrumb: {
+      '@type': 'BreadcrumbList',
+      itemListElement: [
+        {
+          '@type': 'ListItem',
+          position: 1,
+          name: 'Home',
+          item: WEBSITE_ROOT,
+        },
+        {
+          '@type': 'ListItem',
+          position: 2,
+          name: 'My projects',
+          item: pageUrl,
+        },
+      ],
+    },
+  },
+} as const;
 ---
 
 <HolyGrailLayout
   seoProps={{
-    title: 'My Projects',
+    title: 'My projects',
     description:
       'Explore the portfolio of DuckyCoding - showcasing various web development projects, applications, and experiments.',
     openGraph: {
@@ -220,6 +251,7 @@ const pageUrl = Astro.url.href;
       ],
     },
   }}
+  jsonLd={projectsPageJsonLd}
 >
   <!-- Hero Section -->
   <section class='mb-16 text-center'>
@@ -247,7 +279,7 @@ const pageUrl = Astro.url.href;
           size='large'
           class='px-8 py-4 text-2xl sm:text-3xl'
         >
-          Browse Projects
+          Browse projects
         </Link>
       </div>
     </Card>

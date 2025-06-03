@@ -15,6 +15,7 @@ import { serverLogger } from '@utils/logs/logger';
 import { postsService } from '../../../db/features/posts/posts.service';
 import DuckyCodingLogo from '@assets/images/DuckyCoding_logo.png';
 import DuckIcon from '../../../components/Icons/DuckIcon/DuckIcon.astro';
+import { AuthorPerson } from '@utils/jsonld/person';
 
 // 1. Generate a new path for every collection entry
 export async function getStaticPaths() {
@@ -111,6 +112,79 @@ const lastPostDateAsISOString = processedPostsWithImages[0]?.post.publishedAt
   : WEBSITE_FIRST_PUBLISHING_DATE;
 
 const pageUrl = Astro.url.href;
+
+// JSON-LD structured data for individual topic page
+const topicPageJsonLd = {
+  item: {
+    '@context': 'https://schema.org',
+    '@type': 'CollectionPage',
+    '@id': pageUrl,
+    name: `${processedTopic.title} - DuckyCoding`,
+    url: pageUrl,
+    description:
+      processedTopic.description ||
+      `Discover the latest posts related to ${processedTopic.title}, written by DuckyCoding!`,
+    about: {
+      '@type': 'Thing',
+      name: processedTopic.title,
+      description:
+        processedTopic.description ||
+        `Everything about ${processedTopic.title}`,
+    },
+    mainEntity: {
+      '@type': 'ItemList',
+      numberOfItems: processedPostsWithImages.length,
+      itemListElement: processedPostsWithImages.map(
+        (postWithImage, index) =>
+          ({
+            '@type': 'ListItem',
+            position: index + 1,
+            item: {
+              '@type': 'BlogPosting',
+              headline: postWithImage.post.title,
+              '@id': `${WEBSITE_ROOT}/posts/${postWithImage.post.slug}`,
+              url: `${WEBSITE_ROOT}/posts/${postWithImage.post.slug}`,
+              datePublished: new Date(
+                postWithImage.post.publishedAt || WEBSITE_FIRST_PUBLISHING_DATE,
+              ).toISOString(),
+              dateModified: new Date(
+                postWithImage.post?.updatedAt ||
+                  postWithImage.post?.createdAt ||
+                  WEBSITE_FIRST_PUBLISHING_DATE,
+              ),
+              author: AuthorPerson(postWithImage.post.author, WEBSITE_ROOT),
+            },
+          }) as const,
+      ),
+    },
+    breadcrumb: {
+      '@type': 'BreadcrumbList',
+      itemListElement: [
+        {
+          '@type': 'ListItem',
+          position: 1,
+          name: 'Home',
+          item: WEBSITE_ROOT,
+        },
+        {
+          '@type': 'ListItem',
+          position: 2,
+          name: 'Topics',
+          item: `${WEBSITE_ROOT}/topics`,
+        },
+        {
+          '@type': 'ListItem',
+          position: 3,
+          name: processedTopic.title,
+          item: pageUrl,
+          image: processedTopic.imageSrc
+            ? new URL(processedTopic.imageSrc.src, WEBSITE_ROOT).href
+            : undefined,
+        },
+      ],
+    },
+  },
+} as const;
 ---
 
 <HolyGrailLayout
@@ -185,6 +259,7 @@ const pageUrl = Astro.url.href;
       ],
     },
   }}
+  jsonLd={topicPageJsonLd}
 >
   <section
     class={`from-accent-300 to-accent2-300 shadow-comic relative grid h-[25dvh] grid-cols-1 grid-rows-1 flex-col place-items-center gap-4 overflow-hidden border-4 bg-gradient-to-br md:h-[35dvh] ${processedTopic.imageSrc && processedTopic.description ? 'mb-4' : ''}`}
