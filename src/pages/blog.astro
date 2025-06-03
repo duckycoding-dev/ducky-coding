@@ -10,6 +10,7 @@ import { postsService } from '../db/features/posts/posts.service';
 import DuckyCodingLogo from '@assets/images/DuckyCoding_logo.png';
 import { WEBSITE_FIRST_PUBLISHING_DATE, WEBSITE_ROOT } from '@utils/globals';
 import DuckIcon from '../components/Icons/DuckIcon/DuckIcon.astro';
+import { AuthorPerson } from '@utils/jsonld/person';
 
 const postsCollection = (await getCollection('posts'))
   .map((entry) => ({
@@ -73,6 +74,66 @@ const featuredPosts = processedPostsWithImages.filter(
 );
 
 const pageUrl = Astro.url.href;
+
+// JSON-LD structured data for blog page
+const blogPageJsonLd = {
+  item: {
+    '@context': 'https://schema.org',
+    '@type': 'CollectionPage',
+    '@id': pageUrl,
+    name: "DuckyCoding's Blog",
+    url: pageUrl,
+    description:
+      "Welcome to the section with my latests articles about web development - here you can find guides, opinions and tips and tricks which I've learned and I want to share with the community.",
+    mainEntity: {
+      '@type': 'Blog',
+      name: "DuckyCoding's Blog",
+      '@id': `${WEBSITE_ROOT}/blog`,
+      url: `${WEBSITE_ROOT}/blog`,
+      description:
+        'Web development blog featuring tutorials, guides, and insights about modern web technologies.',
+      author: {
+        '@type': 'Person',
+        name: 'DuckyCoding',
+        url: WEBSITE_ROOT,
+      },
+      blogPost: processedPostsWithImages.map(
+        ({ post }) =>
+          ({
+            '@type': 'BlogPosting',
+            headline: post.title,
+            url: `${WEBSITE_ROOT}/posts/${post.slug}`,
+            datePublished: new Date(
+              post.publishedAt || WEBSITE_FIRST_PUBLISHING_DATE,
+            ).toISOString(),
+            dateModified: new Date(
+              post.updatedAt ||
+                post.publishedAt ||
+                WEBSITE_FIRST_PUBLISHING_DATE,
+            ).toISOString(),
+            author: AuthorPerson(post.author, WEBSITE_ROOT),
+          }) as const,
+      ),
+    },
+    breadcrumb: {
+      '@type': 'BreadcrumbList',
+      itemListElement: [
+        {
+          '@type': 'ListItem',
+          position: 1,
+          name: 'Home',
+          item: WEBSITE_ROOT,
+        },
+        {
+          '@type': 'ListItem',
+          position: 2,
+          name: 'Blog',
+          item: pageUrl,
+        },
+      ],
+    },
+  },
+} as const;
 ---
 
 <HolyGrailLayout
@@ -140,6 +201,7 @@ const pageUrl = Astro.url.href;
       ],
     },
   }}
+  jsonLd={blogPageJsonLd}
 >
   <h1
     class='decoration-accent mb-8 text-center text-4xl font-extrabold underline underline-offset-4'

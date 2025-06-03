@@ -18,7 +18,7 @@ import { ImagesService } from '@db/features/images/images.service';
 import { postsService } from '@db/features/posts/posts.service';
 import DuckyCodingLogo from '@assets/images/DuckyCoding_logo.png';
 import { TopicThing, TagThing } from '@utils/jsonld/thing';
-import { BlogBlog } from '@utils/jsonld/blog';
+import { DuckyCodingBlog } from '@utils/jsonld/blog';
 import { AuthorPerson } from '@utils/jsonld/person';
 
 // 1. Generate a new path for every collection entry
@@ -71,14 +71,11 @@ const blogPostJsonLd = {
   item: {
     '@context': 'https://schema.org',
     '@type': 'BlogPosting',
+    '@id': pageUrl,
+    url: pageUrl,
     headline: entry.data.title,
     description: entry.data.summary,
     articleBody: entry.data.content,
-    url: pageUrl,
-    mainEntityOfPage: {
-      '@type': 'WebPage',
-      '@id': pageUrl,
-    },
     author: AuthorPerson(entry.data.author, WEBSITE_ROOT),
     publisher: AuthorPerson(entry.data.author, WEBSITE_ROOT),
     maintainer: AuthorPerson(entry.data.author, WEBSITE_ROOT),
@@ -93,13 +90,11 @@ const blogPostJsonLd = {
     ...(processedImage && {
       image: {
         '@type': 'ImageObject',
-        url: new URL(processedImage.src, WEBSITE_ROOT).href,
-        width: processedImage.width,
-        height: processedImage.height,
-        alt:
+        contentUrl: new URL(processedImage.src, WEBSITE_ROOT).href,
+        description:
           bannerImageFromDb?.alt ||
           `Post banner cover related to "${entry.data.topicTitle}"`,
-      },
+      } as const,
     }),
     keywords: entry.data.tags.join(', '),
     articleSection: entry.data.topicTitle,
@@ -107,13 +102,13 @@ const blogPostJsonLd = {
     wordCount: entry.data.content.split(' ').length,
     about: TopicThing(entry.data.topicTitle),
     mentions: entry.data.tags.map((tag) => TagThing(tag)),
-    isPartOf: BlogBlog,
+    isPartOf: DuckyCodingBlog,
     potentialAction: {
       '@type': 'ReadAction',
       target: pageUrl,
     },
   },
-};
+} as const;
 ---
 
 <HolyGrailLayout

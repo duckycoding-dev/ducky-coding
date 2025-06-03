@@ -14,6 +14,8 @@ import TimelineCard from '../components/Card/TimelineCard.astro';
 import '@styles/markdown.css';
 import FunfactCard from '../components/Card/FunfactCard.astro';
 import DuckyCodingLogo from '@assets/images/DuckyCoding_logo.png';
+import { DuckyCodingPerson } from '@utils/jsonld/person';
+import { DuckyCodingWebsite } from '@utils/jsonld/website';
 
 const timelineObjects: ComponentProps<typeof TimelineCard>[] = [
   {
@@ -98,6 +100,15 @@ const funFacts: ComponentProps<typeof FunfactCard>[] = [
 ];
 
 const pageUrl = Astro.url.href;
+
+// JSON-LD structured data for homepage
+const homepageJsonLd = {
+  item: {
+    '@context': 'https://schema.org',
+    ...DuckyCodingPerson,
+    mainEntityOfPage: DuckyCodingWebsite,
+  },
+} as const;
 ---
 
 <HolyGrailLayout
@@ -167,6 +178,7 @@ const pageUrl = Astro.url.href;
       ],
     },
   }}
+  jsonLd={homepageJsonLd}
 >
   <!-- Hero Section -->
   <section class='mb-8 md:mb-12'>
