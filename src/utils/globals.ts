@@ -6,3 +6,5 @@ export const WEBSITE_FIRST_PUBLISHING_DATE = new Date(
   1,
   18,
 ).toISOString();
+
+export const WEBSITE_ROOT = 'https://duckycoding.dev';

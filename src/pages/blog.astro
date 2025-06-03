@@ -8,7 +8,7 @@ import { matchImageFromGlobImport } from '@utils/images/images';
 import { serverLogger } from '@utils/logs/logger';
 import { postsService } from '../db/features/posts/posts.service';
 import DuckyCodingLogo from '@assets/images/DuckyCoding_logo.png';
-import { WEBSITE_FIRST_PUBLISHING_DATE } from '@utils/globals';
+import { WEBSITE_FIRST_PUBLISHING_DATE, WEBSITE_ROOT } from '@utils/globals';
 
 const postsCollection = (await getCollection('posts'))
   .map((entry) => ({
@@ -84,7 +84,7 @@ const pageUrl = Astro.url.href;
         title: "DuckyCoding's blog",
         type: 'website',
         url: pageUrl,
-        image: DuckyCodingLogo.src,
+        image: new URL(DuckyCodingLogo.src, WEBSITE_ROOT).href,
       },
       optional: {
         description:
@@ -97,8 +97,8 @@ const pageUrl = Astro.url.href;
         video: undefined,
       },
       image: {
-        url: DuckyCodingLogo.src,
-        secureUrl: DuckyCodingLogo.src,
+        url: new URL(DuckyCodingLogo.src, WEBSITE_ROOT).href,
+        secureUrl: new URL(DuckyCodingLogo.src, WEBSITE_ROOT).href,
         height: DuckyCodingLogo.height,
         width: DuckyCodingLogo.width,
         type: `image/${DuckyCodingLogo.format}`,
@@ -126,7 +126,7 @@ const pageUrl = Astro.url.href;
       title: "DuckyCoding's blog",
       description:
         "Welcome to the section with my latests articles about web development - here you can find guides, opinions and tips and tricks which I've learned and I want to share with the community.",
-      image: DuckyCodingLogo.src,
+      image: new URL(DuckyCodingLogo.src, WEBSITE_ROOT).href,
       imageAlt: "DuckyCoding's logo",
     },
     extend: {

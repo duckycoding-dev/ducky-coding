@@ -2,7 +2,11 @@
 import { getCollection } from 'astro:content';
 import HolyGrailLayout from '@layouts/HolyGrailLayout/HolyGrailLayout.astro';
 import { Image } from 'astro:assets';
-import { IMAGE_DENSITIES, WEBSITE_FIRST_PUBLISHING_DATE } from '@utils/globals';
+import {
+  IMAGE_DENSITIES,
+  WEBSITE_FIRST_PUBLISHING_DATE,
+  WEBSITE_ROOT,
+} from '@utils/globals';
 import type { ImageMetadata } from 'astro';
 import { matchImageFromGlobImport } from '@utils/images/images';
 import Tag from '@components/Tag/Tag.astro';
@@ -11,8 +15,11 @@ import MarkdownContent from '@layouts/MarkdownContent/MarkdownContent.astro';
 import type { Image as BannerImage } from '@db/features/images/images.model';
 import { serverLogger } from '@utils/logs/logger';
 import { ImagesService } from '@db/features/images/images.service';
-import { postsService } from '../../../db/features/posts/posts.service';
+import { postsService } from '@db/features/posts/posts.service';
 import DuckyCodingLogo from '@assets/images/DuckyCoding_logo.png';
+import { TopicThing, TagThing } from '@utils/jsonld/thing';
+import { BlogBlog } from '@utils/jsonld/blog';
+import { AuthorPerson } from '@utils/jsonld/person';
 
 // 1. Generate a new path for every collection entry
 export async function getStaticPaths() {
@@ -58,6 +65,55 @@ const bannerImageFromDb = imageToFindPath
   ? await ImagesService.getImageByPath(imageToFindPath)
   : undefined;
 const pageUrl = Astro.url.href;
+
+// Create comprehensive JSON-LD structured data for the blog post
+const blogPostJsonLd = {
+  item: {
+    '@context': 'https://schema.org',
+    '@type': 'BlogPosting',
+    headline: entry.data.title,
+    description: entry.data.summary,
+    articleBody: entry.data.content,
+    url: pageUrl,
+    mainEntityOfPage: {
+      '@type': 'WebPage',
+      '@id': pageUrl,
+    },
+    author: AuthorPerson(entry.data.author, WEBSITE_ROOT),
+    publisher: AuthorPerson(entry.data.author, WEBSITE_ROOT),
+    maintainer: AuthorPerson(entry.data.author, WEBSITE_ROOT),
+    datePublished: new Date(
+      postFromDb?.createdAt || WEBSITE_FIRST_PUBLISHING_DATE,
+    ).toISOString(),
+    dateModified: new Date(
+      postFromDb?.updatedAt ||
+        postFromDb?.createdAt ||
+        WEBSITE_FIRST_PUBLISHING_DATE,
+    ).toISOString(),
+    ...(processedImage && {
+      image: {
+        '@type': 'ImageObject',
+        url: new URL(processedImage.src, WEBSITE_ROOT).href,
+        width: processedImage.width,
+        height: processedImage.height,
+        alt:
+          bannerImageFromDb?.alt ||
+          `Post banner cover related to "${entry.data.topicTitle}"`,
+      },
+    }),
+    keywords: entry.data.tags.join(', '),
+    articleSection: entry.data.topicTitle,
+    inLanguage: entry.data.language || 'en',
+    wordCount: entry.data.content.split(' ').length,
+    about: TopicThing(entry.data.topicTitle),
+    mentions: entry.data.tags.map((tag) => TagThing(tag)),
+    isPartOf: BlogBlog,
+    potentialAction: {
+      '@type': 'ReadAction',
+      target: pageUrl,
+    },
+  },
+};
 ---
 
 <HolyGrailLayout
@@ -69,7 +125,8 @@ const pageUrl = Astro.url.href;
         title: entry.data.title,
         type: 'article',
         url: pageUrl,
-        image: processedImage?.src || DuckyCodingLogo.src,
+        image: new URL(processedImage?.src || DuckyCodingLogo.src, WEBSITE_ROOT)
+          .href,
       },
       optional: {
         description: entry.data.summary,
@@ -81,8 +138,12 @@ const pageUrl = Astro.url.href;
         video: undefined,
       },
       image: {
-        url: processedImage?.src || DuckyCodingLogo.src,
-        secureUrl: processedImage?.src || DuckyCodingLogo.src,
+        url: new URL(processedImage?.src || DuckyCodingLogo.src, WEBSITE_ROOT)
+          .href,
+        secureUrl: new URL(
+          processedImage?.src || DuckyCodingLogo.src,
+          WEBSITE_ROOT,
+        ).href,
         height: processedImage?.height || DuckyCodingLogo.height,
         width: processedImage?.width || DuckyCodingLogo.width,
         type: `image/${processedImage?.format || DuckyCodingLogo.format}`,
@@ -110,7 +171,8 @@ const pageUrl = Astro.url.href;
       creator: '@ducky_coding',
       title: entry.data.title,
       description: entry.data.summary,
-      image: processedImage?.src || DuckyCodingLogo.src,
+      image: new URL(processedImage?.src || DuckyCodingLogo.src, WEBSITE_ROOT)
+        .href,
       imageAlt: "DuckyCoding's logo",
     },
     extend: {
@@ -122,6 +184,7 @@ const pageUrl = Astro.url.href;
       ],
     },
   }}
+  jsonLd={blogPostJsonLd}
 >
   <section
     class='from-accent-300 to-accent2-300 shadow-comic flex flex-col gap-4 border-4 bg-gradient-to-br'
