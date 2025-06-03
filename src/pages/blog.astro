@@ -9,6 +9,7 @@ import { serverLogger } from '@utils/logs/logger';
 import { postsService } from '../db/features/posts/posts.service';
 import DuckyCodingLogo from '@assets/images/DuckyCoding_logo.png';
 import { WEBSITE_FIRST_PUBLISHING_DATE, WEBSITE_ROOT } from '@utils/globals';
+import DuckIcon from '../components/Icons/DuckIcon/DuckIcon.astro';
 
 const postsCollection = (await getCollection('posts'))
   .map((entry) => ({
@@ -200,8 +201,11 @@ const pageUrl = Astro.url.href;
           <span class='block'>No content has been published yet :'(</span>
           <span class='block'>I'm working hard on it!</span>
         </h2>
-        <h3 class='text-center text-xl font-extrabold md:text-left'>
-          Check again soon! 🦆
+        <h3 class='flex items-center justify-center text-xl font-extrabold md:justify-start'>
+          Please check again soon!
+          <span>
+            <DuckIcon class='h-8' />
+          </span>
         </h3>
       </>
     )

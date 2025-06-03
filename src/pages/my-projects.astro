@@ -164,7 +164,7 @@ const pageUrl = Astro.url.href;
         title: "DuckyCoding's projects",
         type: 'website',
         url: pageUrl,
-        image: DuckyCodingLogo.src,
+        image: new URL(DuckyCodingLogo.src, WEBSITE_ROOT).href,
       },
       optional: {
         description:
@@ -177,8 +177,8 @@ const pageUrl = Astro.url.href;
         video: undefined,
       },
       image: {
-        url: DuckyCodingLogo.src,
-        secureUrl: DuckyCodingLogo.src,
+        url: new URL(DuckyCodingLogo.src, WEBSITE_ROOT).href,
+        secureUrl: new URL(DuckyCodingLogo.src, WEBSITE_ROOT).href,
         height: DuckyCodingLogo.height,
         width: DuckyCodingLogo.width,
         type: `image/${DuckyCodingLogo.format}`,
@@ -207,7 +207,7 @@ const pageUrl = Astro.url.href;
       title: "DuckyCoding's projects",
       description:
         'Explore the portfolio of DuckyCoding - showcasing various web development projects, applications, and experiments.',
-      image: DuckyCodingLogo.src,
+      image: new URL(DuckyCodingLogo.src, WEBSITE_ROOT).href,
       imageAlt: "DuckyCoding's logo",
     },
     extend: {
@@ -268,7 +268,11 @@ const pageUrl = Astro.url.href;
             target={
               project.projectUrl === thisWebsiteOrigin ? '_self' : '_blank'
             }
-            rel='noopener noreferrer'
+            rel={
+              project.projectUrl === thisWebsiteOrigin
+                ? undefined
+                : 'noopener noreferrer'
+            }
           >
             <ProjectCard
               title={project.title}

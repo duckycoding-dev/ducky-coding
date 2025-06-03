@@ -8,7 +8,9 @@ import DuckyCodingLogo from '@assets/images/DuckyCoding_logo.png';
 import { serverLogger } from '@utils/logs/logger';
 import { WEBSITE_FIRST_PUBLISHING_DATE, WEBSITE_ROOT } from '@utils/globals';
 
-const topicsWithImages = await TopicsService.getAllTopicsWithImage();
+const topicsWithImages = (await TopicsService.getAllTopicsWithImage()).filter(
+  (topic) => topic.postCount > 0,
+);
 // Process topics and match with images
 const processedTopics = (
   await Promise.all(

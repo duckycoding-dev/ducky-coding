@@ -68,7 +68,7 @@ const { class: className, ...props }: Props = Astro.props;
       >
     </li>
     {
-      import.meta.env.MODE === 'development' ? (
+      import.meta.env.DEV ? (
         <li>
           <Link
             href={'/md/test'}
