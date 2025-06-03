@@ -4,6 +4,7 @@ import { SEO } from 'astro-seo';
 import { Schema } from 'astro-seo-schema';
 import type { ComponentProps } from 'astro/types';
 import DuckyCodingLogo from '@assets/images/DuckyCoding_logo.png';
+import { WEBSITE_ROOT } from '../../utils/globals';
 
 export type BaseHeadProps = {
   seoProps?: SEOProps;
@@ -25,11 +26,17 @@ const seoPropsWithDefaults: SEOProps = {
       type: seoProps?.openGraph?.basic.type || 'website',
       url:
         seoProps?.openGraph?.basic.url || seoProps?.canonical || Astro.url.href,
-      image: seoProps?.openGraph?.basic?.image || DuckyCodingLogo.src,
+      image:
+        seoProps?.openGraph?.basic?.image ||
+        new URL(DuckyCodingLogo.src, WEBSITE_ROOT).href,
     },
     image: {
-      url: seoProps?.openGraph?.image?.url || DuckyCodingLogo.src,
-      secureUrl: seoProps?.openGraph?.image?.secureUrl || DuckyCodingLogo.src,
+      url:
+        seoProps?.openGraph?.image?.url ||
+        new URL(DuckyCodingLogo.src, WEBSITE_ROOT).href,
+      secureUrl:
+        seoProps?.openGraph?.image?.secureUrl ||
+        new URL(DuckyCodingLogo.src, WEBSITE_ROOT).href,
       height: seoProps?.openGraph?.image?.height || DuckyCodingLogo.height,
       width: seoProps?.openGraph?.image?.width || DuckyCodingLogo.width,
       type:
@@ -54,7 +61,9 @@ const seoPropsWithDefaults: SEOProps = {
     site: seoProps?.twitter?.site || '@ducky_coding',
     creator: seoProps?.twitter?.creator || '@ducky_coding',
     title: seoProps?.twitter?.title || "DuckyCoding's blog",
-    image: seoProps?.twitter?.image || DuckyCodingLogo.src,
+    image:
+      seoProps?.twitter?.image ||
+      new URL(DuckyCodingLogo.src, WEBSITE_ROOT).href,
     imageAlt: seoProps?.twitter?.imageAlt || "DuckyCoding's logo",
     description: seoProps?.twitter?.description,
   },

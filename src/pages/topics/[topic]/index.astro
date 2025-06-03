@@ -14,10 +14,13 @@ import {
 import { serverLogger } from '@utils/logs/logger';
 import { postsService } from '../../../db/features/posts/posts.service';
 import DuckyCodingLogo from '@assets/images/DuckyCoding_logo.png';
+import DuckIcon from '../../../components/Icons/DuckIcon/DuckIcon.astro';
 
 // 1. Generate a new path for every collection entry
 export async function getStaticPaths() {
-  const topicsWithImages = await TopicsService.getAllTopicsWithImage();
+  const topicsWithImages = (await TopicsService.getAllTopicsWithImage()).filter(
+    (topic) => topic.postCount ?? 0 > 0,
+  );
   // Process topics and match with images
 
   const dynamicRouteData = await Promise.all(
@@ -239,8 +242,11 @@ const pageUrl = Astro.url.href;
         <h2 class='mt-8 text-center text-2xl font-extrabold text-balance md:text-left'>
           {`There isn't any content about ${processedTopic.title} yet :'(`}
         </h2>
-        <h3 class='text-center text-xl font-extrabold md:text-left'>
-          Please check again soon!
+        <h3 class='flex items-center justify-center text-xl font-extrabold md:justify-start'>
+          Please check again soon!{' '}
+          <span>
+            <DuckIcon class='h-8' />
+          </span>
         </h3>
       </>
     )
