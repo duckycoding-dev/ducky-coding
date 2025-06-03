@@ -6,7 +6,7 @@ import type { ImageMetadata } from 'astro';
 import { matchImageFromGlobImport } from '@utils/images/images';
 import DuckyCodingLogo from '@assets/images/DuckyCoding_logo.png';
 import { serverLogger } from '@utils/logs/logger';
-import { WEBSITE_FIRST_PUBLISHING_DATE } from '@utils/globals';
+import { WEBSITE_FIRST_PUBLISHING_DATE, WEBSITE_ROOT } from '@utils/globals';
 
 const topicsWithImages = await TopicsService.getAllTopicsWithImage();
 // Process topics and match with images
@@ -62,7 +62,7 @@ const lastTopicDateAsISOString = topicsWithImages[0]?.lastPostDate
         title: "DuckyCoding's blog posts topics",
         type: 'website',
         url: pageUrl,
-        image: DuckyCodingLogo.src,
+        image: new URL(DuckyCodingLogo.src, WEBSITE_ROOT).href,
       },
       optional: {
         description:
@@ -75,8 +75,8 @@ const lastTopicDateAsISOString = topicsWithImages[0]?.lastPostDate
         video: undefined,
       },
       image: {
-        url: DuckyCodingLogo.src,
-        secureUrl: DuckyCodingLogo.src,
+        url: new URL(DuckyCodingLogo.src, WEBSITE_ROOT).href,
+        secureUrl: new URL(DuckyCodingLogo.src, WEBSITE_ROOT).href,
         height: DuckyCodingLogo.height,
         width: DuckyCodingLogo.width,
         type: `image/${DuckyCodingLogo.format}`,
@@ -97,7 +97,7 @@ const lastTopicDateAsISOString = topicsWithImages[0]?.lastPostDate
       title: "DuckyCoding's blog posts topics",
       description:
         'Explore web development topics on DuckyCoding - from JavaScript and TypeScript to React, Vue, and more. Find detailed tutorials and practical guides.',
-      image: DuckyCodingLogo.src,
+      image: new URL(DuckyCodingLogo.src, WEBSITE_ROOT).href,
       imageAlt: "DuckyCoding's logo",
     },
     extend: {

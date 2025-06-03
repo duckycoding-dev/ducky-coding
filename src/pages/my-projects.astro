@@ -12,7 +12,7 @@ import TechnologyCard from '@components/Card/TechnologyCard.astro';
 import pentaNewsLogo from '@assets/images/penta_news_logo.png';
 import leetCodeLogo from '@assets/images/topics/leetcode_logo.png';
 import DuckyCodingLogo from '@assets/images/DuckyCoding_logo.png';
-import { WEBSITE_FIRST_PUBLISHING_DATE } from '@utils/globals';
+import { WEBSITE_FIRST_PUBLISHING_DATE, WEBSITE_ROOT } from '@utils/globals';
 
 const thisWebsiteOrigin = Astro.url.origin;
 
@@ -91,7 +91,7 @@ const projects: ProjectCardProps[] = [
       'Drizzle ORM',
       'SQLite',
     ],
-    projectUrl: 'https://duckycoding.dev',
+    projectUrl: WEBSITE_ROOT,
     linkActionTitle: 'Live Site',
   },
   {

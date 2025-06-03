@@ -67,14 +67,18 @@ const { class: className, ...props }: Props = Astro.props;
         >My projects</Link
       >
     </li>
-    <li>
-      <Link
-        href={'/md/test'}
-        class={'text-3xl md:text-base text-secondary font-medium w-full'}
-      >
-        Test Markdown
-      </Link>
-    </li>
+    {
+      import.meta.env.MODE === 'development' ? (
+        <li>
+          <Link
+            href={'/md/test'}
+            class={'text-secondary w-full text-3xl font-medium md:text-base'}
+          >
+            Test Markdown
+          </Link>
+        </li>
+      ) : null
+    }
   </ul>
   <p id='scroll-tip' class='hidden text-center text-base italic md:hidden'>
     Did you know: You can swipe right to open the side menu and left to close

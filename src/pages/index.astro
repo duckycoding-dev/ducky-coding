@@ -6,6 +6,7 @@ import headshotDavide from '@assets/images/head-shot-davide.jpg';
 import {
   IMAGE_DENSITIES,
   WEBSITE_FIRST_PUBLISHING_DATE,
+  WEBSITE_ROOT,
 } from '../utils/globals';
 import Link from '../components/Link/Link.astro';
 import type { ComponentProps } from 'astro/types';
@@ -109,7 +110,7 @@ const pageUrl = Astro.url.href;
         title: "DuckyCoding's blog",
         type: 'website',
         url: pageUrl,
-        image: DuckyCodingLogo.src,
+        image: new URL(DuckyCodingLogo.src, WEBSITE_ROOT).href,
       },
       optional: {
         description:
@@ -122,8 +123,8 @@ const pageUrl = Astro.url.href;
         video: undefined,
       },
       image: {
-        url: DuckyCodingLogo.src,
-        secureUrl: DuckyCodingLogo.src,
+        url: new URL(DuckyCodingLogo.src, WEBSITE_ROOT).href,
+        secureUrl: new URL(DuckyCodingLogo.src, WEBSITE_ROOT).href,
         height: DuckyCodingLogo.height,
         width: DuckyCodingLogo.width,
         type: `image/${DuckyCodingLogo.format}`,
@@ -153,7 +154,7 @@ const pageUrl = Astro.url.href;
       title: "DuckyCoding's blog",
       description:
         "I'm Davide, aka DuckyCoding, a passionate web developer who loves crafting modern digital experiences, sharing what I learn along my path with everyone online.",
-      image: DuckyCodingLogo.src,
+      image: new URL(DuckyCodingLogo.src, WEBSITE_ROOT).href,
       imageAlt: "DuckyCoding's logo",
     },
     extend: {
