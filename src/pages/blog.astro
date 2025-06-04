@@ -34,7 +34,7 @@ const processedPostsWithImages = (
       const imageToFindPath = `${post.post.bannerImagePath}`;
       if (imageToFindPath) {
         const images = import.meta.glob<{ default: ImageMetadata }>(
-          `/src/assets/images/posts/**/*.{jpeg,jpg,png,gif,webp,svg}`,
+          `/src/assets/images/**/*.{jpeg,jpg,png,gif,webp,svg}`,
         );
         processedImage = await matchImageFromGlobImport(
           images,
@@ -225,7 +225,7 @@ const blogPageJsonLd = {
             {processedPostsWithImages.map(
               ({ post, image, tags, processedBannerImage }, i) => {
                 return (
-                  <li class={`${i === 0 ? '[grid-area:last-post]' : ''}`}>
+                  <li>
                     <PostCard
                       class='block h-full'
                       post={post}

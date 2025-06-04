@@ -14,6 +14,9 @@ export const ContentStatusSchema = z
   .default('draft');
 export type ContentStatus = z.infer<typeof ContentStatusSchema>;
 
+// This SQLite expression calculates the current Unix timestamp in milliseconds.
+const currentTimestampMillisSQL = sql`(CAST(ROUND((julianday('now') - 2440587.5) * 86400000) AS INTEGER))`;
+
 export const postsTable = sqliteTable('posts', {
   id: integer().primaryKey({ autoIncrement: true }),
   slug: text().notNull(),
@@ -30,10 +33,10 @@ export const postsTable = sqliteTable('posts', {
   status: text().$type<ContentStatus>().notNull().default('draft'), // value should be one of [draft, published, deleted] (can't yet use enums )
   createdAt: integer({ mode: 'number' })
     .notNull()
-    .default(sql`(strftime('%s', 'now'))`),
+    .default(currentTimestampMillisSQL),
   updatedAt: integer({ mode: 'number' })
     .notNull()
-    .default(sql`(strftime('%s', 'now'))`),
+    .default(currentTimestampMillisSQL),
   publishedAt: integer({ mode: 'number' }),
   deletedAt: integer({ mode: 'number' }), // need to use date type instead of integer maybe
   isFeatured: integer({ mode: 'boolean' }).notNull().default(false),

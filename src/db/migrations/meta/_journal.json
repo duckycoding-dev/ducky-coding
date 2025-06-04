@@ -5,22 +5,8 @@
     {
       "idx": 0,
       "version": "6",
-      "when": 1748207312854,
-      "tag": "0000_bent_ender_wiggin",
-      "breakpoints": true
-    },
-    {
-      "idx": 1,
-      "version": "6",
-      "when": 1748603274945,
-      "tag": "0001_round_newton_destine",
-      "breakpoints": true
-    },
-    {
-      "idx": 2,
-      "version": "6",
-      "when": 1748631173603,
-      "tag": "0002_sharp_earthquake",
+      "when": 1749025656245,
+      "tag": "0000_wandering_thaddeus_ross",
       "breakpoints": true
     }
   ]

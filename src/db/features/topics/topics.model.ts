@@ -7,6 +7,10 @@ import {
   createUpdateSchema,
 } from 'drizzle-zod';
 import { z } from 'zod';
+import { sql } from 'drizzle-orm';
+
+// This SQLite expression calculates the current Unix timestamp in milliseconds.
+const currentTimestampMillisSQL = sql`(CAST(ROUND((julianday('now') - 2440587.5) * 86400000) AS INTEGER))`;
 
 export const topicsTable = sqliteTable('topics', {
   title: text()
@@ -21,11 +25,11 @@ export const topicsTable = sqliteTable('topics', {
   backgroundGradient: text(), // Tailwind gradient classes
   externalLink: text(),
   // Analytics fields
-  postCount: integer().default(0),
+  postCount: integer().notNull().default(0),
   lastPostDate: integer(), // Timestamp of last post in this topic
   // Timestamps
-  createdAt: integer().default(Date.now()),
-  updatedAt: integer().default(Date.now()),
+  createdAt: integer().notNull().default(currentTimestampMillisSQL),
+  updatedAt: integer().notNull().default(currentTimestampMillisSQL),
 });
 
 export const topicSchema = createSelectSchema(topicsTable);

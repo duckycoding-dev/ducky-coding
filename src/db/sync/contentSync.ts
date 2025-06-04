@@ -201,7 +201,24 @@ export async function syncContentToDatabase(): Promise<
           if (someDataChanged) {
             await db
               .update(postsTable)
-              .set({ ...postContentData, updatedAt: Date.now() })
+              .set({
+                ...postContentData,
+                createdAt: existingPost.createdAt,
+                deletedAt:
+                  postContentData.status === 'deleted' &&
+                  existingPost.status !== 'deleted' &&
+                  !existingPost.deletedAt
+                    ? Date.now()
+                    : null,
+                publishedAt:
+                  postContentData.status === 'published' &&
+                  existingPost.status !== 'published' &&
+                  !existingPost.publishedAt
+                    ? Date.now()
+                    : existingPost.publishedAt,
+                // Always update updatedAt
+                updatedAt: Date.now(),
+              })
               .where(eq(postsTable.id, existingPost.id));
             dbPost = { ...existingPost, ...postContentData };
           }
@@ -212,6 +229,10 @@ export async function syncContentToDatabase(): Promise<
             .insert(postsTable)
             .values({
               ...postContentData,
+              createdAt: Date.now(),
+              updatedAt: Date.now(),
+              publishedAt:
+                postContentData.status === 'published' ? Date.now() : null,
               content: post.body ?? '', // Store full content for search
             })
             .returning();

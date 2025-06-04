@@ -45,17 +45,23 @@ export async function getStaticPaths() {
 }
 // 2. For your template, you can get the entry directly from the prop
 const { entry, bannerImage } = Astro.props;
+console.log('bannerImage:', bannerImage);
 
 let processedImage: ImageMetadata | undefined;
 const imageToFindPath = bannerImage?.path;
 if (imageToFindPath) {
   const images = import.meta.glob<{ default: ImageMetadata }>(
-    `/src/assets/images/posts/**/*.{jpeg,jpg,png,gif,webp,svg}`,
+    `/src/assets/images/**/*.{jpeg,jpg,png,gif,webp,svg}`,
   );
   processedImage = await matchImageFromGlobImport(
     images,
     imageToFindPath,
     serverLogger,
+  );
+  console.log(
+    `Processed image for post "${entry.data.title}": ${JSON.stringify(
+      processedImage,
+    )}`,
   );
 }
 
@@ -182,10 +188,10 @@ const blogPostJsonLd = {
   jsonLd={blogPostJsonLd}
 >
   <section
-    class='from-accent-300 to-accent2-300 shadow-comic flex flex-col gap-4 border-4 bg-gradient-to-br'
+    class='from-accent-300 to-accent2-300 shadow-comic border-4 bg-gradient-to-br'
   >
     <div
-      class=`grid ${bannerImage ? 'md:grid-cols-[1fr_minmax(max-content,250px)]' : ''} items-center`
+      class=`grid ${bannerImage ? 'md:grid-cols-[auto_1fr]' : ''} items-center`
     >
       {
         bannerImage && processedImage ? (
@@ -198,7 +204,7 @@ const blogPostJsonLd = {
             title={entry.data.topicTitle}
             loading={'eager'}
             decoding={'async'}
-            class='border-accent self-stretch object-cover p-4'
+            class='border-accent min-w-fit justify-self-center object-cover py-4 pr-4 pl-8'
             densities={IMAGE_DENSITIES}
           />
         ) : null
