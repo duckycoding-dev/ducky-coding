@@ -74,7 +74,7 @@ export const GET: APIRoute = async (context) => {
       description: post.summary,
       // Compute RSS link from post `id`
       // This example assumes all posts are rendered as `/posts/[id]` routes
-      link: `/posts/${post.id}/`,
+      link: `/posts/${post.slug}/`,
       content: sanitizeHtml(parser.render(post.content), {
         allowedTags: sanitizeHtml.defaults.allowedTags.concat(['img']),
       }),
