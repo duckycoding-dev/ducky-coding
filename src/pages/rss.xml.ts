@@ -51,7 +51,9 @@ export const GET: APIRoute = async (context) => {
       'Web development blog featuring tutorials, guides, and insights about modern web technologies, brought to you by DuckyCoding.',
     // Pull in your project "site" from the endpoint context
     // https://docs.astro.build/en/reference/api-reference/#site
-    site: context.site ?? 'https://duckycoding.dev',
+    site: context.site
+      ? `${context.site}/blog`
+      : 'https://duckycoding.dev/blog',
     // Array of `<item>`s in output xml
     // See "Generating items" section for examples using content collections and glob imports
     items: processedPostsWithImages.map((post) => ({
