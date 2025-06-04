@@ -1,0 +1,18 @@
+---
+import type { HTMLAttributes } from 'astro/types';
+import { cn } from '../../utils/cn';
+
+interface Props extends HTMLAttributes<'div'> {}
+
+const { class: className, ...props }: Props = Astro.props;
+---
+
+<div
+  class={cn(
+    'meme-image-container bg-primary-100 border-secondary shadow-comic-lg mx-auto max-w-4xl border-2 p-3 md:border-4 md:p-4',
+    className,
+  )}
+  {...props}
+>
+  <slot />
+</div>

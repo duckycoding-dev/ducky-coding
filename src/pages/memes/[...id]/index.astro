@@ -1,0 +1,150 @@
+---
+import { getCollection } from 'astro:content';
+import HolyGrailLayout from '@layouts/HolyGrailLayout/HolyGrailLayout.astro';
+import { Image } from 'astro:assets';
+import { matchImageFromGlobImport } from '../../../utils/images/images';
+import { IMAGE_DENSITIES } from '@utils/globals';
+import Link from '@components/Link/Link.astro';
+import MemeContainer from '@components/Memes/MemeContainer.astro';
+import MemeInfo from '@components/Memes/MemeInfo.astro';
+import MemeExternalLinks from '@components/Memes/MemeExternalLinks.astro';
+
+const memesImages = import.meta.glob<{ default: ImageMetadata }>(
+  `/src/assets/images/memes/**/*.{jpeg,jpg,png,gif,webp,svg}`,
+);
+
+export async function getStaticPaths() {
+  const memesSortedByCreationDate = (await getCollection('memes')).toSorted(
+    (a, b) => a.data.createdAt - b.data.createdAt,
+  );
+  return memesSortedByCreationDate.map((entry, index) => {
+    // Determine prev/next based on the sorted list
+    // Sort here again or ensure consistent sort order with above
+
+    const prevMeme = index > 0 ? memesSortedByCreationDate[index - 1] : null;
+    const nextMeme =
+      index < memesSortedByCreationDate.length - 1
+        ? memesSortedByCreationDate[index + 1]
+        : null;
+
+    return {
+      params: { id: entry.id },
+      props: {
+        entry,
+        prevPost: prevMeme
+          ? {
+              slug: `/memes/${prevMeme.id}/`,
+              title: prevMeme.data.title,
+              imagePath: prevMeme.data.imagePath,
+            }
+          : null,
+        nextPost: nextMeme
+          ? {
+              slug: `/memes/${nextMeme.id}/`,
+              title: nextMeme.data.title,
+              imagePath: nextMeme.data.imagePath,
+            }
+          : null,
+      },
+    };
+  });
+}
+
+const { entry, prevPost, nextPost } = Astro.props;
+const {
+  title,
+  imagePath,
+  imageAlt,
+  description,
+  createdAt,
+  externalLinks,
+  tags,
+  author,
+} = entry.data;
+
+const processedImage = await matchImageFromGlobImport(memesImages, imagePath);
+const processedPrevPostImage = prevPost
+  ? await matchImageFromGlobImport(memesImages, prevPost.imagePath)
+  : null;
+const processedNextPostImage = nextPost
+  ? await matchImageFromGlobImport(memesImages, nextPost.imagePath)
+  : null;
+---
+
+<HolyGrailLayout>
+  <h1
+    class='text-secondary border-accent mb-8 border-b-5 pb-3 text-center text-3xl font-extrabold md:text-4xl lg:text-5xl'
+  >
+    {title}
+  </h1>
+
+  {
+    processedImage ? (
+      <MemeContainer class='mb-6'>
+        <Image
+          src={processedImage}
+          alt={imageAlt}
+          densities={IMAGE_DENSITIES}
+          class='block h-auto max-h-[70vh] w-full object-contain'
+        />
+      </MemeContainer>
+    ) : null
+  }
+  <MemeInfo createdAt={createdAt} tags={tags} author={author} />
+  {
+    description && (
+      <article class='text-md text-secondary bg-primary-200 border-secondary shadow-comic mx-auto mb-6 max-w-4xl border-2 p-4 md:text-lg'>
+        {description}
+      </article>
+    )
+  }
+  {
+    externalLinks ? (
+      <MemeExternalLinks links={externalLinks} class='mb-6' />
+    ) : null
+  }
+  <nav
+    class='mx-auto flex max-w-3xl flex-col justify-between gap-4 sm:flex-row'
+  >
+    {
+      prevPost ? (
+        <Link
+          variant='contained'
+          href={prevPost.slug}
+          class='text-secondary bg-accent hover:bg-accent-700 flex flex-1 items-center justify-center gap-4 text-center text-xl font-bold md:text-2xl'
+        >
+          {processedPrevPostImage ? (
+            <Image
+              src={processedPrevPostImage}
+              alt={`Preview of ${prevPost.title}`}
+              densities={IMAGE_DENSITIES}
+              width={50}
+              class='border-secondary border-comic block aspect-square h-auto rounded object-cover'
+            />
+          ) : null}
+          &larr; Previous meme
+        </Link>
+      ) : null
+    }
+    {
+      nextPost ? (
+        <Link
+          variant={'contained'}
+          href={nextPost.slug}
+          class='text-secondary bg-accent2 hover:bg-accent2-700 active:bg-accent2-700 focus:bg-accent2-700 flex flex-1 items-center justify-center gap-4 text-center text-xl font-bold md:text-2xl'
+        >
+          Next meme &rarr;
+          {processedNextPostImage ? (
+            <Image
+              src={processedNextPostImage}
+              alt={`Preview of ${nextPost.title}`}
+              densities={IMAGE_DENSITIES}
+              width={50}
+              class='border-secondary border-comic block aspect-square h-auto rounded object-cover'
+            />
+          ) : null}
+        </Link>
+      ) : null
+    }
+  </nav>
+</HolyGrailLayout>

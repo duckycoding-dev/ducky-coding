@@ -1,0 +1,50 @@
+---
+import type { HTMLAttributes } from 'astro/types';
+import type { MemeContent } from '@custom-types/entities/memeContent.entity';
+import { cn } from '@utils/cn';
+import Tag from '../Tag/Tag.astro';
+import PersonIcon from '@components/Icons/PersonIcon.astro';
+import CalendarIcon from '@components/Icons/CalendarIcon.astro';
+
+type Props = Pick<MemeContent, 'author' | 'createdAt' | 'tags'> &
+  HTMLAttributes<'header'>;
+
+const { author, createdAt, tags, class: className, ...props } = Astro.props;
+---
+
+<header class={cn('mx-auto max-w-4xl', className)} {...props}>
+  <section class='mb-4 flex flex-wrap justify-around gap-2 text-sm md:text-lg'>
+    <Tag
+      id={'created-by'}
+      class='from-accent to-accent2 flex items-center gap-2 rounded-none bg-gradient-to-br'
+      title={'Created by'}
+      ><PersonIcon size={24} title='Created by' aria-labelledby='created-by' />
+      <span class='font-black'
+        >{author.toLowerCase() === 'duckycoding' ? 'DuckyCoding (me)' : author}
+      </span>
+    </Tag>
+    <Tag
+      id={'creation-date'}
+      title='Creation date'
+      class='from-accent2 to-accent flex items-center gap-2 rounded-none bg-gradient-to-br'
+      ><CalendarIcon
+        size={24}
+        aria-labelledby='creation-date'
+        title='Creation date'
+      /><span class='font-black'
+        >{new Date(createdAt).toLocaleDateString()}</span
+      ></Tag
+    >
+  </section>
+  {
+    tags?.length ? (
+      <section class='mb-4 flex flex-wrap items-center justify-center gap-2 px-4 text-sm md:gap-4 md:text-lg'>
+        {tags.map((tag) => {
+          return (
+            <Tag class='odd:bg-accent even:bg-accent2 inline-block'>{tag}</Tag>
+          );
+        })}
+      </section>
+    ) : null
+  }
+</header>
