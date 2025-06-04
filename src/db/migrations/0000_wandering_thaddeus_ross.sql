@@ -23,10 +23,11 @@ CREATE TABLE `posts` (
 	`language` text DEFAULT 'en' NOT NULL,
 	`time_to_read` integer DEFAULT 1 NOT NULL,
 	`status` text DEFAULT 'draft' NOT NULL,
-	`created_at` integer DEFAULT (strftime('%s', 'now')) NOT NULL,
-	`updated_at` integer DEFAULT (strftime('%s', 'now')) NOT NULL,
+	`created_at` integer DEFAULT (CAST(ROUND((julianday('now') - 2440587.5) * 86400000) AS INTEGER)) NOT NULL,
+	`updated_at` integer DEFAULT (CAST(ROUND((julianday('now') - 2440587.5) * 86400000) AS INTEGER)) NOT NULL,
 	`published_at` integer,
 	`deleted_at` integer,
+	`is_featured` integer DEFAULT false NOT NULL,
 	FOREIGN KEY (`banner_image_path`) REFERENCES `images`(`path`) ON UPDATE no action ON DELETE no action,
 	FOREIGN KEY (`topic_title`) REFERENCES `topics`(`title`) ON UPDATE no action ON DELETE no action
 );
@@ -40,6 +41,13 @@ CREATE TABLE `topics` (
 	`title` text PRIMARY KEY NOT NULL,
 	`slug` text NOT NULL,
 	`image_path` text,
+	`description` text,
+	`background_gradient` text,
+	`external_link` text,
+	`post_count` integer DEFAULT 0 NOT NULL,
+	`last_post_date` integer,
+	`created_at` integer DEFAULT (CAST(ROUND((julianday('now') - 2440587.5) * 86400000) AS INTEGER)) NOT NULL,
+	`updated_at` integer DEFAULT (CAST(ROUND((julianday('now') - 2440587.5) * 86400000) AS INTEGER)) NOT NULL,
 	FOREIGN KEY (`title`) REFERENCES `tags`(`name`) ON UPDATE no action ON DELETE no action,
 	FOREIGN KEY (`image_path`) REFERENCES `images`(`path`) ON UPDATE no action ON DELETE no action
 );

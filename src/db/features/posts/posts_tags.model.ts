@@ -18,7 +18,7 @@ export const postsTagsTable = sqliteTable(
   {
     postId: integer()
       .notNull()
-      .references(() => postsTable.id),
+      .references(() => postsTable.id, { onDelete: 'cascade' }),
     tagName: text()
       .notNull()
       .references(() => tagsTable.name),
