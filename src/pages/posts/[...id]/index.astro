@@ -45,23 +45,17 @@ export async function getStaticPaths() {
 }
 // 2. For your template, you can get the entry directly from the prop
 const { entry, bannerImage } = Astro.props;
-console.log('bannerImage:', bannerImage);
 
 let processedImage: ImageMetadata | undefined;
 const imageToFindPath = bannerImage?.path;
+const images = import.meta.glob<{ default: ImageMetadata }>(
+  `/src/assets/images/**/*.{jpeg,jpg,png,gif,webp,svg}`,
+);
 if (imageToFindPath) {
-  const images = import.meta.glob<{ default: ImageMetadata }>(
-    `/src/assets/images/**/*.{jpeg,jpg,png,gif,webp,svg}`,
-  );
   processedImage = await matchImageFromGlobImport(
     images,
     imageToFindPath,
     serverLogger,
-  );
-  console.log(
-    `Processed image for post "${entry.data.title}": ${JSON.stringify(
-      processedImage,
-    )}`,
   );
 }
 
