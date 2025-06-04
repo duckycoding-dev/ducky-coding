@@ -23,17 +23,16 @@ export async function getStaticPaths() {
     (topic) => topic.postCount ?? 0 > 0,
   );
   // Process topics and match with images
-
+  const topicsImages = import.meta.glob<{ default: ImageMetadata }>(
+    `/src/assets/images/topics/**/*.{jpeg,jpg,png,gif,webp,svg}`,
+  );
   const dynamicRouteData = await Promise.all(
     topicsWithImages.map(async (topic) => {
       let processedImage: ImageMetadata | undefined;
       const imageToFindPath = topic.image?.path;
       if (imageToFindPath) {
-        const images = import.meta.glob<{ default: ImageMetadata }>(
-          `/src/assets/images/topics/**/*.{jpeg,jpg,png,gif,webp,svg}`,
-        );
         processedImage = await matchImageFromGlobImport(
-          images,
+          topicsImages,
           imageToFindPath,
         );
       }
@@ -69,17 +68,17 @@ const postsWithBannerImage = (
   (postWithBannerImage) => postWithBannerImage.post.status === 'published',
 );
 
+const postsImages = import.meta.glob<{ default: ImageMetadata }>(
+  `/src/assets/images/posts/**/*.{jpeg,jpg,png,gif,webp,svg}`,
+);
 const processedPostsWithImages = (
   await Promise.all(
     postsWithBannerImage.map(async (post) => {
       let processedImage: ImageMetadata | undefined;
       const imageToFindPath = `${post.post.bannerImagePath}`;
       if (imageToFindPath) {
-        const images = import.meta.glob<{ default: ImageMetadata }>(
-          `/src/assets/images/posts/**/*.{jpeg,jpg,png,gif,webp,svg}`,
-        );
         processedImage = await matchImageFromGlobImport(
-          images,
+          postsImages,
           imageToFindPath,
           serverLogger,
         );

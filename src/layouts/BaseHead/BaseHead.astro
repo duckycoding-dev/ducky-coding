@@ -84,6 +84,12 @@ const seoPropsWithDefaults: SEOProps = {
 
 <meta charset='utf-8' />
 <link
+  rel='alternate'
+  type='application/rss+xml'
+  title='DuckyCoding'
+  href={new URL('rss.xml', Astro.site)}
+/>
+<link
   rel='apple-touch-icon'
   sizes='180x180'
   href='/images/apple-touch-icon.png'

@@ -12,15 +12,15 @@ const topicsWithImages = (await TopicsService.getAllTopicsWithImage()).filter(
   (topic) => topic.postCount ?? 0 > 0,
 );
 // Process topics and match with images
+const images = import.meta.glob<{ default: ImageMetadata }>(
+  `/src/assets/images/topics/**/*.{jpeg,jpg,png,gif,webp,svg}`,
+);
 const processedTopics = (
   await Promise.all(
     topicsWithImages.map(async (topic) => {
       let processedImage: ImageMetadata | undefined;
       const imageToFindPath = topic.image?.path;
       if (imageToFindPath) {
-        const images = import.meta.glob<{ default: ImageMetadata }>(
-          `/src/assets/images/topics/**/*.{jpeg,jpg,png,gif,webp,svg}`,
-        );
         processedImage = await matchImageFromGlobImport(
           images,
           imageToFindPath,
