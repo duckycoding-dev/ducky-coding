@@ -17,7 +17,7 @@ const topics = defineCollection({
 });
 
 const memes = defineCollection({
-  loader: glob({ pattern: '**/*.json', base: './src/content/memes' }),
+  loader: glob({ pattern: '**/*.{md,mdx}', base: './src/content/memes' }),
   schema: MemeContentSchema,
 });
 

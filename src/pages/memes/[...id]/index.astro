@@ -8,6 +8,7 @@ import Link from '@components/Link/Link.astro';
 import MemeContainer from '@components/Memes/MemeContainer.astro';
 import MemeInfo from '@components/Memes/MemeInfo.astro';
 import MemeExternalLinks from '@components/Memes/MemeExternalLinks.astro';
+import MarkdownContent from '../../../layouts/MarkdownContent/MarkdownContent.astro';
 
 const memesImages = import.meta.glob<{ default: ImageMetadata }>(
   `/src/assets/images/memes/**/*.{jpeg,jpg,png,gif,webp,svg}`,
@@ -51,16 +52,8 @@ export async function getStaticPaths() {
 }
 
 const { entry, prevPost, nextPost } = Astro.props;
-const {
-  title,
-  imagePath,
-  imageAlt,
-  description,
-  createdAt,
-  externalLinks,
-  tags,
-  author,
-} = entry.data;
+const { title, imagePath, imageAlt, createdAt, externalLinks, tags, author } =
+  entry.data;
 
 const processedImage = await matchImageFromGlobImport(memesImages, imagePath);
 const processedPrevPostImage = prevPost
@@ -92,9 +85,9 @@ const processedNextPostImage = nextPost
   }
   <MemeInfo createdAt={createdAt} tags={tags} author={author} />
   {
-    description && (
+    entry && (
       <article class='text-md text-secondary bg-primary-200 border-secondary shadow-comic mx-auto mb-6 max-w-4xl border-2 p-4 md:text-lg'>
-        {description}
+        <MarkdownContent entry={entry} />
       </article>
     )
   }

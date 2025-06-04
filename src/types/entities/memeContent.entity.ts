@@ -5,7 +5,6 @@ export const MemeContentSchema = z.object({
   author: z.string().min(1), // Author of the meme
   imagePath: z.string(), // Path to the image file in src/assets/images (ex: 'memes/my-meme.jpg')
   imageAlt: z.string().min(1), // Alt text for the image
-  description: z.string().min(1),
   createdAt: z.number().default(Date.now), // Unix timestamp
   tags: z.array(z.string()).optional(),
   externalLinks: z
