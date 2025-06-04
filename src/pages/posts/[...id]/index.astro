@@ -190,9 +190,7 @@ const blogPostJsonLd = {
   <section
     class='from-accent-300 to-accent2-300 shadow-comic border-4 bg-gradient-to-br'
   >
-    <div
-      class=`grid ${bannerImage ? 'md:grid-cols-[auto_1fr]' : ''} items-center`
-    >
+    <div class=`grid items-center`>
       {
         bannerImage && processedImage ? (
           <Image
@@ -204,7 +202,7 @@ const blogPostJsonLd = {
             title={entry.data.topicTitle}
             loading={'eager'}
             decoding={'async'}
-            class='border-accent min-w-fit justify-self-center object-cover py-4 pr-4 pl-8'
+            class='border-accent aspect-[16/9] justify-self-center object-cover px-4 py-4'
             densities={IMAGE_DENSITIES}
           />
         ) : null
@@ -213,18 +211,16 @@ const blogPostJsonLd = {
         class='flex flex-col justify-center gap-2 self-stretch justify-self-center px-8 pt-0 pb-4 md:pt-4'
       >
         <h1
-          class='decoration-accent text-center text-4xl font-extrabold underline underline-offset-4'
+          class='decoration-accent text-center text-4xl font-extrabold wrap-anywhere underline underline-offset-4'
         >
           {entry.data.title}
         </h1>
         <p class='text-center text-lg font-semibold'>
-          <span
-            >Written by: {
-              entry.data.author.toLowerCase() === 'duckycoding'
-                ? 'DuckyCoding (me)'
-                : entry.data.author
-            }</span
-          >
+          Written by: {
+            entry.data.author.toLowerCase() === 'duckycoding'
+              ? 'DuckyCoding (me)'
+              : entry.data.author
+          }
         </p>
         <div>
           <p class='text-center text-base italic'>
@@ -242,19 +238,31 @@ const blogPostJsonLd = {
         {
           entry.data.tags.length > 0 ? (
             <div class='flex flex-wrap justify-center gap-2'>
-              {entry.data.tags.map((tag, index) => (
-                <Link
-                  variant='contained'
-                  href={`/topics/${tag.toLowerCase()}`}
-                  class='border-secondary rounded-full border-none p-0'
-                >
-                  <Tag
-                    class={`${index % 2 === 0 ? 'bg-accent2' : 'bg-accent'}`}
-                  >
-                    {tag}
-                  </Tag>
-                </Link>
-              ))}
+              {entry.data.tags.map((tag, index) => {
+                if (tag.toLowerCase() === entry.data.topicTitle.toLowerCase()) {
+                  return (
+                    <Link
+                      variant='contained'
+                      href={`/topics/${tag.toLowerCase()}`}
+                      class='border-secondary rounded-full border-none p-0'
+                    >
+                      <Tag
+                        class={`${index % 2 === 0 ? 'bg-accent2' : 'bg-accent'}`}
+                      >
+                        {tag}
+                      </Tag>
+                    </Link>
+                  );
+                } else {
+                  return (
+                    <Tag
+                      class={`${index % 2 === 0 ? 'bg-accent2' : 'bg-accent'}`}
+                    >
+                      {tag}
+                    </Tag>
+                  );
+                }
+              })}
             </div>
           ) : null
         }
