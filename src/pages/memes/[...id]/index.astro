@@ -11,6 +11,7 @@ import MemeInfo from '@components/Memes/MemeInfo.astro';
 import MemeExternalLinks from '@components/Memes/MemeExternalLinks.astro';
 import MarkdownContent from '@layouts/MarkdownContent/MarkdownContent.astro';
 import DuckyCodingLogo from '@assets/images/DuckyCoding_logo.png';
+import { MemeJsonLd } from '@utils/jsonld/meme';
 
 const memesImages = import.meta.glob<{ default: ImageMetadata }>(
   `/src/assets/images/memes/**/*.{jpeg,jpg,png,gif,webp,svg}`,
@@ -80,6 +81,21 @@ if (nextPost) {
 }
 
 const pageUrl = Astro.url.href;
+
+// Create JSON-LD structured data for the meme
+const memeJsonLd = {
+  item: MemeJsonLd({
+    title,
+    author,
+    imageUrl: new URL((processedImage || DuckyCodingLogo).src, WEBSITE_ROOT)
+      .href,
+    imageAlt: imageAlt || "DuckyCoding's logo",
+    createdAt,
+    tags,
+    description: `Check out this meme titled "${title}", created by ${author}${author.toLowerCase() !== 'duckycoding' ? ' and brought to you by DuckyCoding' : ''}.`,
+    pageUrl,
+  }),
+};
 ---
 
 <HolyGrailLayout
@@ -145,6 +161,7 @@ const pageUrl = Astro.url.href;
       link: prevAndPostMetaLinks,
     },
   }}
+  jsonLd={memeJsonLd}
 >
   <h1
     class='text-secondary border-accent mb-8 border-b-5 pb-3 text-center text-3xl font-extrabold md:text-4xl lg:text-5xl'
