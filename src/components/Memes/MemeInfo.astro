@@ -31,8 +31,10 @@ const { author, createdAt, tags, class: className, ...props } = Astro.props;
         size={24}
         aria-labelledby='creation-date'
         title='Creation date'
-      /><span class='font-black'
-        >{new Date(createdAt).toLocaleDateString()}</span
+      /><time
+        class='font-black'
+        datetime={`${new Date(createdAt).getFullYear()}-${new Date(createdAt).getMonth() + 1}-${new Date(createdAt).getDate()}`}
+        >{new Date(createdAt).toLocaleDateString()}</time
       ></Tag
     >
   </section>
