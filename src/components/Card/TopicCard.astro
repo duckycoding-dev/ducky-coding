@@ -77,7 +77,8 @@ const {
             class={`${backgroundGradient} aspect-square w-full object-contain`}
             width={200}
             height={200}
-            densities={IMAGE_DENSITIES}
+            widths={getImageWidths(meme.processedImage.width)}
+            sizes={IMAGE_COMMON_SIZES}
           />
         ) : (
           <Image
@@ -86,7 +87,8 @@ const {
             loading={loading}
             decoding={decoding}
             class={`${backgroundGradient} aspect-square w-full object-contain`}
-            densities={IMAGE_DENSITIES}
+            widths={getImageWidths(meme.processedImage.width)}
+            sizes={IMAGE_COMMON_SIZES}
           />
         ))
     }

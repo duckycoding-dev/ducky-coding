@@ -27,7 +27,7 @@ const { class: className, ...props }: Props = Astro.props;
       title={'DuckyCoding'}
       src={DuckyCodingLogo}
       width={50}
-      densities={[1.5, 2]}
+      densities={[1, 1.5, 2]}
       class='max-w-none'
     />
     <h2 class='text-secondary text-3xl md:hidden lg:block'>DuckyCoding</h2>
@@ -56,6 +56,15 @@ const { class: className, ...props }: Props = Astro.props;
         variant={'default'}
         class={'text-3xl md:text-base text-secondary font-medium w-full'}
         >Topics</Link
+      >
+    </li>
+    <li>
+      <Link
+        href={'/memes'}
+        size={'medium'}
+        variant={'default'}
+        class={'text-3xl md:text-base text-secondary font-medium w-full'}
+        >Memes</Link
       >
     </li>
     <li>

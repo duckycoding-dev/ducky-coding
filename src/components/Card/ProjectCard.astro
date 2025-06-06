@@ -3,10 +3,11 @@ import { Image } from 'astro:assets';
 import type { ImageMetadata } from 'astro';
 import type { HTMLAttributes } from 'astro/types';
 import { cn } from '@utils/cn';
-import { IMAGE_DENSITIES } from '@utils/globals';
+import { IMAGE_COMMON_SIZES } from '@utils/globals';
 import Card from '@components/Card/Card.astro';
 import Tag from '@components/Tag/Tag.astro';
 import DuckyCodingLogo from '@assets/images/DuckyCoding_logo.png';
+import { getImageWidths } from '../../utils/images/images';
 
 export interface ProjectCardProps extends HTMLAttributes<'div'> {
   title: string;
@@ -50,10 +51,11 @@ const {
       (
         <Image
           src={bannerImage ?? DuckyCodingLogo}
-          width={Math.floor((bannerImage ?? DuckyCodingLogo).width / 3)}
-          height={Math.floor((bannerImage ?? DuckyCodingLogo).height / 3)}
+          width={(bannerImage ?? DuckyCodingLogo).width}
+          height={(bannerImage ?? DuckyCodingLogo).height}
           alt={imageAlt ?? `${title} project banner`}
-          densities={IMAGE_DENSITIES}
+          widths={getImageWidths((bannerImage ?? DuckyCodingLogo).width)}
+          sizes={IMAGE_COMMON_SIZES}
           loading={loading}
           decoding={'async'}
           class='h-full w-full object-cover transition-transform duration-300 group-hover:scale-105'

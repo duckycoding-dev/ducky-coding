@@ -4,7 +4,7 @@ import Card from '@components/Card/Card.astro';
 import { Image } from 'astro:assets';
 import headshotDavide from '@assets/images/head-shot-davide.jpg';
 import {
-  IMAGE_DENSITIES,
+  IMAGE_COMMON_SIZES,
   WEBSITE_FIRST_PUBLISHING_DATE,
   WEBSITE_ROOT,
 } from '../utils/globals';
@@ -16,6 +16,7 @@ import FunfactCard from '../components/Card/FunfactCard.astro';
 import DuckyCodingLogo from '@assets/images/DuckyCoding_logo.png';
 import { DuckyCodingPerson } from '@utils/jsonld/person';
 import { DuckyCodingWebsite } from '@utils/jsonld/website';
+import { getImageWidths } from '../utils/images/images';
 
 const timelineObjects: ComponentProps<typeof TimelineCard>[] = [
   {
@@ -209,7 +210,8 @@ const homepageJsonLd = {
       <div class='aspect-square md:h-80 lg:h-96'>
         <Card class='flex h-full w-full items-baseline md:items-baseline'>
           <Image
-            densities={IMAGE_DENSITIES}
+            widths={getImageWidths(headshotDavide.width)}
+            sizes={IMAGE_COMMON_SIZES}
             loading={'eager'}
             decoding={'async'}
             title={'Davide - DuckyCoding'}

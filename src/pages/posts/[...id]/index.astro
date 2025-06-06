@@ -3,12 +3,12 @@ import { getCollection } from 'astro:content';
 import HolyGrailLayout from '@layouts/HolyGrailLayout/HolyGrailLayout.astro';
 import { Image } from 'astro:assets';
 import {
-  IMAGE_DENSITIES,
+  IMAGE_COMMON_SIZES,
   WEBSITE_FIRST_PUBLISHING_DATE,
   WEBSITE_ROOT,
 } from '@utils/globals';
 import type { ImageMetadata } from 'astro';
-import { matchImageFromGlobImport } from '@utils/images/images';
+import { getImageWidths, matchImageFromGlobImport } from '@utils/images/images';
 import Tag from '@components/Tag/Tag.astro';
 import Link from '@components/Link/Link.astro';
 import MarkdownContent from '@layouts/MarkdownContent/MarkdownContent.astro';
@@ -197,7 +197,8 @@ const blogPostJsonLd = {
             loading={'eager'}
             decoding={'async'}
             class='border-accent aspect-[16/9] justify-self-center object-cover px-4 py-4'
-            densities={IMAGE_DENSITIES}
+            widths={getImageWidths(processedImage.width)}
+            sizes={IMAGE_COMMON_SIZES}
           />
         ) : null
       }

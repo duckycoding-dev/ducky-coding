@@ -1,0 +1,86 @@
+---
+import { getCollection } from 'astro:content';
+import HolyGrailLayout from '@layouts/HolyGrailLayout/HolyGrailLayout.astro';
+import Link from '@components/Link/Link.astro';
+import { Image } from 'astro:assets';
+import { getImageWidths } from '@utils/images/images';
+import { matchImageFromGlobImport } from '../../utils/images/images';
+import { serverLogger } from '../../utils/logs/logger';
+import { IMAGE_COMMON_SIZES } from '../../utils/globals';
+
+const memesImages = import.meta.glob<{ default: ImageMetadata }>(
+  `/src/assets/images/memes/**/*.{jpeg,jpg,png,gif,webp,svg}`,
+);
+
+const memes = (await getCollection('memes')).sort(
+  (a, b) =>
+    new Date(b.data.createdAt).valueOf() - new Date(a.data.createdAt).valueOf(),
+);
+
+const memesWithProcessedImage = (
+  await Promise.all(
+    memes.map(async (meme) => {
+      const processedImage = await matchImageFromGlobImport(
+        memesImages,
+        meme.data.imagePath,
+        serverLogger,
+      );
+      const res = { ...meme, processedImage };
+      return res;
+    }),
+  )
+).filter(
+  (meme) => meme.processedImage !== undefined,
+) as ((typeof memes)[number] & {
+  processedImage: ImageMetadata;
+})[]; // Ensure processedImage is defined, type inference is not working correctly with filter
+---
+
+<HolyGrailLayout
+  seoProps={{
+    title: 'Memes',
+  }}
+>
+  <h1
+    class='text-secondary border-accent mb-10 border-b-4 pb-3 text-center text-4xl font-extrabold wrap-anywhere md:text-5xl'
+  >
+    Ducky's Meme Gallery
+  </h1>
+
+  {
+    memesWithProcessedImage.length > 0 ? (
+      <div class='grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3'>
+        {memesWithProcessedImage.map((meme, index) => (
+          <Link
+            variant={'contained'}
+            href={`/memes/${meme.id}/`}
+            class='meme-card-link border-secondary shadow-comic bg-primary-100 hover:shadow-comic-lg md:p3 block border-2 p-2 transition-all hover:-translate-x-0.5 hover:-translate-y-1'
+          >
+            <Image
+              src={meme.processedImage}
+              widths={getImageWidths(meme.processedImage.width)}
+              sizes={IMAGE_COMMON_SIZES}
+              format='avif'
+              alt={meme.data.imageAlt || meme.data.title}
+              class='border-secondary mb-3 aspect-square h-auto w-full border-2 object-cover'
+              loading={index < 4 ? 'eager' : 'lazy'}
+              fetchpriority={index < 4 ? 'high' : 'auto'}
+            />
+            <h3
+              class='text-secondary truncate text-lg font-bold'
+              title={meme.data.title}
+            >
+              {meme.data.title}
+            </h3>
+            {/* Optional: show date or tags */}
+            {/* <p class="text-xs text-secondary-600">{new Date(meme.data.pubDate).toLocaleDateString()}</p> */}
+          </Link>
+        ))}
+      </div>
+    ) : (
+      <p class='text-center text-xl md:text-left'>
+        No memes published yet. Stay tuned!
+      </p>
+    )
+  }
+</HolyGrailLayout>

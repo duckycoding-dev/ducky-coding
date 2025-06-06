@@ -58,7 +58,8 @@ Specify images based on device pixel density:
 />
 ```
 
-This is useful when we have specific uses cases where we must provide different images based on the display type: for example we might want to provide the original image to displays with super high pixel densities, while providing an edited version without all the smaller details to every other display (because maybe some details in the original images cannot be seen on lower density displays)
+This is useful when we have specific uses cases where we must provide different images based on the display type: for example we might want to provide the original image to displays with super high pixel densities, while providing an edited version without all the smaller details to every other display (because maybe some details in the original images cannot be seen on lower density displays).\
+Another common example would be when we are dealing with very small images, such as icons: in this case we might want to provide a 1x version for standard displays, and a 2x version for denser displays (such as retina displays or mobile devices).
 
 ## How browsers select images
 

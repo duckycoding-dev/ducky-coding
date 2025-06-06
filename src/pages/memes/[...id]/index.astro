@@ -2,8 +2,12 @@
 import { getCollection } from 'astro:content';
 import HolyGrailLayout from '@layouts/HolyGrailLayout/HolyGrailLayout.astro';
 import { Image } from 'astro:assets';
-import { matchImageFromGlobImport } from '@utils/images/images';
-import { IMAGE_DENSITIES, WEBSITE_ROOT } from '@utils/globals';
+import { getImageWidths, matchImageFromGlobImport } from '@utils/images/images';
+import {
+  IMAGE_COMMON_SIZES,
+  IMAGE_DENSITIES,
+  WEBSITE_ROOT,
+} from '@utils/globals';
 import Link from '@components/Link/Link.astro';
 import type { Link as MetaLink } from 'astro-seo';
 import MemeContainer from '@components/Memes/MemeContainer.astro';
@@ -18,7 +22,7 @@ const memesImages = import.meta.glob<{ default: ImageMetadata }>(
 );
 
 export async function getStaticPaths() {
-  const memesSortedByCreationDate = (await getCollection('memes')).toSorted(
+  const memesSortedByCreationDate = (await getCollection('memes')).sort(
     (a, b) => a.data.createdAt - b.data.createdAt,
   );
   return memesSortedByCreationDate.map((entry, index) => {
@@ -175,7 +179,8 @@ const memeJsonLd = {
         <Image
           src={processedImage}
           alt={imageAlt}
-          densities={IMAGE_DENSITIES}
+          widths={getImageWidths(processedImage.width)}
+          sizes={IMAGE_COMMON_SIZES}
           class='block h-auto max-h-[70vh] w-full object-contain'
         />
       </MemeContainer>
