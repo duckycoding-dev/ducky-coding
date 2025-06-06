@@ -4,11 +4,12 @@ import type { ImageMetadata } from 'astro';
 import type { HTMLAttributes } from 'astro/types';
 import DuckyCodingLogo from '@assets/images/DuckyCoding_logo.png';
 import { cn } from '@utils/cn';
-import { IMAGE_DENSITIES } from '@utils/globals';
+import { IMAGE_COMMON_SIZES } from '@utils/globals';
 import Card from '@components/Card/Card.astro';
 import Link from '@components/Link/Link.astro';
 import Tag from '@components/Tag/Tag.astro';
 import type { Post } from '@db/features/posts/posts.model';
+import { getImageWidths } from '../../utils/images/images';
 
 export interface PostCardProps extends HTMLAttributes<'a'> {
   post: Post;
@@ -16,6 +17,7 @@ export interface PostCardProps extends HTMLAttributes<'a'> {
   bannerImage?: ImageMetadata | null;
   imageAlt?: string | null;
   loading?: 'eager' | 'lazy';
+  fetchPriority?: 'high' | 'low' | 'auto';
 }
 
 interface Props extends PostCardProps {}
@@ -29,24 +31,26 @@ const {
   class: className,
   loading = 'lazy',
   imageAlt,
+  fetchPriority = 'auto',
 } = props;
 ---
 
 <Link variant='unstyled' href={`/posts/${post.slug}`} class={cn(className)}>
   <Card class='card flex h-full flex-col'>
     <Image
+      format={'avif'}
       src={bannerImage ?? DuckyCodingLogo}
-      width={bannerImage
-        ? Math.floor(bannerImage.width / 3)
-        : Math.floor(DuckyCodingLogo.width / 3)}
-      height={bannerImage
-        ? Math.floor(bannerImage.height / 3)
-        : Math.floor(DuckyCodingLogo.height / 3)}
+      width={bannerImage ? bannerImage.width : DuckyCodingLogo.width}
+      height={bannerImage ? bannerImage.height : DuckyCodingLogo.height}
       alt={imageAlt ?? 'Post banner image'}
-      densities={IMAGE_DENSITIES}
+      widths={getImageWidths(
+        bannerImage ? bannerImage.width : DuckyCodingLogo.width,
+      )}
+      sizes={IMAGE_COMMON_SIZES}
       loading={loading}
       decoding={'async'}
       class='bg-primary-700 aspect-[16/9] w-full object-cover'
+      fetchpriority={fetchPriority}
     />
     <footer
       class='border-secondary flex grow flex-col gap-2 border-t-4 pt-2.5 pb-4'

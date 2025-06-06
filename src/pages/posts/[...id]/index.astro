@@ -3,12 +3,12 @@ import { getCollection } from 'astro:content';
 import HolyGrailLayout from '@layouts/HolyGrailLayout/HolyGrailLayout.astro';
 import { Image } from 'astro:assets';
 import {
-  IMAGE_DENSITIES,
+  IMAGE_COMMON_SIZES,
   WEBSITE_FIRST_PUBLISHING_DATE,
   WEBSITE_ROOT,
 } from '@utils/globals';
 import type { ImageMetadata } from 'astro';
-import { matchImageFromGlobImport } from '@utils/images/images';
+import { getImageWidths, matchImageFromGlobImport } from '@utils/images/images';
 import Tag from '@components/Tag/Tag.astro';
 import Link from '@components/Link/Link.astro';
 import MarkdownContent from '@layouts/MarkdownContent/MarkdownContent.astro';
@@ -75,7 +75,7 @@ const blogPostJsonLd = {
     url: pageUrl,
     headline: entry.data.title,
     description: entry.data.summary,
-    articleBody: entry.data.content,
+    articleBody: entry.data.content, // TODO: this should probably be entry.body; content is a field that does not match with the actual post content, it's basically a second summary
     author: AuthorPerson(entry.data.author, WEBSITE_ROOT),
     publisher: AuthorPerson(entry.data.author, WEBSITE_ROOT),
     maintainer: AuthorPerson(entry.data.author, WEBSITE_ROOT),
@@ -188,6 +188,7 @@ const blogPostJsonLd = {
       {
         bannerImage && processedImage ? (
           <Image
+            format='avif'
             src={processedImage}
             alt={
               bannerImage.alt ??
@@ -195,9 +196,11 @@ const blogPostJsonLd = {
             }
             title={entry.data.topicTitle}
             loading={'eager'}
+            fetchpriority={'high'}
             decoding={'async'}
             class='border-accent aspect-[16/9] justify-self-center object-cover px-4 py-4'
-            densities={IMAGE_DENSITIES}
+            widths={getImageWidths(processedImage.width)}
+            sizes={IMAGE_COMMON_SIZES}
           />
         ) : null
       }

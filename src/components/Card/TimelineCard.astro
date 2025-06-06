@@ -3,7 +3,6 @@ import type { ComponentProps, HTMLAttributes } from 'astro/types';
 import Link from '@components/Link/Link.astro';
 import Card from './Card.astro';
 import Image from 'astro/components/Image.astro';
-import { IMAGE_DENSITIES } from '../../utils/globals';
 
 interface Props extends ComponentProps<typeof Card> {
   logo?:
@@ -57,10 +56,12 @@ const wrapperProps = link
           ) : logo ? (
             typeof logo.src === 'string' ? (
               <Image
+                format={'avif'}
                 src={logo.src}
                 width={96}
                 height={96}
-                densities={IMAGE_DENSITIES}
+                widths={[50, 100]}
+                sizes={'(max-width: 200px) 50px, 100px'}
                 alt={logo.alt || 'Logo'}
                 loading={logo.loading}
                 decoding={logo.decoding}
@@ -68,11 +69,13 @@ const wrapperProps = link
               />
             ) : (
               <Image
+                format={'avif'}
                 src={logo.src}
                 alt={logo.alt || 'Logo'}
                 loading={logo.loading}
                 decoding={logo.decoding}
-                densities={IMAGE_DENSITIES}
+                widths={[50, 100]}
+                sizes={'(max-width: 200px) 50px, 100px'}
                 class={logo.class || ''}
               />
             )

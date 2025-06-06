@@ -1,0 +1,163 @@
+---
+import type { HTMLAttributes } from 'astro/types';
+import type { MemeContent } from '@custom-types/entities/memeContent.entity';
+import { cn } from '@utils/cn';
+import Link from '../Link/Link.astro';
+import InstagramIcon from '../Icons/InstagramIcon/InstagramIcon.astro';
+import LinkedInIcon from '../Icons/LinkedInIcon/LinkedInIcon.astro';
+import TikTokIcon from '../Icons/TikTokIcon/TikTokIcon.astro';
+import XIcon from '../Icons/XIcon/XIcon.astro';
+import YouTubeIcon from '../Icons/YouTubeIcon/YouTubeIcon.astro';
+import RedditIcon from '../Icons/RedditIcon/RedditIcon.astro';
+import GitHubIcon from '../Icons/GitHubIcon/GitHubIcon.astro';
+
+interface Props extends HTMLAttributes<'section'> {
+  links: NonNullable<MemeContent['externalLinks']>;
+}
+
+const { links, class: className, ...props }: Props = Astro.props;
+const { socials, source, author } = links;
+const { github, linkedin, reddit, x, youtube, instagram, tiktok } =
+  socials || {};
+
+const hasSocials = Object.values(socials || {}).some((link) => link);
+---
+
+<section class={cn('flex flex-col gap-4', className)} {...props}>
+  {
+    hasSocials ? (
+      <nav>
+        <h2 class='text-secondary mb-4 text-center text-xl font-black md:text-2xl'>
+          You can <span class='text-accent-700'>find this meme</span> on
+        </h2>
+        <ul class='flex flex-wrap items-center justify-center gap-4'>
+          {x ? (
+            <li>
+              <Link
+                target='_blank'
+                rel='noopener noreferrer'
+                href={x}
+                variant={'default'}
+                class='text-secondary'
+              >
+                <XIcon size={50} />
+              </Link>
+            </li>
+          ) : null}
+          {linkedin ? (
+            <li>
+              <Link
+                target='_blank'
+                rel='noopener noreferrer'
+                href={linkedin}
+                variant={'default'}
+                class='text-secondary'
+              >
+                <LinkedInIcon size={50} />
+              </Link>
+            </li>
+          ) : null}
+          {instagram ? (
+            <li>
+              <Link
+                target='_blank'
+                rel='noopener noreferrer'
+                href={instagram}
+                variant={'default'}
+                class='text-secondary'
+              >
+                <InstagramIcon size={50} />
+              </Link>
+            </li>
+          ) : null}
+          {tiktok ? (
+            <li>
+              <Link
+                target='_blank'
+                rel='noopener noreferrer'
+                href={tiktok}
+                variant={'default'}
+                class='text-secondary'
+              >
+                <TikTokIcon size={50} />
+              </Link>
+            </li>
+          ) : null}
+          {youtube ? (
+            <li>
+              <Link
+                target='_blank'
+                rel='noopener noreferrer'
+                href={youtube}
+                variant={'default'}
+                class='text-secondary'
+              >
+                <YouTubeIcon size={50} />
+              </Link>
+            </li>
+          ) : null}
+          {reddit ? (
+            <li>
+              <Link
+                target='_blank'
+                rel='noopener noreferrer'
+                href={reddit}
+                variant={'default'}
+                class='text-secondary'
+              >
+                <RedditIcon size={50} />
+              </Link>
+            </li>
+          ) : null}
+          {github ? (
+            <li>
+              <Link
+                target='_blank'
+                rel='noopener noreferrer'
+                href={github}
+                variant={'default'}
+                class='text-secondary'
+              >
+                <GitHubIcon size={50} />
+              </Link>
+            </li>
+          ) : null}
+        </ul>
+      </nav>
+    ) : null
+  }
+  {
+    source ? (
+      <Fragment>
+        <h3 class='text-center'>
+          <Link
+            target='_blank'
+            rel='noopener noreferrer'
+            href={source}
+            variant={'outlined'}
+            class='border-secondary from-accent3 to-accent text-secondary hover:from-accent-700 hover:to-accent3-700 focus:from-accent-700 focus:to-accent3-700 active:from-accent-700 active:to-accent3-700 bg-gradient-to-tr text-center text-xl font-black md:text-2xl'
+          >
+            You can find the original post here
+          </Link>
+        </h3>
+      </Fragment>
+    ) : null
+  }
+  {
+    author ? (
+      <Fragment>
+        <h3 class='text-center'>
+          <Link
+            target='_blank'
+            rel='noopener noreferrer'
+            href={author}
+            variant={'outlined'}
+            class='border-secondary from-accent to-accent3 text-secondary hover:from-accent-700 hover:to-accent3-700 focus:from-accent-700 focus:to-accent3-700 active:from-accent-700 active:to-accent3-700 bg-gradient-to-br text-center text-xl font-black md:text-2xl'
+          >
+            Check the author out
+          </Link>
+        </h3>
+      </Fragment>
+    ) : null
+  }
+</section>

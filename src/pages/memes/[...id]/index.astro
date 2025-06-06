@@ -1,0 +1,254 @@
+---
+import { getCollection } from 'astro:content';
+import HolyGrailLayout from '@layouts/HolyGrailLayout/HolyGrailLayout.astro';
+import { Image } from 'astro:assets';
+import { getImageWidths, matchImageFromGlobImport } from '@utils/images/images';
+import {
+  IMAGE_COMMON_SIZES,
+  IMAGE_DENSITIES,
+  WEBSITE_ROOT,
+} from '@utils/globals';
+import Link from '@components/Link/Link.astro';
+import type { Link as MetaLink } from 'astro-seo';
+import MemeContainer from '@components/Memes/MemeContainer.astro';
+import MemeInfo from '@components/Memes/MemeInfo.astro';
+import MemeExternalLinks from '@components/Memes/MemeExternalLinks.astro';
+import MarkdownContent from '@layouts/MarkdownContent/MarkdownContent.astro';
+import DuckyCodingLogo from '@assets/images/DuckyCoding_logo.png';
+import { MemeJsonLd } from '@utils/jsonld/meme';
+
+const memesImages = import.meta.glob<{ default: ImageMetadata }>(
+  `/src/assets/images/memes/**/*.{jpeg,jpg,png,gif,webp,svg}`,
+);
+
+export async function getStaticPaths() {
+  const memesSortedByCreationDate = (await getCollection('memes')).sort(
+    (a, b) => a.data.createdAt - b.data.createdAt,
+  );
+  return memesSortedByCreationDate.map((entry, index) => {
+    // Determine prev/next based on the sorted list
+    // Sort here again or ensure consistent sort order with above
+
+    const prevMeme = index > 0 ? memesSortedByCreationDate[index - 1] : null;
+    const nextMeme =
+      index < memesSortedByCreationDate.length - 1
+        ? memesSortedByCreationDate[index + 1]
+        : null;
+
+    return {
+      params: { id: entry.id },
+      props: {
+        entry,
+        prevPost: prevMeme
+          ? {
+              slug: `/memes/${prevMeme.id}/`,
+              title: prevMeme.data.title,
+              imagePath: prevMeme.data.imagePath,
+            }
+          : null,
+        nextPost: nextMeme
+          ? {
+              slug: `/memes/${nextMeme.id}/`,
+              title: nextMeme.data.title,
+              imagePath: nextMeme.data.imagePath,
+            }
+          : null,
+      },
+    };
+  });
+}
+
+const { entry, prevPost, nextPost } = Astro.props;
+const { title, imagePath, imageAlt, createdAt, externalLinks, tags, author } =
+  entry.data;
+
+const processedImage = await matchImageFromGlobImport(memesImages, imagePath);
+const processedPrevPostImage = prevPost
+  ? await matchImageFromGlobImport(memesImages, prevPost.imagePath)
+  : null;
+const processedNextPostImage = nextPost
+  ? await matchImageFromGlobImport(memesImages, nextPost.imagePath)
+  : null;
+
+const prevAndPostMetaLinks: Partial<MetaLink>[] = [];
+if (prevPost) {
+  prevAndPostMetaLinks.push({
+    rel: 'prev',
+    href: `${WEBSITE_ROOT}/memes/${prevPost.slug}`,
+  });
+}
+if (nextPost) {
+  prevAndPostMetaLinks.push({
+    rel: 'next',
+    href: `${WEBSITE_ROOT}/memes/${nextPost.slug}`,
+  });
+}
+
+const pageUrl = Astro.url.href;
+
+// Create JSON-LD structured data for the meme
+const memeJsonLd = {
+  item: MemeJsonLd({
+    title,
+    author,
+    imageUrl: new URL((processedImage || DuckyCodingLogo).src, WEBSITE_ROOT)
+      .href,
+    imageAlt: imageAlt || "DuckyCoding's logo",
+    createdAt,
+    tags,
+    description: `Check out this meme titled "${title}", created by ${author}${author.toLowerCase() !== 'duckycoding' ? ' and brought to you by DuckyCoding' : ''}.`,
+    pageUrl,
+  }),
+};
+---
+
+<HolyGrailLayout
+  seoProps={{
+    title: title,
+    description: `Check out this meme titled "${title}", created by ${author}${author.toLowerCase() !== 'duckycoding' ? ' and brought to you by DuckyCoding' : ''}.`,
+    openGraph: {
+      basic: {
+        title: title,
+        type: 'website',
+        url: pageUrl,
+        image: new URL((processedImage || DuckyCodingLogo).src, WEBSITE_ROOT)
+          .href,
+      },
+      optional: {
+        description:
+          "Here's a meme brought to you by DuckyCoding - Check it out!",
+        locale: 'en_US',
+        siteName: 'DuckyCoding',
+        localeAlternate: ['en_GB'],
+        determiner: '',
+        audio: undefined,
+        video: undefined,
+      },
+      image: {
+        url: new URL((processedImage || DuckyCodingLogo).src, WEBSITE_ROOT)
+          .href,
+        secureUrl: new URL(
+          (processedImage || DuckyCodingLogo).src,
+          WEBSITE_ROOT,
+        ).href,
+        height: (processedImage || DuckyCodingLogo).height,
+        width: (processedImage || DuckyCodingLogo).width,
+        type: `image/${(processedImage || DuckyCodingLogo).format}`,
+        alt: imageAlt || "DuckyCoding's logo",
+      },
+      article: {
+        publishedTime: new Date(createdAt).toISOString(),
+        modifiedTime: new Date(createdAt).toISOString(),
+        section: 'Web Development',
+        authors: [author],
+        tags: tags,
+      },
+    },
+    twitter: {
+      card: 'summary_large_image',
+      site: '@ducky_coding',
+      creator: '@ducky_coding',
+      title: title,
+      description:
+        "Here's a meme brought to you by DuckyCoding - Check it out!",
+      image: new URL((processedImage || DuckyCodingLogo).src, WEBSITE_ROOT)
+        .href,
+      imageAlt: imageAlt || "DuckyCoding's logo",
+    },
+    extend: {
+      meta: [
+        {
+          name: 'keywords',
+          content: `meme, ${title}, ${author}, programming ${author === 'DuckyCoding' ? ',DuckyCoding' : ''}`,
+        },
+      ],
+      link: prevAndPostMetaLinks,
+    },
+  }}
+  jsonLd={memeJsonLd}
+>
+  <h1
+    class='text-secondary border-accent mb-8 border-b-5 pb-3 text-center text-3xl font-extrabold md:text-4xl lg:text-5xl'
+  >
+    {title}
+  </h1>
+
+  {
+    processedImage ? (
+      <MemeContainer class='mb-6'>
+        <Image
+          format='avif'
+          src={processedImage}
+          alt={imageAlt}
+          widths={getImageWidths(processedImage.width)}
+          sizes={IMAGE_COMMON_SIZES}
+          class='block h-auto max-h-[70vh] w-full object-contain'
+          fetchpriority='high'
+          loading='eager'
+          decoding='async'
+        />
+      </MemeContainer>
+    ) : null
+  }
+  <MemeInfo createdAt={createdAt} tags={tags} author={author} />
+  {
+    entry && (
+      <article class='text-md text-secondary bg-primary-200 border-secondary shadow-comic mx-auto mb-6 max-w-4xl border-2 p-4 md:text-lg'>
+        <MarkdownContent entry={entry} />
+      </article>
+    )
+  }
+  {
+    externalLinks ? (
+      <MemeExternalLinks links={externalLinks} class='mb-6' />
+    ) : null
+  }
+  <nav
+    class='mx-auto flex max-w-3xl flex-col justify-between gap-4 sm:flex-row'
+  >
+    {
+      prevPost ? (
+        <Link
+          data-astro-prefetch='load'
+          variant='contained'
+          href={prevPost.slug}
+          class='text-secondary bg-accent hover:bg-accent-700 flex flex-1 items-center justify-center gap-4 text-center text-xl font-bold md:text-2xl'
+        >
+          {processedPrevPostImage ? (
+            <Image
+              format='avif'
+              src={processedPrevPostImage}
+              alt={`Preview of ${prevPost.title}`}
+              densities={IMAGE_DENSITIES}
+              width={50}
+              class='border-secondary border-comic block aspect-square h-auto rounded object-cover'
+            />
+          ) : null}
+          &larr; Previous meme
+        </Link>
+      ) : null
+    }
+    {
+      nextPost ? (
+        <Link
+          data-astro-prefetch='load'
+          variant={'contained'}
+          href={nextPost.slug}
+          class='text-secondary bg-accent2 hover:bg-accent2-700 active:bg-accent2-700 focus:bg-accent2-700 flex flex-1 items-center justify-center gap-4 text-center text-xl font-bold md:text-2xl'
+        >
+          Next meme &rarr;
+          {processedNextPostImage ? (
+            <Image
+              format='avif'
+              src={processedNextPostImage}
+              alt={`Preview of ${nextPost.title}`}
+              densities={IMAGE_DENSITIES}
+              width={50}
+              class='border-secondary border-comic block aspect-square h-auto rounded object-cover'
+            />
+          ) : null}
+        </Link>
+      ) : null
+    }
+  </nav>
+</HolyGrailLayout>

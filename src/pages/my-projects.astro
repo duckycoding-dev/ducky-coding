@@ -315,6 +315,7 @@ const projectsPageJsonLd = {
               bannerImageClass={project.bannerImageClass}
               imageAlt={`Banner image for ${project.title}`}
               loading={index < 3 ? 'eager' : 'lazy'}
+              fetchPriority={index < 3 ? 'high' : 'auto'}
             />
           </Link>
         ))
