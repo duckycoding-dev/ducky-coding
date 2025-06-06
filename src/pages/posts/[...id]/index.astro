@@ -75,7 +75,7 @@ const blogPostJsonLd = {
     url: pageUrl,
     headline: entry.data.title,
     description: entry.data.summary,
-    articleBody: entry.data.content,
+    articleBody: entry.data.content, // TODO: this should probably be entry.body; content is a field that does not match with the actual post content, it's basically a second summary
     author: AuthorPerson(entry.data.author, WEBSITE_ROOT),
     publisher: AuthorPerson(entry.data.author, WEBSITE_ROOT),
     maintainer: AuthorPerson(entry.data.author, WEBSITE_ROOT),
