@@ -271,7 +271,10 @@ const topicPageJsonLd = {
     {
       processedTopic.imageSrc ? (
         <Image
+          format='avif'
           loading='eager'
+          decoding='async'
+          fetchpriority='high'
           class='[grid-column:1/1] [grid-row:1/1] h-[150%] w-min object-cover md:mx-0 md:h-[200%]'
           src={processedTopic.imageSrc}
           alt={

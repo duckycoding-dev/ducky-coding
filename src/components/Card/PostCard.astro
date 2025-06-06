@@ -17,6 +17,7 @@ export interface PostCardProps extends HTMLAttributes<'a'> {
   bannerImage?: ImageMetadata | null;
   imageAlt?: string | null;
   loading?: 'eager' | 'lazy';
+  fetchPriority?: 'high' | 'low' | 'auto';
 }
 
 interface Props extends PostCardProps {}
@@ -30,12 +31,14 @@ const {
   class: className,
   loading = 'lazy',
   imageAlt,
+  fetchPriority = 'auto',
 } = props;
 ---
 
 <Link variant='unstyled' href={`/posts/${post.slug}`} class={cn(className)}>
   <Card class='card flex h-full flex-col'>
     <Image
+      format={'avif'}
       src={bannerImage ?? DuckyCodingLogo}
       width={bannerImage ? bannerImage.width : DuckyCodingLogo.width}
       height={bannerImage ? bannerImage.height : DuckyCodingLogo.height}
@@ -47,6 +50,7 @@ const {
       loading={loading}
       decoding={'async'}
       class='bg-primary-700 aspect-[16/9] w-full object-cover'
+      fetchpriority={fetchPriority}
     />
     <footer
       class='border-secondary flex grow flex-col gap-2 border-t-4 pt-2.5 pb-4'

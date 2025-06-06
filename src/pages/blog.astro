@@ -232,6 +232,7 @@ const blogPageJsonLd = {
                       tags={tags}
                       bannerImage={processedBannerImage || null}
                       loading={i < 4 ? 'eager' : 'lazy'}
+                      fetchPriority={i < 4 ? 'high' : 'auto'}
                       imageAlt={image?.alt || 'Banner image for ' + post.title}
                     />
                   </li>

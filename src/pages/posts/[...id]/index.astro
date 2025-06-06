@@ -188,6 +188,7 @@ const blogPostJsonLd = {
       {
         bannerImage && processedImage ? (
           <Image
+            format='avif'
             src={processedImage}
             alt={
               bannerImage.alt ??
@@ -195,6 +196,7 @@ const blogPostJsonLd = {
             }
             title={entry.data.topicTitle}
             loading={'eager'}
+            fetchpriority={'high'}
             decoding={'async'}
             class='border-accent aspect-[16/9] justify-self-center object-cover px-4 py-4'
             widths={getImageWidths(processedImage.width)}

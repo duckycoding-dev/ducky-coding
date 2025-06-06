@@ -177,11 +177,15 @@ const memeJsonLd = {
     processedImage ? (
       <MemeContainer class='mb-6'>
         <Image
+          format='avif'
           src={processedImage}
           alt={imageAlt}
           widths={getImageWidths(processedImage.width)}
           sizes={IMAGE_COMMON_SIZES}
           class='block h-auto max-h-[70vh] w-full object-contain'
+          fetchpriority='high'
+          loading='eager'
+          decoding='async'
         />
       </MemeContainer>
     ) : null
@@ -212,6 +216,7 @@ const memeJsonLd = {
         >
           {processedPrevPostImage ? (
             <Image
+              format='avif'
               src={processedPrevPostImage}
               alt={`Preview of ${prevPost.title}`}
               densities={IMAGE_DENSITIES}
@@ -234,6 +239,7 @@ const memeJsonLd = {
           Next meme &rarr;
           {processedNextPostImage ? (
             <Image
+              format='avif'
               src={processedNextPostImage}
               alt={`Preview of ${nextPost.title}`}
               densities={IMAGE_DENSITIES}

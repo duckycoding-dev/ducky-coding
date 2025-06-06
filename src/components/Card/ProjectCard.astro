@@ -17,6 +17,7 @@ export interface ProjectCardProps extends HTMLAttributes<'div'> {
   bannerImageClass?: string;
   imageAlt?: string;
   loading?: 'eager' | 'lazy';
+  fetchPriority?: 'high' | 'low' | 'auto';
   projectUrl?: string;
   linkActionTitle?: string;
 }
@@ -33,6 +34,7 @@ const {
   loading = 'lazy',
   imageAlt,
   projectUrl,
+  fetchPriority = 'auto',
   linkActionTitle = 'View Project',
   ...rest
 } = Astro.props;
@@ -50,6 +52,7 @@ const {
     {
       (
         <Image
+          format={'avif'}
           src={bannerImage ?? DuckyCodingLogo}
           width={(bannerImage ?? DuckyCodingLogo).width}
           height={(bannerImage ?? DuckyCodingLogo).height}
@@ -58,6 +61,7 @@ const {
           sizes={IMAGE_COMMON_SIZES}
           loading={loading}
           decoding={'async'}
+          fetchpriority={fetchPriority}
           class='h-full w-full object-cover transition-transform duration-300 group-hover:scale-105'
         />
       )

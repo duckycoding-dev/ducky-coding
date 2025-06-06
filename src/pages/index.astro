@@ -210,10 +210,12 @@ const homepageJsonLd = {
       <div class='aspect-square md:h-80 lg:h-96'>
         <Card class='flex h-full w-full items-baseline md:items-baseline'>
           <Image
+            format={'avif'}
             widths={getImageWidths(headshotDavide.width)}
             sizes={IMAGE_COMMON_SIZES}
             loading={'eager'}
             decoding={'async'}
+            fetchpriority={'high'}
             title={'Davide - DuckyCoding'}
             src={headshotDavide}
             width={350}
