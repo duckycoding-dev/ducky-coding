@@ -16,6 +16,7 @@ import DuckyCodingLogo from '../../assets/images/DuckyCoding_logo.png';
 import type { BaseHeadProps } from '../../layouts/BaseHead/BaseHead.astro';
 import { AuthorPerson, DuckyCodingPerson } from '../../utils/jsonld/person';
 
+// TODO: add a separate RSS feed for memes
 // TODO: decide if we will keep this as a single page with all memes loaded at once, or if should will implement pagination once the number of memes grows
 
 const memesImages = import.meta.glob<{ default: ImageMetadata }>(
