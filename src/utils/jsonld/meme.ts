@@ -30,7 +30,7 @@ export const MemeJsonLd = (props: MemeJsonLdProps) => {
 
   return {
     '@context': 'https://schema.org',
-    '@type': 'CreativeWork',
+    '@type': 'MediaObject',
     '@id': pageUrl,
     url: pageUrl,
     name: title,

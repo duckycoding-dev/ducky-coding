@@ -8,8 +8,14 @@ import { matchImageFromGlobImport } from '../../utils/images/images';
 import { serverLogger } from '../../utils/logs/logger';
 import CalendarIcon from '../../components/Icons/CalendarIcon.astro';
 import PersonIcon from '../../components/Icons/PersonIcon.astro';
+import {
+  WEBSITE_FIRST_PUBLISHING_DATE,
+  WEBSITE_ROOT,
+} from '../../utils/globals';
+import DuckyCodingLogo from '../../assets/images/DuckyCoding_logo.png';
+import type { BaseHeadProps } from '../../layouts/BaseHead/BaseHead.astro';
+import { AuthorPerson, DuckyCodingPerson } from '../../utils/jsonld/person';
 
-// TODO: Add SEO metadata for the memes page
 // TODO: decide if we will keep this as a single page with all memes loaded at once, or if should will implement pagination once the number of memes grows
 
 const memesImages = import.meta.glob<{ default: ImageMetadata }>(
@@ -38,12 +44,125 @@ const memesWithProcessedImage = (
 ) as ((typeof memes)[number] & {
   processedImage: ImageMetadata;
 })[]; // Ensure processedImage is defined, type inference is not working correctly with filter
+
+const pageUrl = Astro.url.href;
+
+const memesJsonLd = {
+  item: {
+    '@context': 'https://schema.org',
+    '@type': 'CollectionPage',
+    url: pageUrl,
+    name: "DuckyCoding's memes",
+    headline: 'Tech memes by DuckyCoding',
+    description:
+      "Enjoy a collection of tech-related memes that will make you laugh and relate to the developer's life, brought to you by DuckyCoding.",
+    creator: DuckyCodingPerson,
+    author: DuckyCodingPerson,
+    publisher: DuckyCodingPerson,
+    dateCreated: WEBSITE_FIRST_PUBLISHING_DATE,
+    datePublished: WEBSITE_FIRST_PUBLISHING_DATE,
+    dateModified: memes[0]?.data?.createdAt
+      ? new Date(memes[0].data.createdAt).toISOString()
+      : WEBSITE_FIRST_PUBLISHING_DATE,
+    mainEntity: {
+      '@type': 'ItemList',
+      name: "DuckyCoding's Blog",
+      '@id': pageUrl,
+      url: pageUrl,
+      description:
+        'Web development blog featuring tutorials, guides, and insights about modern web technologies.',
+      itemListElement: memesWithProcessedImage.map((meme, index) => ({
+        '@type': 'ListItem',
+        position: index + 1,
+        item: {
+          '@type': 'CreativeWork',
+          name: meme.data.title,
+          author: AuthorPerson(meme.data.author, WEBSITE_ROOT),
+          image: new URL(meme.processedImage.src, WEBSITE_ROOT).href,
+        },
+      })),
+    },
+    breadcrumb: {
+      '@type': 'BreadcrumbList',
+      itemListElement: [
+        {
+          '@type': 'ListItem',
+          position: 1,
+          name: 'Home',
+          item: WEBSITE_ROOT,
+        },
+        {
+          '@type': 'ListItem',
+          position: 2,
+          name: 'Memes',
+          item: `${WEBSITE_ROOT}/memes`,
+        },
+      ],
+    },
+  },
+} as const satisfies NonNullable<BaseHeadProps['jsonLd']>;
 ---
 
 <HolyGrailLayout
   seoProps={{
-    title: 'Memes',
+    title: 'Tech memes',
+    description:
+      "Enjoy a collection of tech-related memes that will make you laugh and relate to the developer's life, brought to you by DuckyCoding.",
+    openGraph: {
+      basic: {
+        title: 'Tech memes',
+        type: 'website',
+        url: pageUrl,
+        image: new URL(DuckyCodingLogo.src, WEBSITE_ROOT).href,
+      },
+      optional: {
+        description:
+          "Enjoy a collection of tech-related memes that will make you laugh and relate to the developer's life, brought to you by DuckyCoding.",
+        locale: 'en_US',
+        siteName: 'DuckyCoding',
+        localeAlternate: ['en_GB'],
+        determiner: '',
+        audio: undefined,
+        video: undefined,
+      },
+      image: {
+        url: new URL(DuckyCodingLogo.src, WEBSITE_ROOT).href,
+        secureUrl: new URL(DuckyCodingLogo.src, WEBSITE_ROOT).href,
+        height: DuckyCodingLogo.height,
+        width: DuckyCodingLogo.width,
+        type: `image/${DuckyCodingLogo.format}`,
+        alt: "DuckyCoding's logo",
+      },
+      article: {
+        publishedTime: WEBSITE_FIRST_PUBLISHING_DATE,
+        modifiedTime: memes[0]?.data?.createdAt
+          ? new Date(memes[0].data.createdAt).toISOString()
+          : WEBSITE_FIRST_PUBLISHING_DATE,
+        section: 'Tech memes',
+        authors: ['DuckyCoding', 'Davide'],
+        tags: ['DuckyCoding', 'memes', 'tech', 'web development', 'developer'],
+      },
+    },
+    twitter: {
+      card: 'summary_large_image',
+      site: '@ducky_coding',
+      creator: '@ducky_coding',
+      title: 'Tech memes',
+      description:
+        "Enjoy a collection of tech-related memes that will make you laugh and relate to the developer's life, brought to you by DuckyCoding.",
+      image: new URL(DuckyCodingLogo.src, WEBSITE_ROOT).href,
+      imageAlt: "DuckyCoding's logo",
+    },
+    extend: {
+      meta: [
+        {
+          name: 'keywords',
+          content: 'DuckyCoding, memes, tech, web development, developer',
+        },
+      ],
+    },
   }}
+  jsonLd={memesJsonLd}
 >
   <h1
     class='decoration-accent mb-2 text-center text-4xl font-extrabold wrap-anywhere underline underline-offset-4'

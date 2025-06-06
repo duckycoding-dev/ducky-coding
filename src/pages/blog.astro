@@ -10,7 +10,8 @@ import { postsService } from '../db/features/posts/posts.service';
 import DuckyCodingLogo from '@assets/images/DuckyCoding_logo.png';
 import { WEBSITE_FIRST_PUBLISHING_DATE, WEBSITE_ROOT } from '@utils/globals';
 import DuckIcon from '../components/Icons/DuckIcon/DuckIcon.astro';
-import { AuthorPerson } from '@utils/jsonld/person';
+import { AuthorPerson, DuckyCodingPerson } from '@utils/jsonld/person';
+import type { BaseHeadProps } from '../layouts/BaseHead/BaseHead.astro';
 
 const postsCollection = (await getCollection('posts'))
   .map((entry) => ({
@@ -88,15 +89,11 @@ const blogPageJsonLd = {
     mainEntity: {
       '@type': 'Blog',
       name: "DuckyCoding's Blog",
-      '@id': `${WEBSITE_ROOT}/blog`,
-      url: `${WEBSITE_ROOT}/blog`,
+      '@id': pageUrl,
+      url: pageUrl,
       description:
         'Web development blog featuring tutorials, guides, and insights about modern web technologies.',
-      author: {
-        '@type': 'Person',
-        name: 'DuckyCoding',
-        url: WEBSITE_ROOT,
-      },
+      author: DuckyCodingPerson,
       blogPost: processedPostsWithImages.map(
         ({ post }) =>
           ({
@@ -133,7 +130,7 @@ const blogPageJsonLd = {
       ],
     },
   },
-} as const;
+} as const satisfies NonNullable<BaseHeadProps['jsonLd']>;
 ---
 
 <HolyGrailLayout
