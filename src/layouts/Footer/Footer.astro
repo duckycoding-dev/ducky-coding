@@ -24,7 +24,7 @@ const { class: className, ...props }: Props = Astro.props;
   {...props}
 >
   <h2
-    class='decoration-accent text-center text-2xl font-extrabold underline underline-offset-6'
+    class='decoration-accent text-center text-2xl font-extrabold wrap-anywhere underline underline-offset-6'
   >
     Stay in touch
   </h2>
@@ -86,7 +86,7 @@ const { class: className, ...props }: Props = Astro.props;
     </Link>
   </nav>
 
-  <section class='flex flex-col items-center justify-center'>
+  <section class='flex flex-col items-center justify-center wrap-anywhere'>
     <small>Copyright &copy; 2024 - DuckyCoding - All Rights Reserved</small>
     <small>Built with Astro</small>
   </section>

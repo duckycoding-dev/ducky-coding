@@ -3,14 +3,16 @@ import { MarkdownComponents } from '@components/Markdown';
 import type { CollectionEntry } from 'astro:content';
 import '@styles/markdown.css';
 import { render } from 'astro:content';
+import type { HTMLAttributes } from 'astro/types';
+import { cn } from '@utils/cn';
 
-export type MarkdownContentProps = {
-  entry: CollectionEntry<'posts'>;
-};
+export interface MarkdownContentProps extends HTMLAttributes<'article'> {
+  entry: CollectionEntry<'posts'> | CollectionEntry<'memes'>;
+}
 
 type Props = MarkdownContentProps;
 
-const { entry }: Props = Astro.props;
+const { entry, class: className, ...props }: Props = Astro.props;
 
 // const { Content, headings } = await render(entry);
 const { Content } = await render(entry);
@@ -18,6 +20,6 @@ const { Content } = await render(entry);
 // if this is not working for some reasons, check mdx v4 changelogs
 ---
 
-<article class='markdown-content'>
+<article class={cn('markdown-content', className)} {...props}>
   <Content components={MarkdownComponents} />
 </article>

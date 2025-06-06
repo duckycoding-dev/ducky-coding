@@ -1,5 +1,6 @@
 import type { ClientLogger, ServerLogger } from '@utils/logs/logger';
 import type { ImageMetadata } from 'astro';
+import { IMAGE_COMMON_WIDTHS } from '../globals';
 
 /**
  *
@@ -25,4 +26,14 @@ export async function matchImageFromGlobImport(
   }
 
   return undefined;
+}
+
+export function getImageWidths(
+  imageWidth: number,
+  widths: number[] = IMAGE_COMMON_WIDTHS,
+): number[] {
+  return widths
+    .filter((w) => w < imageWidth)
+    .concat(imageWidth)
+    .sort((a, b) => a - b);
 }
