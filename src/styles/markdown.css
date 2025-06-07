@@ -1,19 +1,25 @@
 /* Basic text elements */
-/* done */
 .markdown-content p {
   margin-top: 1rem;
 }
 
 .markdown-content h1,
-.markdown-content h2,
+.markdown-content h2 {
+  color: var(--color-secondary);
+  margin-block: 2rem 1.5rem;
+  font-weight: 800;
+  border-bottom: 5px solid var(--color-accent);
+  line-height: 125%;
+}
+
 .markdown-content h3,
 .markdown-content h4,
 .markdown-content h5,
 .markdown-content h6 {
   color: var(--color-secondary);
-  margin-block: 2rem 1.5rem;
-  font-weight: 800;
-  border-bottom: 5px solid var(--color-accent);
+  margin-block: 1.5rem 1rem;
+  font-weight: 700;
+  border-bottom: 3px solid var(--color-accent2-600);
   line-height: 125%;
 }
 
@@ -36,38 +42,38 @@
   font-size: 1rem;
 }
 
-/* done */
 /* Lists */
 .markdown-content ul {
   list-style-type: none;
 }
 
-/* done */
-.markdown-content ul li {
+.markdown-content ol,
+.markdown-content ul {
+  margin-left: 1.5rem;
 }
 
-/* done */
-.markdown-content ul li::before {
+.markdown-content ul > li::before {
   content: '▪';
   color: var(--color-accent2);
   font-size: 1.5rem;
   margin-right: 0.25rem;
 }
 
-/* done */
 .markdown-content ol {
   list-style-type: none;
   counter-reset: item;
 }
 
-/* done */
-.markdown-content ol li {
+.markdown-content ol > li {
   counter-increment: item;
   margin: 0.5rem 0;
 }
 
-/* done */
-.markdown-content ol li::before {
+.markdown-content li > p:first-child {
+  display: inline;
+}
+
+.markdown-content ol > li::before {
   content: counter(item);
   color: var(--color-secondary);
   font-weight: 900;
@@ -79,16 +85,14 @@
 }
 
 /* Code-related Elements */
-/* done */
 .markdown-content code {
-  background-color: var(--color-secondary);
-  color: var(--color-primary);
+  background-color: #24292e;
+  color: var(--color-accent2-100);
   padding: 0.2rem 0.4rem;
   font-family: monospace;
   font-size: 1em;
 }
 
-/* done */
 .markdown-content pre {
   background-color: var(--color-secondary);
   color: var(--color-primary-100);
@@ -101,13 +105,11 @@
   max-height: 70vh;
 }
 
-/* done */
 .markdown-content pre code {
   padding: 0;
   background-color: transparent;
 }
 
-/* done */
 .markdown-content kbd {
   background-color: var(--color-primary-600);
   border: 2px solid var(--color-secondary);
@@ -118,26 +120,21 @@
 }
 
 /* Quotes */
-/* done */
 .markdown-content blockquote {
+  border-right: 3px solid var(--color-secondary);
+  border-bottom: 3px solid var(--color-secondary);
   border-left: 8px solid var(--color-accent3);
-  margin: 1rem 0;
   padding: 1rem;
+  margin: 1rem 0;
+  box-shadow: 4px 4px 0 var(--color-secondary);
   background-color: var(--color-primary-200);
   box-shadow: 4px 4px 0 var(--color-secondary);
   outline: 1px solid var(--color-secondary);
 }
-
-/* done */
 .markdown-content blockquote p {
-  background-color: var(--color-primary-300);
-  border: 3px solid var(--color-secondary);
-  padding: 1rem;
-  margin: 1rem 0;
-  box-shadow: 4px 4px 0 var(--color-secondary);
+  margin: 0;
 }
 
-/* done */
 .markdown-content q {
   background-color: var(--color-accent2-200);
   padding: 0.2rem 0.4rem;
@@ -175,7 +172,6 @@
 }
 
 /* Inline Elements */
-/* done */
 .markdown-content mark {
   background-color: var(--color-accent3);
   padding: 0.2rem 0.4rem;
@@ -183,14 +179,12 @@
   white-space: break-spaces;
 }
 
-/* done */
 .markdown-content abbr {
   border-bottom: 3px dotted var(--color-accent);
   cursor: help;
 }
 
 /* Other */
-/* done */
 .markdown-content details {
   border: 3px solid var(--color-secondary);
   margin: 1rem 0;
@@ -198,20 +192,16 @@
   box-shadow: 4px 4px 0 var(--color-secondary);
 }
 
-/* done */
 .markdown-content details > :not(summary) {
   padding-inline: 1rem;
 }
-/* done */
 .markdown-content details > :not(summary):first-child {
   margin-top: 1rem;
 }
-/* done */
 .markdown-content details > :not(summary):last-child {
   margin-bottom: 1rem;
 }
 
-/* done */
 .markdown-content summary {
   font-weight: 700;
   cursor: pointer;
@@ -220,12 +210,10 @@
   border-bottom: 2px solid var(--color-secondary);
 }
 
-/* done */
 .markdown-content summary:hover {
   background-color: var(--color-accent2-300);
 }
 
-/* done */
 .markdown-content time {
   background-color: var(--color-accent-100);
   padding: 0.2rem 0.4rem;
@@ -234,7 +222,6 @@
   white-space: break-spaces;
 }
 
-/* done */
 .markdown-content hr {
   border: none;
   height: 2px;
@@ -243,6 +230,7 @@
 }
 
 .markdown-content * {
+  /* all: revert; */
   scrollbar-color: var(--color-accent) var(--color-primary);
   scrollbar-width: thin;
 }

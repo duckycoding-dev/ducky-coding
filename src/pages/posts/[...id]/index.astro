@@ -182,89 +182,87 @@ const blogPostJsonLd = {
   jsonLd={blogPostJsonLd}
 >
   <section
-    class='from-accent-300 to-accent2-300 shadow-comic border-4 bg-gradient-to-br'
+    class='from-accent-300 to-accent2-300 shadow-comic grid items-center border-4 bg-gradient-to-br px-4 py-4'
   >
-    <div class=`grid items-center`>
-      {
-        bannerImage && processedImage ? (
-          <Image
-            format='avif'
-            src={processedImage}
-            alt={
-              bannerImage.alt ??
-              `Post banner cover related to ${entry.data.topicTitle}`
-            }
-            title={entry.data.topicTitle}
-            loading={'eager'}
-            fetchpriority={'high'}
-            decoding={'async'}
-            class='border-accent aspect-[16/9] justify-self-center object-cover px-4 py-4'
-            widths={getImageWidths(processedImage.width)}
-            sizes={IMAGE_COMMON_SIZES}
-          />
-        ) : null
-      }
-      <section
-        class='flex flex-col justify-center gap-2 self-stretch justify-self-center px-8 pt-0 pb-4 md:pt-4'
+    {
+      bannerImage && processedImage ? (
+        <Image
+          format='avif'
+          src={processedImage}
+          alt={
+            bannerImage.alt ??
+            `Post banner cover related to ${entry.data.topicTitle}`
+          }
+          title={entry.data.topicTitle}
+          loading={'eager'}
+          fetchpriority={'high'}
+          decoding={'async'}
+          class='border-secondary aspect-[16/9] justify-self-center border-6 object-cover'
+          widths={getImageWidths(processedImage.width)}
+          sizes={IMAGE_COMMON_SIZES}
+        />
+      ) : null
+    }
+    <footer
+      class='flex flex-col justify-center gap-2 self-stretch justify-self-center px-8 pt-0 pb-4 md:pt-4'
+    >
+      <h1
+        class='decoration-accent text-center text-4xl font-extrabold wrap-anywhere underline underline-offset-4'
       >
-        <h1
-          class='decoration-accent text-center text-4xl font-extrabold wrap-anywhere underline underline-offset-4'
-        >
-          {entry.data.title}
-        </h1>
-        <p class='text-center text-lg font-semibold'>
-          Written by: {
-            entry.data.author.toLowerCase() === 'duckycoding'
-              ? 'DuckyCoding (me)'
-              : entry.data.author
-          }
+        {entry.data.title}
+      </h1>
+      <p class='text-center text-lg font-semibold'>
+        Written by: {
+          entry.data.author.toLowerCase() === 'duckycoding'
+            ? 'DuckyCoding (me)'
+            : entry.data.author
+        }
+      </p>
+      <div>
+        <p class='text-center text-base italic'>
+          Read time: {entry.data.timeToRead}
+          {entry.data.timeToRead > 1 ? 'minutes' : 'minute'}
         </p>
-        <div>
-          <p class='text-center text-base italic'>
-            Read time: {entry.data.timeToRead}
-            {entry.data.timeToRead > 1 ? 'minutes' : 'minute'}
-          </p>
-          {
-            postFromDb?.createdAt ? (
-              <p class='text-center text-base italic'>
-                {`Published on: ${new Date(postFromDb.createdAt).toLocaleDateString()}`}
-              </p>
-            ) : null
-          }
-        </div>
         {
-          entry.data.tags.length > 0 ? (
-            <div class='flex flex-wrap justify-center gap-2'>
-              {entry.data.tags.map((tag, index) => {
-                if (tag.toLowerCase() === entry.data.topicTitle.toLowerCase()) {
-                  return (
-                    <Link
-                      variant='contained'
-                      href={`/topics/${tag.toLowerCase()}`}
-                      class='border-secondary rounded-full border-none p-0'
-                    >
-                      <Tag
-                        class={`${index % 2 === 0 ? 'bg-accent2' : 'bg-accent'}`}
-                      >
-                        {tag}
-                      </Tag>
-                    </Link>
-                  );
-                } else {
-                  return (
+          postFromDb?.createdAt ? (
+            <p class='text-center text-base italic'>
+              {`Published on: ${new Date(postFromDb.createdAt).toLocaleDateString()}`}
+            </p>
+          ) : null
+        }
+      </div>
+      {
+        entry.data.tags.length > 0 ? (
+          <div class='flex flex-wrap justify-center gap-2'>
+            {entry.data.tags.map((tag, index) => {
+              if (tag.toLowerCase() === entry.data.topicTitle.toLowerCase()) {
+                return (
+                  <Link
+                    variant='contained'
+                    href={`/topics/${tag.toLowerCase()}`}
+                    class='border-secondary rounded-full border-none p-0'
+                  >
                     <Tag
                       class={`${index % 2 === 0 ? 'bg-accent2' : 'bg-accent'}`}
                     >
                       {tag}
                     </Tag>
-                  );
-                }
-              })}
-            </div>
-          ) : null
-        }
-      </section>
-    </div>
+                  </Link>
+                );
+              } else {
+                return (
+                  <Tag
+                    class={`${index % 2 === 0 ? 'bg-accent2' : 'bg-accent'}`}
+                  >
+                    {tag}
+                  </Tag>
+                );
+              }
+            })}
+          </div>
+        ) : null
+      }
+    </footer>
   </section>
   <MarkdownContent entry={entry} />
   {

@@ -17,9 +17,13 @@ status: 'draft'
 language: 'en'
 isFeatured: true
 ---
+import firefoxVideo from '../../assets/videos/firefox_srcset_test.mp4';
+import chromeVideo from '../../assets/videos/chrome_srcset_test.mp4';
 
-Modern web development requires serving optimized images across different devices and screen sizes: we don't want to load a full 4K image that get's displayed in a 300px column... we want to load different images for any given context.\
-While building this website I stumbled upon this need of optimizing my images for these scenarios, to improve load times and user experience.\
+## Deep dive into the image element and its srcset and sizes attributes
+
+Modern web development requires serving optimized images across different devices and screen sizes: we don't want to load a full 4K image that get's displayed in a 300px column but instead we want to load different images for any given context.\
+While building this website I stumbled upon this need of optimizing my images for these scenarios, to improve load times and user experience.
 
 How have I done this? Using powerful tools built into HTML.\
 HTML5's `<img />`'s `srcset` and `sizes` attributes come into play for managing this without the need of writing any JavaScript.
@@ -89,7 +93,8 @@ Selected: medium.jpg (800w is the smallest value ≥ 700px)
 
 The `sizes` attribute overrides the default `100vw` assumption: this value indicates at what viewport width (multiplied by the screen's pixel density) a srcset source is triggered.
 
-> **Careful**: it does not look at how wide the image is compared to the viewport, only at the viewport width itself (the naming is a bit confusing I know)
+> **Note**: This attribute also defines the final rendering size of the image, but I'm not going to cover that in this article, as I'm just trying to show how the srcset and sizes attributes cooperate (and I'm honestly not too sure about the details, as I've noticed that browsers behave differently even for this aspect).\
+> Also, if you are defining the width of the image using CSS, you will only care about which image in the srcset gets selected.
 
 ### Syntax
 
@@ -123,7 +128,7 @@ Simple responsive sizing:
 />
 ```
 
-Let's analyze all the possible scenarios (I'll use "CVW" as "current viewport width", and "AVW" as "actual viewport width")
+Let's analyze all the possible scenarios (I'll use "CVW" as "current viewport width", and "AVW" as "actual viewport width")\
 To recap: we need to calculate the ACVW to use: AVW = CVW \* SIZE (when dealing with sizes relative to the viewport, for other cases, such as when using `em` or `rem` the calculation is a bit different of course, but you get the idea)\
 Finally, we need to multiply the AVW by the screen pixel density to get the final value which will be used to determine which item in the srcset gets selected
 
@@ -133,28 +138,32 @@ If the browser does not support srcset `fallback.jpg` is selected in ANY case
 
 #### When the screen width is smaller or equal to 768px
 
-In this case the custom size is 100vw (which, coincidentally, is also the usual default behaviour).\
+In this case the custom size is 100vw (which, coincidentally, is also the usual default behaviour).
 
+```
 - CVW = 390px => AVW = 390px
-  - case 1: 390 \* 1 => 390 => `small.jpg` is selected
-  - case 2: 390 \* 2 => 780 => `medium.jpg` is selected
+  - case 1: 390 * 1 => 390 => `small.jpg` is selected
+  - case 2: 390 * 2 => 780 => `medium.jpg` is selected
 - CVW = 500px => AVW = 500px
-  - case 1: 500 \* 1 => 500 => `medium.jpg` is selected
-  - case 2: 500 \* 2 => 1000 => `large.jpg` is selected
+  - case 1: 500 * 1 => 500 => `medium.jpg` is selected
+  - case 2: 500 * 2 => 1000 => `large.jpg` is selected
 - CVW = 768px => AVW = 768px
-  - case 1: 768 \* 1 => 768 => `medium.jpg` is selected
-  - case 2: 768 \* 2 => 1536 => `large.png` is selected (because it's the largest possible image in the srcset)
+  - case 1: 768 * 1 => 768 => `medium.jpg` is selected
+  - case 2: 768 * 2 => 1536 => `large.png` is selected (because it's the largest possible image in the srcset)
+```
 
 #### When the screen width is bigger than 768px
 
 In this case the custom size is 50vw
 
+```
 - CVW = 800px => AVW = 400px
-  - case 1: 400 \* 1 => 400 => `small.jpg` is selected (because it's larger or EQUAL to the small.jpg srcset value)
-  - case 2: 400 \* 2 => 800 => `medium.jpg` is selected (because it's larger or EQUAL to the medium.jpg srcset value)
+  - case 1: 400 * 1 => 400 => `small.jpg` is selected (because it's larger or EQUAL to the small.jpg srcset value)
+  - case 2: 400 * 2 => 800 => `medium.jpg` is selected (because it's larger or EQUAL to the medium.jpg srcset value)
 - CVW = 1200px => AVW = 600px
-  - case 1: 600 \* 1 => 600 => `medium.jpg` is selected
-  - case 2: 600 \* 2 => 1200 => `large.jpg` is selected (because it's larger or EQUAL to the large.jpg srcset value)
+  - case 1: 600 * 1 => 600 => `medium.jpg` is selected
+  - case 2: 600 * 2 => 1200 => `large.jpg` is selected (because it's larger or EQUAL to the large.jpg srcset value)
+```
 
 ## Key points to remember
 
@@ -165,29 +174,29 @@ Here are some key points to remember when working with `<img/>` and its `srcset`
 3. **Pixel density affects calculation**: The browser multiplies your `sizes` values by the device pixel ratio when selecting from `srcset`
 4. **Media queries in sizes**: Only the size values are affected by pixel density, not the media query conditions
 5. **Not all browsers handle srcset in the same way**:
+    - **Firefox**: Dynamically switches between images as the viewport changes, always using the most appropriate image for the current size.
+      <video controls src={firefoxVideo} alt='Shows how Firefox handles srcset' />
+    - **Chrome, Safari and Edge**: Use a "download once, keep forever" approach. Once a larger image is downloaded, it won't switch back to smaller images when the viewport shrinks.
+      <video controls src={chromeVideo} alt='Shows how Chrome handles srcset' />
+    > **Best practice**: Given these two differences, use `srcset` primarily for different resolutions of the same image, not for using completely different images (e.g. you might be tempted to do so when you have different layouts at different screen sizes).
+  
+6. **You HAVE TO provide the images to be used in the srcset**: the image paths included in the srcset are not magically generated from the original `src`, but you have to manually provide them.
 
-- **Firefox**: Dynamically switches between images as the viewport changes, always using the most appropriate image for the current size.
-- **Chrome, Safari and Edge**: Use a "download once, keep forever" approach. Once a larger image is downloaded, it won't switch back to smaller images when the viewport shrinks.
+    You could be manually creating different images with different sizes by using any graphic software and decide to use a standard naming convention for all your images by, for example, appending descriptors such as `-small`, `-medium`, `-large`, etc..., or using whatever naming convention you prefer.
 
-  > **Best practice**: Given these two differences, use `srcset` primarily for different resolutions of the same image, not for using completely different images (e.g. for when you have different layouts).
+    Another option would be creating a script that does this for you but, before you do this, you could check for any existing tools, unless you want to practice some coding: if that's the case, feel free to implement it yourself!
 
-6. **You HAVE TO provide the images to be used in the srcset**: the images paths included in the srcset are not magically generated from the original `src`, but you have to manually provide them.
+    Alternatively if you are using a modern framework, most of them do have a built in system for generating all relevant image variants at built time.\
+    For example, this website uses [Astro](https://astro.build/)'s built-in `<Image />` component that automatically handles this for you, based on some props that you provide; you can read more about this in the [official Astro documentation about images](https://docs.astro.build/en/guides/images/#images-in-astro-files)
 
-   You could be manually creating different images with different sizes by using any graphic software and decide to use a standard naming convention for all your images by, for example, appending descriptors like `-small`, `-medium`, `-large`, etc..., or using whatever naming convention you prefer.
+2. **Use modern image formats**: this is not really relevant to how `srcset` and `sizes` work, but it can help you improve your pages performance and loading time as well.
 
-   Another option would be creating a script that does this for you but, before you do this, you could check for any existing tools, unless you want to practice some coding: if that's the case, feel free to implement it yourself!
+    Modern image formats such as `webp` and `avif` are able to provide near identical quality compared to the more classic `jpg` and `png`, while have a fraction of the weigth in terms of file size; nowadays these are supported by most major browsers, but you should check that it's ok to use them for your specific use case.
 
-   Alternatively if you are using a modern framework, most of them do have a built in system for generating all relevant image variants at built time.\
-   For example, this website uses [Astro](https://astro.build/)'s built-in `<Image />` component that automatically handles this for you, based on some props that you provide; you can read more about this in the [official Astro documentation about images](https://docs.astro.build/en/guides/images/#images-in-astro-files)
+3. **Use the `<picture />` element for more complex scenarios**: I'm not diving into the difference with the picture element in this article, but one example for using it over the more common img element would be for providing different image formats, in case the browser does not support your preferred choice.
+4. **Caching**: you might be testing this out and finding yourself stuck with the same image being used at any viewport width: why is this? because browsers cache stuff. If the biggest image has already been cached, the browser will always use that one directly (except for Firefox, as we saw in the fifth key point)
 
-7. **Use modern image formats**: this is not really relevant to how `srcset` and `sizes` work, but it can help you improve your pages performance and loading time as well.
-
-   Modern image formats such as `webp` and `avif` are able to provide near identical quality compared to the more classic `jpg` and `png`, while have a fraction of the weigth in terms of file size; nowadays these are supported by most major browsers, but you should check that it's ok to use them for your specific use case.
-
-8. **Use the `<picture />` element for more complex scenarios**: I'm not diving into the difference with the picture element in this article, but one example for using it over the more common img element would be for providing different image formats, in case the browser does not support your preferred choice.
-9. **Caching**: you might be testing this out and finding yourself stuck with the same image being used at any viewport width: why is this? because browser's cache stuff. If the biggest image has already been cached, the browser will always use that one directly (except for Firefox, as we saw in the fifth key point)
-
-   If you want to test this out effectively you could either hard refresh the page and clear the cache manually (not very comfortable if you need to reload the page many times) or you could just disable the cache from the browser's developer tools: with this second approach you will then be free to reload the page as many times as you want and analyze how and when the images are loaded in, which you can easily check in the network tab by filter for images.
+    If you want to test this out effectively you could either hard refresh the page and clear the cache manually (not very comfortable if you need to reload the page many times) or you could just disable the cache from the browser's developer tools: with this second approach you will then be free to reload the page as many times as you want and analyze how and when the images are loaded in, which you can easily check in the network tab by filter for images.
 
 ## Wrapping up
 
