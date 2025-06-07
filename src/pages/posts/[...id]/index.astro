@@ -20,6 +20,7 @@ import DuckyCodingLogo from '@assets/images/DuckyCoding_logo.png';
 import { TopicThing, TagThing } from '@utils/jsonld/thing';
 import { DuckyCodingBlog } from '@utils/jsonld/blog';
 import { AuthorPerson } from '@utils/jsonld/person';
+import ScrollToTopButton from '@components/ScrollToTopButton/ScrollToTopButton.astro';
 
 // 1. Generate a new path for every collection entry
 export async function getStaticPaths() {
@@ -112,6 +113,7 @@ const blogPostJsonLd = {
 ---
 
 <HolyGrailLayout
+  class='relative'
   seoProps={{
     title: entry.data.title,
     description: entry.data.summary,
@@ -207,6 +209,7 @@ const blogPostJsonLd = {
       class='flex flex-col justify-center gap-2 self-stretch justify-self-center px-8 pt-0 pb-4 md:pt-4'
     >
       <h1
+        id={'post-title'}
         class='decoration-accent text-center text-4xl font-extrabold wrap-anywhere underline underline-offset-4'
       >
         {entry.data.title}
@@ -271,4 +274,5 @@ const blogPostJsonLd = {
       </p>
     ) : null
   }
+  <ScrollToTopButton target='#post-title' />
 </HolyGrailLayout>

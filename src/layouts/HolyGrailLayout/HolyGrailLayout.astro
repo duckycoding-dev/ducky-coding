@@ -4,15 +4,16 @@ import Footer from '@layouts/Footer/Footer.astro';
 import Header from '@layouts/Header/Header.astro';
 import MainContent from '@layouts/MainContent/MainContent.astro';
 import type { ComponentProps } from 'astro/types';
+import { cn } from '../../utils/cn';
 
 interface Props extends ComponentProps<typeof BaseHtml> {}
 
-const { ...props }: Props = Astro.props;
+const { class: className, ...props }: Props = Astro.props;
 ---
 
 <BaseHtml {...props}>
   <Header />
-  <MainContent class='overflow-auto px-4 py-8 md:px-8'>
+  <MainContent class={cn('overflow-auto px-4 py-8 md:px-8', className)}>
     <slot />
     <!-- your content is injected here -->
   </MainContent>

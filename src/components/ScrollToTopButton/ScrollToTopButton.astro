@@ -1,0 +1,82 @@
+---
+import type { HTMLAttributes } from 'astro/types';
+import { cn } from '@utils/cn';
+import Caret from '@components/Icons/Caret.astro';
+import Link from '../Link/Link.astro';
+
+interface Props extends HTMLAttributes<'button'> {
+  target?: string;
+  showAfterPx?: number;
+}
+
+const {
+  class: className,
+  showAfterPx,
+  target = '#',
+  ...props
+}: Props = Astro.props;
+---
+
+<Link
+  href={target}
+  id='scroll-to-top-button'
+  variant='contained'
+  size='medium'
+  class={cn(
+    'fixed bottom-4 right-4 z-50 opacity-0 transition-all duration-200 ease-in-out pointer-events-none flex items-center justify-center w-12 h-12 rounded-full hover:scale-110 active:scale-95 ',
+    className,
+  )}
+  title='Scroll to top'
+  aria-label='Scroll to top of page'
+  {...props}
+>
+  <Caret />
+</Link>
+
+<script define:vars={{ showAfterPx }}>
+  // Handle scroll to top functionality
+  function initScrollToTopButton() {
+    const button = document.getElementById('scroll-to-top-button');
+    if (!button) return;
+
+    const mininumHeightToShow =
+      showAfterPx ??
+      window.innerHeight ??
+      document.documentElement.clientHeight;
+    // Show/hide button based on scroll position
+    function toggleButtonVisibility() {
+      const scrollTop =
+        window.pageYOffset || document.documentElement.scrollTop;
+
+      if (scrollTop > mininumHeightToShow) {
+        button.tabIndex = 0; // Make button focusable
+        button.classList.add('opacity-100', 'pointer-events-auto');
+        button.classList.remove('opacity-0', 'pointer-events-none');
+      } else {
+        button.tabIndex = -1; // Remove focusability
+        button.classList.add('opacity-0', 'pointer-events-none');
+        button.classList.remove('opacity-100', 'pointer-events-auto');
+      }
+    }
+
+    // Add event listeners
+    window.addEventListener('scroll', toggleButtonVisibility, {
+      passive: true,
+    });
+
+    // Initial check
+    toggleButtonVisibility();
+
+    // Cleanup function for page transitions
+    return () => {
+      window.removeEventListener('scroll', toggleButtonVisibility);
+    };
+  }
+
+  // Initialize when DOM is ready
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initScrollToTopButton);
+  } else {
+    initScrollToTopButton();
+  }
+</script>
