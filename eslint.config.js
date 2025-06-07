@@ -20,6 +20,8 @@ export default tseslint.config(
   // ignore all files inside distribution folders
   {
     ignores: [
+      '**/*.md',
+      '**/*.mdx',
       '**/*/dist/**/*.js',
       '**/*/dist/**/*.d.ts',
       '**/*/build/**/*.js',

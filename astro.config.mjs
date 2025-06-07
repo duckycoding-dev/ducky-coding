@@ -62,7 +62,7 @@ export default defineConfig({
     gfm: true, // --DEFAULT--
     smartypants: true, // --DEFAULT--
     shikiConfig: {
-      wrap: true,
+      wrap: null,
     },
   },
   i18n: {

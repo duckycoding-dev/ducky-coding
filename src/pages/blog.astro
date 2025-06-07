@@ -218,13 +218,17 @@ const blogPageJsonLd = {
           <h2 class='border-comic border-secondary from-accent-200 to-accent2-200 shadow-comic mb-4 rounded-xl border-4 bg-gradient-to-br px-4 py-2 text-4xl font-extrabold'>
             Latest posts
           </h2>
-          <ul class='latest-grid-layout grid items-baseline gap-8'>
+          <ul class='latest-grid-layout grid gap-8'>
             {processedPostsWithImages.map(
               ({ post, image, tags, processedBannerImage }, i) => {
                 return (
                   <li>
                     <PostCard
                       class='block h-full'
+                      widths={[300, 600, 900, 1200, 1500]}
+                      sizes={
+                        '(max-width: 767px) calc(100vw - 2rem), calc(33vw - 2rem)'
+                      }
                       post={post}
                       tags={tags}
                       bannerImage={processedBannerImage || null}
@@ -279,7 +283,7 @@ const blogPageJsonLd = {
 >
   .grid-layout {
     display: grid;
-
+    align-items: stretch;
     grid-template-areas: 'latest trending';
 
     grid-template-columns: minmax(0, 2fr) var(--showFeaturedPosts);

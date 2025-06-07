@@ -12,7 +12,7 @@ const { ...props }: Props = Astro.props;
 
 <BaseHtml {...props}>
   <Header />
-  <MainContent class='px-4 py-8 md:px-8'>
+  <MainContent class='overflow-auto px-4 py-8 md:px-8'>
     <slot />
     <!-- your content is injected here -->
   </MainContent>
