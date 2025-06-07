@@ -1,5 +1,5 @@
 ---
-title: 'Welcome to DuckyCoding - How this blog was built'
+title: 'Welcome to DuckyCoding'
 summary: "Inaugural post introducing DuckyCoding's new blog and diving into the technical stack behind it: Astro, SQLite, Drizzle ORM, and modern web development practices."
 content: 'A comprehensive look at the technology choices, architecture decisions, and development process behind building this modern blog with Astro, content collections, SQLite database, and more.'
 author: 'DuckyCoding'
@@ -12,7 +12,7 @@ tags:
   - 'TailwindCSS'
   - 'Blog'
   - 'Web Development'
-timeToRead: 8
+timeToRead: 4
 bannerImagePath: 'posts/welcome-to-duckycoding.png'
 status: 'published'
 language: 'en'
@@ -21,99 +21,62 @@ isFeatured: true
 
 ## Welcome to DuckyCoding! 🦆
 
-After months of planning, coding, and countless cups of coffee, I'm thrilled to finally launch **DuckyCoding** - my new home on the web where I'll be sharing insights, tutorials, and experiences from my journey in software development.
+After months of planning, coding, forgetting about this, coming back, refactors and countless cups of coffee, I'm thrilled to finally launch **DuckyCoding** - my new home on the web where I'll be sharing insights, tutorials, and experiences from my journey in software development.
 
-But before we dive into the exciting content that's coming, I thought it would be fitting to pull back the curtain and show you exactly how this blog was built. After all, as developers, we love to know what's under the hood!
+But before we dive into the exciting content that's coming, I thought it would be nice to show you how this blog was built. After all, as developers, we love to know what's under the hood!
 
-## The Tech Stack That Powers This Blog
+## The tech stack that powers this blog
 
 ### 🚀 Astro - The foundation
 
-The heart of this blog is built with [Astro](https://astro.build), and I couldn't be happier with this choice. Here's why Astro was perfect for this project:
+The heart of this blog is built with [Astro](https://astro.build).\
+Here's why Astro was perfect for this project:
 
-- **Content-First Architecture**: Astro is specifically designed for content-heavy sites like blogs
-- **Island Architecture**: Components are hydrated only when needed, resulting in blazing-fast performance
-- **Framework Agnostic**: I can use React, Vue, or any other framework when needed, but most of the site is pure HTML/CSS
-- **Excellent Developer Experience**: Hot reloading, TypeScript support out of the box, and intuitive file-based routing
+- **Content-First architecture**: Astro is specifically designed for content-heavy sites like blogs
+- **Zero JavaScript by default**: Only the minimum JavaScript is sent to the client, making it incredibly fast
+- **Framework agnostic**: I could use React, Vue, or any other framework if needed, but most of the site is pure HTML/CSS written in Astro components
+- **Excellent developer experience**: Hot reloading, TypeScript support out of the box, and intuitive file-based routing
 
 ### 📚 Content Collections - Structured content management
 
-One of Astro's killer features is Content Collections, which I'm using to manage blog posts and topics:
+One of Astro's killer features is Content Collections, which I'm using to manage blog posts and more:
 
 ```typescript
 const posts = defineCollection({
   loader: glob({ pattern: '**/*.{md,mdx}', base: './src/content/posts' }),
-  schema: PostContentSchema,
-});
-
-const topics = defineCollection({
-  loader: glob({ pattern: '**/*.json', base: './src/content/topics' }),
-  schema: TopicContentSchema,
+  schema: PostContentSchema, // Zod schema for validating post frontmatter
 });
 ```
 
 This gives me:
 
-- **Type Safety**: Every post is validated against a Zod schema
-- **Automatic Routing**: Posts are automatically available at `/posts/[slug]`
-- **Rich Metadata**: Frontmatter includes everything from reading time to featured status
-- **MDX Support**: Full MDX capabilities when I need interactive components in posts
+- **Type safety**: Every post is validated against a [Zod schema](https://docs.astro.build/en/guides/content-collections/#defining-the-collection-schema)
+- **Automatic routing**: Posts are automatically available at `/posts/[slug]`
+- **Rich metadata**: Frontmatter includes everything I need, like the post title, its summary, its reading time, etc,...
+- **MDX support**: Full MDX capabilities when I need interactive components in posts
 
 ### 🗄️ SQLite + Drizzle ORM - Simple yet powerful data layer
 
-For the database layer, I went with SQLite managed through Drizzle ORM:
+For the database layer, I went with a SQLite database hosted on [Turso](https://turso.tech), managed through [Drizzle ORM](https://orm.drizzle.team/):
 
 **Why SQLite?**
 
 - Perfect for a blog that doesn't need complex relationships
 - Zero configuration - it's just a file
-- Incredibly fast for read-heavy workloads
 - Easy to backup and migrate
 
 **Why Drizzle ORM?**
 
-- TypeScript-first approach with excellent type inference
-- Lightweight and performant
-- SQL-like syntax that doesn't hide the database
-- Great migration system
-
-```typescript
-// Example of how clean the database operations are:
-const posts = await db
-  .select()
-  .from(postsTable)
-  .where(eq(postsTable.status, 'published'))
-  .orderBy(desc(postsTable.createdAt));
-```
+One word, TypeScript.
 
 ### 🎨 Styling philosophy
 
 The visual design is built with:
 
-- **TailwindCSS**: Utility-first CSS framework for rapid development
+- **[TailwindCSS v4](https://tailwindcss.com/blog/tailwindcss-v4)**: Utility-first CSS framework for rapid development
 - **Mobile-First Approach**: Every component is designed mobile-first, then enhanced for larger screens
-- **Custom Color System**: Carefully crafted color palette with CSS custom properties
-- **Typography**: Beautiful typography using the Inter font family
-
-### 🔧 Developer experience enhancements
-
-I've put a lot of effort into making this codebase maintainable and enjoyable to work with:
-
-```json
-{
-  "scripts": {
-    "astro:dev": "astro dev",
-    "astro:build": "astro check && astro build",
-    "db:migrate:local": "tsx --env-file=.env.development ./src/db/migrate.ts",
-    "drizzle:studio": "npx drizzle-kit studio"
-  }
-}
-```
-
-- **TypeScript Everywhere**: Full type safety from database to UI components
-- **ESLint + Prettier**: Consistent code formatting and linting
-- **Hot Reloading**: Instant feedback during development
-- **Component Library**: Reusable components with proper TypeScript interfaces
+- **Custom Color System**: Carefully crafted color palette (= whatever colors I liked 👀) with CSS custom properties
+- **Astro scoped styles**: Where I needed more complex styles, I used Astro's scoped styles over Tailwind
 
 ## Architecture decisions & patterns
 
@@ -123,15 +86,25 @@ The project follows a clean, scalable structure:
 
 ```
 src/
+├── assets/         # Static assets like images and fonts
 ├── components/     # Reusable UI components
 ├── content/        # Blog posts and topics
-├── db/            # Database schemas and utilities
-├── layouts/       # Page layouts
-├── pages/         # Route pages
-├── services/      # Business logic
-├── types/         # TypeScript type definitions
-└── utils/         # Helper functions
+├── db/             # Database schemas and utilities
+├── layouts/        # Page layouts
+├── pages/          # Routes
+├── types/          # TypeScript type definitions and Zod schemas
+└── utils/          # Helper functions
 ```
+
+### SEO
+Every page is optimized for SEO with: 
+- **Meta tags**
+- **Open Graph and Twitter Cards**: Custom images and metadata for social sharing
+- **Structured Data**: JSON-LD for rich search results
+- **Sitemap**: Automatically generated sitemap for better indexing
+- **Robots.txt**: Properly configured to allow search engines to index the site
+
+Static pages have its metadata hardcoded, whereas dynamic pages (like blog posts) have their metadata defined in the frontmatter and processed at build time.
 
 ### Content management workflow
 
@@ -139,33 +112,38 @@ Writing a new blog post is as simple as:
 
 1. Create a new `.mdx` file in `src/content/posts/`
 2. Add the required frontmatter (validated by Zod schema)
-3. Write the content in Markdown/MDX
-4. The post automatically appears on the blog with proper routing, SEO, and styling
+3. Write its content in Markdown syntax, using MDX for interactive components
+4. Save and commit the file, which is version controlled with Git with the rest of the repository
+5. Set the post's status to `published` in the frontmatter to make it live whenever it's ready
+6. Merge to the main branch, which triggers a build and deploy process on [Netlify](https://www.netlify.com/).
+7. The post automatically appears on the blog with proper routing, SEO, and styling
 
 ### Performance optimizations
 
-- **Static Site Generation**: Most pages are pre-rendered at build time
+- **Static Site Generation**: For now, the entire site is statically generated at build time, resulting in fast load times
 - **Image Optimization**: Automatic image optimization with Astro's built-in tools
 - **CSS Purging**: Unused CSS is automatically removed in production
-- **Minimal JavaScript**: Only interactive components are hydrated
+- **Minimal JavaScript**: Most components ship as static HTML, with JavaScript only for interactivity when needed (e.g. the sidemenu on small screens uses some JavaScript to toggle the menu visibility by swiping left or right)
 
 ## What's coming next
 
-Now that the foundation is solid, here's what you can expect from DuckyCoding:
+Now that the foundation is solid I can finally start blogging!\
+Here's what you can expect from DuckyCoding:
 
-- **In-Depth Tutorials**: Deep dives into modern web development
-- **Code Reviews**: Analysis of popular open-source projects
-- **Tool Comparisons**: Honest comparisons of frameworks, libraries, and tools
-- **Career Insights**: Lessons learned from years in the industry
-- **Project Walkthroughs**: Building real applications from scratch
+- **Quick guides**: Short, focused tutorials on specific topics like Astro features, CSS tricks, TypeScript tips, web performance optimization, etc,...
+- **In-depth articles**: Longer posts diving deep into web development concepts, architecture patterns, and best practices
+- **Project showcases**: Behind-the-scenes looks at projects I'm working on, including code snippets and architecture decisions
+- **Community Q&A**: Answering questions from readers, sharing solutions to common problems, and discussing new technologies
+- **Guest posts**: Inviting other developers to share their experiences and insights
+- **Tech news and trends**: My take on the latest developments in the web development world, including new tools, frameworks, and best practices
 
 ## Join the journey
 
 I'm excited to share this journey with you! Whether you're a seasoned developer or just starting out, I hope you'll find value in the content I'll be sharing.
 
-Feel free to reach out if you have questions about the technical setup, suggestions for future posts, or just want to connect. You can find me on [GitHub](https://github.com/duckycoding-dev) or on my different socials.
+Feel free to reach out if you have questions about the technical setup, suggestions for future posts, or just want to connect. You can find me on [GitHub](https://github.com/duckycoding-dev) or on any of my socials.
 
-Here's to building great things together! 🚀🦆
+Here's to building great things together! Quack! 🦆
 
 ---
 
