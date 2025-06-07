@@ -234,22 +234,18 @@ const blogPostJsonLd = {
       {
         entry.data.tags.length > 0 ? (
           <div class='flex flex-wrap justify-center gap-2'>
-            {entry.data.tags.map((tag, index) => {
-              if (tag.toLowerCase() === entry.data.topicTitle.toLowerCase()) {
-                return (
-                  <Link
-                    variant='contained'
-                    href={`/topics/${tag.toLowerCase()}`}
-                    class='border-secondary rounded-full border-none p-0'
-                  >
-                    <Tag
-                      class={`${index % 2 === 0 ? 'bg-accent2' : 'bg-accent'}`}
-                    >
-                      {tag}
-                    </Tag>
-                  </Link>
-                );
-              } else {
+            {entry.data.topicTitle && (
+              <Link
+                variant='contained'
+                href={`/topics/${entry.data.topicTitle.toLowerCase()}`}
+                class='border-secondary rounded-full border-none p-0'
+              >
+                <Tag class='bg-accent'>{entry.data.topicTitle}</Tag>
+              </Link>
+            )}
+            {entry.data.tags
+              .filter((tag) => tag !== entry.data.topicTitle)
+              .map((tag, index) => {
                 return (
                   <Tag
                     class={`${index % 2 === 0 ? 'bg-accent2' : 'bg-accent'}`}
@@ -257,8 +253,7 @@ const blogPostJsonLd = {
                     {tag}
                   </Tag>
                 );
-              }
-            })}
+              })}
           </div>
         ) : null
       }
