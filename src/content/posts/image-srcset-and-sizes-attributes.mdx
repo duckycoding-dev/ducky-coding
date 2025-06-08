@@ -13,7 +13,7 @@ tags:
   - 'Web Development'
 timeToRead: 8
 bannerImagePath: 'posts/image-srcset-and-sizes-attributes.png'
-status: 'draft'
+status: 'published'
 language: 'en'
 isFeatured: true
 ---
@@ -25,8 +25,8 @@ import chromeVideo from '../../assets/videos/chrome_srcset_test.mp4';
 Modern web development requires serving optimized images across different devices and screen sizes: we don't want to load a full 4K image that get's displayed in a 300px column but instead we want to load different images for any given context.\
 While building this website I stumbled upon this need of optimizing my images for these scenarios, to improve load times and user experience.
 
-How have I done this? Using powerful tools built into HTML.\
-HTML5's `<img />`'s `srcset` and `sizes` attributes come into play for managing this without the need of writing any JavaScript.
+How have I done this? Using powerful tools built into <abbr title='Hyper text markup language'>HTML</abbr>.\
+<abbr title='Hyper text markup language 5'>HTML5</abbr>'s `<img />`'s `srcset` and `sizes` attributes come into play for managing this without the need of writing any JavaScript.
 
 I couldn't find a clear and definitive explanation with examples on how these actually worked, so I started testing them myself.\
 So... let me explain how these work, based on my own research and personal tests
@@ -128,9 +128,9 @@ Simple responsive sizing:
 />
 ```
 
-Let's analyze all the possible scenarios (I'll use "CVW" as "current viewport width", and "AVW" as "actual viewport width")\
-To recap: we need to calculate the ACVW to use: AVW = CVW \* SIZE (when dealing with sizes relative to the viewport, for other cases, such as when using `em` or `rem` the calculation is a bit different of course, but you get the idea)\
-Finally, we need to multiply the AVW by the screen pixel density to get the final value which will be used to determine which item in the srcset gets selected
+Let's analyze all the possible scenarios (I'll use <abbr title='current viewport width'>CVW</abbr> as "current viewport width", and <abbr title='actual viewport width'>AVW</abbr> as "actual viewport width")\
+To recap: we need to calculate the <abbr title='actual viewport width'>AVW</abbr> to use: <abbr title='actual viewport width'>AVW</abbr> = <abbr title='current viewport width'>CVW</abbr> \* SIZE (when dealing with sizes relative to the viewport, for other cases, such as when using `em` or `rem` the calculation is a bit different of course, but you get the idea)\
+Finally, we need to multiply the <abbr title='actual viewport width'>AVW</abbr> by the screen pixel density to get the final value which will be used to determine which item in the srcset gets selected
 
 #### Fallback
 
@@ -203,13 +203,13 @@ Here are some key points to remember when working with `<img/>` and its `srcset`
 In order to use these tools you might need to do some math, and take into account various factors when deciding which "breakpoints" to use for your images: for example you might have to consider if padding is used, if the image is in a multi column layout, gaps between columns, etc,...; or even, if you are using `sizes` relative to the font size (such as `em` or `rem`) you have to take that into account instead of the viewport width.
 
 Also, as you saw, you **DON'T NEED** to use JavaScript just to load different images in different scenarios!\
-If we are leveraging the full potential of basic HTML and browser's features, we can save ourselves a lot of work (and save our users a lot of time and mobile data waiting for a huge image to load on their small mobile device).\
-I'm not saying there aren't some use cases where JS can be used when dealing with images, because there are many where you might want to use it, but for simple scenarios in which you just want to load the "least impacting but still good looking" image you should probably just let the browser decide which one is the most appropriate to load.
+If we are leveraging the full potential of basic <abbr title='Hyper text markup language'>HTML</abbr> and browser's features, we can save ourselves a lot of work (and save our users a lot of time and mobile data waiting for a huge image to load on their small mobile device).\
+I'm not saying there aren't some use cases where <abbr title='JavaScript'>JS</abbr> can be used when dealing with images, because there are many where you might want to use it, but for simple scenarios in which you just want to load the "least impacting but still good looking" image you should probably just let the browser decide which one is the most appropriate to load.
 
 ## Greetings
 
 That's it for this article!\
-Thank you for taking the time to read through this deep dive into HTML5's `srcset` and `sizes` attributes! I hope you found this helpful!
+Thank you for taking the time to read through this deep dive into <abbr title='Hyper text markup language 5'>HTML5</abbr>'s `srcset` and `sizes` attributes! I hope you found this helpful!
 
 This was actually my very first technical blog post, so I really hope the explanations were clear and easy to follow.\
 Writing about web development topics is something I'm passionate about, and I'm excited to share more insights on various programming and web development topics in future posts.

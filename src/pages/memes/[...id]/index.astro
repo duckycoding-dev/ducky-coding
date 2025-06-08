@@ -104,7 +104,7 @@ const memeJsonLd = {
 
 <HolyGrailLayout
   seoProps={{
-    title: title,
+    title: `${title} - meme`,
     description: `Check out this meme titled "${title}", created by ${author}${author.toLowerCase() !== 'duckycoding' ? ' and brought to you by DuckyCoding' : ''}.`,
     openGraph: {
       basic: {
@@ -182,7 +182,7 @@ const memeJsonLd = {
           alt={imageAlt}
           widths={getImageWidths(processedImage.width)}
           sizes={IMAGE_COMMON_SIZES}
-          class='block h-auto max-h-[70vh] w-full object-contain'
+          class='block max-h-[70vh] object-contain'
           fetchpriority='high'
           loading='eager'
           decoding='async'
@@ -193,9 +193,10 @@ const memeJsonLd = {
   <MemeInfo createdAt={createdAt} tags={tags} author={author} />
   {
     entry && (
-      <article class='text-md text-secondary bg-primary-200 border-secondary shadow-comic mx-auto mb-6 max-w-4xl border-2 p-4 md:text-lg'>
-        <MarkdownContent entry={entry} />
-      </article>
+      <MarkdownContent
+        entry={entry}
+        class='text-md text-secondary bg-primary-200 border-secondary shadow-comic mx-auto mb-6 max-w-4xl border-2 p-4 md:text-lg'
+      />
     )
   }
   {

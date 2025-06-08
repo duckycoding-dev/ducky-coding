@@ -34,7 +34,7 @@ Here's why Astro was perfect for this project:
 
 - **Content-First architecture**: Astro is specifically designed for content-heavy sites like blogs
 - **Zero JavaScript by default**: Only the minimum JavaScript is sent to the client, making it incredibly fast
-- **Framework agnostic**: I could use React, Vue, or any other framework if needed, but most of the site is pure HTML/CSS written in Astro components
+- **Framework agnostic**: I could use React, Vue, or any other framework if needed, but most of the site is pure <abbr title='Hyper text markup language'>HTML</abbr>/<abbr title='Cascading style sheets'>CSS</abbr> written in Astro components
 - **Excellent developer experience**: Hot reloading, TypeScript support out of the box, and intuitive file-based routing
 
 ### 📚 Content Collections - Structured content management
@@ -55,7 +55,7 @@ This gives me:
 - **Rich metadata**: Frontmatter includes everything I need, like the post title, its summary, its reading time, etc,...
 - **MDX support**: Full MDX capabilities when I need interactive components in posts
 
-### 🗄️ SQLite + Drizzle ORM - Simple yet powerful data layer
+### 🗄️ SQLite + Drizzle <abbr title='Object Relational Mapper'>ORM</abbr> - Simple yet powerful data layer
 
 For the database layer, I went with a SQLite database hosted on [Turso](https://turso.tech), managed through [Drizzle ORM](https://orm.drizzle.team/):
 
@@ -65,7 +65,7 @@ For the database layer, I went with a SQLite database hosted on [Turso](https://
 - Zero configuration - it's just a file
 - Easy to backup and migrate
 
-**Why Drizzle ORM?**
+**Why Drizzle <abbr title='Object Relational Mapper'>ORM</abbr>?**
 
 One word, TypeScript.
 
@@ -73,9 +73,9 @@ One word, TypeScript.
 
 The visual design is built with:
 
-- **[TailwindCSS v4](https://tailwindcss.com/blog/tailwindcss-v4)**: Utility-first CSS framework for rapid development
+- **[TailwindCSS v4](https://tailwindcss.com/blog/tailwindcss-v4)**: Utility-first <abbr title='Cascading style sheets'>CSS</abbr> framework for rapid development
 - **Mobile-First Approach**: Every component is designed mobile-first, then enhanced for larger screens
-- **Custom Color System**: Carefully crafted color palette (= whatever colors I liked 👀) with CSS custom properties
+- **Custom Color System**: Carefully crafted color palette (= whatever colors I liked 👀) with <abbr title='Cascading style sheets'>CSS</abbr> custom properties
 - **Astro scoped styles**: Where I needed more complex styles, I used Astro's scoped styles over Tailwind
 
 ## Architecture decisions & patterns
@@ -96,11 +96,11 @@ src/
 └── utils/          # Helper functions
 ```
 
-### SEO
-Every page is optimized for SEO with: 
+### <abbr title='Search Engine Optimization'>SEO</abbr>
+Every page is optimized for <abbr title='Search Engine Optimization'>SEO</abbr> with: 
 - **Meta tags**
 - **Open Graph and Twitter Cards**: Custom images and metadata for social sharing
-- **Structured Data**: JSON-LD for rich search results
+- **Structured Data**: <abbr title='JavaScript Object Notation for Linked Data'>JSON-LD</abbr> for rich search results
 - **Sitemap**: Automatically generated sitemap for better indexing
 - **Robots.txt**: Properly configured to allow search engines to index the site
 
@@ -122,15 +122,15 @@ Writing a new blog post is as simple as:
 
 - **Static Site Generation**: For now, the entire site is statically generated at build time, resulting in fast load times
 - **Image Optimization**: Automatic image optimization with Astro's built-in tools
-- **CSS Purging**: Unused CSS is automatically removed in production
-- **Minimal JavaScript**: Most components ship as static HTML, with JavaScript only for interactivity when needed (e.g. the sidemenu on small screens uses some JavaScript to toggle the menu visibility by swiping left or right)
+- **<abbr title='Cascading style sheets'>CSS</abbr> Purging**: Unused <abbr title='Cascading style sheets'>CSS</abbr> is automatically removed in production
+- **Minimal JavaScript**: Most components ship as static <abbr title='Hyper text markup language'>HTML</abbr>, with JavaScript only for interactivity when needed (e.g. the sidemenu on small screens uses some JavaScript to toggle the menu visibility by swiping left or right)
 
 ## What's coming next
 
 Now that the foundation is solid I can finally start blogging!\
 Here's what you can expect from DuckyCoding:
 
-- **Quick guides**: Short, focused tutorials on specific topics like Astro features, CSS tricks, TypeScript tips, web performance optimization, etc,...
+- **Quick guides**: Short, focused tutorials on specific topics like Astro features, <abbr title='Cascading style sheets'>CSS</abbr> tricks, TypeScript tips, web performance optimization, etc,...
 - **In-depth articles**: Longer posts diving deep into web development concepts, architecture patterns, and best practices
 - **Project showcases**: Behind-the-scenes looks at projects I'm working on, including code snippets and architecture decisions
 - **Community Q&A**: Answering questions from readers, sharing solutions to common problems, and discussing new technologies

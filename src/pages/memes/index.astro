@@ -45,7 +45,6 @@ const memesWithProcessedImage = (
 ) as ((typeof memes)[number] & {
   processedImage: ImageMetadata;
 })[]; // Ensure processedImage is defined, type inference is not working correctly with filter
-
 const pageUrl = Astro.url.href;
 
 const memesJsonLd = {
@@ -106,12 +105,12 @@ const memesJsonLd = {
 
 <HolyGrailLayout
   seoProps={{
-    title: 'Tech memes',
+    title: "Ducky's tech memes",
     description:
       "Enjoy a collection of tech-related memes that will make you laugh and relate to the developer's life, brought to you by DuckyCoding.",
     openGraph: {
       basic: {
-        title: 'Tech memes',
+        title: "Ducky's tech memes",
         type: 'website',
         url: pageUrl,
         image: new URL(DuckyCodingLogo.src, WEBSITE_ROOT).href,
@@ -139,7 +138,7 @@ const memesJsonLd = {
         modifiedTime: memes[0]?.data?.createdAt
           ? new Date(memes[0].data.createdAt).toISOString()
           : WEBSITE_FIRST_PUBLISHING_DATE,
-        section: 'Tech memes',
+        section: "Ducky's tech memes",
         authors: ['DuckyCoding', 'Davide'],
         tags: ['DuckyCoding', 'memes', 'tech', 'web development', 'developer'],
       },
@@ -168,7 +167,7 @@ const memesJsonLd = {
   <h1
     class='decoration-accent mb-2 text-center text-4xl font-extrabold wrap-anywhere underline underline-offset-4'
   >
-    Ducky's Meme Gallery
+    Ducky's meme gallery
   </h1>
   <small class='mb-8 block text-center italic'
     >A curated list of tech related memes</small
