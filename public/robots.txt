@@ -2,4 +2,4 @@ User-agent: *
 Disallow: /md/
 Noindex: /md/
 
-Sitemap: https://duckycoding.dev/sitemap-index.xml
+Sitemap: https://duckycoding.dev/sitemap-0.xml

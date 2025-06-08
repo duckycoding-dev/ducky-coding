@@ -21,10 +21,6 @@ const memes = defineCollection({
   schema: MemeContentSchema,
 });
 
-const md = defineCollection({
-  loader: glob({ pattern: '**/*.{md,mdx}', base: './src/content/md' }),
-});
-
 // 3. Export a single `collections` object to register your collection(s)
 //    This key should match your collection directory name in "src/content"
-export const collections = { posts, topics, memes, md };
+export const collections = { posts, topics, memes };

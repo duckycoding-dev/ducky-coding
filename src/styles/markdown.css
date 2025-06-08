@@ -1,6 +1,12 @@
 /* Basic text elements */
+
 .markdown-content p {
   margin-top: 1rem;
+}
+
+.markdown-content p:first-child {
+  /*if p is the first element of the markdown it does not need any top margin*/
+  margin-top: 0;
 }
 
 .markdown-content em {
@@ -140,6 +146,7 @@
 }
 
 .markdown-content q {
+  line-height: 200%;
   background-color: var(--color-accent2-200);
   padding: 0.2rem 0.4rem;
   border: 2px solid var(--color-secondary);
