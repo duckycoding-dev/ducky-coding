@@ -37,7 +37,14 @@ const {
 } = props;
 ---
 
-<Link variant='unstyled' href={`/posts/${post.slug}`} class={cn(className)}>
+<Link
+  variant='unstyled'
+  href={`/posts/${post.slug}`}
+  class={cn(
+    'rounded-xl transition-all duration-300 focus:shadow-comic-xl focus:-translate-y-1',
+    className,
+  )}
+>
   <Card class='card flex h-full flex-col'>
     <Image
       format={'avif'}

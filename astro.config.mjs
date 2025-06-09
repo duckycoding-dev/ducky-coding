@@ -16,7 +16,9 @@ export default defineConfig({
   outDir: './dist', // --DEFAULT--
   base: '/',
   trailingSlash: 'ignore', // --DEFAULT--
-  adapter: netlify(),
+  adapter: netlify({
+    imageCDN: false,
+  }),
   compressHTML: true, // could be set to false in development using env variables
   scopedStyleStrategy: 'attribute', // --DEFAULT--
   build: {

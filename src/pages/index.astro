@@ -3,11 +3,7 @@ import HolyGrailLayout from '@layouts/HolyGrailLayout/HolyGrailLayout.astro';
 import Card from '@components/Card/Card.astro';
 import { Image } from 'astro:assets';
 import headshotDavide from '@assets/images/head-shot-davide.jpg';
-import {
-  IMAGE_COMMON_SIZES,
-  WEBSITE_FIRST_PUBLISHING_DATE,
-  WEBSITE_ROOT,
-} from '../utils/globals';
+import { WEBSITE_FIRST_PUBLISHING_DATE, WEBSITE_ROOT } from '../utils/globals';
 import Link from '../components/Link/Link.astro';
 import type { ComponentProps } from 'astro/types';
 import TimelineCard from '../components/Card/TimelineCard.astro';
@@ -16,7 +12,6 @@ import FunfactCard from '../components/Card/FunfactCard.astro';
 import DuckyCodingLogo from '@assets/images/DuckyCoding_logo.png';
 import { DuckyCodingPerson } from '@utils/jsonld/person';
 import { DuckyCodingWebsite } from '@utils/jsonld/website';
-import { getImageWidths } from '../utils/images/images';
 
 const timelineObjects: ComponentProps<typeof TimelineCard>[] = [
   {
@@ -211,8 +206,11 @@ const homepageJsonLd = {
         <Card class='flex h-full w-full items-baseline md:items-baseline'>
           <Image
             format={'avif'}
-            widths={getImageWidths(headshotDavide.width)}
-            sizes={IMAGE_COMMON_SIZES}
+            widths={[200, 300, 316, 380, 400, 600, 632, 760]}
+            sizes={`
+              (max-width: 664px) calc(50vw - 4rem),
+              ((min-width: 665px) and (max-width: 975px)) 316px, 380px
+            `}
             loading={'eager'}
             decoding={'async'}
             fetchpriority={'high'}
