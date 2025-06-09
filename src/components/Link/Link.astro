@@ -80,11 +80,17 @@ const {
   ...props
 }: Props = Astro.props;
 const currentPath = Astro.url.pathname;
+const pathWithoutSlash = currentPath.endsWith('/')
+  ? currentPath.slice(0, -1)
+  : currentPath;
+const hrefWithoutSlash = href?.toString()?.endsWith('/')
+  ? href?.toString().slice(0, -1)
+  : href?.toString();
 ---
 
 {/* to avoid ciruclar links */}
 {
-  href && currentPath !== href && !isActive ? (
+  href && pathWithoutSlash !== hrefWithoutSlash && !isActive ? (
     <a
       href={href}
       class={cn(linkVariants({ variant, size, isActive: false }), className)}
