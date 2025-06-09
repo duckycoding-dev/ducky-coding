@@ -13,6 +13,9 @@ export interface HeaderProps {}
 export interface Props extends HTMLAttributes<'header'>, HeaderProps {}
 
 const { class: className, ...props }: Props = Astro.props;
+
+const currentPath = Astro.url.pathname;
+console.log('Current path:', currentPath);
 ---
 
 <header
@@ -33,7 +36,7 @@ const { class: className, ...props }: Props = Astro.props;
     />
     <div class='mx-auto h-[42px] md:mx-0' aria-hidden='true'>
       <Link
-        href='/'
+        href={currentPath === '/' ? '/#hero' : '/'}
         variant='contained'
         class='rounded-full p-0 md:justify-start'
         id='logo'
