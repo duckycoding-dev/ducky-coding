@@ -67,7 +67,7 @@ const {
   variant='unstyled'
   href={slug && `${envs.BASE_SITE_URL}/topics/${slug}`}
   class={cn(
-    'rounded-xl transition-all duration-300 focus:shadow-comic-xl focus:-translate-y-1',
+    'rounded-xl transition-all duration-300 focus:shadow-comic-xl focus:-translate-y-0.5 active:translate-y-0.5 active:shadow-comic group',
     className,
   )}
   title={title}
@@ -75,34 +75,37 @@ const {
 >
   <Card class='flex h-full flex-col'>
     {
-      imageSrc &&
-        (typeof imageSrc === 'string' ? (
-          <Image
-            format={'avif'}
-            src={imageSrc}
-            alt={imageAlt}
-            loading={loading}
-            decoding={decoding}
-            class={`${backgroundGradient} aspect-square w-full object-contain`}
-            width={200}
-            height={200}
-            widths={getImageWidths(200)}
-            sizes={IMAGE_COMMON_SIZES}
-            fetchpriority={fetchPriority}
-          />
-        ) : (
-          <Image
-            format={'avif'}
-            src={imageSrc}
-            alt={imageAlt}
-            loading={loading}
-            decoding={decoding}
-            class={`${backgroundGradient} aspect-square w-full object-contain`}
-            widths={getImageWidths(imageSrc.width)}
-            sizes={IMAGE_COMMON_SIZES}
-            fetchpriority={fetchPriority}
-          />
-        ))
+      imageSrc && (
+        <div class='aspect-square overflow-hidden'>
+          {typeof imageSrc === 'string' ? (
+            <Image
+              format={'avif'}
+              src={imageSrc}
+              alt={imageAlt}
+              loading={loading}
+              decoding={decoding}
+              class={`${backgroundGradient} -z-1 aspect-square w-full object-contain p-4 transition-transform duration-300 group-hover:scale-110 group-focus:scale-110 group-active:scale-110`}
+              width={200}
+              height={200}
+              widths={getImageWidths(200)}
+              sizes={IMAGE_COMMON_SIZES}
+              fetchpriority={fetchPriority}
+            />
+          ) : (
+            <Image
+              format={'avif'}
+              src={imageSrc}
+              alt={imageAlt}
+              loading={loading}
+              decoding={decoding}
+              class={`${backgroundGradient} -z-1 aspect-square w-full object-contain p-4 transition-transform duration-300 group-hover:scale-110 group-focus:scale-110 group-active:scale-110`}
+              widths={getImageWidths(imageSrc.width)}
+              sizes={IMAGE_COMMON_SIZES}
+              fetchpriority={fetchPriority}
+            />
+          )}
+        </div>
+      )
     }
     {
       title ? (
