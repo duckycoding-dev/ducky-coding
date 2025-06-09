@@ -3,11 +3,7 @@ import { getCollection } from 'astro:content';
 import HolyGrailLayout from '@layouts/HolyGrailLayout/HolyGrailLayout.astro';
 import { Image } from 'astro:assets';
 import { getImageWidths, matchImageFromGlobImport } from '@utils/images/images';
-import {
-  IMAGE_COMMON_SIZES,
-  IMAGE_DENSITIES,
-  WEBSITE_ROOT,
-} from '@utils/globals';
+import { IMAGE_DENSITIES, WEBSITE_ROOT } from '@utils/globals';
 import Link from '@components/Link/Link.astro';
 import type { Link as MetaLink } from 'astro-seo';
 import MemeContainer from '@components/Memes/MemeContainer.astro';
@@ -181,7 +177,10 @@ const memeJsonLd = {
           src={processedImage}
           alt={imageAlt}
           widths={getImageWidths(processedImage.width)}
-          sizes={IMAGE_COMMON_SIZES}
+          sizes={`
+            (max-width: 767px) calc(80vw - 4rem), 
+            (max-width: 896px) calc(80vw - 6rem), 896px,
+            `}
           class='block max-h-[70vh] object-contain'
           fetchpriority='high'
           loading='eager'

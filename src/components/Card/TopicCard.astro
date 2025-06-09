@@ -66,7 +66,10 @@ const {
 <Link
   variant='unstyled'
   href={slug && `${envs.BASE_SITE_URL}/topics/${slug}`}
-  class={cn('', className)}
+  class={cn(
+    'rounded-xl transition-all duration-300 focus:shadow-comic-xl focus:-translate-y-1',
+    className,
+  )}
   title={title}
   {...props}
 >
