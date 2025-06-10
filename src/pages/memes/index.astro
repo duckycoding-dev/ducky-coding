@@ -180,10 +180,14 @@ const memesJsonLd = {
       <section class='grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3'>
         {memesWithProcessedImage.map((meme, index) => (
           <Link
+            aria-label={"View page for this meme's details"}
             variant={'unstyled'}
             href={`/memes/${meme.id}/`}
             class='group hover:bg-primary-100 focus:bg-primary-100 bg-primary-100 xs:p-4 xs:gap-4 focus:shadow-comic-xl border-comic border-secondary shadow-comic-lg hover:shadow-comic-xl active:shadow-comic flex flex-col justify-between gap-2 overflow-hidden p-2 transition-all duration-300 hover:-translate-y-1 focus:-translate-y-1 active:translate-y-0.5'
           >
+            <small class='block text-center italic'>
+              Click to see more details
+            </small>
             <div class='border-secondary aspect-square h-auto w-full overflow-hidden border-2'>
               <Image
                 format={'avif'}
