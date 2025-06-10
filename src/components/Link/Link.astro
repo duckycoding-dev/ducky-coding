@@ -100,6 +100,7 @@ const hrefWithoutSlash = href?.toString()?.endsWith('/')
     </a>
   ) : (
     <span
+      aria-current='page'
       class={cn(linkVariants({ variant, size, isActive: true }), className)}
       {...props}
     >
@@ -107,4 +108,3 @@ const hrefWithoutSlash = href?.toString()?.endsWith('/')
     </span>
   )
 }
-<script></script>
