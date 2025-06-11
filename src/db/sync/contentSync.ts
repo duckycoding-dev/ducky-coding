@@ -1,7 +1,7 @@
 import { getCollection } from 'astro:content';
 import { serverLogger } from '@utils/logs/logger';
 import { db } from '../client';
-import { postsTable } from '../features/posts/posts.model';
+import { postsTable, type InsertPost } from '../features/posts/posts.model';
 import { postsTagsTable } from '../features/posts/posts_tags.model';
 import { tagsTable } from '../features/tags/tags.model';
 import { topicsTable } from '../features/topics/topics.model';
@@ -151,17 +151,18 @@ export async function syncContentToDatabase(): Promise<
           .where(eq(postsTable.slug, post.id))
           .get();
 
-        const postContentData = {
+        const postContentData: InsertPost = {
           slug: post.id,
           title: post.data.title,
           summary: post.data.summary,
-          content: post.body, // Full markdown content for search
+          content: post.body ?? '', // Full markdown content for search
           author: post.data.author,
           topicTitle: post.data.topicTitle,
           language: post.data.language || 'en',
           timeToRead: post.data.timeToRead || 1,
           status: post.data.status,
           bannerImagePath: post.data.bannerImagePath,
+          isFeatured: post.data.isFeatured || false,
         };
 
         let dbPost;
@@ -183,7 +184,8 @@ export async function syncContentToDatabase(): Promise<
             existingPost.language !== postContentData.language ||
             existingPost.timeToRead !== postContentData.timeToRead ||
             existingPost.status !== postContentData.status ||
-            existingPost.bannerImagePath !== postContentData.bannerImagePath
+            existingPost.bannerImagePath !== postContentData.bannerImagePath ||
+            existingPost.isFeatured !== (postContentData.isFeatured ?? false)
           ) {
             someDataChanged = true;
           }
@@ -233,7 +235,6 @@ export async function syncContentToDatabase(): Promise<
               updatedAt: Date.now(),
               publishedAt:
                 postContentData.status === 'published' ? Date.now() : null,
-              content: post.body ?? '', // Store full content for search
             })
             .returning();
           dbPost = insertedPost;
