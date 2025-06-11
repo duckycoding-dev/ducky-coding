@@ -70,9 +70,7 @@ const lastPostDateAsISOString = processedPostsWithImages[0]?.post.publishedAt
   ? new Date(processedPostsWithImages[0].post.publishedAt).toISOString()
   : WEBSITE_FIRST_PUBLISHING_DATE;
 
-const featuredPosts = processedPostsWithImages.filter(
-  ({ post }) => post.isFeatured,
-);
+const featuredPosts: typeof processedPostsWithImages = []; // todo implmement featured posts logic when we have enough posts: we will also need to only fetch X number of posts to show in this page; if that number is reached, we need to show a text inviting the user to check the topics page for older content
 
 const pageUrl = Astro.url.href;
 
@@ -206,8 +204,8 @@ const blogPageJsonLd = {
     Welcome to my blog
   </h1>
   <p class='mb-8 text-center text-lg'>
-    Here you will find articles and guides about web development and coding
-    concepts.
+    In my blog you will find articles and guides about web development, coding
+    concepts, the latest techs and much more.
     <br />
     Enjoy!
   </p>
@@ -215,7 +213,7 @@ const blogPageJsonLd = {
     processedPostsWithImages.length > 0 ? (
       <div class={`grid-layout ${featuredPosts.length ? 'gap-8' : ''}`}>
         <section class='[grid-area:latest]'>
-          <h2 class='border-comic border-secondary from-accent-200 to-accent2-200 shadow-comic mb-4 rounded-xl border-4 bg-gradient-to-br px-4 py-2 text-4xl font-extrabold'>
+          <h2 class='border-comic border-secondary from-accent-200 to-accent2-200 shadow-comic mb-4 rounded-xl border-4 bg-gradient-to-br px-4 py-2 text-2xl font-extrabold'>
             Latest posts
           </h2>
           <ul class='latest-grid-layout grid gap-8'>
@@ -244,8 +242,8 @@ const blogPageJsonLd = {
         </section>
         {featuredPosts.length > 0 ? (
           <section class='trending'>
-            <h2 class='border-comic border-secondary shadow-comic from-accent-100 to-accent3-100 mb-4 rounded-xl bg-gradient-to-br px-4 py-2 text-4xl font-extrabold'>
-              Trending
+            <h2 class='border-comic border-secondary from-accent-200 to-accent2-200 shadow-comic mb-4 rounded-xl border-4 bg-gradient-to-br px-4 py-2 text-2xl font-extrabold'>
+              Featured
             </h2>
             <ol class='flex flex-col gap-4'>
               {featuredPosts.map(({ post, tags }) => (

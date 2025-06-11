@@ -22,14 +22,14 @@ import chromeVideo from '../../assets/videos/chrome_srcset_test.mp4';
 
 ## Deep dive into the image element and its srcset and sizes attributes
 
+<abbr title='Hyper text markup language 5'>HTML5</abbr>'s `<img />`'s `srcset` and `sizes` attributes can help achieve faster load times and waste less data when fetching images, thus improving user experience: let me explain why and how you can use them effectively!
+
 Modern web development requires serving optimized images across different devices and screen sizes: we don't want to load a full 4K image that get's displayed in a 300px column but instead we want to load different images for any given context.\
-While building this website I stumbled upon this need of optimizing my images for these scenarios, to improve load times and user experience.
+While building this website I stumbled upon this need of optimizing my images for these scenarios
 
-How have I done this? Using powerful tools built into <abbr title='Hyper text markup language'>HTML</abbr>.\
-<abbr title='Hyper text markup language 5'>HTML5</abbr>'s `<img />`'s `srcset` and `sizes` attributes come into play for managing this without the need of writing any JavaScript.
+So, how have I done this? Using those powerful tools that I've just mentioned, which are built into <abbr title='Hyper text markup language'>HTML</abbr>, without the need of using any JavaScript.
 
-I couldn't find a clear and definitive explanation with examples on how these actually worked, so I started testing them myself.\
-So... let me explain how these work, based on my own research and personal tests
+I couldn't find a clear and definitive explanation with examples on how these actually worked, so I decided to test and explain them myself.
 
 ## The srcset attribute
 

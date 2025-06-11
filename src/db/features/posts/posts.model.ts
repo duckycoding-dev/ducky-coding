@@ -45,6 +45,12 @@ export const postsTable = sqliteTable('posts', {
 export const postSchema = createSelectSchema(postsTable);
 export const insertPostSchema = createInsertSchema(postsTable);
 export const updatePostSchema = createUpdateSchema(postsTable);
-export type Post = z.infer<typeof postSchema>;
-export type InsertPost = z.infer<typeof insertPostSchema>;
-export type UpdatePost = z.infer<typeof updatePostSchema>;
+export type Post = Omit<z.infer<typeof postSchema>, 'status'> & {
+  status: ContentStatus;
+};
+export type InsertPost = Omit<z.infer<typeof insertPostSchema>, 'status'> & {
+  status: ContentStatus;
+};
+export type UpdatePost = Omit<z.infer<typeof updatePostSchema>, 'status'> & {
+  status: ContentStatus;
+};

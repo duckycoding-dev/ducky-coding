@@ -1,6 +1,6 @@
 ---
-title: 'How I avoided self-referencing links in my website and why I think you should too'
-summary: "Learn how to prevent self-referencing links in your website's navigation structure, enhancing user experience, accessibility and SEO."
+title: 'How I avoid self-referencing links in my website and why I think you should too'
+summary: "Learn how to prevent self-referencing links in your website's navigation structure, enhancing user experience and accessibility."
 content: "Self-referencing links in a website can create a confusing user experience. In this post, I will share how I avoided self-referencing links in my website's navigation structure and why you should consider doing the same."
 author: 'DuckyCoding'
 topicTitle: 'HTML'
@@ -10,7 +10,7 @@ tags:
   - 'Web Development'
 timeToRead: 5
 bannerImagePath: 'posts/avoid-self-referencing-links.png'
-status: 'draft'
+status: 'published'
 language: 'en'
 isFeatured: true
 ---
@@ -18,15 +18,11 @@ import desktopNavbar from './desktop_navbar.png';
 import mobileNavbar from './mobile_navbar.png';
 import { Image } from 'astro:assets';
 
-## Let's understand what self-referencing links are and why I've decided to avoid them
-
-Self-referencing links in a website can create a confusing user experience.\
-In this post, I will share why I decided to avoid using them in my website's navigation structure, how I achieved this and why you should consider doing the same.
-
 ## What are self-referencing links?
 
 First of all, let's define what I mean when I'm talking about "self-referencing link".\
-Self-referencing links are links that lead to the same page where you find them: let's think about them in terms of anchor tags `<a href="..."></a>` in which the `href` attribute is equal to the current page path.
+Self-referencing links are links that lead to the same page where you find them: let's think about them in terms of anchor tags `<a href="..."></a>` in which the `href` attribute is equal to the current page path.\
+They can create a confusing user experience.\
 
 This type of link is generally found in navigation menus, footers, or other repeated elements across a website, but can be found anywhere really.
 
@@ -62,6 +58,8 @@ When you are on the about me page, its final html would probably be:
 ```
 As you can see, the "About me" link points to the same page where it is located, creating a self-referencing link: we want to avoid having this kind of links in our website.
 
+In this post, I will share why I decided to avoid using them in my website's navigation structure, how I achieved this and why you should consider doing the same.
+
 ## But wait, why should we avoid self-referencing links?
 Ask yourself this question: what do you think users expect to happen when they click on a link?\
 Exactly, ~~to not be brought to a malicious website~~ to be taken to a different page, right?\
@@ -79,7 +77,7 @@ Instead of having an anchor tag that points to the current page, I have replaced
 Here's how my navigation menu looks like, on desktop and on mobile, with self-referencing links replaced by styled `<span>` elements:
 
 <div class="my-2 overflow-x-scroll">
-  <Image src={desktopNavbar} alt="Example of my desktop navigation menu with self-referencing links removed" class='h-[70px] w-auto max-w-none'/>
+  <Image src={desktopNavbar} alt="Example of my desktop navigation menu with self-referencing links removed" class='h-[70px] md:h-auto w-auto max-w-none md:max-w-full'/>
 </div>
 <Image class='mx-auto max-h-[45vh] w-auto' src={mobileNavbar} alt="Example of my mobile navigation menu with self-referencing links removed" />
 
