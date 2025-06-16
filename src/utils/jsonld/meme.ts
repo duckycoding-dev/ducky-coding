@@ -1,6 +1,5 @@
 import { WEBSITE_ROOT } from '@utils/globals';
 import { AuthorPerson } from './person';
-import { TagThing } from './thing';
 import type { BaseHeadProps } from '../../layouts/BaseHead/BaseHead.astro';
 
 export interface MemeJsonLdProps {
@@ -87,7 +86,6 @@ export const MemeJsonLd = (props: MemeJsonLdProps) => {
     },
     keywords: tags.join(', '),
     genre: 'Meme',
-    about: tags.map((tag) => TagThing(tag)),
     inLanguage: 'en',
     isAccessibleForFree: true,
     usageInfo: 'Educational and entertainment purposes',

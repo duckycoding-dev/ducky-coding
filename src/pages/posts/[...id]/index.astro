@@ -13,7 +13,7 @@ import { serverLogger } from '@utils/logs/logger';
 import { ImagesService } from '@db/features/images/images.service';
 import { postsService } from '@db/features/posts/posts.service';
 import DuckyCodingLogo from '@assets/images/DuckyCoding_logo.png';
-import { TopicThing, TagThing } from '@utils/jsonld/thing';
+import { TopicThing } from '@utils/jsonld/thing';
 import { DuckyCodingBlog } from '@utils/jsonld/blog';
 import { AuthorPerson } from '@utils/jsonld/person';
 import ScrollToTopButton from '@components/ScrollToTopButton/ScrollToTopButton.astro';
@@ -98,7 +98,6 @@ const blogPostJsonLd = {
     inLanguage: entry.data.language || 'en',
     wordCount: entry.data.content.split(' ').length,
     about: TopicThing(entry.data.topicTitle),
-    mentions: entry.data.tags.map((tag) => TagThing(tag)),
     isPartOf: DuckyCodingBlog,
     potentialAction: {
       '@type': 'ReadAction',
