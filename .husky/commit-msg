@@ -1,0 +1,3 @@
+echo "Running commitlint... 📝"
+
+commitlint --edit $1

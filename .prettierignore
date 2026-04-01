@@ -6,8 +6,8 @@ build
 .husky
 .vscode
 docs
-local
-scripts
+best-practices
+commitlint.config.js
 package-lock.json
 
 **/*.md

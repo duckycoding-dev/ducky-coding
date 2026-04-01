@@ -1,9 +1,10 @@
-import { logLevels } from '@utils/logs/logger';
 import z from 'zod';
+
+import { logLevels } from '@utils/logs/logger';
 
 // env variables declared inside the .env file
 // import.meta.env is used for Vite and is available in the client-side code
-// process.env is used for Node.js and is available in the server-side code and scripts run by tsx
+// process.env is used for Node.js and is available in the server-side code and scripts
 
 const envVariables = z.object({
   BASE_SITE_URL: z.url(),
