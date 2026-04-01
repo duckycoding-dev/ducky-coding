@@ -1,21 +1,16 @@
 ---
-import HolyGrailLayout from '@layouts/HolyGrailLayout/HolyGrailLayout.astro';
 import { Image } from 'astro:assets';
+
 import duck404 from '@assets/images/404_duck.png';
 import Link from '@components/Link/Link.astro';
+import HolyGrailLayout from '@layouts/HolyGrailLayout/HolyGrailLayout.astro';
 import {
   IMAGE_COMMON_SIZES,
   WEBSITE_FIRST_PUBLISHING_DATE,
   WEBSITE_ROOT,
 } from '@utils/globals';
-import { syncAllContent, syncImages } from '../db/sync/contentSync';
 import { getImageWidths } from '../utils/images/images';
 
-// Content syncing is done here because this is the first page that gets rendered in the build process. (because pages are renrdered in alphabetical order)
-if (import.meta.env.PROD) {
-  await syncImages();
-  await syncAllContent();
-}
 const pageUrl = Astro.url.href;
 ---
 

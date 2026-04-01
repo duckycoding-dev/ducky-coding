@@ -1,14 +1,14 @@
 import { getCollection } from 'astro:content';
+import { sql } from 'drizzle-orm';
+import { eq } from 'drizzle-orm';
+
 import { serverLogger } from '@utils/logs/logger';
 import { db } from '../client';
-import { postsTable, type InsertPost } from '../features/posts/posts.model';
+import { imagesTable } from '../features/images/images.model';
+import { type InsertPost, postsTable } from '../features/posts/posts.model';
 import { postsTagsTable } from '../features/posts/posts_tags.model';
 import { tagsTable } from '../features/tags/tags.model';
 import { topicsTable } from '../features/topics/topics.model';
-
-import { sql } from 'drizzle-orm';
-import { eq } from 'drizzle-orm';
-import { imagesTable } from '../features/images/images.model';
 
 /**
  * Syncs topics from content collection to database
@@ -166,6 +166,8 @@ export async function syncContentToDatabase(): Promise<
         };
 
         let dbPost;
+        let shouldSyncTags = false;
+
         if (existingPost) {
           const postTagsFromDb = (
             await db
@@ -223,21 +225,27 @@ export async function syncContentToDatabase(): Promise<
               })
               .where(eq(postsTable.id, existingPost.id));
             dbPost = { ...existingPost, ...postContentData };
+            shouldSyncTags = true;
+          } else {
+            dbPost = existingPost; // Use existing post if no changes
           }
-          dbPost = existingPost; // Use existing post if no changes
         } else {
           // Insert new post
           const [insertedPost] = await db
             .insert(postsTable)
             .values({
               ...postContentData,
-              createdAt: Date.now(),
-              updatedAt: Date.now(),
+              createdAt: post.data.createdAt.getTime(),
+              updatedAt: (post.data.updatedAt ?? post.data.createdAt).getTime(),
               publishedAt:
-                postContentData.status === 'published' ? Date.now() : null,
+                post.data.publishedAt?.getTime() ??
+                (postContentData.status === 'published'
+                  ? post.data.createdAt.getTime()
+                  : null),
             })
             .returning();
           dbPost = insertedPost;
+          shouldSyncTags = true;
         }
         if (!dbPost) {
           throw new Error(
@@ -245,28 +253,30 @@ export async function syncContentToDatabase(): Promise<
           );
         }
 
-        // Sync tags - remove existing and add new ones
-        await db
-          .delete(postsTagsTable)
-          .where(eq(postsTagsTable.postId, dbPost.id));
+        // Sync tags - remove existing and add new ones (only if content changed)
+        if (shouldSyncTags) {
+          await db
+            .delete(postsTagsTable)
+            .where(eq(postsTagsTable.postId, dbPost.id));
 
-        if (post.data.tags && post.data.tags.length > 0) {
-          // Ensure all tags exist in tags table
-          for (const tagName of post.data.tags) {
-            await db
-              .insert(tagsTable)
-              .values({ name: tagName })
-              .onConflictDoNothing();
+          if (post.data.tags && post.data.tags.length > 0) {
+            // Ensure all tags exist in tags table
+            for (const tagName of post.data.tags) {
+              await db
+                .insert(tagsTable)
+                .values({ name: tagName })
+                .onConflictDoNothing();
+            }
+
+            // Link post to tags
+            const tagRelations = post.data.tags.map((tagName) => ({
+              postId: dbPost.id,
+              tagName: tagName,
+            }));
+
+            // Insert new tag relations
+            await db.insert(postsTagsTable).values(tagRelations);
           }
-
-          // Link post to tags
-          const tagRelations = post.data.tags.map((tagName) => ({
-            postId: dbPost.id,
-            tagName: tagName,
-          }));
-
-          // Insert new tag relations
-          await db.insert(postsTagsTable).values(tagRelations);
         }
 
         syncedCount++;
