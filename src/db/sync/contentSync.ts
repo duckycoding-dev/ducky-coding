@@ -1,14 +1,14 @@
 import { getCollection } from 'astro:content';
+import { sql } from 'drizzle-orm';
+import { eq } from 'drizzle-orm';
+
 import { serverLogger } from '@utils/logs/logger';
 import { db } from '../client';
-import { postsTable, type InsertPost } from '../features/posts/posts.model';
+import { imagesTable } from '../features/images/images.model';
+import { type InsertPost, postsTable } from '../features/posts/posts.model';
 import { postsTagsTable } from '../features/posts/posts_tags.model';
 import { tagsTable } from '../features/tags/tags.model';
 import { topicsTable } from '../features/topics/topics.model';
-
-import { sql } from 'drizzle-orm';
-import { eq } from 'drizzle-orm';
-import { imagesTable } from '../features/images/images.model';
 
 /**
  * Syncs topics from content collection to database
@@ -223,8 +223,9 @@ export async function syncContentToDatabase(): Promise<
               })
               .where(eq(postsTable.id, existingPost.id));
             dbPost = { ...existingPost, ...postContentData };
+          } else {
+            dbPost = existingPost; // Use existing post if no changes
           }
-          dbPost = existingPost; // Use existing post if no changes
         } else {
           // Insert new post
           const [insertedPost] = await db
