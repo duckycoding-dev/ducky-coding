@@ -202,6 +202,13 @@ export async function syncContentToDatabase(): Promise<
             someDataChanged = true;
           }
 
+          const frontmatterUpdatedAt = (
+            post.data.updatedAt ?? post.data.createdAt
+          ).getTime();
+          if (existingPost.updatedAt !== frontmatterUpdatedAt) {
+            someDataChanged = true;
+          }
+
           if (someDataChanged) {
             await db
               .update(postsTable)
@@ -220,8 +227,7 @@ export async function syncContentToDatabase(): Promise<
                   !existingPost.publishedAt
                     ? Date.now()
                     : existingPost.publishedAt,
-                // Always update updatedAt
-                updatedAt: Date.now(),
+                updatedAt: frontmatterUpdatedAt,
               })
               .where(eq(postsTable.id, existingPost.id));
             dbPost = { ...existingPost, ...postContentData };

@@ -16,9 +16,9 @@ export const PostContentSchema = z.object({
   status: ContentStatusSchema,
   tags: z.array(z.string()).min(1),
   isFeatured: z.boolean().default(false),
-  createdAt: z.date(),
-  publishedAt: z.date().optional(),
-  updatedAt: z.date().optional(),
+  createdAt: z.coerce.date(),
+  publishedAt: z.coerce.date().optional(),
+  updatedAt: z.coerce.date().optional(),
 });
 
 export type PostContent = z.infer<typeof PostContentSchema>;

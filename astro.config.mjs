@@ -5,6 +5,7 @@ import netlify from '@astrojs/netlify';
 import sitemap from '@astrojs/sitemap';
 import tailwindcss from '@tailwindcss/vite';
 
+import { buildSyncAllContent, buildSyncImages } from './src/db/sync/buildSync.ts';
 import { logLevels } from './src/utils/logs/logger';
 // properties without "--DEFAULT--" either use a setting decided by me or/and didn't have a default value
 
@@ -96,9 +97,6 @@ export default defineConfig({
       hooks: {
         'astro:build:start': async ({ logger }) => {
           logger.info('Starting DB sync...');
-          const { buildSyncImages, buildSyncAllContent } = await import(
-            './src/db/sync/buildSync.ts'
-          );
           await buildSyncImages();
           await buildSyncAllContent();
           logger.info('DB sync complete.');
