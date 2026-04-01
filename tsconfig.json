@@ -50,12 +50,12 @@
     "noImplicitOverride": true /* Ensure overriding members in derived classes are marked with an override modifier. */,
     "allowUnusedLabels": false /* Disable error reporting for unused labels. */,
     "allowUnreachableCode": false /* Disable error reporting for unreachable code. */,
+    "noFallthroughCasesInSwitch": true /* Enable error reporting for fallthrough cases in switch statements. */,
     "erasableSyntaxOnly": true,
     /* Completeness */
     "skipLibCheck": true /* Skip type checking all .d.ts files. */
   }
 }
-
 
 /* (1)
 The inferred type of 'ExampleTable' cannot be named without a reference to '../../../../node_modules/@astrojs/db/dist/_internal/core/types'.
