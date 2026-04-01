@@ -13,7 +13,7 @@
       "@styles/*": ["src/styles/*"],
       "@assets/*": ["src/assets/*"],
       "@services/*": ["src/services/*"],
-      "@custom-types/*": ["src/types/*"],
+      "@typings/*": ["src/types/*"],
       "@db/*": ["src/db/*"]
     },
     /* Emit */

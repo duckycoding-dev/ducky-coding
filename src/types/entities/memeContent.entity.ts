@@ -1,4 +1,4 @@
-import { z } from 'astro:content';
+import { z } from 'astro/zod';
 
 export const MemeContentSchema = z.object({
   title: z.string().min(1),
@@ -11,17 +11,17 @@ export const MemeContentSchema = z.object({
     .object({
       socials: z
         .object({
-          x: z.string().url().optional(), // Link to the meme on X (formerly Twitter)
-          linkedin: z.string().url().optional(), // Link to the meme on LinkedIn
-          reddit: z.string().url().optional(), // Link to the meme on Reddit
-          instagram: z.string().url().optional(), // Link to the meme on Instagram
-          github: z.string().url().optional(), // Link to the meme on GitHub
-          tiktok: z.string().url().optional(), // Link to the meme on TikTok
-          youtube: z.string().url().optional(), // Link to the meme on YouTube
+          x: z.url().optional(), // Link to the meme on X (formerly Twitter)
+          linkedin: z.url().optional(), // Link to the meme on LinkedIn
+          reddit: z.url().optional(), // Link to the meme on Reddit
+          instagram: z.url().optional(), // Link to the meme on Instagram
+          github: z.url().optional(), // Link to the meme on GitHub
+          tiktok: z.url().optional(), // Link to the meme on TikTok
+          youtube: z.url().optional(), // Link to the meme on YouTube
         })
         .optional(),
-      source: z.string().url().optional(), // Link to the original source of the meme
-      author: z.string().url().optional(), // Author of the meme if different from the main author
+      source: z.url().optional(), // Link to the original source of the meme
+      author: z.url().optional(), // Author of the meme if different from the main author
     })
     .optional(),
 });
