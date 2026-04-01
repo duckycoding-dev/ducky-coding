@@ -235,10 +235,13 @@ export async function syncContentToDatabase(): Promise<
             .insert(postsTable)
             .values({
               ...postContentData,
-              createdAt: Date.now(),
-              updatedAt: Date.now(),
+              createdAt: post.data.createdAt.getTime(),
+              updatedAt: (post.data.updatedAt ?? post.data.createdAt).getTime(),
               publishedAt:
-                postContentData.status === 'published' ? Date.now() : null,
+                post.data.publishedAt?.getTime() ??
+                (postContentData.status === 'published'
+                  ? post.data.createdAt.getTime()
+                  : null),
             })
             .returning();
           dbPost = insertedPost;
