@@ -1,10 +1,10 @@
+import { type z } from 'zod';
 import { sqliteTable, text } from 'drizzle-orm/sqlite-core';
 import {
-  createSelectSchema,
   createInsertSchema,
+  createSelectSchema,
   createUpdateSchema,
 } from 'drizzle-zod';
-import { z } from 'zod';
 
 export const tagsTable = sqliteTable('tags', {
   name: text().primaryKey().unique().notNull(),

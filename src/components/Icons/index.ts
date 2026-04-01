@@ -1,7 +1,8 @@
 import type { HTMLAttributes } from 'astro/types';
+
 import type {
-  AstroIconDimensions,
   AstroIconBasicProps,
+  AstroIconDimensions,
   GenericIconVariantsProps,
 } from './GenericIcon.astro';
 

@@ -1,8 +1,9 @@
 import type { APIRoute } from 'astro';
-import { serverLogger } from '@utils/logs/logger';
+import { TURSO_AUTH_TOKEN } from 'astro:env/server';
+
 import { ImagesService } from '@db/features/images/images.service';
 import { syncImages } from '@db/sync/contentSync';
-import { TURSO_AUTH_TOKEN } from 'astro:env/server';
+import { serverLogger } from '@utils/logs/logger';
 
 export const prerender = false; // Disable prerendering for this API route
 

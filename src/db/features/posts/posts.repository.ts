@@ -1,7 +1,8 @@
 import { eq, inArray } from 'drizzle-orm';
+
 import { db } from '../../client';
-import { postsTable, type Post } from './posts.model';
-import { imagesTable, type Image } from '../images/images.model';
+import { type Image, imagesTable } from '../images/images.model';
+import { type Post, postsTable } from './posts.model';
 import { postsTagsTable } from './posts_tags.model';
 
 const getPostsBySlugs = async (slugs: string[]): Promise<Post[]> => {

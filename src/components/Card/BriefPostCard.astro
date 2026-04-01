@@ -1,10 +1,11 @@
 ---
 import type { HTMLAttributes } from 'astro/types';
-import { cn } from '@utils/cn';
+
 import Card from '@components/Card/Card.astro';
 import Link from '@components/Link/Link.astro';
 import Tag from '@components/Tag/Tag.astro';
 import type { Post } from '@db/features/posts/posts.model';
+import { cn } from '@utils/cn';
 
 export interface BriefPostCardProps extends HTMLAttributes<'a'> {
   post: Post;
