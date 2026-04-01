@@ -21,3 +21,7 @@ pnpm-debug.log*
 .env.production
 
 .netlify/
+
+# sqlite files
+**/content.db-shm
+**/content.db-wal
