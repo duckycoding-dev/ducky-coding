@@ -166,6 +166,8 @@ export async function syncContentToDatabase(): Promise<
         };
 
         let dbPost;
+        let shouldSyncTags = false;
+
         if (existingPost) {
           const postTagsFromDb = (
             await db
@@ -223,6 +225,7 @@ export async function syncContentToDatabase(): Promise<
               })
               .where(eq(postsTable.id, existingPost.id));
             dbPost = { ...existingPost, ...postContentData };
+            shouldSyncTags = true;
           } else {
             dbPost = existingPost; // Use existing post if no changes
           }
@@ -239,6 +242,7 @@ export async function syncContentToDatabase(): Promise<
             })
             .returning();
           dbPost = insertedPost;
+          shouldSyncTags = true;
         }
         if (!dbPost) {
           throw new Error(
@@ -246,28 +250,30 @@ export async function syncContentToDatabase(): Promise<
           );
         }
 
-        // Sync tags - remove existing and add new ones
-        await db
-          .delete(postsTagsTable)
-          .where(eq(postsTagsTable.postId, dbPost.id));
+        // Sync tags - remove existing and add new ones (only if content changed)
+        if (shouldSyncTags) {
+          await db
+            .delete(postsTagsTable)
+            .where(eq(postsTagsTable.postId, dbPost.id));
 
-        if (post.data.tags && post.data.tags.length > 0) {
-          // Ensure all tags exist in tags table
-          for (const tagName of post.data.tags) {
-            await db
-              .insert(tagsTable)
-              .values({ name: tagName })
-              .onConflictDoNothing();
+          if (post.data.tags && post.data.tags.length > 0) {
+            // Ensure all tags exist in tags table
+            for (const tagName of post.data.tags) {
+              await db
+                .insert(tagsTable)
+                .values({ name: tagName })
+                .onConflictDoNothing();
+            }
+
+            // Link post to tags
+            const tagRelations = post.data.tags.map((tagName) => ({
+              postId: dbPost.id,
+              tagName: tagName,
+            }));
+
+            // Insert new tag relations
+            await db.insert(postsTagsTable).values(tagRelations);
           }
-
-          // Link post to tags
-          const tagRelations = post.data.tags.map((tagName) => ({
-            postId: dbPost.id,
-            tagName: tagName,
-          }));
-
-          // Insert new tag relations
-          await db.insert(postsTagsTable).values(tagRelations);
         }
 
         syncedCount++;
