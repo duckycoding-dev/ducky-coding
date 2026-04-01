@@ -41,10 +41,7 @@ type AstroIconVariantOnly = {
   height?: undefined;
 } & Pick<GenericIconVariantsProps, 'variant'>;
 
-export type AstroIconDimensions =
-  | AstroIconSizeOnly
-  | AstroIconWidthHeightOnly
-  | AstroIconVariantOnly;
+export type AstroIconDimensions = AstroIconSizeOnly | AstroIconWidthHeightOnly | AstroIconVariantOnly;
 
 export interface AstroIconBasicProps {
   name: string;
