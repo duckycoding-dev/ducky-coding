@@ -23,6 +23,7 @@ export default defineConfig(
       '**/*.md',
       '**/*.mdx',
       '**/.vscode/**/*',
+      '**/.husky/**',
       '**/.astro/**',
       '**/.netlify/**',
       '**/.claude/**',

@@ -24,6 +24,7 @@
   ],
   "main": "dist/index.html",
   "scripts": {
+    "prepare": "husky",
     "astro:check": "astro check",
     "astro:dev": "astro dev",
     "astro:build": "astro check && astro build",
@@ -79,6 +80,10 @@
     "prettier-plugin-tailwindcss": "0.7.2",
     "tsx": "4.21.0",
     "typescript": "5.9.3",
-    "typescript-eslint": "8.58.0"
+    "typescript-eslint": "8.58.0",
+    "@commitlint/cli": "20.5.0",
+    "@commitlint/config-conventional": "20.5.0",
+    "lint-staged": "16.4.0",
+    "husky": "9.1.7"
   }
 }
