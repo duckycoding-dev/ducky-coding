@@ -6,10 +6,10 @@ import z from 'zod';
 // process.env is used for Node.js and is available in the server-side code and scripts run by tsx
 
 const envVariables = z.object({
-  BASE_SITE_URL: z.string().url(),
+  BASE_SITE_URL: z.url(),
   SERVER_LOGS_LEVEL: z.enum(logLevels),
   CLIENT_LOGS_LEVEL: z.enum(logLevels),
-  TURSO_DATABASE_URL: z.string().url(),
+  TURSO_DATABASE_URL: z.url(),
   TURSO_AUTH_TOKEN: z.string().optional(),
 });
 

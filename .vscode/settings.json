@@ -8,8 +8,12 @@
   "editor.defaultFormatter": "esbenp.prettier-vscode",
   "editor.formatOnSave": true,
   "editor.formatOnSaveMode": "file",
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": "explicit",
+    "source.fixAll.prettier": "explicit"
+  },
   "editor.hover.above": true,
-  "editor.hover.enabled": true,
+  "editor.hover.enabled": "on",
   "editor.hover.delay": 500,
   "editor.inlineSuggest.enabled": true,
   "editor.inlayHints.enabled": "on",
@@ -33,9 +37,16 @@
   "html.hover.references": true,
   "html.hover.documentation": true,
 
+  "eslint.validate": [
+    "javascript",
+    "javascriptreact",
+    "typescript",
+    "typescriptreact",
+    "astro"
+  ],
+  "typescript.preferences.preferTypeOnlyAutoImports": true,
+  "typescript.preferences.importModuleSpecifier": "non-relative",
   "typescript.preferences.quoteStyle": "single",
-
-  "eslint.experimental.useFlatConfig": true,
   "tailwindCSS.experimental.classRegex": [
     ["cva\\(([^)]*)\\)", "[\"'`]([^\"'`]*).*?[\"'`]"],
     ["cx\\(([^)]*)\\)", "(?:'|\"|`)([^']*)(?:'|\"|`)"]

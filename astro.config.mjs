@@ -81,14 +81,7 @@ export default defineConfig({
   },
   vite: {
     css: {
-      // transformer: 'lightningcss', //TODO: uncomment this when moving to Tailwind v4.0: Tailwind v3 needs PostCSS to work (which is the default in Vite configs)
       devSourcemap: true,
-      // lightningcss: {
-      //   // This one is left uncommented because it has no effect if transformer is not se to lightning CSS
-      //   cssModules: {
-      //     dashedIdents: false,
-      //   },
-      // },
     },
     build: {
       // cssMinify: 'lightningcss',

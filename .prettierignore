@@ -1,2 +1,19 @@
-**/*.mdx
+node_modules
+dist
+build
+.astro
+.claude
+.husky
+.vscode
+docs
+local
+scripts
+package-lock.json
+
 **/*.md
+**/*.mdx
+
+# we are keeping the astro.config.mjs file compact,
+# especially for envs definitions that would end up
+# wrapping and taking up a lot of lines of code
+astro.config.mjs

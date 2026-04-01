@@ -1,11 +1,13 @@
-import rss from '@astrojs/rss';
+import type { APIRoute } from 'astro';
 import { getCollection } from 'astro:content';
+import rss from '@astrojs/rss';
+import MarkdownIt from 'markdown-it';
+import sanitizeHtml from 'sanitize-html';
+
 import { postsService } from '../db/features/posts/posts.service';
 import { matchImageFromGlobImport } from '../utils/images/images';
 import { serverLogger } from '../utils/logs/logger';
-import type { APIRoute } from 'astro';
-import sanitizeHtml from 'sanitize-html';
-import MarkdownIt from 'markdown-it';
+
 const parser = new MarkdownIt();
 
 export const GET: APIRoute = async (context) => {

@@ -1,9 +1,9 @@
 // 1. Import utilities from `astro:content`
 import { defineCollection } from 'astro:content';
 import { glob } from 'astro/loaders';
-import { PostContentSchema } from '@custom-types/entities/postContent.entity';
-import { TopicContentSchema } from '@custom-types/entities/topicContent.entity';
-import { MemeContentSchema } from '@custom-types/entities/memeContent.entity';
+import { PostContentSchema } from '@typings/entities/postContent.entity';
+import { TopicContentSchema } from '@typings/entities/topicContent.entity';
+import { MemeContentSchema } from '@typings/entities/memeContent.entity';
 
 // 2. Define your collection(s)
 const posts = defineCollection({

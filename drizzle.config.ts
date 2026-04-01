@@ -9,7 +9,7 @@ export default defineConfig({
   dialect: 'turso',
   casing: 'snake_case',
   dbCredentials: {
-    url: process.env.TURSO_DATABASE_URL ?? 'http://127.0.0.1:8080',
+    url: process.env.TURSO_DATABASE_URL ?? 'file:database/content.db',
     authToken: process.env.TURSO_AUTH_TOKEN,
   },
 });

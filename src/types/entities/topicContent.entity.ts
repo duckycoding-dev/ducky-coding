@@ -1,4 +1,4 @@
-import { z } from 'astro:content';
+import { z } from 'astro/zod';
 
 export const TopicContentSchema = z.object({
   title: z.string().min(1),
