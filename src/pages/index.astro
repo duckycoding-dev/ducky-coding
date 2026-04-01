@@ -1,17 +1,19 @@
 ---
-import HolyGrailLayout from '@layouts/HolyGrailLayout/HolyGrailLayout.astro';
-import Card from '@components/Card/Card.astro';
-import { Image } from 'astro:assets';
-import headshotDavide from '@assets/images/head-shot-davide.jpg';
-import { WEBSITE_FIRST_PUBLISHING_DATE, WEBSITE_ROOT } from '../utils/globals';
-import Link from '../components/Link/Link.astro';
-import type { ComponentProps } from 'astro/types';
-import TimelineCard from '../components/Card/TimelineCard.astro';
 import '@styles/markdown.css';
-import FunfactCard from '../components/Card/FunfactCard.astro';
+
+import type { ComponentProps } from 'astro/types';
+import { Image } from 'astro:assets';
+
 import DuckyCodingLogo from '@assets/images/DuckyCoding_logo.png';
+import headshotDavide from '@assets/images/head-shot-davide.jpg';
+import Card from '@components/Card/Card.astro';
+import HolyGrailLayout from '@layouts/HolyGrailLayout/HolyGrailLayout.astro';
 import { DuckyCodingPerson } from '@utils/jsonld/person';
 import { DuckyCodingWebsite } from '@utils/jsonld/website';
+import FunfactCard from '../components/Card/FunfactCard.astro';
+import TimelineCard from '../components/Card/TimelineCard.astro';
+import Link from '../components/Link/Link.astro';
+import { WEBSITE_FIRST_PUBLISHING_DATE, WEBSITE_ROOT } from '../utils/globals';
 
 const timelineObjects: ComponentProps<typeof TimelineCard>[] = [
   {

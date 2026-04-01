@@ -1,6 +1,6 @@
 import { WEBSITE_ROOT } from '@utils/globals';
-import { DuckyCodingPerson } from './person';
 import type { BaseHeadProps } from '../../layouts/BaseHead/BaseHead.astro';
+import { DuckyCodingPerson } from './person';
 
 export const DuckyCodingWebsite = {
   '@type': 'WebSite',

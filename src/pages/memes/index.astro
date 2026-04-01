@@ -1,20 +1,21 @@
 ---
-import { getCollection } from 'astro:content';
-import HolyGrailLayout from '@layouts/HolyGrailLayout/HolyGrailLayout.astro';
-import Link from '@components/Link/Link.astro';
 import { Image } from 'astro:assets';
+import { getCollection } from 'astro:content';
+
+import Link from '@components/Link/Link.astro';
+import HolyGrailLayout from '@layouts/HolyGrailLayout/HolyGrailLayout.astro';
 import { getImageWidths } from '@utils/images/images';
-import { matchImageFromGlobImport } from '../../utils/images/images';
-import { serverLogger } from '../../utils/logs/logger';
+import DuckyCodingLogo from '../../assets/images/DuckyCoding_logo.png';
 import CalendarIcon from '../../components/Icons/CalendarIcon.astro';
 import PersonIcon from '../../components/Icons/PersonIcon.astro';
+import type { BaseHeadProps } from '../../layouts/BaseHead/BaseHead.astro';
 import {
   WEBSITE_FIRST_PUBLISHING_DATE,
   WEBSITE_ROOT,
 } from '../../utils/globals';
-import DuckyCodingLogo from '../../assets/images/DuckyCoding_logo.png';
-import type { BaseHeadProps } from '../../layouts/BaseHead/BaseHead.astro';
+import { matchImageFromGlobImport } from '../../utils/images/images';
 import { AuthorPerson, DuckyCodingPerson } from '../../utils/jsonld/person';
+import { serverLogger } from '../../utils/logs/logger';
 
 // TODO: add a separate RSS feed for memes
 // TODO: decide if we will keep this as a single page with all memes loaded at once, or if should will implement pagination once the number of memes grows

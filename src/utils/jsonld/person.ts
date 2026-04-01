@@ -1,5 +1,5 @@
-import { WEBSITE_ROOT } from '@utils/globals';
 import headshotDavide from '@assets/images/head-shot-davide.jpg';
+import { WEBSITE_ROOT } from '@utils/globals';
 import { WavelopOrganization } from './organization';
 
 export const DuckyCodingPerson = {

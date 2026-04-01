@@ -1,11 +1,12 @@
 ---
+import type { ImageMetadata } from 'astro';
+import type { HTMLAttributes } from 'astro/types';
+import { Image } from 'astro:assets';
+
 import Card from '@components/Card/Card.astro';
 import Link from '@components/Link/Link.astro';
 import { cn } from '@utils/cn';
 import { envs } from '@utils/env';
-import type { ImageMetadata } from 'astro';
-import type { HTMLAttributes } from 'astro/types';
-import { Image } from 'astro:assets';
 import { IMAGE_COMMON_SIZES } from '../../utils/globals';
 import { getImageWidths } from '../../utils/images/images';
 

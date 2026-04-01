@@ -1,10 +1,10 @@
 import { migrate } from 'drizzle-orm/libsql/migrator';
 import { dirname, join } from 'path';
 import { fileURLToPath } from 'url';
-import { db } from './client';
-import { serverLogger } from '@utils/logs/logger';
 
-// eslint-disable-next-line no-underscore-dangle
+import { serverLogger } from '@utils/logs/logger';
+import { db } from './client';
+
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
 async function main() {

@@ -1,5 +1,6 @@
-import type { ClientLogger, ServerLogger } from '@utils/logs/logger';
 import type { ImageMetadata } from 'astro';
+
+import type { ClientLogger, ServerLogger } from '@utils/logs/logger';
 import { IMAGE_COMMON_WIDTHS } from '../globals';
 
 /**

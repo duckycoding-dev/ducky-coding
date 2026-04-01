@@ -1,7 +1,8 @@
 import { eq, inArray } from 'drizzle-orm';
+
 import { db } from '../../client';
-import { imagesTable, type Image } from '../images/images.model';
-import { topicsTable, type Topic } from './topics.model';
+import { type Image, imagesTable } from '../images/images.model';
+import { type Topic, topicsTable } from './topics.model';
 
 const getTopics = async (topicTitles: string[]): Promise<Topic[]> => {
   const topics = await db

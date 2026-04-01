@@ -1,4 +1,3 @@
-/* eslint-disable max-classes-per-file */
 import chalk from 'chalk';
 
 export const logLevels = ['log', 'info', 'warn', 'error', 'debug'] as const;
@@ -105,7 +104,6 @@ class LoggerImpl implements BaseLogger {
       logParts.push(`${coloredLevel}:`);
     }
 
-    // eslint-disable-next-line no-console
     console[level](logParts.join(' '), message, ...args);
   }
 
@@ -202,7 +200,6 @@ class ServerImpl extends LoggerImpl implements ServerLogger {
       }
     }
 
-    // eslint-disable-next-line no-console
     console[level](logParts.join(' '), coloredMessage, ...args);
   }
 }

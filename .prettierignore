@@ -9,6 +9,7 @@ docs
 best-practices
 commitlint.config.js
 package-lock.json
+src/db/migrations/
 
 **/*.md
 **/*.mdx

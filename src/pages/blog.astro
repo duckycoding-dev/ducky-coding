@@ -1,16 +1,17 @@
 ---
-import HolyGrailLayout from '@layouts/HolyGrailLayout/HolyGrailLayout.astro';
-import PostCard from '@components/Card/PostCard.astro';
-import BriefPostCard from '@components/Card/BriefPostCard.astro';
-import { getCollection } from 'astro:content';
 import { type ImageMetadata } from 'astro';
-import { matchImageFromGlobImport } from '@utils/images/images';
-import { serverLogger } from '@utils/logs/logger';
-import { postsService } from '../db/features/posts/posts.service';
+import { getCollection } from 'astro:content';
+
 import DuckyCodingLogo from '@assets/images/DuckyCoding_logo.png';
+import BriefPostCard from '@components/Card/BriefPostCard.astro';
+import PostCard from '@components/Card/PostCard.astro';
+import HolyGrailLayout from '@layouts/HolyGrailLayout/HolyGrailLayout.astro';
 import { WEBSITE_FIRST_PUBLISHING_DATE, WEBSITE_ROOT } from '@utils/globals';
-import DuckIcon from '../components/Icons/DuckIcon/DuckIcon.astro';
+import { matchImageFromGlobImport } from '@utils/images/images';
 import { AuthorPerson, DuckyCodingPerson } from '@utils/jsonld/person';
+import { serverLogger } from '@utils/logs/logger';
+import DuckIcon from '../components/Icons/DuckIcon/DuckIcon.astro';
+import { postsService } from '../db/features/posts/posts.service';
 import type { BaseHeadProps } from '../layouts/BaseHead/BaseHead.astro';
 
 const postsCollection = (await getCollection('posts'))
