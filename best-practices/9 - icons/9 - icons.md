@@ -1,21 +1,31 @@
-## Icons
-For using icons throught the project, we will be using the `astro-icon` (not an official AstroJS library, but one created by one of the founders)\
-For how to use the `<Icon>` component, check [astro-icon's docs](https://www.astroicon.dev/getting-started/).\
-As for the actual images, we will be using both `Material Design Icons (MDI)` and `Phosphor` icon sets: we use two because, even though they are huge libraries, they offer different things and some icons available in one of the two is missing from the other (and viceversa).\
-For example, `Phosphor` has the new Twitter logo (X) icon, whereas `MDI` does not; on the other hand `MDI` has an icon for Firefox while `Phosphor` does't.\
-`Phosphor` also offers different variants of the same logo, like filled, outlined, different thickness, etc...
+---
+updated: 2026-04-01
+---
 
-These two icon sets (and other in the future in case), are installed via `@icony-json` npm package.\
-To install one package it's as simple as typing `npm install @iconify-json/NAME_OR_ABBREVIATION_OF_THE_ICON_SET_YOU_WANT`: you can find all the icon sets at [iconify.design](https://iconify.design/)
+## Icons
 
-**_BE CAREFUL_**, if using server side rendering, or hybrid rendering, every icon of the assets will be imported in the final build.
-To avoid this, customize `astro.config.mjs` by including only the used icons, like done in the following example:
+For using icons throughout the project, we use `astro-icon` (not an official Astro library, but one created by one of the founders).
+For how to use the `<Icon>` component, check [astro-icon's docs](https://www.astroicon.dev/getting-started/).
+
+We use both `Material Design Icons (MDI)` and `Phosphor` icon sets: the two sets complement each other — some icons available in one are missing from the other.
+For example, `Phosphor` has the new Twitter/X logo icon, whereas `MDI` does not; `MDI` has a Firefox icon while `Phosphor` doesn't.
+`Phosphor` also offers multiple variants of the same icon (filled, outlined, different weights, etc.).
+
+These icon sets are installed via `@iconify-json` npm packages:
+
+```bash
+npm install @iconify-json/NAME_OR_ABBREVIATION_OF_THE_ICON_SET
+```
+
+You can browse all available icon sets at [iconify.design](https://iconify.design/).
+
+**BE CAREFUL**: when using server-side rendering or hybrid rendering, every icon in the assets will be included in the final build.
+To avoid bloating the bundle, configure `astro.config.mjs` to include only the icons actually used:
 
 ```js
 /* astro.config.mjs */
 
 export default defineConfig({
-...
   integrations: [
     icon({
       include: {
@@ -28,37 +38,3 @@ export default defineConfig({
   ]
 });
 ```
-
-
-#TODO: explain custom icon components
-#TODO: explain custom icon components
-#TODO: explain custom icon components
-#TODO: explain custom icon components
-#TODO: explain custom icon components
-#TODO: explain custom icon components
-#TODO: explain custom icon components
-#TODO: explain custom icon components
-#TODO: explain custom icon components
-#TODO: explain custom icon components
-#TODO: explain custom icon components
-#TODO: explain custom icon components
-#TODO: explain custom icon components
-#TODO: explain custom icon components
-#TODO: explain custom icon components
-#TODO: explain custom icon components
-#TODO: explain custom icon components
-#TODO: explain custom icon components
-#TODO: explain custom icon components
-#TODO: explain custom icon components
-#TODO: explain custom icon components
-#TODO: explain custom icon components
-#TODO: explain custom icon components
-#TODO: explain custom icon components
-#TODO: explain custom icon components
-#TODO: explain custom icon components
-#TODO: explain custom icon components
-#TODO: explain custom icon components
-#TODO: explain custom icon components
-#TODO: explain custom icon components
-#TODO: explain custom icon components
-#TODO: explain custom icon components

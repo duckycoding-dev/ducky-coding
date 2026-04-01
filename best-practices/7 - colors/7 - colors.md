@@ -1,87 +1,36 @@
+---
+updated: 2026-04-01
+---
+
 ### Color themes
 
-For the default theme, colors have been choosen trying to follow the 60-30-10 design rule as follow:
+For the default theme, colors follow the 60-30-10 design rule:
 
-- 60 - primary color: the one that is viewed the most throught the pages; mostly used as the background
-- 30 - secondary color: the one that is viewed a lot everywhere but that takes up a smaller percentage of the screen; mostly used for the text
-- 10 - accent colors: I came up with a list of three different colors that will be used to catch user attention or call them to do something; mostly used with buttons, links, borders, etc,...; of the three colors the idea is to use them in order, meaning that the accent-color-1 will be used more often than the other two
-- info colors: the ones used to transmit some meaning to the user, like errors, warning, successful actions, etc; mostly used in pop ups, snackbars and things like that
+- **60 - primary color**: used the most, mainly as backgrounds
+- **30 - secondary color**: used widely but takes up less space, mainly for text
+- **10 - accent colors**: three accent colors (`accent`, `accent2`, `accent3`) to draw user attention; used for buttons, links, borders, etc. Use them in order — `accent` most frequently, `accent3` least
+- **info colors**: convey meaning to the user (errors, warnings, success); used in pop-ups, snackbars, and similar UI
 
-The colors have been chosen so that their contrast is accessible: the idea is that a text using the secondary color over a background of either primary color or accent colors should always be highly visible to the user.\
-This means that for other themes we will need to follow this pattern as well, so that we don't need to handle complicated logic in css to handle one theme or the other.
+Colors are chosen so that secondary color text remains highly visible against both primary and accent backgrounds. Other themes must follow this same pattern to avoid complex per-theme CSS logic.
 
-For example, if I'm using the default theme and I'm making a button with text color of secondary color and background color of accent color, and it's highly visible, my code would look something like this:
+For example, a button using secondary text on an accent background is written:
 
 ```html
-<button class="text-secondary background-accent-1">Click me!</button>
+<button class="text-secondary bg-accent">Click me!</button>
 ```
 
-Now, if I were to change theme, I would want to **NOT CHANGE THE HTML** and to **keep the same class names**: the color changes will be handled by tailwind referencing the css variable that changes value at runtime based on the current theme;
+Switching themes changes the values of the CSS variables — the HTML and class names stay the same.
 
-### Text colors
+### Text colors (Tailwind v4)
 
-**How it was with Tailwind v3 (left for reference)**
+In Tailwind v4, color tokens are defined via `@theme` in `global.css`, referencing CSS custom properties set per-theme. Both `text-primary` and `bg-primary` point to `--color-primary`; `text-secondary` and `bg-secondary` point to `--color-secondary`. There is no cross-mapping between text and background tokens.
 
-Since, as we said, text colors would mostly use the secondary color most of the times, would it make sense to override the colors just for the texts?\
-The result I'm thinking about would be the following:\
+### Info colors
 
-- text-primary -> uses color-secondary
-- background-primary -> uses color-primary
-
-This is because for us it might be more intuitive to think like "what text color do I use here? oh the one that I use the most, so it must be text-primary", and to write classes that use either one of `primary` or `secondary`.
-
-To do so we need to customize tailwind configs to make text reference the right color.\
-We create two javascript const variables that contain the colors and then use them like so in tailwind.config.mjs:
-
-```js
-/* tailwind.config.mjs */
-
-const primaryColor = {
-  DEFAULT: 'var(--color-primary)',
-  100: 'var(--color-primary-100)',
-  200: 'var(--color-primary-200)',
-  300: 'var(--color-primary-300)',
-  400: 'var(--color-primary-400)',
-  500: 'var(--color-primary-500)',
-  600: 'var(--color-primary-600)',
-  700: 'var(--color-primary-700)',
-  800: 'var(--color-primary-800)',
-  900: 'var(--color-primary-900)',
-};
-
-const secondaryColor = {
-  DEFAULT: 'var(--color-secondary)',
-  100: 'var(--color-secondary-100)',
-  200: 'var(--color-secondary-200)',
-  300: 'var(--color-secondary-300)',
-  400: 'var(--color-secondary-400)',
-  500: 'var(--color-secondary-500)',
-  600: 'var(--color-secondary-600)',
-  700: 'var(--color-secondary-700)',
-  800: 'var(--color-secondary-800)',
-  900: 'var(--color-secondary-900)',
-};
-
-...
-
-export default {
-  theme: {
-    extend: {
-      colors: {
-        primary: primaryColor,
-        secondary: secondaryColor,
-        ...
-      },
-      textColor: {
-        primary: secondaryColor,
-        secondary: primaryColor,
-      },
-      ...
-    },
-  },
-};
+```css
+--color-success
+--color-warning
+--color-danger
 ```
 
-We could save all colors and other config object in const variables to clean up the final exported config object as well, for readibility.
-
-**TAILWIND V4 ISSUE:**: I could not figure out how to achieve this using tailwind v4 css config: thus I've reverted it and now `text-primary` points to `--color-primary` and `text-secondary` points to `--color-secondary`
+These are used for feedback states and should not be repurposed for decorative elements.
