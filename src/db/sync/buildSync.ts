@@ -12,10 +12,12 @@
 import { createClient } from '@libsql/client';
 import { eq, sql } from 'drizzle-orm';
 import { drizzle } from 'drizzle-orm/libsql';
-import { glob } from 'node:fs/promises';
-import { readFile } from 'node:fs/promises';
+import { glob, readFile } from 'node:fs/promises';
 import path from 'node:path';
+import { parse as parseYaml } from 'yaml';
 
+import { PostContentSchema } from '../../types/entities/postContent.entity.ts';
+import { TopicContentSchema } from '../../types/entities/topicContent.entity.ts';
 import { imagesTable } from '../features/images/images.model.ts';
 import { type InsertPost, postsTable } from '../features/posts/posts.model.ts';
 import { postsTagsTable } from '../features/posts/posts_tags.model.ts';
@@ -39,34 +41,8 @@ function createDb() {
 }
 
 // ---------------------------------------------------------------------------
-// Frontmatter parsing helpers
+// Frontmatter helpers
 // ---------------------------------------------------------------------------
-
-interface PostFrontmatter {
-  title: string;
-  summary: string;
-  content: string;
-  author: string;
-  topicTitle: string;
-  language?: string;
-  timeToRead?: number;
-  status: 'draft' | 'published' | 'deleted';
-  tags?: string[];
-  isFeatured?: boolean;
-  bannerImagePath?: string;
-  createdAt: Date;
-  publishedAt?: Date;
-  updatedAt?: Date;
-}
-
-interface TopicFrontmatter {
-  title: string;
-  slug: string;
-  imagePath?: string;
-  description: string;
-  backgroundGradient?: string;
-  externalLink?: string;
-}
 
 function extractFrontmatter(fileContent: string): {
   frontmatter: string;
@@ -79,173 +55,6 @@ function extractFrontmatter(fileContent: string): {
   const frontmatter = match[1] ?? '';
   const body = fileContent.slice(match[0].length);
   return { frontmatter, body };
-}
-
-function parseDate(value: unknown): Date | undefined {
-  if (value instanceof Date) return value;
-  if (typeof value === 'string' || typeof value === 'number') {
-    const d = new Date(value);
-    return isNaN(d.getTime()) ? undefined : d;
-  }
-  return undefined;
-}
-
-/**
- * Minimal regex-based YAML frontmatter parser.
- * Handles the scalar and list patterns used in this project's post frontmatter.
- * Does not support nested objects or multi-line block scalars.
- */
-function parseSimpleYaml(raw: string): Record<string, unknown> {
-  const result: Record<string, unknown> = {};
-  const lines = raw.split(/\r?\n/);
-  let i = 0;
-
-  while (i < lines.length) {
-    const line = lines[i] ?? '';
-    i++;
-
-    // Skip blank lines and comments
-    if (!line.trim() || line.trim().startsWith('#')) continue;
-
-    // List item at top level (shouldn't appear, but guard anyway)
-    if (/^\s+-/.test(line) && !/:/.test(line)) continue;
-
-    // Key: value line
-    const kvMatch = /^(\w+):\s*(.*)$/.exec(line);
-    if (!kvMatch) continue;
-
-    const key = kvMatch[1] ?? '';
-    const rawValue = (kvMatch[2] ?? '').trim();
-
-    // Check if next lines are a YAML list (items starting with "  - ")
-    const listItems: string[] = [];
-    while (i < lines.length) {
-      const next = lines[i] ?? '';
-      const listMatch = /^\s+-\s*(.*)$/.exec(next);
-      if (listMatch) {
-        listItems.push((listMatch[1] ?? '').replace(/^['"]|['"]$/g, '').trim());
-        i++;
-      } else {
-        break;
-      }
-    }
-
-    if (listItems.length > 0) {
-      result[key] = listItems;
-      continue;
-    }
-
-    // Empty value (list or block follows) — if no list captured, treat as null
-    if (rawValue === '') {
-      result[key] = null;
-      continue;
-    }
-
-    // Check if the value is quoted (YAML quotes preserve type as string)
-    const isQuoted = /^['"].*['"]$/.test(rawValue);
-
-    // Strip surrounding quotes
-    const unquoted = rawValue.replace(/^(['"])(.*)\1$/, '$2');
-
-    // If quoted, always treat as string (preserves YAML spec)
-    if (isQuoted) {
-      result[key] = unquoted;
-      continue;
-    }
-
-    // Boolean (unquoted only)
-    if (unquoted === 'true') {
-      result[key] = true;
-      continue;
-    }
-    if (unquoted === 'false') {
-      result[key] = false;
-      continue;
-    }
-
-    // Number (unquoted only)
-    if (/^-?\d+(\.\d+)?$/.test(unquoted)) {
-      result[key] = Number(unquoted);
-      continue;
-    }
-
-    // Date (YYYY-MM-DD) (unquoted only)
-    if (/^\d{4}-\d{2}-\d{2}$/.test(unquoted)) {
-      result[key] = new Date(unquoted);
-      continue;
-    }
-
-    result[key] = unquoted;
-  }
-
-  return result;
-}
-
-function parsePostFrontmatter(
-  rawFrontmatter: string,
-): PostFrontmatter | undefined {
-  try {
-    const parsed = parseSimpleYaml(rawFrontmatter);
-
-    const createdAt = parseDate(parsed['createdAt']);
-    if (!createdAt) {
-      console.log('  Skipping post: missing or invalid createdAt');
-      return undefined;
-    }
-
-    const status = parsed['status'];
-    if (status !== 'draft' && status !== 'published' && status !== 'deleted') {
-      console.log(`  Skipping post: invalid status "${String(status)}"`);
-      return undefined;
-    }
-
-    const title = parsed['title'];
-    const summary = parsed['summary'];
-    const content = parsed['content'];
-    const author = parsed['author'];
-    const topicTitle = parsed['topicTitle'];
-
-    if (
-      typeof title !== 'string' ||
-      typeof summary !== 'string' ||
-      typeof content !== 'string' ||
-      typeof author !== 'string' ||
-      typeof topicTitle !== 'string'
-    ) {
-      console.log('  Skipping post: missing required string fields');
-      return undefined;
-    }
-
-    return {
-      title,
-      summary,
-      content,
-      author,
-      topicTitle,
-      language:
-        typeof parsed['language'] === 'string' ? parsed['language'] : 'en',
-      timeToRead:
-        typeof parsed['timeToRead'] === 'number' ? parsed['timeToRead'] : 1,
-      status,
-      tags: Array.isArray(parsed['tags'])
-        ? (parsed['tags'] as string[]).filter((t) => typeof t === 'string')
-        : [],
-      isFeatured:
-        typeof parsed['isFeatured'] === 'boolean'
-          ? parsed['isFeatured']
-          : false,
-      bannerImagePath:
-        typeof parsed['bannerImagePath'] === 'string'
-          ? parsed['bannerImagePath']
-          : undefined,
-      createdAt,
-      publishedAt: parseDate(parsed['publishedAt']),
-      updatedAt: parseDate(parsed['updatedAt']),
-    };
-  } catch (err) {
-    console.log('  Failed to parse frontmatter:', err);
-    return undefined;
-  }
 }
 
 // ---------------------------------------------------------------------------
@@ -328,15 +137,15 @@ export async function buildSyncAllContent(): Promise<{
     for await (const topicFilePath of glob(topicGlobPattern)) {
       try {
         const fileContent = await readFile(topicFilePath, 'utf-8');
-        const topicData = JSON.parse(fileContent) as TopicFrontmatter;
-
-        if (!topicData.title || !topicData.slug) {
+        const parsed = TopicContentSchema.safeParse(JSON.parse(fileContent));
+        if (!parsed.success) {
           console.log(
-            `  Skipping topic file ${topicFilePath}: missing title or slug`,
+            `  Skipping topic ${topicFilePath}: ${parsed.error.message}`,
           );
           topicsSkippedCount++;
           continue;
         }
+        const topicData = parsed.data;
 
         const existingTopic = await db
           .select()
@@ -416,12 +225,15 @@ export async function buildSyncAllContent(): Promise<{
         const fileContent = await readFile(postFilePath, 'utf-8');
         const { frontmatter: rawFrontmatter, body } =
           extractFrontmatter(fileContent);
-        const postData = parsePostFrontmatter(rawFrontmatter);
-
-        if (!postData) {
+        const parsed = PostContentSchema.safeParse(parseYaml(rawFrontmatter));
+        if (!parsed.success) {
+          console.log(
+            `  Skipping post ${postFilePath}: ${parsed.error.message}`,
+          );
           postsSkippedCount++;
           continue;
         }
+        const postData = parsed.data;
 
         // Derive slug from file path relative to src/content/posts/
         const postsMarker = `src/content/posts/`;
@@ -467,6 +279,10 @@ export async function buildSyncAllContent(): Promise<{
           const existingTagsSet = new Set(postTagsFromDb);
           const tagsDifference = newTagsSet.difference(existingTagsSet);
 
+          const frontmatterUpdatedAt = (
+            postData.updatedAt ?? postData.createdAt
+          ).getTime();
+
           const someDataChanged =
             existingPost.title !== postContentData.title ||
             existingPost.summary !== postContentData.summary ||
@@ -478,6 +294,7 @@ export async function buildSyncAllContent(): Promise<{
             existingPost.status !== postContentData.status ||
             existingPost.bannerImagePath !== postContentData.bannerImagePath ||
             existingPost.isFeatured !== (postContentData.isFeatured ?? false) ||
+            existingPost.updatedAt !== frontmatterUpdatedAt ||
             tagsDifference.size > 0 ||
             newTagsSet.size !== existingTagsSet.size;
 
@@ -499,7 +316,7 @@ export async function buildSyncAllContent(): Promise<{
                   !existingPost.publishedAt
                     ? Date.now()
                     : existingPost.publishedAt,
-                updatedAt: Date.now(),
+                updatedAt: frontmatterUpdatedAt,
               })
               .where(eq(postsTable.id, existingPost.id));
 
