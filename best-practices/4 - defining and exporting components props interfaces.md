@@ -1,3 +1,7 @@
+---
+updated: 2025-05-16
+---
+
 ### For any .astro file
 
 Since Astro.props **always** reflects the type/interface (from now on only called "type" in either case) named `Props`, we need to first create a custom type with a more meaningful name.\

@@ -1,3 +1,7 @@
+---
+updated: 2026-04-01
+---
+
 ## use template files for new files
 
 When creating files with the same structures over and over again, it's handy to be able to generate some boilerplate code on file creation.\

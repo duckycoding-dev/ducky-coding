@@ -1,42 +1,42 @@
+---
+updated: 2026-04-01
+---
+
 ## How to style content from Markdown
 
-There are different ways to style markdown content inside an Astro page: using global styles, importing a stylesheet directly inside the page/layout that wraps the content, creating custom components for everything or using Tailwind's typography plugin.
+Markdown content is styled using a dedicated stylesheet (`src/styles/markdown.css`) combined with custom Astro components for elements that need richer markup.
 
-In order to ease development, for now we will rely on the Tailwind's typography plugin, combined with a few custom elements (for example for styling anchor tags as done around the website using the same `<Link />` component, with `variant='default'`)
+### Custom stylesheet
 
-It's been created a directory in `packages/astro-app/src/components/Markdown` in which are present some custom components, exported as a single object from the `index.ts` file: as for now this object won't be used, untill there is time to invest in manually styling how the markdown content looks, except for some components that might require immediate styling (again, e.g. the anchor tags)
+`src/styles/markdown.css` applies styles by scoping them under the `.markdown-content` class. Add this class to the wrapper element around the rendered markdown content:
 
-These custom components are used in this way, passed to the markdown `<Content />` component:
-
-```jsx
-// src/pages/posts/[...slug]/index.astro
+```astro
+<!-- src/pages/posts/[...slug]/index.astro -->
 ---
-import { MarkdownComponents } from '@components/Markdown';
 const { Content } = await entry.render();
 ---
 
-<article>
+<article class="markdown-content">
   <Content components={MarkdownComponents} />
 </article>
 ```
 
-In order to use Tailwind's typography plugin we add it to `tailwind.config.mjs` like so:
+The stylesheet covers: headings, paragraphs, lists, code blocks, blockquotes, tables, inline elements (`mark`, `kbd`, `abbr`, `q`, `time`), `details`/`summary`, and `hr`.
 
-```js
-import typography from '@tailwindcss/typography';
+### Custom Markdown components
 
-export default{
-  ...
-  plugins: [typography],
-}
+For elements that require richer component markup beyond what CSS alone can express, custom Astro components live in `src/components/Markdown/`.
+
+They are exported from `src/components/Markdown/index.ts` as a single `MarkdownComponents` object:
+
+```ts
+import { MarkdownComponents } from '@components/Markdown';
 ```
 
-And then add its own `prose` class (and other classes if needed) in the .astro page:
+And passed to the `<Content />` component:
 
-```jsx
-<article class='prose'>
-  <Content components={MarkdownComponents} />
-</article>
+```astro
+<Content components={MarkdownComponents} />
 ```
 
-For more info about Tailwind's typography plugin check its [GitHub repo](https://github.com/tailwindlabs/tailwindcss-typography#adding-custom-color-themes)
+Currently only the anchor tag (`a`) uses a custom component. All other elements are styled via the CSS stylesheet. To activate a custom component for another element, uncomment it in `src/components/Markdown/index.ts`.
