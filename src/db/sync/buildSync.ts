@@ -121,7 +121,7 @@ function parseSimpleYaml(raw: string): Record<string, unknown> {
     const listItems: string[] = [];
     while (i < lines.length) {
       const next = lines[i] ?? '';
-      const listMatch = /^\s+-\s+(.+)$/.exec(next);
+      const listMatch = /^\s+-\s*(.*)$/.exec(next);
       if (listMatch) {
         listItems.push((listMatch[1] ?? '').replace(/^['"]|['"]$/g, '').trim());
         i++;
@@ -141,10 +141,19 @@ function parseSimpleYaml(raw: string): Record<string, unknown> {
       continue;
     }
 
+    // Check if the value is quoted (YAML quotes preserve type as string)
+    const isQuoted = /^['"].*['"]$/.test(rawValue);
+
     // Strip surrounding quotes
     const unquoted = rawValue.replace(/^(['"])(.*)\1$/, '$2');
 
-    // Boolean
+    // If quoted, always treat as string (preserves YAML spec)
+    if (isQuoted) {
+      result[key] = unquoted;
+      continue;
+    }
+
+    // Boolean (unquoted only)
     if (unquoted === 'true') {
       result[key] = true;
       continue;
@@ -154,13 +163,13 @@ function parseSimpleYaml(raw: string): Record<string, unknown> {
       continue;
     }
 
-    // Number
+    // Number (unquoted only)
     if (/^-?\d+(\.\d+)?$/.test(unquoted)) {
       result[key] = Number(unquoted);
       continue;
     }
 
-    // Date (YYYY-MM-DD)
+    // Date (YYYY-MM-DD) (unquoted only)
     if (/^\d{4}-\d{2}-\d{2}$/.test(unquoted)) {
       result[key] = new Date(unquoted);
       continue;
