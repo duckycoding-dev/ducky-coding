@@ -1,9 +1,10 @@
 import { defineConfig, envField } from 'astro/config';
-import mdx from '@astrojs/mdx';
-import sitemap from '@astrojs/sitemap';
 import icon from 'astro-icon';
+import mdx from '@astrojs/mdx';
 import netlify from '@astrojs/netlify';
+import sitemap from '@astrojs/sitemap';
 import tailwindcss from '@tailwindcss/vite';
+
 import { logLevels } from './src/utils/logs/logger';
 // properties without "--DEFAULT--" either use a setting decided by me or/and didn't have a default value
 
@@ -90,6 +91,20 @@ export default defineConfig({
     plugins: [tailwindcss()],
   }, // add Vite configs TODO
   integrations: [
+    {
+      name: 'db-sync',
+      hooks: {
+        'astro:build:start': async ({ logger }) => {
+          logger.info('Starting DB sync...');
+          const { buildSyncImages, buildSyncAllContent } = await import(
+            './src/db/sync/buildSync.ts'
+          );
+          await buildSyncImages();
+          await buildSyncAllContent();
+          logger.info('DB sync complete.');
+        },
+      },
+    },
     mdx(),
     sitemap(),
     icon({
