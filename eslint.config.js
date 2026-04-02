@@ -178,12 +178,32 @@ export default defineConfig(
       'no-restricted-imports': [
         'error',
         {
-          paths: [
-            // {
-            //   name: 'server-only-package',
-            //   message:
-            //     'server-only-package is server-only (pino logger, Redis, etc.). Do not import it in client-side <script> tags. Use it in .astro frontmatter or .ts server files only.',
-            // },
+          patterns: [
+            {
+              group: ['@db/**/*', '**/db/**/*'],
+              message:
+                'You are trying to import a server-only file. Do not import it in client-side <script> tags. Use it in .astro frontmatter or .ts server files only.',
+            },
+          ],
+        },
+      ],
+    },
+  },
+
+  // --- Imports that should not be directly used in astro files at all ---
+  {
+    files: ['**/*.astro'],
+    rules: {
+      'no-restricted-imports': [
+        'error',
+        {
+          patterns: [
+            {
+              regex:
+                '^(?:@db|(?:\\.{1,2}/)+.*?/db)(?!.*\\.service(?:\\.[cm]?ts)?$)',
+              message:
+                'You are trying to import a db file. Only *.service.ts files from the db module can be imported in .astro files.',
+            },
           ],
         },
       ],
