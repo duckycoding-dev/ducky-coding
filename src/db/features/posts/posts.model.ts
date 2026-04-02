@@ -1,13 +1,14 @@
-import { text, sqliteTable, integer } from 'drizzle-orm/sqlite-core';
+import { z } from 'zod';
 import { sql } from 'drizzle-orm';
+import { integer, sqliteTable, text } from 'drizzle-orm/sqlite-core';
 import {
-  createSelectSchema,
   createInsertSchema,
+  createSelectSchema,
   createUpdateSchema,
 } from 'drizzle-zod';
+
 import { imagesTable } from '../images/images.model';
 import { topicsTable } from '../topics/topics.model';
-import { z } from 'zod';
 
 export const ContentStatusSchema = z
   .enum(['draft', 'published', 'deleted'])

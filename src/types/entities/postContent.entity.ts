@@ -1,4 +1,4 @@
-import { z } from 'astro:content';
+import { z } from 'astro/zod';
 
 const ContentStatusSchema = z
   .enum(['draft', 'published', 'deleted'])
@@ -16,6 +16,9 @@ export const PostContentSchema = z.object({
   status: ContentStatusSchema,
   tags: z.array(z.string()).min(1),
   isFeatured: z.boolean().default(false),
+  createdAt: z.coerce.date(),
+  publishedAt: z.coerce.date().optional(),
+  updatedAt: z.coerce.date().optional(),
 });
 
 export type PostContent = z.infer<typeof PostContentSchema>;

@@ -1,9 +1,11 @@
 ---
-import { MarkdownComponents } from '@components/Markdown';
-import type { CollectionEntry } from 'astro:content';
 import '@styles/markdown.css';
-import { render } from 'astro:content';
+
 import type { HTMLAttributes } from 'astro/types';
+import type { CollectionEntry } from 'astro:content';
+import { render } from 'astro:content';
+
+import { MarkdownComponents } from '@components/Markdown';
 import { cn } from '@utils/cn';
 
 export interface MarkdownContentProps extends HTMLAttributes<'article'> {

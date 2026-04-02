@@ -1,7 +1,8 @@
 import type { APIRoute } from 'astro';
+import { TURSO_AUTH_TOKEN } from 'astro:env/server';
+
 import { TopicsService } from '@db/features/topics/topics.service';
 import { serverLogger } from '@utils/logs/logger';
-import { TURSO_AUTH_TOKEN } from 'astro:env/server';
 import { syncTopicsToDatabase } from '../../../db/sync/contentSync';
 
 export const prerender = false; // Disable prerendering for this API route

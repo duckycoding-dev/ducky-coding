@@ -1,9 +1,10 @@
 ---
+import type { ComponentProps } from 'astro/types';
+
 import BaseHtml from '@layouts/BaseHtml/BaseHtml.astro';
 import Footer from '@layouts/Footer/Footer.astro';
 import Header from '@layouts/Header/Header.astro';
 import MainContent from '@layouts/MainContent/MainContent.astro';
-import type { ComponentProps } from 'astro/types';
 import { cn } from '../../utils/cn';
 
 interface Props extends ComponentProps<typeof BaseHtml> {}

@@ -1,11 +1,13 @@
 ---
 import type { HTMLAttributes } from 'astro/types';
+
 import Input from '@components/Form/Input/Input.astro';
 
 export interface InputWithLabelProps {}
 
 interface Props
-  extends InputWithLabelProps,
+  extends
+    InputWithLabelProps,
     HTMLAttributes<'input'>,
     HTMLAttributes<'label'> {}
 

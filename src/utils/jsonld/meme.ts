@@ -1,6 +1,6 @@
 import { WEBSITE_ROOT } from '@utils/globals';
-import { AuthorPerson } from './person';
 import type { BaseHeadProps } from '../../layouts/BaseHead/BaseHead.astro';
+import { AuthorPerson } from './person';
 
 export interface MemeJsonLdProps {
   title: string;

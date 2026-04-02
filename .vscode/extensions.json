@@ -17,6 +17,7 @@
     "oderwat.indent-rainbow",
     "dbaeumer.vscode-eslint",
     "esbenp.prettier-vscode",
+    "mermaidchart.vscode-mermaid-chart",
     "rhangai.file-template"
   ]
 }

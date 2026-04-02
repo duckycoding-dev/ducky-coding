@@ -1,10 +1,10 @@
-import { text, sqliteTable } from 'drizzle-orm/sqlite-core';
+import { type z } from 'zod';
+import { sqliteTable, text } from 'drizzle-orm/sqlite-core';
 import {
-  createSelectSchema,
   createInsertSchema,
+  createSelectSchema,
   createUpdateSchema,
 } from 'drizzle-zod';
-import { z } from 'zod';
 
 export const imagesTable = sqliteTable('images', {
   path: text().primaryKey(), // Relative path from src/assets/images

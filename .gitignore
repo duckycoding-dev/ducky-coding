@@ -8,6 +8,9 @@ dist/
 # generated types
 .astro/
 
+# git worktrees
+.worktrees/
+
 # dependencies
 node_modules/
 
@@ -21,3 +24,7 @@ pnpm-debug.log*
 .env.production
 
 .netlify/
+
+# sqlite files
+**/content.db-shm
+**/content.db-wal

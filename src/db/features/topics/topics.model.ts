@@ -1,13 +1,14 @@
-import { text, sqliteTable, integer } from 'drizzle-orm/sqlite-core';
-import { tagsTable } from '../tags/tags.model';
-import { imagesTable } from '../images/images.model';
+import { type z } from 'zod';
+import { sql } from 'drizzle-orm';
+import { integer, sqliteTable, text } from 'drizzle-orm/sqlite-core';
 import {
-  createSelectSchema,
   createInsertSchema,
+  createSelectSchema,
   createUpdateSchema,
 } from 'drizzle-zod';
-import { z } from 'zod';
-import { sql } from 'drizzle-orm';
+
+import { imagesTable } from '../images/images.model';
+import { tagsTable } from '../tags/tags.model';
 
 // This SQLite expression calculates the current Unix timestamp in milliseconds.
 const currentTimestampMillisSQL = sql`(CAST(ROUND((julianday('now') - 2440587.5) * 86400000) AS INTEGER))`;

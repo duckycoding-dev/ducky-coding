@@ -1,17 +1,18 @@
+import { type z } from 'zod';
 import {
-  sqliteTable,
   integer,
   primaryKey,
+  sqliteTable,
   text,
 } from 'drizzle-orm/sqlite-core';
 import {
-  createSelectSchema,
   createInsertSchema,
+  createSelectSchema,
   createUpdateSchema,
 } from 'drizzle-zod';
-import { postsTable } from './posts.model';
+
 import { tagsTable } from '../tags/tags.model';
-import { z } from 'zod';
+import { postsTable } from './posts.model';
 
 export const postsTagsTable = sqliteTable(
   'posts_tags',

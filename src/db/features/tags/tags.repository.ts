@@ -1,6 +1,7 @@
 import { inArray } from 'drizzle-orm';
+
 import { db } from '../../client';
-import { tagsTable, type Tag } from './tags.model';
+import { type Tag, tagsTable } from './tags.model';
 
 const getTags = async (tagNames: string[]): Promise<Tag[]> => {
   const tags = await db
