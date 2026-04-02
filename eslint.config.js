@@ -200,9 +200,9 @@ export default defineConfig(
           patterns: [
             {
               regex:
-                '^(?:@db|(?:\\.{1,2}/)+.*?/db)(?!.*\\.service(?:\\.[cm]?ts)?$)',
+                '^(?:@db|(?:\\.{1,2}/)+.*?/db)(?!.*\\.(?:service|model)(?:\\.[cm]?ts)?$)',
               message:
-                'You are trying to import a db file. Only *.service.ts files from the db module can be imported in .astro files.',
+                'You are trying to import a db file. Only *.service.ts and *.model.ts files from the db module can be imported in .astro files.',
             },
           ],
         },
