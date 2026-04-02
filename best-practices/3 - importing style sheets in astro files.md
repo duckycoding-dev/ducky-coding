@@ -34,5 +34,6 @@ The key difference from a bare import:
 - `import styles from './Component.module.css'` — exposes hashed class names as object keys; only classes assigned via `styles.x` get the scoped name
 
 **Important**: with the `styles from` form, only classes explicitly referenced as `styles.x` are applied. A rule like `div { color: red }` or `.card { ... }` used without `styles.card` will have no effect on elements in the component.
+Probably a config in astro.config.mjs is needed for css modules to get back to work
 
 In practice, Astro's `<style>` block covers almost every use case. Reach for CSS modules only when programmatic class name access is genuinely needed.

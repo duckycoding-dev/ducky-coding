@@ -37,3 +37,4 @@ Use Astro's built-in `<style>` block for component-scoped styles. Astro scopes t
 The `@reference` directive gives access to Tailwind utilities and theme tokens inside the style block without duplicating the stylesheet.
 
 CSS modules (`.module.css` files) should be avoided unless you need to reference class names programmatically in TypeScript code. That case is rare — prefer `<style>` blocks by default.
+Probably a config in astro.config.mjs is needed for css modules to get back to work
