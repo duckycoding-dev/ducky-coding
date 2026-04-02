@@ -10,7 +10,7 @@
  */
 
 import { createClient } from '@libsql/client';
-import { eq, sql } from 'drizzle-orm';
+import { eq, inArray, notInArray, sql } from 'drizzle-orm';
 import { drizzle } from 'drizzle-orm/libsql';
 import { glob, readFile } from 'node:fs/promises';
 import path from 'node:path';
@@ -102,6 +102,16 @@ export async function buildSyncImages(dbConfig: BuildSyncDbConfig): Promise<{
     console.log('CAREFUL: alt texts must be added manually to the db.');
   }
 
+  // Remove image records whose files no longer exist on disk
+  if (relativePaths.length > 0) {
+    const deleted = await db
+      .delete(imagesTable)
+      .where(notInArray(imagesTable.path, relativePaths));
+    if (deleted.rowsAffected > 0) {
+      console.log(`Removed ${deleted.rowsAffected} orphaned image records.`);
+    }
+  }
+
   return {
     imagesAdded: result.rowsAffected,
     message: 'Images synced successfully.',
@@ -133,6 +143,7 @@ export async function buildSyncAllContent(
     );
     let topicsSyncedCount = 0;
     let topicsSkippedCount = 0;
+    const syncedTitles: string[] = [];
 
     for await (const topicFilePath of glob(topicGlobPattern)) {
       try {
@@ -199,6 +210,7 @@ export async function buildSyncAllContent(
           );
         }
 
+        syncedTitles.push(topicData.title);
         topicsSyncedCount++;
       } catch (err) {
         topicsSkippedCount++;
@@ -219,6 +231,7 @@ export async function buildSyncAllContent(
     );
     let postsSyncedCount = 0;
     let postsSkippedCount = 0;
+    const syncedSlugs: string[] = [];
 
     for await (const postFilePath of glob(postGlobPattern)) {
       try {
@@ -242,7 +255,9 @@ export async function buildSyncAllContent(
           postsIdx !== -1
             ? postFilePath.slice(postsIdx + postsMarker.length)
             : path.basename(postFilePath);
-        const slug = slugWithExt.replace(/\.(md|mdx)$/, '');
+        const slug = slugWithExt
+          .replace(/\.(md|mdx)$/, '')
+          .replace(/\/index$/, '');
 
         const existingPost = await db
           .select()
@@ -368,6 +383,7 @@ export async function buildSyncAllContent(
           }
         }
 
+        syncedSlugs.push(slug);
         postsSyncedCount++;
         console.log(`  Synced post: ${postData.title}`);
       } catch (err) {
@@ -380,7 +396,57 @@ export async function buildSyncAllContent(
       `Content sync completed! Synced: ${postsSyncedCount}, Skipped: ${postsSkippedCount}`,
     );
 
-    // 3. Update topic analytics ---------------------------------------------
+    // 3. Orphan cleanup --------------------------------------------------------
+    console.log('Cleaning up orphaned records...');
+
+    // Hard-delete posts whose content file no longer exists
+    if (syncedSlugs.length > 0) {
+      const orphanedPosts = await db
+        .select({ id: postsTable.id, slug: postsTable.slug })
+        .from(postsTable)
+        .where(notInArray(postsTable.slug, syncedSlugs));
+      if (orphanedPosts.length > 0) {
+        const orphanedIds = orphanedPosts.map((r) => r.id);
+        const orphanedSlugs = orphanedPosts.map((r) => r.slug);
+        // Explicitly remove post-tag relations before deleting posts,
+        // since libsql does not reliably trigger ON DELETE CASCADE.
+        await db
+          .delete(postsTagsTable)
+          .where(inArray(postsTagsTable.postId, orphanedIds));
+        await db
+          .delete(postsTable)
+          .where(notInArray(postsTable.slug, syncedSlugs));
+        console.log(
+          `  Removed ${orphanedSlugs.length} orphaned post(s): ${orphanedSlugs.join(', ')}`,
+        );
+      }
+    }
+
+    // Hard-delete topics whose JSON file no longer exists
+    if (syncedTitles.length > 0) {
+      const deletedTopics = await db
+        .delete(topicsTable)
+        .where(notInArray(topicsTable.title, syncedTitles));
+      if (deletedTopics.rowsAffected > 0) {
+        console.log(
+          `  Removed ${deletedTopics.rowsAffected} orphaned topic(s).`,
+        );
+      }
+    }
+
+    // Delete tags not referenced by any post-tag relation and not a topic title.
+    // posts_tags rows are already cascade-deleted when their post was deleted above.
+    const deletedTags = await db.delete(tagsTable).where(
+      sql`${tagsTable.name} NOT IN (SELECT DISTINCT tag_name FROM posts_tags)
+          AND ${tagsTable.name} NOT IN (SELECT title FROM topics)`,
+    );
+    if (deletedTags.rowsAffected > 0) {
+      console.log(`  Removed ${deletedTags.rowsAffected} orphaned tag(s).`);
+    }
+
+    console.log('Orphan cleanup complete.');
+
+    // 4. Update topic analytics ---------------------------------------------
     console.log('Updating topic analytics...');
 
     const topicStats = (await db
