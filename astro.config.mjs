@@ -4,9 +4,18 @@ import mdx from '@astrojs/mdx';
 import netlify from '@astrojs/netlify';
 import sitemap from '@astrojs/sitemap';
 import tailwindcss from '@tailwindcss/vite';
+import { loadEnv } from 'vite';
 
 import { buildSyncAllContent, buildSyncImages } from './src/db/sync/buildSync.ts';
 import { logLevels } from './src/utils/logs/logger';
+
+const modeArgIdx = process.argv.indexOf('--mode');
+const mode =
+  modeArgIdx !== -1 && process.argv[modeArgIdx + 1]
+    ? process.argv[modeArgIdx + 1]
+    : 'production';
+const buildEnv = loadEnv(mode, process.cwd(), '');
+
 // properties without "--DEFAULT--" either use a setting decided by me or/and didn't have a default value
 
 // https://astro.build/config
@@ -96,9 +105,13 @@ export default defineConfig({
       name: 'db-sync',
       hooks: {
         'astro:build:start': async ({ logger }) => {
+          const dbConfig = {
+            url: buildEnv['TURSO_DATABASE_URL'] ?? '',
+            authToken: buildEnv['TURSO_AUTH_TOKEN'],
+          };
           logger.info('Starting DB sync...');
-          await buildSyncImages();
-          await buildSyncAllContent();
+          await buildSyncImages(dbConfig);
+          await buildSyncAllContent(dbConfig);
           logger.info('DB sync complete.');
         },
       },

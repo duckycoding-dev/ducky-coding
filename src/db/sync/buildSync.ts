@@ -28,15 +28,13 @@ import { topicsTable } from '../features/topics/topics.model.ts';
 // Standalone DB client (no import.meta.env / Vite path aliases)
 // ---------------------------------------------------------------------------
 
-function createDb() {
-  const url = process.env['TURSO_DATABASE_URL'];
-  const authToken = process.env['TURSO_AUTH_TOKEN'];
+export interface BuildSyncDbConfig {
+  url: string;
+  authToken?: string;
+}
 
-  if (!url) {
-    throw new Error('TURSO_DATABASE_URL environment variable is not set');
-  }
-
-  const turso = createClient({ url, authToken });
+function createDb(config: BuildSyncDbConfig) {
+  const turso = createClient({ url: config.url, authToken: config.authToken });
   return drizzle({ client: turso, casing: 'snake_case' });
 }
 
@@ -61,13 +59,13 @@ function extractFrontmatter(fileContent: string): {
 // buildSyncImages
 // ---------------------------------------------------------------------------
 
-export async function buildSyncImages(): Promise<{
+export async function buildSyncImages(dbConfig: BuildSyncDbConfig): Promise<{
   imagesAdded: number;
   message?: string;
 }> {
   console.log('Starting image sync to database (build)...');
 
-  const db = createDb();
+  const db = createDb(dbConfig);
   const projectRoot = process.cwd();
   const imageGlobPattern = path.join(
     projectRoot,
@@ -114,14 +112,16 @@ export async function buildSyncImages(): Promise<{
 // buildSyncAllContent
 // ---------------------------------------------------------------------------
 
-export async function buildSyncAllContent(): Promise<{
+export async function buildSyncAllContent(
+  dbConfig: BuildSyncDbConfig,
+): Promise<{
   success: boolean;
   error?: string;
 }> {
   console.log('Starting complete content sync (build)...');
 
   try {
-    const db = createDb();
+    const db = createDb(dbConfig);
     const projectRoot = process.cwd();
 
     // 1. Sync topics --------------------------------------------------------
