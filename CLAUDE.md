@@ -25,7 +25,7 @@ Personal blog at [duckycoding.dev](https://duckycoding.dev), built with Astro 6 
 
 ### Naming
 
-- **file and dir names** — kebab-case
+- **file and dir names** — kebab-case; exception: `.astro` component filenames use PascalCase (Astro convention — filename must match the component tag name); their containing directories remain kebab-case
 - **constants** — UPPER_SNAKE_CASE for truly fixed values (fixed numbers, fixed strings)
 - **functions and variables** — camelCase
 - **TS types and interfaces** — PascalCase

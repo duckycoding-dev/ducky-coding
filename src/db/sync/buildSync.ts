@@ -1,10 +1,8 @@
 /**
- * Node-safe sync module for use in Astro integration hooks.
+ * Build-time DB sync module for use in Astro integration hooks.
  *
- * This module replicates the logic from contentSync.ts but uses:
- * - node:fs/promises glob instead of import.meta.glob (Vite-only)
- * - Direct filesystem reading instead of getCollection (Astro virtual module)
- * - process.env instead of import.meta.env (Vite-only)
+ * Uses Node APIs (node:fs/promises glob, yaml package, Zod schemas)
+ * instead of Vite/Astro virtual modules (import.meta.glob, getCollection).
  *
  * Compatible with Node 22+ (native glob in node:fs/promises).
  */

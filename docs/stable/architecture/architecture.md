@@ -204,22 +204,15 @@ sequenceDiagram
     participant U as User
     participant N as Netlify CDN
     participant S as Static HTML
-    participant F as Netlify Functions
-    participant D as Turso DB
 
-    Note over U,S: Static pages (prerendered)
+    Note over U,S: All pages are prerendered (SSG)
     U->>N: GET /blog
     N->>S: Serve cached HTML
     S-->>U: Static page
-
-    Note over U,D: API endpoints (SSR)
-    U->>N: POST /api/v1/topics
-    N->>F: Route to function
-    F->>F: Validate Bearer token
-    F->>D: Sync content
-    D-->>F: Result
-    F-->>U: JSON response
 ```
+
+DB sync happens at build time via the `astro:build:start` hook, not at request
+time. There are no runtime API endpoints.
 
 ## Component Variant Pattern (CVA)
 
