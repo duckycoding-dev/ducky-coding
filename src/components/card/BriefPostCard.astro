@@ -14,9 +14,7 @@ export interface BriefPostCardProps extends HTMLAttributes<'a'> {
 
 interface Props extends BriefPostCardProps {}
 
-const { props }: { props: Props } = Astro;
-
-const { post, tags, class: className } = props;
+const { post, tags, class: className }: Props = Astro.props;
 ---
 
 <Link variant='unstyled' href={`/posts/${post.slug}`} class={cn(className)}>

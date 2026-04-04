@@ -23,8 +23,6 @@ export interface PostCardProps extends HTMLAttributes<'a'> {
 
 interface Props extends PostCardProps {}
 
-const { props }: { props: Props } = Astro;
-
 const {
   post,
   tags,
@@ -35,7 +33,7 @@ const {
   fetchPriority = 'auto',
   sizes,
   widths,
-} = props;
+}: Props = Astro.props;
 ---
 
 <Link

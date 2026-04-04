@@ -44,13 +44,14 @@ at the top of the page that uses it.
 - [x] Created `src/utils/json-ld/breadcrumb.ts` with `buildBreadcrumb()`
 - [x] Updated all 9 pages to use helpers (50-65 line SEO blocks → ~15 lines)
 
-### Step 3: Make repeated items data-driven
+### Step 3: Make repeated items data-driven — DONE
 
-- [ ] Navbar: extract nav items to config array + map
-- [ ] MemeExternalLinks: replace 7 ternary chains with config array + map
+- [x] Navbar: extracted nav items to `NAV_ITEMS` config array + map
+- [x] MemeExternalLinks: replaced 7 ternary chains with `SOCIAL_PLATFORMS` config + map
 
-### Step 4: Standardize component patterns
+### Step 4: Standardize component patterns — DONE
 
-- [ ] Fix props destructuring where `const { props } = Astro` adds no value
-- [ ] CustomA.astro: replace inline style with Tailwind class or remove
-- [ ] ToggleSwitch.astro: remove empty `<script>` tag
+- [x] Fixed props destructuring in PostCard.astro, BriefPostCard.astro
+- [x] Kept `const { props } = Astro` in InputWithLabel and CustomA (justified — they spread props)
+- [x] CustomA.astro: replaced inline style with Tailwind `no-underline`
+- [x] ToggleSwitch.astro: removed empty `<script>` tag
