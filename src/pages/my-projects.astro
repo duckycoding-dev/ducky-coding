@@ -1,7 +1,6 @@
 ---
 import type { ComponentProps } from 'astro/types';
 
-import DuckyCodingLogo from '@assets/images/DuckyCoding_logo.png';
 import pentaNewsLogo from '@assets/images/penta_news_logo.png';
 import leetCodeLogo from '@assets/images/topics/leetcode_logo.png';
 import Card from '@components/card/Card.astro';
@@ -14,6 +13,8 @@ import XIcon from '@components/icons/x-icon/XIcon.astro';
 import Link from '@components/link/Link.astro';
 import HolyGrailLayout from '@layouts/holy-grail-layout/HolyGrailLayout.astro';
 import { WEBSITE_FIRST_PUBLISHING_DATE, WEBSITE_ROOT } from '@utils/globals';
+import { buildBreadcrumb } from '@utils/json-ld/breadcrumb';
+import { buildPageSeo } from '@utils/seo/page-seo';
 
 const thisWebsiteOrigin = Astro.url.origin;
 
@@ -153,7 +154,6 @@ const PROJECTS: ProjectCardProps[] = [
 
 const pageUrl = Astro.url.href;
 
-// JSON-LD structured data for projects page
 const projectsPageJsonLd = {
   item: {
     '@context': 'https://schema.org',
@@ -163,93 +163,36 @@ const projectsPageJsonLd = {
     url: pageUrl,
     description:
       'Explore the portfolio of DuckyCoding - showcasing various web development projects, applications, and experiments.',
-    breadcrumb: {
-      '@type': 'BreadcrumbList',
-      itemListElement: [
-        {
-          '@type': 'ListItem',
-          position: 1,
-          name: 'Home',
-          item: WEBSITE_ROOT,
-        },
-        {
-          '@type': 'ListItem',
-          position: 2,
-          name: 'My projects',
-          item: pageUrl,
-        },
-      ],
-    },
+    breadcrumb: buildBreadcrumb([{ name: 'My projects', url: pageUrl }]),
   },
 } as const;
 ---
 
 <HolyGrailLayout
-  seoProps={{
+  seoProps={buildPageSeo({
     title: 'My projects',
+    ogTitle: "DuckyCoding's projects",
     description:
       'Explore the portfolio of DuckyCoding - showcasing various web development projects, applications, and experiments.',
-    openGraph: {
-      basic: {
-        title: "DuckyCoding's projects",
-        type: 'website',
-        url: pageUrl,
-        image: new URL(DuckyCodingLogo.src, WEBSITE_ROOT).href,
-      },
-      optional: {
-        description:
-          'Explore the portfolio of DuckyCoding - showcasing various web development projects, applications, and experiments.',
-        locale: 'en_US',
-        siteName: 'DuckyCoding',
-        localeAlternate: ['en_GB'],
-        determiner: '',
-        audio: undefined,
-        video: undefined,
-      },
-      image: {
-        url: new URL(DuckyCodingLogo.src, WEBSITE_ROOT).href,
-        secureUrl: new URL(DuckyCodingLogo.src, WEBSITE_ROOT).href,
-        height: DuckyCodingLogo.height,
-        width: DuckyCodingLogo.width,
-        type: `image/${DuckyCodingLogo.format}`,
-        alt: "DuckyCoding's logo",
-      },
-      article: {
-        publishedTime: WEBSITE_FIRST_PUBLISHING_DATE,
-        modifiedTime: WEBSITE_FIRST_PUBLISHING_DATE,
-        section: 'Web Development',
-        authors: ['DuckyCoding', 'Davide'],
-        tags: [
-          'DuckyCoding',
-          'Davide',
-          'projects',
-          'portfolio',
-          'web development',
-          'applications',
-          'GitHub',
-        ],
-      },
-    },
-    twitter: {
-      card: 'summary_large_image',
-      site: '@ducky_coding',
-      creator: '@ducky_coding',
-      title: "DuckyCoding's projects",
-      description:
-        'Explore the portfolio of DuckyCoding - showcasing various web development projects, applications, and experiments.',
-      image: new URL(DuckyCodingLogo.src, WEBSITE_ROOT).href,
-      imageAlt: "DuckyCoding's logo",
-    },
-    extend: {
-      meta: [
-        {
-          name: 'keywords',
-          content:
-            'DuckyCoding, projects, portfolio, web development, applications, GitHub',
-        },
+    pageUrl,
+    keywords:
+      'DuckyCoding, projects, portfolio, web development, applications, GitHub',
+    article: {
+      publishedTime: WEBSITE_FIRST_PUBLISHING_DATE,
+      modifiedTime: WEBSITE_FIRST_PUBLISHING_DATE,
+      section: 'Web Development',
+      authors: ['DuckyCoding', 'Davide'],
+      tags: [
+        'DuckyCoding',
+        'Davide',
+        'projects',
+        'portfolio',
+        'web development',
+        'applications',
+        'GitHub',
       ],
     },
-  }}
+  })}
   jsonLd={projectsPageJsonLd}
 >
   <!-- Hero Section -->

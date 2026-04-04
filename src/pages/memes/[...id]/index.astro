@@ -13,6 +13,7 @@ import MarkdownContent from '@layouts/markdown-content/MarkdownContent.astro';
 import { IMAGE_DENSITIES, WEBSITE_ROOT } from '@utils/globals';
 import { getImageWidths, matchImageFromGlobImport } from '@utils/images/images';
 import { MemeJsonLd } from '@utils/json-ld/meme';
+import { buildPageSeo } from '@utils/seo/page-seo';
 
 const memesImages = import.meta.glob<{ default: ImageMetadata }>(
   `/src/assets/images/memes/**/*.{jpeg,jpg,png,gif,webp,svg}`,
@@ -101,38 +102,21 @@ const memeJsonLd = {
 
 <HolyGrailLayout
   seoProps={{
-    title: `${title} - meme`,
-    description: `Check out this meme titled "${title}", created by ${author}${author.toLowerCase() !== 'duckycoding' ? ' and brought to you by DuckyCoding' : ''}.`,
-    openGraph: {
-      basic: {
-        title: title,
-        type: 'website',
-        url: pageUrl,
-        image: new URL((processedImage || DuckyCodingLogo).src, WEBSITE_ROOT)
-          .href,
-      },
-      optional: {
-        description:
-          "Here's a meme brought to you by DuckyCoding - Check it out!",
-        locale: 'en_US',
-        siteName: 'DuckyCoding',
-        localeAlternate: ['en_GB'],
-        determiner: '',
-        audio: undefined,
-        video: undefined,
-      },
-      image: {
-        url: new URL((processedImage || DuckyCodingLogo).src, WEBSITE_ROOT)
-          .href,
-        secureUrl: new URL(
-          (processedImage || DuckyCodingLogo).src,
-          WEBSITE_ROOT,
-        ).href,
-        height: (processedImage || DuckyCodingLogo).height,
-        width: (processedImage || DuckyCodingLogo).width,
-        type: `image/${(processedImage || DuckyCodingLogo).format}`,
-        alt: imageAlt || "DuckyCoding's logo",
-      },
+    ...buildPageSeo({
+      title: `${title} - meme`,
+      ogTitle: title,
+      description: `Check out this meme titled "${title}", created by ${author}${author.toLowerCase() !== 'duckycoding' ? ' and brought to you by DuckyCoding' : ''}.`,
+      pageUrl,
+      keywords: `meme, ${title}, ${author}, programming ${author === 'DuckyCoding' ? ',DuckyCoding' : ''}`,
+      ...(processedImage && {
+        image: {
+          src: processedImage.src,
+          width: processedImage.width,
+          height: processedImage.height,
+          format: processedImage.format,
+          alt: imageAlt || "DuckyCoding's logo",
+        },
+      }),
       article: {
         publishedTime: new Date(createdAt).toISOString(),
         modifiedTime: new Date(createdAt).toISOString(),
@@ -140,18 +124,7 @@ const memeJsonLd = {
         authors: [author],
         tags: tags,
       },
-    },
-    twitter: {
-      card: 'summary_large_image',
-      site: '@ducky_coding',
-      creator: '@ducky_coding',
-      title: title,
-      description:
-        "Here's a meme brought to you by DuckyCoding - Check it out!",
-      image: new URL((processedImage || DuckyCodingLogo).src, WEBSITE_ROOT)
-        .href,
-      imageAlt: imageAlt || "DuckyCoding's logo",
-    },
+    }),
     extend: {
       meta: [
         {

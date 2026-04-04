@@ -7,7 +7,9 @@ import { TopicsService } from '@db/features/topics/topics.service';
 import HolyGrailLayout from '@layouts/holy-grail-layout/HolyGrailLayout.astro';
 import { WEBSITE_FIRST_PUBLISHING_DATE, WEBSITE_ROOT } from '@utils/globals';
 import { matchImageFromGlobImport } from '@utils/images/images';
+import { buildBreadcrumb } from '@utils/json-ld/breadcrumb';
 import { serverLogger } from '@utils/logs/logger';
+import { buildPageSeo } from '@utils/seo/page-seo';
 
 const topicsWithImages = (await TopicsService.getAllTopicsWithImage()).filter(
   (topic) => topic.postCount ?? 0 > 0,
@@ -87,84 +89,27 @@ const topicsPageJsonLd = {
           }) as const,
       ),
     },
-    breadcrumb: {
-      '@type': 'BreadcrumbList',
-      itemListElement: [
-        {
-          '@type': 'ListItem',
-          position: 1,
-          name: 'Home',
-          item: WEBSITE_ROOT,
-        },
-        {
-          '@type': 'ListItem',
-          position: 2,
-          name: 'Topics',
-          item: pageUrl,
-        },
-      ],
-    },
+    breadcrumb: buildBreadcrumb([{ name: 'Topics', url: pageUrl }]),
   },
 } as const;
 ---
 
 <HolyGrailLayout
-  seoProps={{
+  seoProps={buildPageSeo({
     title: 'Topics',
+    ogTitle: "DuckyCoding's blog posts topics",
     description:
       'Explore web development topics on DuckyCoding - from JavaScript and TypeScript to React, Vue, and more. Find detailed tutorials and practical guides.',
-    openGraph: {
-      basic: {
-        title: "DuckyCoding's blog posts topics",
-        type: 'website',
-        url: pageUrl,
-        image: new URL(DuckyCodingLogo.src, WEBSITE_ROOT).href,
-      },
-      optional: {
-        description:
-          'Explore web development topics on DuckyCoding - from JavaScript and TypeScript to React, Vue, and more. Find detailed tutorials and practical guides.',
-        locale: 'en_US',
-        siteName: 'DuckyCoding',
-        localeAlternate: ['en_GB'],
-        determiner: '',
-        audio: undefined,
-        video: undefined,
-      },
-      image: {
-        url: new URL(DuckyCodingLogo.src, WEBSITE_ROOT).href,
-        secureUrl: new URL(DuckyCodingLogo.src, WEBSITE_ROOT).href,
-        height: DuckyCodingLogo.height,
-        width: DuckyCodingLogo.width,
-        type: `image/${DuckyCodingLogo.format}`,
-        alt: "DuckyCoding's logo",
-      },
-      article: {
-        publishedTime: WEBSITE_FIRST_PUBLISHING_DATE,
-        modifiedTime: lastTopicDateAsISOString,
-        section: 'Web Development',
-        authors: ['DuckyCoding', 'Davide'],
-        tags: ['DuckyCoding', 'web development', 'topics', 'posts'],
-      },
+    pageUrl,
+    keywords: 'DuckyCoding, web development, topics, posts',
+    article: {
+      publishedTime: WEBSITE_FIRST_PUBLISHING_DATE,
+      modifiedTime: lastTopicDateAsISOString,
+      section: 'Web Development',
+      authors: ['DuckyCoding', 'Davide'],
+      tags: ['DuckyCoding', 'web development', 'topics', 'posts'],
     },
-    twitter: {
-      card: 'summary_large_image',
-      site: '@ducky_coding',
-      creator: '@ducky_coding',
-      title: "DuckyCoding's blog posts topics",
-      description:
-        'Explore web development topics on DuckyCoding - from JavaScript and TypeScript to React, Vue, and more. Find detailed tutorials and practical guides.',
-      image: new URL(DuckyCodingLogo.src, WEBSITE_ROOT).href,
-      imageAlt: "DuckyCoding's logo",
-    },
-    extend: {
-      meta: [
-        {
-          name: 'keywords',
-          content: 'DuckyCoding, web development, topics, posts',
-        },
-      ],
-    },
-  }}
+  })}
   jsonLd={topicsPageJsonLd}
 >
   <h1

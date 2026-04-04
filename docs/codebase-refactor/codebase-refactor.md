@@ -24,25 +24,25 @@ summary: Tracking document for the codebase refactor branch
 
 ## Phase 2b: utils → libs + constants naming
 
-- [ ] Move `src/utils/tailwind-merge/` → `src/libs/tailwind-merge/`
-- [ ] Move `src/utils/cn/` → `src/libs/cn/`
-- [ ] Add `@libs/` path alias to `tsconfig.json`
-- [ ] Update all imports (24+ files)
-- [ ] Rename constants in `my-projects.astro` to UPPER_SNAKE_CASE
+- [x] Move `src/utils/tailwind-merge/` → `src/libs/tailwind-merge/`
+- [x] Move `src/utils/cn/` → `src/libs/cn/`
+- [x] Add `@libs/` path alias to `tsconfig.json`
+- [x] Update all imports (24+ files)
+- [x] Rename constants in `my-projects.astro` to UPPER_SNAKE_CASE
 
 ## Phase 3: Component & page code quality
 
-### Step 1: Extract page data to constants files
+### ~~Step 1: Extract page data to constants files~~ — SKIPPED
 
-- [ ] Create `src/utils/constants/homepage-data.ts` (timeline, funfact items)
-- [ ] Create `src/utils/constants/projects-data.ts` (technologies, projects)
-- [ ] Update `index.astro` and `my-projects.astro` to import from constants
+Data is tightly coupled to component types and Astro image imports — extracting
+to plain `.ts` files would require duplicating types. Page-specific data stays
+at the top of the page that uses it.
 
-### Step 2: Extract JSON-LD to factory functions
+### Step 2: Extract SEO + breadcrumb helpers — DONE
 
-- [ ] Add page-specific factory functions to `src/utils/json-ld/`
-- [ ] Create shared `buildPageSeo()` helper for openGraph/twitter patterns
-- [ ] Update all pages to use factories instead of inline objects
+- [x] Created `src/utils/seo/page-seo.ts` with `buildPageSeo()`
+- [x] Created `src/utils/json-ld/breadcrumb.ts` with `buildBreadcrumb()`
+- [x] Updated all 9 pages to use helpers (50-65 line SEO blocks → ~15 lines)
 
 ### Step 3: Make repeated items data-driven
 
