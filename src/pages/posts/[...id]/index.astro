@@ -4,19 +4,19 @@ import { Image } from 'astro:assets';
 import { getCollection } from 'astro:content';
 
 import DuckyCodingLogo from '@assets/images/DuckyCoding_logo.png';
-import Link from '@components/Link/Link.astro';
-import ScrollToTopButton from '@components/ScrollToTopButton/ScrollToTopButton.astro';
-import Tag from '@components/Tag/Tag.astro';
+import Link from '@components/link/Link.astro';
+import ScrollToTopButton from '@components/scroll-to-top-button/ScrollToTopButton.astro';
+import Tag from '@components/tag/Tag.astro';
 import type { Image as BannerImage } from '@db/features/images/images.model';
 import { ImagesService } from '@db/features/images/images.service';
 import { postsService } from '@db/features/posts/posts.service';
-import HolyGrailLayout from '@layouts/HolyGrailLayout/HolyGrailLayout.astro';
-import MarkdownContent from '@layouts/MarkdownContent/MarkdownContent.astro';
+import HolyGrailLayout from '@layouts/holy-grail-layout/HolyGrailLayout.astro';
+import MarkdownContent from '@layouts/markdown-content/MarkdownContent.astro';
 import { WEBSITE_FIRST_PUBLISHING_DATE, WEBSITE_ROOT } from '@utils/globals';
 import { getImageWidths, matchImageFromGlobImport } from '@utils/images/images';
-import { DuckyCodingBlog } from '@utils/jsonld/blog';
-import { AuthorPerson } from '@utils/jsonld/person';
-import { TopicThing } from '@utils/jsonld/thing';
+import { DuckyCodingBlog } from '@utils/json-ld/blog';
+import { AuthorPerson } from '@utils/json-ld/person';
+import { TopicThing } from '@utils/json-ld/thing';
 import { serverLogger } from '@utils/logs/logger';
 
 // 1. Generate a new path for every collection entry
@@ -180,7 +180,7 @@ const blogPostJsonLd = {
   jsonLd={blogPostJsonLd}
 >
   <section
-    class='from-accent-300 to-accent2-300 shadow-comic mx-auto grid items-center border-4 bg-gradient-to-br px-4 py-4 lg:max-w-[80%]'
+    class='from-accent-300 to-accent2-300 shadow-comic mx-auto grid items-center border-4 bg-linear-to-br px-4 py-4 lg:max-w-[80%]'
   >
     {
       bannerImage && processedImage ? (
@@ -195,7 +195,7 @@ const blogPostJsonLd = {
           loading={'eager'}
           fetchpriority={'high'}
           decoding={'async'}
-          class='border-secondary aspect-[16/9] justify-self-center border-6 object-cover'
+          class='border-secondary aspect-video justify-self-center border-6 object-cover'
           widths={getImageWidths(processedImage.width)}
           sizes={`
             (max-width: 767px) calc(80vw - 4rem), 

@@ -2,9 +2,9 @@
 import type { ImageMetadata } from 'astro';
 
 import DuckyCodingLogo from '@assets/images/DuckyCoding_logo.png';
-import TopicCard from '@components/Card/TopicCard.astro';
+import TopicCard from '@components/card/TopicCard.astro';
 import { TopicsService } from '@db/features/topics/topics.service';
-import HolyGrailLayout from '@layouts/HolyGrailLayout/HolyGrailLayout.astro';
+import HolyGrailLayout from '@layouts/holy-grail-layout/HolyGrailLayout.astro';
 import { WEBSITE_FIRST_PUBLISHING_DATE, WEBSITE_ROOT } from '@utils/globals';
 import { matchImageFromGlobImport } from '@utils/images/images';
 import { serverLogger } from '@utils/logs/logger';

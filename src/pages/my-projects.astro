@@ -4,15 +4,15 @@ import type { ComponentProps } from 'astro/types';
 import DuckyCodingLogo from '@assets/images/DuckyCoding_logo.png';
 import pentaNewsLogo from '@assets/images/penta_news_logo.png';
 import leetCodeLogo from '@assets/images/topics/leetcode_logo.png';
-import Card from '@components/Card/Card.astro';
+import Card from '@components/card/Card.astro';
 import ProjectCard, {
   type ProjectCardProps,
-} from '@components/Card/ProjectCard.astro';
-import TechnologyCard from '@components/Card/TechnologyCard.astro';
-import LinkedInIcon from '@components/Icons/LinkedInIcon/LinkedInIcon.astro';
-import XIcon from '@components/Icons/XIcon/XIcon.astro';
-import Link from '@components/Link/Link.astro';
-import HolyGrailLayout from '@layouts/HolyGrailLayout/HolyGrailLayout.astro';
+} from '@components/card/ProjectCard.astro';
+import TechnologyCard from '@components/card/TechnologyCard.astro';
+import LinkedInIcon from '@components/icons/linkedin-icon/LinkedInIcon.astro';
+import XIcon from '@components/icons/x-icon/XIcon.astro';
+import Link from '@components/link/Link.astro';
+import HolyGrailLayout from '@layouts/holy-grail-layout/HolyGrailLayout.astro';
 import { WEBSITE_FIRST_PUBLISHING_DATE, WEBSITE_ROOT } from '@utils/globals';
 
 const thisWebsiteOrigin = Astro.url.origin;
