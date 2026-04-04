@@ -18,111 +18,39 @@ interface Props extends HTMLAttributes<'section'> {
 
 const { links, class: className, ...props }: Props = Astro.props;
 const { socials, source, author } = links;
-const { github, linkedin, reddit, x, youtube, instagram, tiktok } =
-  socials || {};
 
-const hasSocials = Object.values(socials || {}).some((link) => link);
+const SOCIAL_PLATFORMS = [
+  { href: socials?.x, Icon: XIcon },
+  { href: socials?.linkedin, Icon: LinkedInIcon },
+  { href: socials?.instagram, Icon: InstagramIcon },
+  { href: socials?.tiktok, Icon: TikTokIcon },
+  { href: socials?.youtube, Icon: YouTubeIcon },
+  { href: socials?.reddit, Icon: RedditIcon },
+  { href: socials?.github, Icon: GitHubIcon },
+].filter((item): item is { href: string; Icon: typeof XIcon } => !!item.href);
 ---
 
 <section class={cn('flex flex-col gap-4', className)} {...props}>
   {
-    hasSocials ? (
+    SOCIAL_PLATFORMS.length > 0 ? (
       <nav>
         <h2 class='text-secondary mb-4 text-center text-xl font-black md:text-2xl'>
           You can <span class='text-accent-700'>find this meme</span> on
         </h2>
         <ul class='flex flex-wrap items-center justify-center gap-4'>
-          {x ? (
+          {SOCIAL_PLATFORMS.map(({ href, Icon }) => (
             <li>
               <Link
                 target='_blank'
                 rel='noopener noreferrer'
-                href={x}
-                variant={'default'}
+                href={href}
+                variant='default'
                 class='text-secondary'
               >
-                <XIcon size={50} />
+                <Icon size={50} />
               </Link>
             </li>
-          ) : null}
-          {linkedin ? (
-            <li>
-              <Link
-                target='_blank'
-                rel='noopener noreferrer'
-                href={linkedin}
-                variant={'default'}
-                class='text-secondary'
-              >
-                <LinkedInIcon size={50} />
-              </Link>
-            </li>
-          ) : null}
-          {instagram ? (
-            <li>
-              <Link
-                target='_blank'
-                rel='noopener noreferrer'
-                href={instagram}
-                variant={'default'}
-                class='text-secondary'
-              >
-                <InstagramIcon size={50} />
-              </Link>
-            </li>
-          ) : null}
-          {tiktok ? (
-            <li>
-              <Link
-                target='_blank'
-                rel='noopener noreferrer'
-                href={tiktok}
-                variant={'default'}
-                class='text-secondary'
-              >
-                <TikTokIcon size={50} />
-              </Link>
-            </li>
-          ) : null}
-          {youtube ? (
-            <li>
-              <Link
-                target='_blank'
-                rel='noopener noreferrer'
-                href={youtube}
-                variant={'default'}
-                class='text-secondary'
-              >
-                <YouTubeIcon size={50} />
-              </Link>
-            </li>
-          ) : null}
-          {reddit ? (
-            <li>
-              <Link
-                target='_blank'
-                rel='noopener noreferrer'
-                href={reddit}
-                variant={'default'}
-                class='text-secondary'
-              >
-                <RedditIcon size={50} />
-              </Link>
-            </li>
-          ) : null}
-          {github ? (
-            <li>
-              <Link
-                target='_blank'
-                rel='noopener noreferrer'
-                href={github}
-                variant={'default'}
-                class='text-secondary'
-              >
-                <GitHubIcon size={50} />
-              </Link>
-            </li>
-          ) : null}
+          ))}
         </ul>
       </nav>
     ) : null
