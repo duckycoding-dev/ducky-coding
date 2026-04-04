@@ -17,7 +17,7 @@ import { WEBSITE_FIRST_PUBLISHING_DATE, WEBSITE_ROOT } from '@utils/globals';
 
 const thisWebsiteOrigin = Astro.url.origin;
 
-const frontendTechnologies = [
+const FRONTEND_TECHNOLOGIES = [
   'HTML',
   'Modern CSS',
   'Astro',
@@ -30,7 +30,7 @@ const frontendTechnologies = [
   'Styled Components',
 ];
 
-const backendTechnologies = [
+const BACKEND_TECHNOLOGIES = [
   'Node.js',
   'Hono',
   'SQL',
@@ -38,7 +38,7 @@ const backendTechnologies = [
   'AWS Lambda',
 ];
 
-const tools = [
+const TOOLS = [
   'Git',
   'CLI',
   'Zod',
@@ -49,17 +49,17 @@ const tools = [
   'Prettier',
 ];
 
-const technologies: ComponentProps<typeof TechnologyCard>[] = [
+const TECHNOLOGIES: ComponentProps<typeof TechnologyCard>[] = [
   {
     emoji: '⚛️',
     title: 'Frontend',
-    description: `${frontendTechnologies.join(', ')} and more...`,
+    description: `${FRONTEND_TECHNOLOGIES.join(', ')} and more...`,
     class: 'bg-accent-100',
   },
   {
     emoji: '💻',
     title: 'Backend',
-    description: `${backendTechnologies.join(', ')} and more...`,
+    description: `${BACKEND_TECHNOLOGIES.join(', ')} and more...`,
     class: 'bg-accent2-100',
   },
   {
@@ -71,13 +71,12 @@ const technologies: ComponentProps<typeof TechnologyCard>[] = [
   {
     emoji: '🔧',
     title: 'Tools',
-    description: `${tools.join(', ')} and more...`,
+    description: `${TOOLS.join(', ')} and more...`,
     class: 'bg-primary-200',
   },
 ];
 
-// Mock project data - replace with your actual projects
-const projects: ProjectCardProps[] = [
+const PROJECTS: ProjectCardProps[] = [
   {
     title: 'duckycoding.dev (this website)',
     summary:
@@ -292,7 +291,7 @@ const projectsPageJsonLd = {
     </h2>
     <div class='grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3'>
       {
-        projects.map((project, index) => (
+        PROJECTS.map((project, index) => (
           <Link
             href={project.projectUrl || '#'}
             variant='unstyled'
@@ -330,7 +329,7 @@ const projectsPageJsonLd = {
       Technologies I <span class='text-accent-700'>USE</span>
     </h2>
     <div class='grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4'>
-      {technologies.map((tech) => <TechnologyCard {...tech} />)}
+      {TECHNOLOGIES.map((tech) => <TechnologyCard {...tech} />)}
     </div>
   </section>
 
