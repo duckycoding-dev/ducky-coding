@@ -4,16 +4,16 @@ import '@styles/markdown.css';
 import type { ComponentProps } from 'astro/types';
 import { Image } from 'astro:assets';
 
-import DuckyCodingLogo from '@assets/images/DuckyCoding_logo.png';
 import headshotDavide from '@assets/images/head-shot-davide.jpg';
 import Card from '@components/card/Card.astro';
 import HolyGrailLayout from '@layouts/holy-grail-layout/HolyGrailLayout.astro';
+import { WEBSITE_FIRST_PUBLISHING_DATE } from '@utils/globals';
 import { DuckyCodingPerson } from '@utils/json-ld/person';
 import { DuckyCodingWebsite } from '@utils/json-ld/website';
+import { buildPageSeo } from '@utils/seo/page-seo';
 import FunfactCard from '../components/card/FunfactCard.astro';
 import TimelineCard from '../components/card/TimelineCard.astro';
 import Link from '../components/link/Link.astro';
-import { WEBSITE_FIRST_PUBLISHING_DATE, WEBSITE_ROOT } from '../utils/globals';
 
 const timelineObjects: ComponentProps<typeof TimelineCard>[] = [
   {
@@ -110,71 +110,31 @@ const homepageJsonLd = {
 ---
 
 <HolyGrailLayout
-  seoProps={{
+  seoProps={buildPageSeo({
+    title: 'DuckyCoding',
+    ogTitle: 'DuckyCoding',
     description:
       "I'm Davide, aka DuckyCoding, a passionate web developer from Italy who loves crafting modern digital experiences, sharing what I learn along my path with everyone online.",
-    openGraph: {
-      basic: {
-        title: 'DuckyCoding',
-        type: 'website',
-        url: pageUrl,
-        image: new URL(DuckyCodingLogo.src, WEBSITE_ROOT).href,
-      },
-      optional: {
-        description:
-          "I'm Davide, aka DuckyCoding, a passionate web developer from Italy who loves crafting modern digital experiences, sharing what I learn along my path with everyone online.",
-        locale: 'en_US',
-        siteName: 'DuckyCoding',
-        localeAlternate: ['en_GB'],
-        determiner: '',
-        audio: undefined,
-        video: undefined,
-      },
-      image: {
-        url: new URL(DuckyCodingLogo.src, WEBSITE_ROOT).href,
-        secureUrl: new URL(DuckyCodingLogo.src, WEBSITE_ROOT).href,
-        height: DuckyCodingLogo.height,
-        width: DuckyCodingLogo.width,
-        type: `image/${DuckyCodingLogo.format}`,
-        alt: "DuckyCoding's logo",
-      },
-      article: {
-        publishedTime: WEBSITE_FIRST_PUBLISHING_DATE,
-        modifiedTime: WEBSITE_FIRST_PUBLISHING_DATE,
-        section: 'Web Development',
-        authors: ['DuckyCoding', 'Davide'],
-        tags: [
-          'DuckyCoding',
-          'Davide',
-          'developer',
-          'web development',
-          'blog',
-          'frontend',
-          'backend',
-          'journey',
-        ],
-      },
-    },
-    twitter: {
-      card: 'summary_large_image',
-      site: '@ducky_coding',
-      creator: '@ducky_coding',
-      title: 'DuckyCoding',
-      description:
-        "I'm Davide, aka DuckyCoding, a passionate web developer from Italy who loves crafting modern digital experiences, sharing what I learn along my path with everyone online.",
-      image: new URL(DuckyCodingLogo.src, WEBSITE_ROOT).href,
-      imageAlt: "DuckyCoding's logo",
-    },
-    extend: {
-      meta: [
-        {
-          name: 'keywords',
-          content:
-            'DuckyCoding, Davide, developer, web development, blog, frontend, backend, journey',
-        },
+    pageUrl,
+    keywords:
+      'DuckyCoding, Davide, developer, web development, blog, frontend, backend, journey',
+    article: {
+      publishedTime: WEBSITE_FIRST_PUBLISHING_DATE,
+      modifiedTime: WEBSITE_FIRST_PUBLISHING_DATE,
+      section: 'Web Development',
+      authors: ['DuckyCoding', 'Davide'],
+      tags: [
+        'DuckyCoding',
+        'Davide',
+        'developer',
+        'web development',
+        'blog',
+        'frontend',
+        'backend',
+        'journey',
       ],
     },
-  }}
+  })}
   jsonLd={homepageJsonLd}
 >
   <!-- Hero Section -->
