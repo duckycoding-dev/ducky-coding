@@ -1,10 +1,10 @@
 ---
 import type { HTMLAttributes } from 'astro/types';
+import { cn } from '@libs/cn';
 
 import CalendarIcon from '@components/icons/CalendarIcon.astro';
 import PersonIcon from '@components/icons/PersonIcon.astro';
 import type { MemeContent } from '@typings/entities/memeContent.entity';
-import { cn } from '@utils/cn';
 import Tag from '../tag/Tag.astro';
 
 type Props = Pick<MemeContent, 'author' | 'createdAt' | 'tags'> &
