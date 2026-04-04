@@ -6,13 +6,13 @@ import { Image } from 'astro:assets';
 
 import DuckyCodingLogo from '@assets/images/DuckyCoding_logo.png';
 import headshotDavide from '@assets/images/head-shot-davide.jpg';
-import Card from '@components/Card/Card.astro';
-import HolyGrailLayout from '@layouts/HolyGrailLayout/HolyGrailLayout.astro';
-import { DuckyCodingPerson } from '@utils/jsonld/person';
-import { DuckyCodingWebsite } from '@utils/jsonld/website';
-import FunfactCard from '../components/Card/FunfactCard.astro';
-import TimelineCard from '../components/Card/TimelineCard.astro';
-import Link from '../components/Link/Link.astro';
+import Card from '@components/card/Card.astro';
+import HolyGrailLayout from '@layouts/holy-grail-layout/HolyGrailLayout.astro';
+import { DuckyCodingPerson } from '@utils/json-ld/person';
+import { DuckyCodingWebsite } from '@utils/json-ld/website';
+import FunfactCard from '../components/card/FunfactCard.astro';
+import TimelineCard from '../components/card/TimelineCard.astro';
+import Link from '../components/link/Link.astro';
 import { WEBSITE_FIRST_PUBLISHING_DATE, WEBSITE_ROOT } from '../utils/globals';
 
 const timelineObjects: ComponentProps<typeof TimelineCard>[] = [
@@ -234,11 +234,7 @@ const homepageJsonLd = {
     </h2>
     <div class='grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3'>
       <Card class='bg-accent2-100 p-6'>
-        <div
-          class='bg-danger mb-4 flex h-16 w-16 items-center justify-center rounded-lg'
-        >
-          <span class='text-3xl font-bold text-white'>🎨</span>
-        </div>
+        <span class='mb-4 block text-4xl font-bold text-white'>🎨</span>
         <h3 class='text-secondary mb-3 text-xl font-bold'>
           Frontend Development
         </h3>
@@ -251,11 +247,7 @@ const homepageJsonLd = {
       </Card>
 
       <Card class='bg-accent3-100 p-6'>
-        <div
-          class='bg-danger mb-4 flex h-16 w-16 items-center justify-center rounded-lg'
-        >
-          <span class='text-3xl font-bold text-white'>⚙️</span>
-        </div>
+        <span class='mb-4 block text-4xl font-bold text-white'>⚙️</span>
         <h3 class='text-secondary mb-3 text-xl font-bold'>
           Backend Development
         </h3>
@@ -268,11 +260,7 @@ const homepageJsonLd = {
       </Card>
 
       <Card class='bg-accent-100 p-6 md:col-span-2 lg:col-span-1'>
-        <div
-          class='bg-danger mb-4 flex h-16 w-16 items-center justify-center rounded-lg'
-        >
-          <span class='text-3xl font-bold text-white'>🚀</span>
-        </div>
+        <span class='mb-4 block text-4xl font-bold text-white'>🚀</span>
         <h3 class='text-secondary mb-3 text-xl font-bold'>
           Full Stack Solutions
         </h3>

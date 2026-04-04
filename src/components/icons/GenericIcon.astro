@@ -1,0 +1,71 @@
+---
+import type { HTMLAttributes } from 'astro/types';
+import { Icon } from 'astro-icon/components';
+import { cva, type VariantProps } from 'cva';
+
+const genericIconVariants = cva({
+  base: '',
+  variants: {
+    variant: {
+      extrasmall: 12.5,
+      small: 25,
+      medium: 50,
+      large: 75,
+      xl: 100,
+      '2xl': 200,
+      '3xl': 300,
+    },
+  },
+  defaultVariants: {
+    variant: 'medium',
+  },
+});
+
+export type GenericIconVariantsProps = VariantProps<typeof genericIconVariants>;
+
+type AstroIconSizeOnly = {
+  size: number;
+  width?: undefined;
+  height?: undefined;
+  variant?: undefined;
+};
+type AstroIconWidthHeightOnly = {
+  size?: undefined;
+  width: number;
+  height: number;
+  variant?: undefined;
+};
+type AstroIconVariantOnly = {
+  size?: undefined;
+  width?: undefined;
+  height?: undefined;
+} & Pick<GenericIconVariantsProps, 'variant'>;
+
+// prettier-ignore
+// multi-line union with leading "|" breaks esbuild in astro build
+export type AstroIconDimensions = AstroIconSizeOnly | AstroIconWidthHeightOnly | AstroIconVariantOnly;
+
+export interface AstroIconBasicProps {
+  name: string;
+  title: string;
+  'is:inline'?: boolean;
+}
+
+export type GenericIconProps = HTMLAttributes<'svg'> &
+  AstroIconBasicProps &
+  AstroIconDimensions;
+
+type Props = GenericIconProps;
+
+const { variant, size, width, height, ...props }: Props = Astro.props;
+
+let customSize = size || Number(genericIconVariants({ variant })) || undefined;
+if (width && height) customSize = undefined;
+---
+
+<Icon
+  size={customSize}
+  width={width || Number(genericIconVariants({ variant })) || 0}
+  height={height || Number(genericIconVariants({ variant })) || 0}
+  {...props}
+/>

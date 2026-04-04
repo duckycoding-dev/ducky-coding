@@ -4,15 +4,15 @@ import { getCollection } from 'astro:content';
 import type { Link as MetaLink } from 'astro-seo';
 
 import DuckyCodingLogo from '@assets/images/DuckyCoding_logo.png';
-import Link from '@components/Link/Link.astro';
-import MemeContainer from '@components/Memes/MemeContainer.astro';
-import MemeExternalLinks from '@components/Memes/MemeExternalLinks.astro';
-import MemeInfo from '@components/Memes/MemeInfo.astro';
-import HolyGrailLayout from '@layouts/HolyGrailLayout/HolyGrailLayout.astro';
-import MarkdownContent from '@layouts/MarkdownContent/MarkdownContent.astro';
+import Link from '@components/link/Link.astro';
+import MemeContainer from '@components/memes/MemeContainer.astro';
+import MemeExternalLinks from '@components/memes/MemeExternalLinks.astro';
+import MemeInfo from '@components/memes/MemeInfo.astro';
+import HolyGrailLayout from '@layouts/holy-grail-layout/HolyGrailLayout.astro';
+import MarkdownContent from '@layouts/markdown-content/MarkdownContent.astro';
 import { IMAGE_DENSITIES, WEBSITE_ROOT } from '@utils/globals';
 import { getImageWidths, matchImageFromGlobImport } from '@utils/images/images';
-import { MemeJsonLd } from '@utils/jsonld/meme';
+import { MemeJsonLd } from '@utils/json-ld/meme';
 
 const memesImages = import.meta.glob<{ default: ImageMetadata }>(
   `/src/assets/images/memes/**/*.{jpeg,jpg,png,gif,webp,svg}`,

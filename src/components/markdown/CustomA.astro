@@ -1,0 +1,20 @@
+---
+import Link, { type LinkProps } from '@components/link/Link.astro';
+
+type Props = LinkProps;
+
+const { props }: { props: Props } = Astro;
+---
+
+{
+  /* used inline style to override text decoration from Tailwind's typography plugin */
+}
+<Link
+  class='text-accent-800'
+  variant='default'
+  rel={'noopener noreferrer'}
+  {...props}
+  style={{ textDecoration: 'none' }}
+>
+  <slot />
+</Link>

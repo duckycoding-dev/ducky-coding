@@ -3,16 +3,16 @@ import { type ImageMetadata } from 'astro';
 import { getCollection } from 'astro:content';
 
 import DuckyCodingLogo from '@assets/images/DuckyCoding_logo.png';
-import BriefPostCard from '@components/Card/BriefPostCard.astro';
-import PostCard from '@components/Card/PostCard.astro';
-import HolyGrailLayout from '@layouts/HolyGrailLayout/HolyGrailLayout.astro';
+import BriefPostCard from '@components/card/BriefPostCard.astro';
+import PostCard from '@components/card/PostCard.astro';
+import HolyGrailLayout from '@layouts/holy-grail-layout/HolyGrailLayout.astro';
 import { WEBSITE_FIRST_PUBLISHING_DATE, WEBSITE_ROOT } from '@utils/globals';
 import { matchImageFromGlobImport } from '@utils/images/images';
-import { AuthorPerson, DuckyCodingPerson } from '@utils/jsonld/person';
+import { AuthorPerson, DuckyCodingPerson } from '@utils/json-ld/person';
 import { serverLogger } from '@utils/logs/logger';
-import DuckIcon from '../components/Icons/DuckIcon/DuckIcon.astro';
+import DuckIcon from '../components/icons/duck-icon/DuckIcon.astro';
 import { postsService } from '../db/features/posts/posts.service';
-import type { BaseHeadProps } from '../layouts/BaseHead/BaseHead.astro';
+import type { BaseHeadProps } from '../layouts/base-head/BaseHead.astro';
 
 const postsCollection = (await getCollection('posts'))
   .map((entry) => ({
