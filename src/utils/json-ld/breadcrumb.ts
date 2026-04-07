@@ -1,3 +1,5 @@
+import type { BreadcrumbList } from 'schema-dts';
+
 import { WEBSITE_ROOT } from '@utils/globals';
 
 interface BreadcrumbItem {
@@ -5,15 +7,7 @@ interface BreadcrumbItem {
   url: string;
 }
 
-export function buildBreadcrumb(items: BreadcrumbItem[]): {
-  '@type': 'BreadcrumbList';
-  itemListElement: {
-    '@type': 'ListItem';
-    position: number;
-    name: string;
-    item: string;
-  }[];
-} {
+export function buildBreadcrumb(items: BreadcrumbItem[]): BreadcrumbList {
   return {
     '@type': 'BreadcrumbList',
     itemListElement: [

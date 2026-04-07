@@ -2,6 +2,7 @@
 import { type ImageMetadata } from 'astro';
 import { Image } from 'astro:assets';
 import { getCollection } from 'astro:content';
+import type { CollectionPage, WithContext } from 'schema-dts';
 
 import PostCard from '@components/card/PostCard.astro';
 import { TopicsService } from '@db/features/topics/topics.service';
@@ -115,7 +116,7 @@ const lastPostDateAsISOString = processedPostsWithImages[0]?.post.publishedAt
 const pageUrl = Astro.url.href;
 
 // JSON-LD structured data for individual topic page
-const topicPageJsonLd = {
+const topicPageJsonLd: { item: WithContext<CollectionPage> } = {
   item: {
     '@context': 'https://schema.org',
     '@type': 'CollectionPage',
@@ -135,35 +136,32 @@ const topicPageJsonLd = {
     mainEntity: {
       '@type': 'ItemList',
       numberOfItems: processedPostsWithImages.length,
-      itemListElement: processedPostsWithImages.map(
-        (postWithImage, index) =>
-          ({
-            '@type': 'ListItem',
-            position: index + 1,
-            item: {
-              '@type': 'BlogPosting',
-              headline: postWithImage.post.title,
-              '@id': `${WEBSITE_ROOT}/posts/${postWithImage.post.slug}`,
-              url: `${WEBSITE_ROOT}/posts/${postWithImage.post.slug}`,
-              datePublished: new Date(
-                postWithImage.post.publishedAt || WEBSITE_FIRST_PUBLISHING_DATE,
-              ).toISOString(),
-              dateModified: new Date(
-                postWithImage.post?.updatedAt ||
-                  postWithImage.post?.createdAt ||
-                  WEBSITE_FIRST_PUBLISHING_DATE,
-              ),
-              author: AuthorPerson(postWithImage.post.author, WEBSITE_ROOT),
-            },
-          }) as const,
-      ),
+      itemListElement: processedPostsWithImages.map((postWithImage, index) => ({
+        '@type': 'ListItem' as const,
+        position: index + 1,
+        item: {
+          '@type': 'BlogPosting' as const,
+          headline: postWithImage.post.title,
+          '@id': `${WEBSITE_ROOT}/posts/${postWithImage.post.slug}`,
+          url: `${WEBSITE_ROOT}/posts/${postWithImage.post.slug}`,
+          datePublished: new Date(
+            postWithImage.post.publishedAt || WEBSITE_FIRST_PUBLISHING_DATE,
+          ).toISOString(),
+          dateModified: new Date(
+            postWithImage.post?.updatedAt ||
+              postWithImage.post?.createdAt ||
+              WEBSITE_FIRST_PUBLISHING_DATE,
+          ),
+          author: AuthorPerson(postWithImage.post.author, WEBSITE_ROOT),
+        },
+      })),
     },
     breadcrumb: buildBreadcrumb([
       { name: 'Topics', url: `${WEBSITE_ROOT}/topics` },
       { name: processedTopic.title, url: pageUrl },
     ]),
   },
-} as const;
+};
 ---
 
 <HolyGrailLayout

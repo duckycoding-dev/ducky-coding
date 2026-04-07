@@ -1,3 +1,5 @@
+import type { Person } from 'schema-dts';
+
 import headshotDavide from '@assets/images/head-shot-davide.jpg';
 import { WEBSITE_ROOT } from '@utils/globals';
 import { WavelopOrganization } from './organization';
@@ -36,10 +38,10 @@ export const DuckyCodingPerson = {
     'https://www.instagram.com/ducky.coding/',
     'https://www.tiktok.com/@ducky.coding',
   ],
-} as const;
+} as const satisfies Person;
 
-export const AuthorPerson = (authorName: string, url: string) =>
-  ({
+export function AuthorPerson(authorName: string, url: string): Person {
+  return {
     '@type': 'Person',
     name: authorName,
     url: url,
@@ -50,4 +52,5 @@ export const AuthorPerson = (authorName: string, url: string) =>
         'https://www.linkedin.com/in/davide-m-997874254/',
       ],
     }),
-  }) as const;
+  };
+}

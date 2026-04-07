@@ -1,5 +1,6 @@
 ---
 import type { ComponentProps } from 'astro/types';
+import type { CollectionPage, WithContext } from 'schema-dts';
 
 import pentaNewsLogo from '@assets/images/penta_news_logo.png';
 import leetCodeLogo from '@assets/images/topics/leetcode_logo.png';
@@ -154,7 +155,7 @@ const PROJECTS: ProjectCardProps[] = [
 
 const pageUrl = Astro.url.href;
 
-const projectsPageJsonLd = {
+const projectsPageJsonLd: { item: WithContext<CollectionPage> } = {
   item: {
     '@context': 'https://schema.org',
     '@type': 'CollectionPage',
@@ -165,7 +166,7 @@ const projectsPageJsonLd = {
       'Explore the portfolio of DuckyCoding - showcasing various web development projects, applications, and experiments.',
     breadcrumb: buildBreadcrumb([{ name: 'My projects', url: pageUrl }]),
   },
-} as const;
+};
 ---
 
 <HolyGrailLayout

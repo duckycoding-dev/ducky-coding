@@ -1,5 +1,6 @@
 ---
 import type { ImageMetadata } from 'astro';
+import type { CollectionPage, WithContext } from 'schema-dts';
 
 import DuckyCodingLogo from '@assets/images/DuckyCoding_logo.png';
 import TopicCard from '@components/card/TopicCard.astro';
@@ -57,7 +58,7 @@ const lastTopicDateAsISOString = topicsWithImages[0]?.lastPostDate
   : WEBSITE_FIRST_PUBLISHING_DATE;
 
 // JSON-LD structured data for topics page
-const topicsPageJsonLd = {
+const topicsPageJsonLd: { item: WithContext<CollectionPage> } = {
   item: {
     '@context': 'https://schema.org',
     '@type': 'CollectionPage',
@@ -69,29 +70,25 @@ const topicsPageJsonLd = {
     mainEntity: {
       '@type': 'ItemList',
       numberOfItems: processedTopics.length,
-      itemListElement: processedTopics.map(
-        (topic, index) =>
-          ({
-            '@type': 'ListItem',
-            position: index + 1,
-            item: {
-              '@type': 'Thing',
-              name: topic.title,
-              '@id': `${WEBSITE_ROOT}/topics/${topic.slug}`,
-              url: `${WEBSITE_ROOT}/topics/${topic.slug}`,
-              description:
-                topic.description ||
-                `Articles and tutorials about ${topic.title}`,
-              image: topic.imageSrc
-                ? new URL(topic.imageSrc.src, WEBSITE_ROOT).href
-                : undefined,
-            },
-          }) as const,
-      ),
+      itemListElement: processedTopics.map((topic, index) => ({
+        '@type': 'ListItem' as const,
+        position: index + 1,
+        item: {
+          '@type': 'Thing' as const,
+          name: topic.title,
+          '@id': `${WEBSITE_ROOT}/topics/${topic.slug}`,
+          url: `${WEBSITE_ROOT}/topics/${topic.slug}`,
+          description:
+            topic.description || `Articles and tutorials about ${topic.title}`,
+          image: topic.imageSrc
+            ? new URL(topic.imageSrc.src, WEBSITE_ROOT).href
+            : undefined,
+        },
+      })),
     },
     breadcrumb: buildBreadcrumb([{ name: 'Topics', url: pageUrl }]),
   },
-} as const;
+};
 ---
 
 <HolyGrailLayout
