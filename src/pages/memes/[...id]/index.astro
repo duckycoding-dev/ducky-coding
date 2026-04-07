@@ -2,6 +2,7 @@
 import { Image } from 'astro:assets';
 import { getCollection } from 'astro:content';
 import type { Link as MetaLink } from 'astro-seo';
+import type { MediaObject, WithContext } from 'schema-dts';
 
 import DuckyCodingLogo from '@assets/images/DuckyCoding_logo.png';
 import Link from '@components/link/Link.astro';
@@ -85,7 +86,7 @@ if (nextPost) {
 const pageUrl = Astro.url.href;
 
 // Create JSON-LD structured data for the meme
-const memeJsonLd = {
+const memeJsonLd: { item: WithContext<MediaObject> } = {
   item: MemeJsonLd({
     title,
     author,
@@ -122,7 +123,7 @@ const memeJsonLd = {
         modifiedTime: new Date(createdAt).toISOString(),
         section: 'Web Development',
         authors: [author],
-        tags: tags,
+        tags: tags ?? [],
       },
     }),
     extend: {

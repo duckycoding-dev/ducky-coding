@@ -3,6 +3,7 @@ import '@styles/markdown.css';
 
 import type { ComponentProps } from 'astro/types';
 import { Image } from 'astro:assets';
+import type { Person, WithContext } from 'schema-dts';
 
 import headshotDavide from '@assets/images/head-shot-davide.jpg';
 import Card from '@components/card/Card.astro';
@@ -100,13 +101,13 @@ const funFacts: ComponentProps<typeof FunfactCard>[] = [
 const pageUrl = Astro.url.href;
 
 // JSON-LD structured data for homepage
-const homepageJsonLd = {
+const homepageJsonLd: { item: WithContext<Person> } = {
   item: {
     '@context': 'https://schema.org',
     ...DuckyCodingPerson,
     mainEntityOfPage: DuckyCodingWebsite,
   },
-} as const;
+};
 ---
 
 <HolyGrailLayout

@@ -1,6 +1,7 @@
 ---
 import { Image } from 'astro:assets';
 import { getCollection } from 'astro:content';
+import type { CollectionPage, WithContext } from 'schema-dts';
 
 import Link from '@components/link/Link.astro';
 import HolyGrailLayout from '@layouts/holy-grail-layout/HolyGrailLayout.astro';
@@ -9,7 +10,6 @@ import { buildBreadcrumb } from '@utils/json-ld/breadcrumb';
 import { buildPageSeo } from '@utils/seo/page-seo';
 import CalendarIcon from '../../components/icons/CalendarIcon.astro';
 import PersonIcon from '../../components/icons/PersonIcon.astro';
-import type { BaseHeadProps } from '../../layouts/base-head/BaseHead.astro';
 import {
   WEBSITE_FIRST_PUBLISHING_DATE,
   WEBSITE_ROOT,
@@ -49,7 +49,7 @@ const memesWithProcessedImage = (
 })[]; // Ensure processedImage is defined, type inference is not working correctly with filter
 const pageUrl = Astro.url.href;
 
-const memesJsonLd = {
+const memesJsonLd: { item: WithContext<CollectionPage> } = {
   item: {
     '@context': 'https://schema.org',
     '@type': 'CollectionPage',
@@ -74,10 +74,10 @@ const memesJsonLd = {
       description:
         'Web development blog featuring tutorials, guides, and insights about modern web technologies.',
       itemListElement: memesWithProcessedImage.map((meme, index) => ({
-        '@type': 'ListItem',
+        '@type': 'ListItem' as const,
         position: index + 1,
         item: {
-          '@type': 'CreativeWork',
+          '@type': 'CreativeWork' as const,
           name: meme.data.title,
           author: AuthorPerson(meme.data.author, WEBSITE_ROOT),
           image: new URL(meme.processedImage.src, WEBSITE_ROOT).href,
@@ -88,7 +88,7 @@ const memesJsonLd = {
       { name: 'Memes', url: `${WEBSITE_ROOT}/memes` },
     ]),
   },
-} as const satisfies NonNullable<BaseHeadProps['jsonLd']>;
+};
 ---
 
 <HolyGrailLayout

@@ -1,5 +1,6 @@
+import type { MediaObject, WithContext } from 'schema-dts';
+
 import { WEBSITE_ROOT } from '@utils/globals';
-import type { BaseHeadProps } from '../../layouts/base-head/BaseHead.astro';
 import { AuthorPerson } from './person';
 
 export interface MemeJsonLdProps {
@@ -13,7 +14,7 @@ export interface MemeJsonLdProps {
   pageUrl: string;
 }
 
-export const MemeJsonLd = (props: MemeJsonLdProps) => {
+export function MemeJsonLd(props: MemeJsonLdProps): WithContext<MediaObject> {
   const {
     title,
     author,
@@ -89,5 +90,5 @@ export const MemeJsonLd = (props: MemeJsonLdProps) => {
     inLanguage: 'en',
     isAccessibleForFree: true,
     usageInfo: 'Educational and entertainment purposes',
-  } as const satisfies NonNullable<BaseHeadProps['jsonLd']>['item'];
-};
+  };
+}
