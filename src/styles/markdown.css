@@ -110,7 +110,7 @@
   border: 2px solid var(--color-accent2);
   margin: 1rem 0;
   overflow-x: auto;
-  box-shadow: 4px 4px 0 rgba(0, 0, 0, 0.8);
+  box-shadow: var(--shadow-comic-lg);
   font-size: 0.9rem;
   max-height: 70vh;
 }
@@ -125,7 +125,7 @@
   border: 2px solid var(--color-secondary);
   padding: 0.2rem 0.4rem;
   font-family: monospace;
-  box-shadow: 2px 2px 0 var(--color-secondary);
+  box-shadow: var(--shadow-comic);
   white-space: break-spaces;
 }
 
@@ -136,9 +136,8 @@
   border-left: 8px solid var(--color-accent3);
   padding: 1rem;
   margin: 1rem 0;
-  box-shadow: 4px 4px 0 var(--color-secondary);
   background-color: var(--color-primary-200);
-  box-shadow: 4px 4px 0 var(--color-secondary);
+  box-shadow: var(--shadow-comic-lg);
   outline: 1px solid var(--color-secondary);
 }
 .markdown-content blockquote p {
@@ -200,7 +199,7 @@
   border: 3px solid var(--color-secondary);
   margin: 1rem 0;
   background-color: var(--color-primary-200);
-  box-shadow: 4px 4px 0 var(--color-secondary);
+  box-shadow: var(--shadow-comic-lg);
 }
 
 .markdown-content details > :not(summary) {

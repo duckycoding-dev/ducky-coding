@@ -65,24 +65,33 @@
   --color-success: var(--color-success);
   --color-warning: var(--color-warning);
   --color-danger: var(--color-danger);
+
+  --shadow-comic: 0.1rem 0.1rem 0rem 0.1rem var(--color-secondary);
+  --shadow-comic-lg: 0.3rem 0.3rem 0rem 0.1rem var(--color-secondary);
+  --shadow-comic-xl: 0.5rem 0.65rem 0rem 0.1rem var(--color-secondary);
+  --shadow-comic-pressed: -0.1rem -0.075rem 0rem 0.1rem var(--color-secondary);
 }
 
 @utility shadow-comic {
-  box-shadow: 0.1rem 0.1rem 0rem 0.1rem;
+  box-shadow: var(--shadow-comic);
 }
 
 @utility shadow-comic-lg {
-  box-shadow: 0.3rem 0.3rem 0rem 0.1rem;
+  box-shadow: var(--shadow-comic-lg);
 }
 
 @utility shadow-comic-xl {
-  box-shadow: 0.5rem 0.65rem 0rem 0.1rem;
+  box-shadow: var(--shadow-comic-xl);
 }
 
 @utility shadow-comic-pressed {
-  box-shadow: -0.1rem -0.075rem 0rem 0.1rem;
+  box-shadow: var(--shadow-comic-pressed);
 }
 
 @utility border-comic {
   border-width: 2px;
+}
+
+@utility border-comic-thick {
+  border-width: 4px;
 }
