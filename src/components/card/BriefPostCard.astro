@@ -18,18 +18,14 @@ const { post, tags, class: className }: Props = Astro.props;
 ---
 
 <Link variant='unstyled' href={`/posts/${post.slug}`} class={cn(className)}>
-  <Card class='card flex h-full grow flex-col gap-2 py-2.5'>
+  <Card hover='none' class='card flex h-full grow flex-col gap-2 py-2.5'>
     <h2 class='px-5 text-xl font-semibold [text-wrap:unset]'>
       {post.title}
     </h2>
     <section
       class='tags border-secondary mt-auto flex flex-wrap justify-end gap-2 px-5 text-sm font-semibold'
     >
-      {
-        tags.map((tag) => (
-          <Tag class='odd:bg-accent even:bg-accent2'>{tag}</Tag>
-        ))
-      }
+      {tags.map((tag) => <Tag color='alternating'>{tag}</Tag>)}
     </section>
   </Card>
 </Link>

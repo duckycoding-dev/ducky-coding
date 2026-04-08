@@ -1,20 +1,42 @@
 ---
 import type { HTMLAttributes } from 'astro/types';
 import { cn } from '@libs/cn';
+import { cva, type VariantProps } from 'cva';
 
-export interface TagProps {}
+const tagVariants = cva({
+  base: 'text-secondary border-comic border-secondary font-bold',
+  variants: {
+    color: {
+      accent: 'bg-accent',
+      accent2: 'bg-accent2',
+      accent3: 'bg-accent3',
+      alternating: 'odd:bg-accent even:bg-accent2',
+      none: '',
+    },
+    size: {
+      sm: 'text-xs px-2 py-0.5 rounded-2xl',
+      md: 'text-sm px-3 py-1 rounded-3xl',
+      lg: 'text-base px-3 py-1 rounded-3xl',
+    },
+    shape: {
+      pill: 'rounded-3xl',
+      square: 'rounded-none',
+    },
+  },
+  defaultVariants: {
+    color: 'none',
+    size: 'md',
+    shape: 'pill',
+  },
+});
 
-interface Props extends HTMLAttributes<'div'>, TagProps {}
+export type TagVariants = VariantProps<typeof tagVariants>;
 
-const { class: className, ...props }: Props = Astro.props;
+interface Props extends Omit<HTMLAttributes<'div'>, 'color'>, TagVariants {}
+
+const { class: className, color, size, shape, ...props }: Props = Astro.props;
 ---
 
-<div
-  class={cn(
-    'text-secondary border-comic border-secondary rounded-3xl px-3 py-1 font-bold',
-    className,
-  )}
-  {...props}
->
+<div class={cn(tagVariants({ color, size, shape }), className)} {...props}>
   <slot />
 </div>

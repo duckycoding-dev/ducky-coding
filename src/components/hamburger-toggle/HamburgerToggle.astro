@@ -9,13 +9,11 @@ const hamburgerToggleVariants = cva({
     variant: {
       small: 'w-8 gap-[7.5px]',
       medium: 'w-10 gap-2',
-      // large: '',
     },
   },
   defaultVariants: {
     variant: 'medium',
   },
-  compoundVariants: [],
 });
 
 const spanVariants = cva({
@@ -24,47 +22,41 @@ const spanVariants = cva({
     variant: {
       small: 'h-0.5',
       medium: 'h-1',
-      // large: '',
     },
   },
   defaultVariants: {
     variant: 'medium',
   },
-  compoundVariants: [],
 });
 
 export type HamburgerToggleProps = VariantProps<typeof hamburgerToggleVariants>;
 
-interface Props extends HTMLAttributes<'input'>, HamburgerToggleProps {}
+interface Props extends HTMLAttributes<'button'>, HamburgerToggleProps {}
 
-const { variant, class: className, id: inputId }: Props = Astro.props;
+const { variant, class: className, ...props }: Props = Astro.props;
 ---
 
-<input
-  id={inputId}
-  type='checkbox'
-  class={cn('absolute h-0 w-0 opacity-0 cursor-pointer', className)}
-  title={Astro.props.title ?? 'hamburger toggle'}
-/>
-<label
-  for={inputId}
-  aria-labelledby={inputId}
+<button
+  type='button'
   class={cn(hamburgerToggleVariants({ variant }), className)}
+  aria-expanded='false'
+  aria-label='Toggle navigation menu'
+  {...props}
 >
   <span class={cn(spanVariants({ variant }))}></span>
   <span class={cn(spanVariants({ variant }))}></span>
   <span class={cn(spanVariants({ variant }))}></span>
-</label>
+</button>
 
-<style>
-  input:checked ~ label span:nth-child(2) {
+<style is:global>
+  #nav-toggle[aria-expanded='true'] span:nth-child(2) {
     opacity: 0;
   }
-  input:checked ~ label span:nth-child(1) {
+  #nav-toggle[aria-expanded='true'] span:nth-child(1) {
     transform-origin: left;
     transform: rotate(37.5deg);
   }
-  input:checked ~ label span:nth-child(3) {
+  #nav-toggle[aria-expanded='true'] span:nth-child(3) {
     transform-origin: left;
     transform: rotate(-37deg);
   }

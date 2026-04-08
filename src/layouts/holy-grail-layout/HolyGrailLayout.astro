@@ -22,11 +22,7 @@ const { class: className, ...props }: Props = Astro.props;
 </BaseHtml>
 
 <script>
-  import { swipeToTriggerCheckbox } from '@utils/scripts/swipeToTriggerCheckbox';
+  import { initSwipeNavigation } from '@utils/scripts/swipeToToggleDialog';
 
-  const checkbox = document.getElementById(
-    'site_side_navigation_menu_id',
-  ) as HTMLInputElement;
-
-  swipeToTriggerCheckbox(checkbox);
+  initSwipeNavigation();
 </script>
