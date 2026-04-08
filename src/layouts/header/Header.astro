@@ -16,12 +16,11 @@ export interface Props extends HTMLAttributes<'header'>, HeaderProps {}
 const { class: className, ...props }: Props = Astro.props;
 
 const currentPath = Astro.url.pathname;
-console.log('Current path:', currentPath);
 ---
 
 <header
   class={cn(
-    'bg-primary-700 border-4 border-secondary sticky top-0 z-10 [grid-area:header] border-x-0 border-t-0',
+    'bg-primary-700 border-comic-thick border-secondary sticky top-0 z-10 [grid-area:header] border-x-0 border-t-0',
     className,
   )}
   {...props}
@@ -30,9 +29,8 @@ console.log('Current path:', currentPath);
     class='mx-auto flex max-w-7xl items-center justify-between gap-x-8 px-4 py-2 md:px-8'
   >
     <HamburgerToggle
-      id='site_side_navigation_menu_id'
-      title='navigation menu toggle'
-      class='peer absolute z-20 shrink-0 md:hidden'
+      id='nav-toggle'
+      class='z-20 shrink-0 md:hidden'
       variant={'small'}
     />
     <div class='mx-auto h-10.5 md:mx-0' aria-hidden='true'>
@@ -54,15 +52,29 @@ console.log('Current path:', currentPath);
         />
       </Link>
     </div>
-    <Navbar
-      id='primary-navigation'
-      class='fixed z-10 transition-transform peer-checked:flex peer-checked:translate-x-0 peer-[:not(checked)]:-translate-x-full md:ml-auto md:transition-none md:peer-[:not(checked)]:translate-x-0'
-    />
+    <Navbar />
   </div>
 </header>
 
-<style>
-  #logo:checked {
-    /* transform: translateX(1000px); */
+<script>
+  import { closeNav, isNavOpen, openNav } from '@utils/scripts/navDialog';
+
+  const toggle = document.getElementById('nav-toggle');
+
+  if (toggle) {
+    toggle.addEventListener('click', () => {
+      if (isNavOpen()) {
+        closeNav();
+      } else {
+        openNav();
+      }
+    });
   }
-</style>
+
+  // Close on ESC (non-modal dialog doesn't handle ESC natively)
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && isNavOpen()) {
+      closeNav();
+    }
+  });
+</script>
