@@ -80,10 +80,8 @@ const {
     <!-- Technologies -->
     <div class='mb-2 flex flex-wrap gap-2'>
       {
-        technologies.map((tech, index) => (
-          <Tag
-            class={`text-xs ${index % 2 === 0 ? 'bg-accent' : 'bg-accent2'}`}
-          >
+        technologies.map((tech) => (
+          <Tag color='alternating' size='sm'>
             {tech}
           </Tag>
         ))

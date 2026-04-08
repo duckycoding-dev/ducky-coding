@@ -207,7 +207,7 @@ const blogPostJsonLd: { item: WithContext<BlogPosting> } = {
                 href={`/topics/${entry.data.topicTitle.toLowerCase()}`}
                 class='border-secondary rounded-full border-none p-0'
               >
-                <Tag class='bg-accent'>{entry.data.topicTitle}</Tag>
+                <Tag color='accent'>{entry.data.topicTitle}</Tag>
               </Link>
             )}
             {entry.data.tags

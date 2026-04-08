@@ -44,7 +44,7 @@ const {
     className,
   )}
 >
-  <Card class='card flex h-full flex-col'>
+  <Card hover='none' class='card flex h-full flex-col'>
     <Image
       format={'avif'}
       src={bannerImage ?? DuckyCodingLogo}
@@ -89,11 +89,7 @@ const {
       <section
         class='tags border-secondary mt-auto flex flex-wrap justify-end gap-2 px-5 text-sm font-semibold'
       >
-        {
-          tags.map((tag) => (
-            <Tag class='odd:bg-accent even:bg-accent2'>{tag}</Tag>
-          ))
-        }
+        {tags.map((tag) => <Tag color='alternating'>{tag}</Tag>)}
       </section>
     </footer>
   </Card>

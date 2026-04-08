@@ -44,7 +44,9 @@ const { author, createdAt, tags, class: className, ...props } = Astro.props;
       <section class='mb-4 flex flex-wrap items-center justify-center gap-2 px-4 text-sm md:gap-4 md:text-lg'>
         {tags.map((tag) => {
           return (
-            <Tag class='odd:bg-accent even:bg-accent2 inline-block'>{tag}</Tag>
+            <Tag color='alternating' class='inline-block'>
+              {tag}
+            </Tag>
           );
         })}
       </section>

@@ -44,7 +44,7 @@ const wrapperProps = link
 ---
 
 <Wrapper {...props} {...wrapperProps}>
-  <Card class='p-6'>
+  <Card hover={link ? 'lift' : 'none'} class='p-6'>
     <div class='timeline_card'>
       <div
         class={`flex h-20 w-20 shrink-0 items-center justify-center rounded-xl [grid-area:logo] md:h-24 md:w-24`}
