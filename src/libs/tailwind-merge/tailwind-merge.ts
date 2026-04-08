@@ -12,9 +12,13 @@ import { extendTailwindMerge } from 'tailwind-merge';
 export const extendedTwMerge = extendTailwindMerge({
   extend: {
     classGroups: {
-      shadow: ['shadow-comic', 'shadow-comic-pressed'],
-      'border-style': ['border-comic'],
-      'border-w': ['border-comic'],
+      shadow: [
+        'shadow-comic',
+        'shadow-comic-lg',
+        'shadow-comic-xl',
+        'shadow-comic-pressed',
+      ],
+      'border-w': ['border-comic', 'border-comic-thick'],
     },
   },
 });
