@@ -28,6 +28,7 @@ interface PageSeoParams {
   ogType?: 'website' | 'article';
   image?: PageImage;
   article?: PageArticle;
+  author?: string;
 }
 
 export function buildPageSeo(params: PageSeoParams): SEOProps {
@@ -69,7 +70,13 @@ export function buildPageSeo(params: PageSeoParams): SEOProps {
       ...(params.image && { imageAlt: params.image.alt }),
     },
     extend: {
-      meta: [{ name: 'keywords', content: params.keywords }],
+      meta: [
+        { name: 'keywords', content: params.keywords },
+        {
+          name: 'author',
+          content: params.author ?? 'Davide Milan',
+        },
+      ],
     },
   };
 }
