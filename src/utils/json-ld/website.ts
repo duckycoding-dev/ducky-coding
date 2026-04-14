@@ -8,6 +8,6 @@ export const DuckyCodingWebsite: WebSite = {
   name: 'DuckyCoding',
   url: WEBSITE_ROOT,
   description:
-    'Web development blog featuring tutorials, guides, and insights about modern web technologies.',
+    'DuckyCoding — a web development blog by Davide Milan. Tutorials, guides, and developer humor about modern web technologies.',
   author: DuckyCodingPerson,
 };

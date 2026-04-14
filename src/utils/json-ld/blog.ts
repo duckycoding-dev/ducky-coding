@@ -9,6 +9,6 @@ export const DuckyCodingBlog: Blog = {
   url: `${WEBSITE_ROOT}/blog`,
   name: "DuckyCoding's Blog",
   description:
-    'Web development blog featuring tutorials, guides, and insights about modern web technologies.',
+    'Articles and tutorials about web development — TypeScript, Astro, frontend architecture, and more. Written by Davide (DuckyCoding).',
   author: DuckyCodingPerson,
 };
