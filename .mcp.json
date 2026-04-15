@@ -7,6 +7,10 @@
     "zod-v4-docs": {
       "command": "npx",
       "args": ["-y", "mcp-remote", "https://mcp.inkeep.com/zod/mcp"]
+    },
+    "chrome-devtools": {
+      "command": "npx",
+      "args": ["chrome-devtools-mcp@latest"]
     }
   }
 }

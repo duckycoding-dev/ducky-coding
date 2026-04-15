@@ -95,7 +95,7 @@ const memeJsonLd: { item: WithContext<MediaObject> } = {
     imageAlt: imageAlt || "DuckyCoding's logo",
     createdAt,
     tags,
-    description: `Check out this meme titled "${title}", created by ${author}${author.toLowerCase() !== 'duckycoding' ? ' and brought to you by DuckyCoding' : ''}.`,
+    description: `${title} — a programming meme by ${author}. Part of DuckyCoding's collection of developer humor and tech jokes.`,
     pageUrl,
   }),
 };
@@ -106,7 +106,7 @@ const memeJsonLd: { item: WithContext<MediaObject> } = {
     ...buildPageSeo({
       title: `${title} - meme`,
       ogTitle: title,
-      description: `Check out this meme titled "${title}", created by ${author}${author.toLowerCase() !== 'duckycoding' ? ' and brought to you by DuckyCoding' : ''}.`,
+      description: `${title} — a programming meme by ${author}. Part of DuckyCoding's collection of developer humor and tech jokes.`,
       pageUrl,
       keywords: `meme, ${title}, ${author}, programming ${author === 'DuckyCoding' ? ',DuckyCoding' : ''}`,
       ...(processedImage && {

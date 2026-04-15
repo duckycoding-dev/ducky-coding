@@ -32,6 +32,7 @@ export function openNav(): void {
   els.dialog.show();
   els.backdrop?.classList.add(ACTIVE_CLASS);
   els.toggle?.setAttribute('aria-expanded', 'true');
+  document.body.style.overflowY = 'hidden';
 }
 
 export function closeNav(): void {
@@ -47,6 +48,7 @@ export function closeNav(): void {
     els.dialog.classList.remove(CLOSING_CLASS);
     els.dialog.close();
     els.dialog.removeEventListener('transitionend', onEnd);
+    document.body.style.overflowY = '';
   };
 
   els.dialog.addEventListener('transitionend', onEnd);
@@ -66,6 +68,7 @@ function forceClose(): void {
   els.dialog.close();
   els.backdrop?.classList.remove(ACTIVE_CLASS);
   els.toggle?.setAttribute('aria-expanded', 'false');
+  document.body.style.overflowY = '';
 }
 
 /** Auto-close when viewport crosses the md breakpoint */
