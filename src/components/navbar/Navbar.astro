@@ -29,7 +29,12 @@ const NAV_ITEMS = [
   id='nav-dialog'
   class='nav-dialog bg-primary-700 border-comic border-secondary fixed top-0 left-0 z-10 m-0 h-dvh max-h-dvh w-full max-w-[90dvw] border-y-0 border-l-0 px-8 pt-16 pb-8 md:hidden'
 >
-  <nav class={cn('flex h-full flex-col gap-y-4', className)} {...props}>
+  <nav
+    autofocus
+    tabindex='-1'
+    class={cn('flex h-full flex-col gap-y-4 outline-none', className)}
+    {...props}
+  >
     <div class='flex shrink-0 items-center justify-start gap-4 font-semibold'>
       <Image
         format={'avif'}
