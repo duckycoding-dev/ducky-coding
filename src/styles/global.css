@@ -10,8 +10,6 @@
   --breakpoint-lg: 976px;
   --breakpoint-xl: 1440px;
 
-  --font-inter: 'Inter', system-ui, -apple-system, sans-serif;
-
   --color-primary: var(--color-primary);
   --color-primary-100: var(--color-primary-100);
   --color-primary-200: var(--color-primary-200);

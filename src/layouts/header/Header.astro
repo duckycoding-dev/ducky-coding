@@ -30,7 +30,7 @@ const currentPath = Astro.url.pathname;
   >
     <HamburgerToggle
       id='nav-toggle'
-      class='z-20 shrink-0 md:hidden'
+      class='absolute z-20 shrink-0 md:hidden'
       variant={'small'}
     />
     <div class='mx-auto h-10.5 md:mx-0' aria-hidden='true'>
@@ -58,9 +58,10 @@ const currentPath = Astro.url.pathname;
 
 <script>
   import { closeNav, isNavOpen, openNav } from '@utils/scripts/navDialog';
+  import { initSwipeNavigation } from '@utils/scripts/swipeToToggleDialog';
 
+  // Toggle button
   const toggle = document.getElementById('nav-toggle');
-
   if (toggle) {
     toggle.addEventListener('click', () => {
       if (isNavOpen()) {
@@ -71,10 +72,23 @@ const currentPath = Astro.url.pathname;
     });
   }
 
-  // Close on ESC (non-modal dialog doesn't handle ESC natively)
+  // Backdrop click
+  const backdrop = document.getElementById('nav-backdrop');
+  backdrop?.addEventListener('click', closeNav);
+
+  // ESC key (non-modal dialog doesn't handle ESC natively)
   document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape' && isNavOpen()) {
       closeNav();
     }
   });
+
+  // Touch swipe
+  initSwipeNavigation();
+
+  // Touch tip
+  if ('ontouchstart' in document.documentElement) {
+    const scrollTip = document.getElementById('scroll-tip');
+    scrollTip?.classList?.remove('hidden');
+  }
 </script>

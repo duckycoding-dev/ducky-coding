@@ -122,16 +122,3 @@ const NAV_ITEMS = [
     visibility: visible;
   }
 </style>
-
-<script>
-  import { closeNav } from '@utils/scripts/navDialog';
-
-  if ('ontouchstart' in document.documentElement) {
-    const scrollTip = document.getElementById('scroll-tip');
-    scrollTip?.classList?.remove('hidden');
-  }
-
-  // Close on backdrop click
-  const backdrop = document.getElementById('nav-backdrop');
-  backdrop?.addEventListener('click', closeNav);
-</script>

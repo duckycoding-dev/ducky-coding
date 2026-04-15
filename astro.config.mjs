@@ -1,7 +1,6 @@
-import { defineConfig, envField } from 'astro/config';
+import { defineConfig, envField, fontProviders } from 'astro/config';
 import icon from 'astro-icon';
 import mdx from '@astrojs/mdx';
-import netlify from '@astrojs/netlify';
 import sitemap from '@astrojs/sitemap';
 import tailwindcss from '@tailwindcss/vite';
 import { loadEnv } from 'vite';
@@ -27,9 +26,9 @@ export default defineConfig({
   outDir: './dist', // --DEFAULT--
   base: '/',
   trailingSlash: 'ignore', // --DEFAULT--
-  adapter: netlify({
-    imageCDN: false,
-  }),
+  // adapter: netlify({
+  //   imageCDN: false,
+  // }),
   compressHTML: true, // could be set to false in development using env variables
   scopedStyleStrategy: 'attribute', // --DEFAULT--
   build: {
@@ -75,6 +74,7 @@ export default defineConfig({
     gfm: true, // --DEFAULT--
     smartypants: true, // --DEFAULT--
     shikiConfig: {
+      theme: 'github-dark-high-contrast',
       wrap: null,
     },
   },
@@ -121,6 +121,15 @@ export default defineConfig({
     icon({
       iconDir: 'src/assets/icons', // user svgs stored in this path instead of src/icons
     }),
+  ],
+  fonts: [
+    {
+      provider: fontProviders.google(),
+      name: 'Inter',
+      cssVariable: '--font-inter',
+      weights: ['100 900'],
+      styles: ['normal', 'italic'],
+    },
   ],
   experimental: {
     contentIntellisense: true,

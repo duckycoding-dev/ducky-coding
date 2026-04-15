@@ -172,7 +172,7 @@ In this case the custom size is 50vw
 
 Here are some key points to remember when working with `<img/>` and its `srcset` and `sizes` attributes:
 
-1. **Always provide fallback**: Include a `src` attribute for browsers that don't support `srcset`; you can check which browsers support this [here](https://caniuse.com/srcset) (as of the time time of this writing, it looks like only Internet Explorer 11 and Opera Mini don't support it 👀, whereas Safari and Safari for iOS have some edge case limitations)
+1. **Always provide fallback**: Include a `src` attribute for browsers that don't support `srcset`; you can check the [caniuse.com browser support table](https://caniuse.com/srcset) (as of the time time of this writing, it looks like only Internet Explorer 11 and Opera Mini don't support it 👀, whereas Safari and Safari for iOS have some edge case limitations)
 2. **Use appropriate descriptors**: Use `w` descriptors for responsive images, `x` descriptors for fixed-size images with different densities
 3. **Pixel density affects calculation**: The browser multiplies your `sizes` values by the device pixel ratio when selecting from `srcset`
 4. **Media queries in sizes**: Only the size values are affected by pixel density, not the media query conditions

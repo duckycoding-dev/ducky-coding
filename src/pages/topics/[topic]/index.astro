@@ -235,7 +235,7 @@ const topicPageJsonLd: { item: WithContext<CollectionPage> } = {
     processedPostsWithImages.length > 0 ? (
       <ul class='grid-container mt-8 grid gap-8'>
         {processedPostsWithImages.map(
-          ({ post, tags, processedBannerImage }) => {
+          ({ post, tags, processedBannerImage }, index) => {
             return (
               <li class='mb-8 last-of-type:mb-0 md:last-of-type:mb-8'>
                 <PostCard
@@ -245,6 +245,8 @@ const topicPageJsonLd: { item: WithContext<CollectionPage> } = {
                   bannerImage={
                     processedBannerImage || processedTopic.imageSrc || null
                   }
+                  loading={index < 4 ? 'eager' : 'lazy'}
+                  fetchPriority={index < 4 ? 'high' : 'auto'}
                 />
               </li>
             );

@@ -199,7 +199,7 @@ const memeJsonLd: { item: WithContext<MediaObject> } = {
               class='border-secondary border-comic block aspect-square h-auto rounded object-cover'
             />
           ) : null}
-          &larr; Previous meme
+          Previous meme
         </Link>
       ) : null
     }
@@ -211,7 +211,7 @@ const memeJsonLd: { item: WithContext<MediaObject> } = {
           href={nextPost.slug}
           class='text-secondary bg-accent2 hover:bg-accent2-700 active:bg-accent2-700 focus:bg-accent2-700 flex flex-1 items-center justify-center gap-4 text-center text-xl font-bold md:text-2xl'
         >
-          Next meme &rarr;
+          Next meme
           {processedNextPostImage ? (
             <Image
               format='avif'
