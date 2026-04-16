@@ -1,0 +1,38 @@
+---
+import type { HTMLAttributes } from 'astro/types';
+import { cn } from '@libs/cn';
+
+export interface SearchInputProps {
+  initialQuery?: string;
+  searchHref: string;
+}
+
+interface Props extends HTMLAttributes<'div'>, SearchInputProps {}
+
+const {
+  initialQuery = '',
+  searchHref,
+  class: className,
+  ...props
+}: Props = Astro.props;
+---
+
+<div class={cn('flex gap-2', className)} {...props}>
+  <input
+    id='search-input'
+    type='text'
+    name='q'
+    value={initialQuery}
+    placeholder='Search posts and memes...'
+    autocomplete='off'
+    class='border-comic border-secondary bg-primary-100 text-secondary focus:shadow-comic-lg min-w-0 flex-1 rounded-xl px-4 py-2.5 text-base transition-shadow outline-none'
+  />
+  <a
+    id='search-btn'
+    href={searchHref}
+    data-astro-prefetch='tap'
+    class='border-comic border-secondary bg-accent shadow-comic text-secondary hover:bg-accent-700 active:shadow-comic-pressed inline-block shrink-0 rounded-md px-5 py-2.5 font-semibold transition-all active:translate-y-0.5'
+  >
+    Search
+  </a>
+</div>

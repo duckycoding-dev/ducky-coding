@@ -14,9 +14,11 @@ import { glob, readFile } from 'node:fs/promises';
 import path from 'node:path';
 import { parse as parseYaml } from 'yaml';
 
+import { MemeContentSchema } from '../../types/entities/memeContent.entity.ts';
 import { PostContentSchema } from '../../types/entities/postContent.entity.ts';
 import { TopicContentSchema } from '../../types/entities/topicContent.entity.ts';
 import { imagesTable } from '../features/images/images.model.ts';
+import { type InsertMeme, memesTable } from '../features/memes/memes.model.ts';
 import { type InsertPost, postsTable } from '../features/posts/posts.model.ts';
 import { postsTagsTable } from '../features/posts/posts_tags.model.ts';
 import { tagsTable } from '../features/tags/tags.model.ts';
@@ -394,7 +396,91 @@ export async function buildSyncAllContent(
       `Content sync completed! Synced: ${postsSyncedCount}, Skipped: ${postsSkippedCount}`,
     );
 
-    // 3. Orphan cleanup --------------------------------------------------------
+    // 3. Sync memes --------------------------------------------------------
+    console.log('Starting memes sync to database...');
+
+    const memeGlobPattern = path.join(
+      projectRoot,
+      'src/content/memes/**/*.{md,mdx}',
+    );
+    let memesSyncedCount = 0;
+    let memesSkippedCount = 0;
+    const syncedMemeSlugs: string[] = [];
+
+    for await (const memeFilePath of glob(memeGlobPattern)) {
+      try {
+        const fileContent = await readFile(memeFilePath, 'utf-8');
+        const { frontmatter: rawFrontmatter } = extractFrontmatter(fileContent);
+        const parsed = MemeContentSchema.safeParse(parseYaml(rawFrontmatter));
+        if (!parsed.success) {
+          console.log(
+            `  Skipping meme ${memeFilePath}: ${parsed.error.message}`,
+          );
+          memesSkippedCount++;
+          continue;
+        }
+        const memeData = parsed.data;
+
+        const memesMarker = `src/content/memes/`;
+        const memesIdx = memeFilePath.indexOf(memesMarker);
+        const slugWithExt =
+          memesIdx !== -1
+            ? memeFilePath.slice(memesIdx + memesMarker.length)
+            : path.basename(memeFilePath);
+        const slug = slugWithExt
+          .replace(/\.(md|mdx)$/, '')
+          .replace(/\/index$/, '');
+
+        const existingMeme = await db
+          .select()
+          .from(memesTable)
+          .where(eq(memesTable.slug, slug))
+          .get();
+
+        const memeRecord: InsertMeme = {
+          slug,
+          title: memeData.title,
+          author: memeData.author,
+          imagePath: memeData.imagePath,
+          imageAlt: memeData.imageAlt,
+          tags: JSON.stringify(memeData.tags ?? []),
+          createdAt: memeData.createdAt,
+        };
+
+        if (existingMeme) {
+          const changed =
+            existingMeme.title !== memeRecord.title ||
+            existingMeme.author !== memeRecord.author ||
+            existingMeme.imagePath !== memeRecord.imagePath ||
+            existingMeme.imageAlt !== memeRecord.imageAlt ||
+            existingMeme.tags !== memeRecord.tags ||
+            existingMeme.createdAt !== memeRecord.createdAt;
+
+          if (changed) {
+            await db
+              .update(memesTable)
+              .set(memeRecord)
+              .where(eq(memesTable.id, existingMeme.id));
+            console.log(`  Updated meme: ${memeData.title}`);
+          }
+        } else {
+          await db.insert(memesTable).values(memeRecord);
+          console.log(`  Created meme: ${memeData.title}`);
+        }
+
+        syncedMemeSlugs.push(slug);
+        memesSyncedCount++;
+      } catch (err) {
+        memesSkippedCount++;
+        console.log(`  Failed to sync meme ${memeFilePath}:`, err);
+      }
+    }
+
+    console.log(
+      `Memes sync completed! Synced: ${memesSyncedCount}, Skipped: ${memesSkippedCount}`,
+    );
+
+    // 4. Orphan cleanup --------------------------------------------------------
     console.log('Cleaning up orphaned records...');
 
     // Hard-delete posts whose content file no longer exists
@@ -417,6 +503,16 @@ export async function buildSyncAllContent(
         console.log(
           `  Removed ${orphanedSlugs.length} orphaned post(s): ${orphanedSlugs.join(', ')}`,
         );
+      }
+    }
+
+    // Hard-delete memes whose content file no longer exists
+    if (syncedMemeSlugs.length > 0) {
+      const deletedMemes = await db
+        .delete(memesTable)
+        .where(notInArray(memesTable.slug, syncedMemeSlugs));
+      if (deletedMemes.rowsAffected > 0) {
+        console.log(`  Removed ${deletedMemes.rowsAffected} orphaned meme(s).`);
       }
     }
 
@@ -444,7 +540,7 @@ export async function buildSyncAllContent(
 
     console.log('Orphan cleanup complete.');
 
-    // 4. Update topic analytics ---------------------------------------------
+    // 5. Update topic analytics ---------------------------------------------
     console.log('Updating topic analytics...');
 
     const topicStats = (await db
@@ -485,7 +581,7 @@ export async function buildSyncAllContent(
 
     console.log(`Updated analytics for ${topicStats.length} topics.`);
     console.log(
-      `Complete sync finished! Topics: ${topicsSyncedCount}, Posts: ${postsSyncedCount}`,
+      `Complete sync finished! Topics: ${topicsSyncedCount}, Posts: ${postsSyncedCount}, Memes: ${memesSyncedCount}`,
     );
 
     return { success: true };

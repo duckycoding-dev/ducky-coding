@@ -8,6 +8,13 @@
       "when": 1749025656245,
       "tag": "0000_wandering_thaddeus_ross",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "6",
+      "when": 1776353513814,
+      "tag": "0001_oval_blue_shield",
+      "breakpoints": true
     }
   ]
 }

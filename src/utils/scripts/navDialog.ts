@@ -29,6 +29,9 @@ export function openNav(): void {
   const els = getElements();
   if (!els || window.innerWidth >= MD_BREAKPOINT) return;
 
+  // Don't open nav if a modal dialog (e.g., tag/topic filter) is open
+  if (document.querySelector('dialog[open]')) return;
+
   els.dialog.show();
   els.backdrop?.classList.add(ACTIVE_CLASS);
   els.toggle?.setAttribute('aria-expanded', 'true');

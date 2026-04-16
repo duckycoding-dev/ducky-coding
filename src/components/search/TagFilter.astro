@@ -1,0 +1,76 @@
+---
+import type { HTMLAttributes } from 'astro/types';
+import { cn } from '@libs/cn';
+
+export interface TagFilterProps {
+  tags: string[];
+  activeTags: string[];
+}
+
+interface Props extends HTMLAttributes<'div'>, TagFilterProps {}
+
+const { tags, activeTags, class: className, ...props }: Props = Astro.props;
+
+const activeSet = new Set(activeTags);
+---
+
+{/* Trigger button — rendered inline wherever this component is placed */}
+<div class={cn(className)} {...props}>
+  <button
+    type='button'
+    data-tag-dialog-trigger
+    class='border-comic border-secondary bg-primary-100 text-secondary flex w-full items-center justify-between rounded-xl px-4 py-2.5 text-sm'
+  >
+    <span data-tag-trigger-label>
+      {
+        activeTags.length > 0
+          ? `Tags (${activeTags.length} selected)`
+          : 'Select tags...'
+      }
+    </span>
+    <span aria-hidden='true'>▼</span>
+  </button>
+</div>
+
+{
+  /*
+  Dialog is rendered via a <template> — search.astro picks it up once
+  and appends to the page. This avoids duplicate dialog IDs when
+  TagFilter is rendered in both mobile and desktop contexts.
+*/
+}
+<template data-tag-dialog-template>
+  <dialog
+    id='tag-dialog'
+    class='border-comic border-secondary bg-primary shadow-comic-xl m-auto max-h-[80dvh] w-[90dvw] max-w-sm rounded-xl p-0'
+  >
+    <div
+      class='from-accent-200 to-accent2-200 border-secondary flex items-center justify-between border-b-2 bg-gradient-to-r px-4 py-3'
+    >
+      <h3 class='text-secondary text-base font-extrabold'>Tags</h3>
+      <button
+        type='button'
+        data-tag-dialog-close
+        class='text-secondary text-xl leading-none font-bold'
+        aria-label='Close'
+      >
+        ✕
+      </button>
+    </div>
+    <div class='flex flex-col gap-3 overflow-y-auto p-4'>
+      {
+        tags.map((tag) => (
+          <label class='flex cursor-pointer items-center gap-2.5 text-sm'>
+            <input
+              type='checkbox'
+              data-tag-value={tag}
+              checked={activeSet.has(tag)}
+              class='border-comic border-secondary accent-accent h-5 w-5 rounded'
+            />
+            <span class='text-secondary'>{tag}</span>
+          </label>
+        ))
+      }
+    </div>
+  </dialog>
+</template>
