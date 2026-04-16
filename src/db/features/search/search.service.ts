@@ -22,7 +22,7 @@ const search = async (rawParams: unknown): Promise<SearchResponse> => {
         ? searchRepository.searchPosts(params)
         : Promise.resolve({ results: [], total: 0 }),
       includesMemes
-        ? searchRepository.searchMemes({ ...params, topic: undefined })
+        ? searchRepository.searchMemes({ ...params, topics: undefined })
         : Promise.resolve({ results: [], total: 0 }),
     ]);
 

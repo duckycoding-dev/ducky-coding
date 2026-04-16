@@ -11,10 +11,14 @@ export const SearchParamsSchema = z.object({
     .transform((s) => s.split(',').filter(Boolean))
     .pipe(z.array(z.string().min(1)).min(1))
     .optional(),
-  topic: z.string().min(1).optional(),
+  topics: z
+    .string()
+    .transform((s) => s.split(',').filter(Boolean))
+    .pipe(z.array(z.string().min(1)).min(1))
+    .optional(),
   type: z.enum(['post', 'meme', 'all']).default('all'),
   page: z.coerce.number().int().min(1).default(1),
-  pageSize: z.coerce.number().int().min(1).max(50).default(20),
+  pageSize: z.coerce.number().int().min(1).max(100).default(20),
 });
 
 export type SearchParams = z.infer<typeof SearchParamsSchema>;

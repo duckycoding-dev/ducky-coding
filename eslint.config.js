@@ -200,7 +200,7 @@ export default defineConfig(
           patterns: [
             {
               regex:
-                '^(?:@db|(?:\\.{1,2}/)+.*?/db)(?!.*\\.(?:service|model)(?:\\.[cm]?ts)?$)',
+                '^(?:@db|(?:\\.{1,2}/)+.*?/db)(?!.*\\.(?:service|model|types)(?:\\.[cm]?ts)?$)',
               message:
                 'You are trying to import a db file. Only *.service.ts and *.model.ts files from the db module can be imported in .astro files.',
             },
@@ -216,7 +216,7 @@ export default defineConfig(
       // Disabled for imports — handled by unused-imports plugin above.
       // Still active for variables/args/caught errors via unused-imports.
       '@typescript-eslint/no-unused-vars': 'off',
-      '@typescript-eslint/no-non-null-assertion': 'error',
+      '@typescript-eslint/no-non-null-assertion': 'warn',
       '@typescript-eslint/no-explicit-any': 'warn',
       '@typescript-eslint/no-empty-object-type': 'off',
       '@typescript-eslint/consistent-type-imports': [

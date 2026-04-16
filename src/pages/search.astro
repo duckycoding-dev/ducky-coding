@@ -1,0 +1,611 @@
+---
+import type { ImageMetadata } from 'astro';
+import { Image } from 'astro:assets';
+
+import Card from '@components/card/Card.astro';
+import PostCard from '@components/card/PostCard.astro';
+import Link from '@components/link/Link.astro';
+import Pagination from '@components/pagination/Pagination.astro';
+import SearchInput from '@components/search/SearchInput.astro';
+import TagFilter from '@components/search/TagFilter.astro';
+import TopicFilter from '@components/search/TopicFilter.astro';
+import type { SearchType } from '@components/search/TypeTabs.astro';
+import TypeTabs from '@components/search/TypeTabs.astro';
+import type { ContentStatus } from '@db/features/posts/posts.model';
+import { searchService } from '@db/features/search/search.service';
+import type { PostSearchResult } from '@db/features/search/search.types';
+import { TagsService } from '@db/features/tags/tags.service';
+import { TopicsService } from '@db/features/topics/topics.service';
+import HolyGrailLayout from '@layouts/holy-grail-layout/HolyGrailLayout.astro';
+import { matchImageFromGlobImport } from '@utils/images/images';
+import { serverLogger } from '@utils/logs/logger';
+import { buildPageSeo } from '@utils/seo/page-seo';
+
+export const prerender = false;
+
+// ---------------------------------------------------------------------------
+// CDN cache headers
+// ---------------------------------------------------------------------------
+
+Astro.response.headers.set(
+  'Cache-Control',
+  'public, max-age=300, must-revalidate',
+);
+Astro.response.headers.set(
+  'Netlify-CDN-Cache-Control',
+  'public, durable, s-maxage=31536000, stale-while-revalidate=31536000',
+);
+Astro.response.headers.set(
+  'Netlify-Vary',
+  'query=q|tags|topics|type|page|pageSize',
+);
+
+// ---------------------------------------------------------------------------
+// Read URL params
+// ---------------------------------------------------------------------------
+
+const rawParams = Object.fromEntries(Astro.url.searchParams.entries());
+const q = Astro.url.searchParams.get('q') ?? '';
+const activeType = (Astro.url.searchParams.get('type') ?? 'all') as SearchType;
+const activeTags =
+  Astro.url.searchParams.get('tags')?.split(',').filter(Boolean) ?? [];
+const activeTopics =
+  Astro.url.searchParams.get('topics')?.split(',').filter(Boolean) ?? [];
+
+// ---------------------------------------------------------------------------
+// Fetch data
+// ---------------------------------------------------------------------------
+
+const [searchResult, allTags, allTopics] = await Promise.all([
+  searchService.search(rawParams),
+  TagsService.getAllTags(),
+  TopicsService.getAllTopics(),
+]);
+
+const searchData = searchResult.success ? searchResult.data : undefined;
+const posts = searchData?.posts ?? [];
+const memes = searchData?.memes ?? [];
+const totalPosts = searchData?.totalPosts ?? 0;
+const totalMemes = searchData?.totalMemes ?? 0;
+const page = searchData?.page ?? 1;
+const pageSize = searchData?.pageSize ?? 20;
+const totalResults = totalPosts + totalMemes;
+const totalPages = Math.max(
+  Math.ceil(totalPosts / pageSize),
+  Math.ceil(totalMemes / pageSize),
+  1,
+);
+const isOutOfBounds = page > totalPages;
+
+// Allowed page sizes for the selector
+const PAGE_SIZES = [10, 20, 50, 100] as const;
+const pageSizeInList = PAGE_SIZES.includes(
+  pageSize as (typeof PAGE_SIZES)[number],
+);
+
+const tagNames = allTags.map((t) => t.name);
+const topicTitles = allTopics.map((t) => t.title);
+
+// ---------------------------------------------------------------------------
+// Process images
+// ---------------------------------------------------------------------------
+
+const allImages = import.meta.glob<{ default: ImageMetadata }>(
+  `/src/assets/images/**/*.{jpeg,jpg,png,gif,webp,svg}`,
+);
+
+type PostForCard = PostSearchResult & {
+  processedImage: ImageMetadata | undefined;
+};
+
+const postsWithImages: PostForCard[] = await Promise.all(
+  posts.map(async (post) => {
+    const processedImage = post.bannerImagePath
+      ? await matchImageFromGlobImport(
+          allImages,
+          post.bannerImagePath,
+          serverLogger,
+        )
+      : undefined;
+    return { ...post, processedImage };
+  }),
+);
+
+type MemeForDisplay = (typeof memes)[number] & {
+  processedImage: ImageMetadata | undefined;
+};
+
+const memesWithImages: MemeForDisplay[] = await Promise.all(
+  memes.map(async (meme) => {
+    const processedImage = await matchImageFromGlobImport(
+      allImages,
+      meme.imagePath,
+      serverLogger,
+    );
+    return { ...meme, processedImage };
+  }),
+);
+
+// ---------------------------------------------------------------------------
+// Pagination URL builder
+// ---------------------------------------------------------------------------
+
+function buildPageUrl(targetPage: number): string {
+  const params = new URLSearchParams(Astro.url.searchParams);
+  params.set('page', String(targetPage));
+  return `/search?${params.toString()}`;
+}
+
+const searchHref = `/search?${Astro.url.searchParams.toString()}`;
+const pageUrl = Astro.url.href;
+---
+
+<HolyGrailLayout
+  seoProps={buildPageSeo({
+    title: q ? `Search: ${q}` : 'Search',
+    description: 'Search posts and memes on DuckyCoding.',
+    pageUrl,
+    keywords: 'DuckyCoding, search, posts, memes',
+  })}
+>
+  <h1
+    class='decoration-accent mb-6 text-center text-4xl font-extrabold underline underline-offset-4'
+  >
+    Search
+  </h1>
+
+  {/* Full-width grid: main + sidebar + pagination */}
+  <div class='search-grid'>
+    {/* Main content area */}
+    <div class='[grid-area:main]'>
+      <SearchInput initialQuery={q} searchHref={searchHref} class='mb-4' />
+
+      <TypeTabs activeType={activeType} class='mb-3' />
+
+      {/* Active tag pills (removable) */}
+      <div id='active-tags-container' class='mb-3 flex flex-wrap gap-2'>
+        {
+          activeTags.map((tag) => (
+            <button
+              type='button'
+              data-remove-tag={tag}
+              class='border-comic border-secondary bg-accent2 text-secondary hover:bg-accent2-700 shrink-0 rounded-3xl px-3 py-1 text-sm font-bold transition-colors'
+            >
+              {tag} ✕
+            </button>
+          ))
+        }
+      </div>
+
+      {/* Mobile: tag + topic dialog buttons */}
+      <div class='mb-4 flex flex-col gap-2 md:hidden'>
+        <TagFilter tags={tagNames} activeTags={activeTags} />
+        <TopicFilter topics={topicTitles} activeTopics={activeTopics} />
+      </div>
+
+      {/* Results summary + page size */}
+      <div class='mb-4 flex flex-wrap items-center justify-between gap-2'>
+        <p class='text-secondary text-sm opacity-60'>
+          {
+            totalResults > 0
+              ? `Found ${totalResults} result${totalResults !== 1 ? 's' : ''} (${totalPosts} post${totalPosts !== 1 ? 's' : ''}, ${totalMemes} meme${totalMemes !== 1 ? 's' : ''})`
+              : searchResult.success
+                ? 'No results found. Try adjusting your search or filters.'
+                : `Search error: ${searchResult.error}`
+          }
+        </p>
+        <label
+          class='text-secondary flex items-center gap-1.5 text-sm opacity-60'
+        >
+          Show:
+          <select
+            id='page-size-select'
+            class='border-comic border-secondary bg-primary rounded-lg px-2 py-1 text-sm opacity-100'
+          >
+            {
+              !pageSizeInList && (
+                <option value={pageSize} selected>
+                  {pageSize}
+                </option>
+              )
+            }
+            {
+              PAGE_SIZES.map((size) => (
+                <option value={size} selected={size === pageSize}>
+                  {size}
+                </option>
+              ))
+            }
+          </select>
+        </label>
+      </div>
+
+      {/* Posts section */}
+      {
+        postsWithImages.length > 0 && (
+          <section class='mb-8'>
+            <h2 class='text-secondary mb-4 text-2xl font-extrabold'>Posts</h2>
+            <ul class='grid grid-cols-1 gap-6 md:grid-cols-2'>
+              {postsWithImages.map((post, i) => (
+                <li>
+                  <PostCard
+                    class='block h-full'
+                    widths={[300, 600, 900]}
+                    sizes='(max-width: 767px) calc(100vw - 2rem), calc(50vw - 2rem)'
+                    post={{
+                      id: post.id,
+                      slug: post.slug,
+                      title: post.title,
+                      summary: post.summary,
+                      author: post.author,
+                      topicTitle: post.topicTitle,
+                      bannerImagePath: post.bannerImagePath,
+                      timeToRead: post.timeToRead,
+                      createdAt: post.publishedAt ?? 0,
+                      updatedAt: post.publishedAt ?? 0,
+                      publishedAt: post.publishedAt,
+                      deletedAt: null,
+                      isFeatured: false,
+                      status: 'published' as ContentStatus,
+                      content: '',
+                      language: 'en',
+                    }}
+                    tags={post.tags}
+                    bannerImage={post.processedImage ?? null}
+                    imageAlt={`Banner for ${post.title}`}
+                    loading={i < 4 ? 'eager' : 'lazy'}
+                    fetchPriority={i < 4 ? 'high' : 'auto'}
+                  />
+                </li>
+              ))}
+            </ul>
+          </section>
+        )
+      }
+
+      {/* Memes section */}
+      {
+        memesWithImages.length > 0 && (
+          <section class='mb-8'>
+            <h2 class='text-secondary mb-4 text-2xl font-extrabold'>Memes</h2>
+            <div class='grid grid-cols-2 gap-4 md:grid-cols-3'>
+              {memesWithImages.map((meme, i) =>
+                meme.processedImage ? (
+                  <Link
+                    variant='unstyled'
+                    href={`/memes/${meme.slug}/`}
+                    class='group border-comic border-secondary bg-primary-100 shadow-comic-lg hover:shadow-comic-xl active:shadow-comic flex flex-col gap-2 overflow-hidden p-2 transition-all duration-300 hover:-translate-y-1 active:translate-y-0.5'
+                  >
+                    <div class='border-secondary aspect-square w-full overflow-hidden border-2'>
+                      <Image
+                        format='avif'
+                        src={meme.processedImage}
+                        width={meme.processedImage.width}
+                        height={meme.processedImage.height}
+                        alt={meme.imageAlt || meme.title}
+                        class='h-full w-full object-cover transition-transform duration-200 group-hover:scale-105'
+                        loading={i < 4 ? 'eager' : 'lazy'}
+                      />
+                    </div>
+                    <p class='text-secondary text-sm font-bold'>{meme.title}</p>
+                  </Link>
+                ) : null,
+              )}
+            </div>
+          </section>
+        )
+      }
+
+      {/* Out-of-bounds page */}
+      {
+        isOutOfBounds && searchResult.success && totalResults > 0 && (
+          <div class='py-12 text-center'>
+            <p class='text-secondary text-xl font-bold'>
+              Page {page} doesn't exist
+            </p>
+            <p class='text-secondary mt-2 opacity-60'>
+              There {totalPages === 1 ? 'is' : 'are'} only {totalPages} page
+              {totalPages !== 1 ? 's' : ''} of results.
+            </p>
+            <a
+              href={buildPageUrl(1)}
+              class='text-accent-700 mt-4 inline-block font-semibold underline'
+            >
+              Go to page 1
+            </a>
+          </div>
+        )
+      }
+
+      {/* Empty state (no results at all) */}
+      {
+        !isOutOfBounds &&
+          postsWithImages.length === 0 &&
+          memesWithImages.length === 0 &&
+          searchResult.success && (
+            <div class='py-12 text-center'>
+              <p class='text-secondary text-xl font-bold'>No results found</p>
+              <p class='text-secondary mt-2 opacity-60'>
+                Try a different search term or adjust your filters.
+              </p>
+            </div>
+          )
+      }
+    </div>
+
+    {/* Sidebar: tag selector + topic filter (desktop only) */}
+    <aside class='sticky top-0 hidden self-start [grid-area:sidebar] md:block'>
+      <Card hover='none' class='w-60 p-4'>
+        {/* Tag selector dialog button */}
+        <TagFilter tags={tagNames} activeTags={activeTags} class='mb-4' />
+
+        {/* Divider */}
+        <hr class='border-secondary mb-4 border-t' />
+
+        {/* Topic checkboxes */}
+        <TopicFilter topics={topicTitles} activeTopics={activeTopics} />
+      </Card>
+    </aside>
+
+    {/* Pagination (hidden when out of bounds) */}
+    {
+      !isOutOfBounds && (
+        <div class='mt-4 [grid-area:pagination]'>
+          <Pagination
+            currentPage={page}
+            totalPages={totalPages}
+            buildPageUrl={buildPageUrl}
+          />
+        </div>
+      )
+    }
+  </div>
+</HolyGrailLayout>
+
+<script>
+  // ---------------------------------------------------------------------------
+  // Mount tag dialog once from template (avoids duplicate IDs)
+  // ---------------------------------------------------------------------------
+
+  const tagTemplate = document.querySelector<HTMLTemplateElement>(
+    '[data-tag-dialog-template]',
+  );
+  if (tagTemplate?.content) {
+    document.body.appendChild(tagTemplate.content.cloneNode(true));
+  }
+
+  // Wire up ALL tag dialog trigger buttons (mobile + desktop)
+  const tagDialog = document.getElementById(
+    'tag-dialog',
+  ) as HTMLDialogElement | null;
+  document.querySelectorAll('[data-tag-dialog-trigger]').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      tagDialog?.showModal();
+    });
+  });
+  document
+    .querySelector('[data-tag-dialog-close]')
+    ?.addEventListener('click', () => {
+      tagDialog?.close();
+    });
+  tagDialog?.addEventListener('click', (e) => {
+    if (e.target === tagDialog) tagDialog.close();
+  });
+
+  // ---------------------------------------------------------------------------
+  // Build search URL from current filter state
+  // ---------------------------------------------------------------------------
+
+  function updateSearchHref(): void {
+    const searchBtn = document.getElementById(
+      'search-btn',
+    ) as HTMLAnchorElement | null;
+    const searchInput = document.getElementById(
+      'search-input',
+    ) as HTMLInputElement | null;
+    if (!searchBtn || !searchInput) return;
+
+    const params = new URLSearchParams();
+
+    // Query text
+    const q = searchInput.value.trim();
+    if (q) params.set('q', q);
+
+    // Type (single select)
+    const activeTypeBtn = document.querySelector(
+      '[data-type-value][data-active]',
+    );
+    const type = activeTypeBtn?.getAttribute('data-type-value') ?? 'all';
+    if (type !== 'all') params.set('type', type);
+
+    // Tags (from checked checkboxes in dialog)
+    const checkedTags = new Set<string>();
+    document
+      .querySelectorAll<HTMLInputElement>('[data-tag-value]')
+      .forEach((el) => {
+        if (el.checked) checkedTags.add(el.getAttribute('data-tag-value')!);
+      });
+    if (checkedTags.size > 0) params.set('tags', [...checkedTags].join(','));
+
+    // Topics (from checked checkboxes — desktop + mobile)
+    const checkedTopics = new Set<string>();
+    document
+      .querySelectorAll<HTMLInputElement>('[data-topic-value]')
+      .forEach((el) => {
+        if (el.checked) checkedTopics.add(el.getAttribute('data-topic-value')!);
+      });
+    if (checkedTopics.size > 0)
+      params.set('topics', [...checkedTopics].join(','));
+
+    // Page size
+    const pageSizeSelect = document.getElementById(
+      'page-size-select',
+    ) as HTMLSelectElement | null;
+    const selectedPageSize = pageSizeSelect?.value ?? '20';
+    if (selectedPageSize !== '20') params.set('pageSize', selectedPageSize);
+
+    const paramStr = params.toString();
+    searchBtn.href = paramStr ? `/search?${paramStr}` : '/search';
+  }
+
+  // ---------------------------------------------------------------------------
+  // Sync active tag pills with dialog checkbox state
+  // ---------------------------------------------------------------------------
+
+  function syncTagPills(): void {
+    const container = document.getElementById('active-tags-container');
+    if (!container) return;
+
+    // Get currently checked tags from dialog
+    const checkedTags = new Set<string>();
+    document
+      .querySelectorAll<HTMLInputElement>('[data-tag-value]')
+      .forEach((el) => {
+        if (el.checked) checkedTags.add(el.getAttribute('data-tag-value')!);
+      });
+
+    // Remove pills for unchecked tags
+    container.querySelectorAll('[data-remove-tag]').forEach((pill) => {
+      const tag = pill.getAttribute('data-remove-tag')!;
+      if (!checkedTags.has(tag)) pill.remove();
+    });
+
+    // Add pills for newly checked tags
+    const existingPills = new Set(
+      Array.from(container.querySelectorAll('[data-remove-tag]')).map((p) =>
+        p.getAttribute('data-remove-tag'),
+      ),
+    );
+    checkedTags.forEach((tag) => {
+      if (!existingPills.has(tag)) {
+        const pill = document.createElement('button');
+        pill.type = 'button';
+        pill.setAttribute('data-remove-tag', tag);
+        pill.className =
+          'border-comic border-secondary bg-accent2 text-secondary shrink-0 rounded-3xl px-3 py-1 text-sm font-bold transition-colors hover:bg-accent2-700';
+        pill.textContent = `${tag} ✕`;
+        pill.addEventListener('click', () => removePill(tag));
+        container.appendChild(pill);
+      }
+    });
+
+    // Update trigger button text
+    document
+      .querySelectorAll('#tag-dialog-trigger span:first-child')
+      .forEach((el) => {
+        el.textContent =
+          checkedTags.size > 0
+            ? `Tags (${checkedTags.size} selected)`
+            : 'Select tags...';
+      });
+  }
+
+  function removePill(tag: string): void {
+    // Uncheck in dialog
+    document
+      .querySelectorAll<HTMLInputElement>(`[data-tag-value="${tag}"]`)
+      .forEach((cb) => {
+        cb.checked = false;
+      });
+    syncTagPills();
+    updateSearchHref();
+  }
+
+  // ---------------------------------------------------------------------------
+  // Event listeners
+  // ---------------------------------------------------------------------------
+
+  // Type tabs: single-select toggle
+  document.querySelectorAll('[data-type-value]').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('[data-type-value]').forEach((b) => {
+        b.removeAttribute('data-active');
+        b.classList.remove('bg-accent');
+        b.classList.add('bg-primary');
+      });
+      btn.setAttribute('data-active', '');
+      btn.classList.add('bg-accent');
+      btn.classList.remove('bg-primary');
+      updateSearchHref();
+    });
+  });
+
+  // Tag checkboxes: sync pills + update href
+  document
+    .querySelectorAll<HTMLInputElement>('[data-tag-value]')
+    .forEach((checkbox) => {
+      checkbox.addEventListener('change', () => {
+        syncTagPills();
+        updateSearchHref();
+      });
+    });
+
+  // Removable tag pills (server-rendered ones)
+  document.querySelectorAll('[data-remove-tag]').forEach((pill) => {
+    pill.addEventListener('click', () => {
+      const tag = pill.getAttribute('data-remove-tag')!;
+      removePill(tag);
+    });
+  });
+
+  // Topic checkboxes: sync desktop ↔ mobile + update href
+  document
+    .querySelectorAll<HTMLInputElement>('[data-topic-value]')
+    .forEach((checkbox) => {
+      checkbox.addEventListener('change', () => {
+        const topic = checkbox.getAttribute('data-topic-value')!;
+        document
+          .querySelectorAll<HTMLInputElement>(`[data-topic-value="${topic}"]`)
+          .forEach((cb) => {
+            cb.checked = checkbox.checked;
+          });
+        updateSearchHref();
+      });
+    });
+
+  // Text input: update href on input
+  document.getElementById('search-input')?.addEventListener('input', () => {
+    updateSearchHref();
+  });
+
+  // Enter key in search input: navigate
+  document.getElementById('search-input')?.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      document.getElementById('search-btn')?.click();
+    }
+  });
+
+  // Page size selector
+  document
+    .getElementById('page-size-select')
+    ?.addEventListener('change', () => {
+      updateSearchHref();
+    });
+</script>
+
+<style is:global>
+  html:has(dialog[open]) {
+    overflow: hidden;
+  }
+</style>
+
+<style>
+  .search-grid {
+    display: grid;
+    grid-template-areas:
+      'main'
+      'pagination';
+    gap: 1rem;
+  }
+
+  @media (width >= 768px) {
+    .search-grid {
+      grid-template-areas:
+        'main sidebar'
+        'pagination pagination';
+      grid-template-columns: 1fr auto;
+      column-gap: 1.5rem;
+    }
+  }
+</style>

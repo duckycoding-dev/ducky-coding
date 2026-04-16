@@ -37,7 +37,9 @@ const searchPosts = async (
           like(postsTable.content, `%${params.q}%`),
         )
       : undefined,
-    params.topic ? eq(postsTable.topicTitle, params.topic) : undefined,
+    params.topics && params.topics.length > 0
+      ? inArray(postsTable.topicTitle, params.topics)
+      : undefined,
     tagSubquery ? inArray(postsTable.id, tagSubquery) : undefined,
   );
 
