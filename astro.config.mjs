@@ -6,7 +6,7 @@ import sitemap from '@astrojs/sitemap';
 import tailwindcss from '@tailwindcss/vite';
 import { loadEnv } from 'vite';
 
-import { buildSyncAllContent, buildSyncImages } from './src/db/sync/buildSync.ts';
+import { buildMigrate, buildSyncAllContent, buildSyncImages } from './src/db/sync/buildSync.ts';
 import { logLevels } from './src/utils/logs/logger';
 
 const modeArgIdx = process.argv.indexOf('--mode');
@@ -110,6 +110,11 @@ export default defineConfig({
             url: buildEnv['TURSO_DATABASE_URL'] ?? '',
             authToken: buildEnv['TURSO_AUTH_TOKEN'],
           };
+          logger.info('Running DB migrations...');
+          const migrateResult = await buildMigrate(dbConfig);
+          if (!migrateResult.success) {
+            logger.warn(`Migration warning: ${migrateResult.error}`);
+          }
           logger.info('Starting DB sync...');
           await buildSyncImages(dbConfig);
           await buildSyncAllContent(dbConfig);

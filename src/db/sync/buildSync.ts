@@ -10,8 +10,10 @@
 import { createClient } from '@libsql/client';
 import { eq, inArray, notInArray, sql } from 'drizzle-orm';
 import { drizzle } from 'drizzle-orm/libsql';
+import { migrate } from 'drizzle-orm/libsql/migrator';
 import { glob, readFile } from 'node:fs/promises';
 import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { parse as parseYaml } from 'yaml';
 
 import { MemeContentSchema } from '../../types/entities/memeContent.entity.ts';
@@ -36,6 +38,33 @@ export interface BuildSyncDbConfig {
 function createDb(config: BuildSyncDbConfig) {
   const turso = createClient({ url: config.url, authToken: config.authToken });
   return drizzle({ client: turso, casing: 'snake_case' });
+}
+
+// ---------------------------------------------------------------------------
+// buildMigrate
+// ---------------------------------------------------------------------------
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+
+export async function buildMigrate(dbConfig: BuildSyncDbConfig): Promise<{
+  success: boolean;
+  error?: string;
+}> {
+  console.log('Running database migrations (build)...');
+
+  try {
+    const db = createDb(dbConfig);
+    const migrationsFolder = path.join(__dirname, '../migrations');
+    await migrate(db, { migrationsFolder });
+    console.log('Migrations completed successfully.');
+    return { success: true };
+  } catch (err: unknown) {
+    const message = err instanceof Error ? err.message : 'Migration failed';
+    // Non-fatal: log warning and continue — tables may already exist
+    // (e.g., created via drizzle-kit push)
+    console.warn('Migration warning:', message);
+    return { success: false, error: message };
+  }
 }
 
 // ---------------------------------------------------------------------------
