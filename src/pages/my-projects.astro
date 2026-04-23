@@ -1,6 +1,6 @@
 ---
 import type { ComponentProps } from 'astro/types';
-import type { CollectionPage, WithContext } from 'schema-dts';
+import type { ItemList } from 'schema-dts';
 
 import pentaNewsLogo from '@assets/images/penta_news_logo.png';
 import leetCodeLogo from '@assets/images/topics/leetcode_logo.png';
@@ -15,6 +15,11 @@ import Link from '@components/link/Link.astro';
 import HolyGrailLayout from '@layouts/holy-grail-layout/HolyGrailLayout.astro';
 import { WEBSITE_FIRST_PUBLISHING_DATE, WEBSITE_ROOT } from '@utils/globals';
 import { buildBreadcrumb } from '@utils/json-ld/breadcrumb';
+import { buildGraph } from '@utils/json-ld/graph';
+import { DuckyCodingPerson } from '@utils/json-ld/person';
+import { DuckyCodingPublisher } from '@utils/json-ld/publisher';
+import { buildCollectionPage } from '@utils/json-ld/webpage';
+import { DuckyCodingWebsite } from '@utils/json-ld/website';
 import { buildPageSeo } from '@utils/seo/page-seo';
 
 const thisWebsiteOrigin = Astro.url.origin;
@@ -155,17 +160,37 @@ const PROJECTS: ProjectCardProps[] = [
 
 const pageUrl = Astro.url.href;
 
-const projectsPageJsonLd: { item: WithContext<CollectionPage> } = {
-  item: {
-    '@context': 'https://schema.org',
-    '@type': 'CollectionPage',
-    '@id': pageUrl,
-    name: "DuckyCoding's projects",
-    url: pageUrl,
-    description:
-      'Web development projects by Davide (DuckyCoding) — open-source tools, experiments, and applications built with modern technologies.',
-    breadcrumb: buildBreadcrumb([{ name: 'My projects', url: pageUrl }]),
-  },
+const projectsDescription =
+  'Web development projects by Davide (DuckyCoding) — open-source tools, experiments, and applications built with modern technologies.';
+
+const projectsItemList: ItemList = {
+  '@type': 'ItemList',
+  '@id': `${pageUrl}#projects`,
+  name: "DuckyCoding's projects",
+  numberOfItems: PROJECTS.length,
+  itemListElement: PROJECTS.map((project, index) => ({
+    '@type': 'ListItem' as const,
+    position: index + 1,
+    url: project.projectUrl,
+    name: project.title,
+  })),
+};
+
+const projectsPageJsonLd = {
+  item: buildGraph([
+    DuckyCodingWebsite,
+    DuckyCodingPublisher,
+    DuckyCodingPerson,
+    buildCollectionPage({
+      pageUrl,
+      name: "DuckyCoding's projects",
+      description: projectsDescription,
+      hasBreadcrumb: true,
+      mainEntityId: `${pageUrl}#projects`,
+    }),
+    projectsItemList,
+    buildBreadcrumb([{ name: 'My projects', url: pageUrl }], pageUrl),
+  ]),
 };
 ---
 

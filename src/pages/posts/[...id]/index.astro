@@ -2,7 +2,7 @@
 import type { ImageMetadata } from 'astro';
 import { Image } from 'astro:assets';
 import { getCollection } from 'astro:content';
-import type { BlogPosting, WithContext } from 'schema-dts';
+import type { BlogPosting } from 'schema-dts';
 
 import Link from '@components/link/Link.astro';
 import ScrollToTopButton from '@components/scroll-to-top-button/ScrollToTopButton.astro';
@@ -10,13 +10,19 @@ import Tag from '@components/tag/Tag.astro';
 import type { Image as BannerImage } from '@db/features/images/images.model';
 import { ImagesService } from '@db/features/images/images.service';
 import { postsService } from '@db/features/posts/posts.service';
+import { TopicsService } from '@db/features/topics/topics.service';
 import HolyGrailLayout from '@layouts/holy-grail-layout/HolyGrailLayout.astro';
 import MarkdownContent from '@layouts/markdown-content/MarkdownContent.astro';
 import { WEBSITE_FIRST_PUBLISHING_DATE, WEBSITE_ROOT } from '@utils/globals';
 import { getImageWidths, matchImageFromGlobImport } from '@utils/images/images';
 import { DuckyCodingBlog } from '@utils/json-ld/blog';
-import { AuthorPerson } from '@utils/json-ld/person';
+import { buildBreadcrumb } from '@utils/json-ld/breadcrumb';
+import { blogRef, buildGraph, orgRef } from '@utils/json-ld/graph';
+import { AuthorPerson, DuckyCodingPerson } from '@utils/json-ld/person';
+import { DuckyCodingPublisher } from '@utils/json-ld/publisher';
 import { TopicThing } from '@utils/json-ld/thing';
+import { buildWebPage } from '@utils/json-ld/webpage';
+import { DuckyCodingWebsite } from '@utils/json-ld/website';
 import { serverLogger } from '@utils/logs/logger';
 import { buildPageSeo } from '@utils/seo/page-seo';
 
@@ -65,47 +71,86 @@ const bannerImageFromDb = imageToFindPath
   : undefined;
 const pageUrl = Astro.url.href;
 
-// Create comprehensive JSON-LD structured data for the blog post
-const blogPostJsonLd: { item: WithContext<BlogPosting> } = {
-  item: {
-    '@context': 'https://schema.org',
-    '@type': 'BlogPosting',
-    '@id': pageUrl,
-    url: pageUrl,
-    headline: entry.data.title,
-    description: entry.data.summary,
-    articleBody: entry.data.content, // TODO: this should probably be entry.body; content is a field that does not match with the actual post content, it's basically a second summary
-    author: AuthorPerson(entry.data.author, WEBSITE_ROOT),
-    publisher: AuthorPerson(entry.data.author, WEBSITE_ROOT),
-    maintainer: AuthorPerson(entry.data.author, WEBSITE_ROOT),
-    datePublished: new Date(
-      postFromDb?.createdAt || WEBSITE_FIRST_PUBLISHING_DATE,
-    ).toISOString(),
-    dateModified: new Date(
-      postFromDb?.updatedAt ||
-        postFromDb?.createdAt ||
-        WEBSITE_FIRST_PUBLISHING_DATE,
-    ).toISOString(),
-    ...(processedImage && {
-      image: {
-        '@type': 'ImageObject' as const,
-        contentUrl: new URL(processedImage.src, WEBSITE_ROOT).href,
-        description:
-          bannerImageFromDb?.alt ||
-          `Post banner cover related to "${entry.data.topicTitle}"`,
-      },
-    }),
-    keywords: entry.data.tags.join(', '),
-    articleSection: entry.data.topicTitle,
-    inLanguage: entry.data.language || 'en',
-    wordCount: entry.data.content.split(' ').length,
-    about: TopicThing(entry.data.topicTitle),
-    isPartOf: DuckyCodingBlog,
-    potentialAction: {
-      '@type': 'ReadAction',
-      target: pageUrl,
+const topicFromDb = await TopicsService.getTopic(entry.data.topicTitle);
+const topicSlug = topicFromDb?.slug ?? entry.data.topicTitle.toLowerCase();
+
+const publishedAt = new Date(
+  postFromDb?.createdAt || WEBSITE_FIRST_PUBLISHING_DATE,
+).toISOString();
+const modifiedAt = new Date(
+  postFromDb?.updatedAt ||
+    postFromDb?.createdAt ||
+    WEBSITE_FIRST_PUBLISHING_DATE,
+).toISOString();
+
+const author = AuthorPerson(entry.data.author, WEBSITE_ROOT);
+const imageContentUrl = processedImage
+  ? new URL(processedImage.src, WEBSITE_ROOT).href
+  : undefined;
+const imageAlt =
+  bannerImageFromDb?.alt ||
+  `Post banner cover related to "${entry.data.topicTitle}"`;
+
+const blogPosting: BlogPosting = {
+  '@type': 'BlogPosting',
+  '@id': `${pageUrl}#post`,
+  url: pageUrl,
+  mainEntityOfPage: { '@id': pageUrl },
+  headline: entry.data.title,
+  description: entry.data.summary,
+  author,
+  publisher: orgRef(),
+  datePublished: publishedAt,
+  dateModified: modifiedAt,
+  ...(processedImage && {
+    image: {
+      '@type': 'ImageObject' as const,
+      url: imageContentUrl!,
+      contentUrl: imageContentUrl!,
+      width: `${processedImage.width}`,
+      height: `${processedImage.height}`,
+      description: imageAlt,
+    },
+  }),
+  keywords: entry.data.tags.join(', '),
+  articleSection: entry.data.topicTitle,
+  inLanguage: entry.data.language || 'en',
+  about: TopicThing({ title: entry.data.topicTitle, slug: topicSlug }),
+  isPartOf: blogRef(),
+  potentialAction: {
+    '@type': 'ReadAction',
+    target: {
+      '@type': 'EntryPoint',
+      urlTemplate: pageUrl,
     },
   },
+};
+
+const blogPostJsonLd = {
+  item: buildGraph([
+    DuckyCodingWebsite,
+    DuckyCodingPublisher,
+    DuckyCodingPerson,
+    DuckyCodingBlog,
+    buildWebPage({
+      pageUrl,
+      name: entry.data.title,
+      description: entry.data.summary,
+      datePublished: publishedAt,
+      dateModified: modifiedAt,
+      primaryImageUrl: imageContentUrl,
+      hasBreadcrumb: true,
+      mainEntityId: `${pageUrl}#post`,
+    }),
+    blogPosting,
+    buildBreadcrumb(
+      [
+        { name: 'Blog', url: `${WEBSITE_ROOT}/blog` },
+        { name: entry.data.title, url: pageUrl },
+      ],
+      pageUrl,
+    ),
+  ]),
 };
 ---
 

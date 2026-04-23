@@ -68,7 +68,10 @@ const seoPropsWithDefaults: SEOProps = {
     imageAlt: seoProps?.twitter?.imageAlt || "DuckyCoding's logo",
     description: seoProps?.twitter?.description,
   },
-  title: seoProps?.title,
+  title:
+    seoProps?.title && seoProps.title !== 'DuckyCoding'
+      ? `${seoProps.title} | DuckyCoding`
+      : 'DuckyCoding',
   description: seoProps?.description,
   extend: seoProps?.extend,
   languageAlternates: seoProps?.languageAlternates,
@@ -78,10 +81,6 @@ const seoPropsWithDefaults: SEOProps = {
   titleTemplate: seoProps?.titleTemplate,
 };
 ---
-
-<title>
-  {seoProps?.title ? `${seoProps.title} - DuckyCoding` : 'DuckyCoding'}
-</title>
 
 <meta charset='utf-8' />
 <link

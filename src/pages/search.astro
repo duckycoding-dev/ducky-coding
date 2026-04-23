@@ -1,7 +1,7 @@
 ---
 import type { ImageMetadata } from 'astro';
 import { Image } from 'astro:assets';
-import type { SearchResultsPage, WebPage, WithContext } from 'schema-dts';
+import type { SearchResultsPage, WebPage } from 'schema-dts';
 
 import Card from '@components/card/Card.astro';
 import PostCard from '@components/card/PostCard.astro';
@@ -21,6 +21,10 @@ import HolyGrailLayout from '@layouts/holy-grail-layout/HolyGrailLayout.astro';
 import { WEBSITE_ROOT } from '@utils/globals';
 import { matchImageFromGlobImport } from '@utils/images/images';
 import { buildBreadcrumb } from '@utils/json-ld/breadcrumb';
+import { buildGraph } from '@utils/json-ld/graph';
+import { DuckyCodingPerson } from '@utils/json-ld/person';
+import { DuckyCodingPublisher } from '@utils/json-ld/publisher';
+import { DuckyCodingWebsite } from '@utils/json-ld/website';
 import { serverLogger } from '@utils/logs/logger';
 import { buildPageSeo } from '@utils/seo/page-seo';
 
@@ -187,51 +191,61 @@ seoProps.extend = {
 // JSON-LD structured data
 // ---------------------------------------------------------------------------
 
-const breadcrumb = buildBreadcrumb([
-  { name: 'Search', url: `${WEBSITE_ROOT}/search` },
-]);
+const breadcrumb = buildBreadcrumb(
+  [{ name: 'Search', url: `${WEBSITE_ROOT}/search` }],
+  pageUrl,
+);
 
-const searchJsonLd: {
-  item: WithContext<SearchResultsPage> | WithContext<WebPage>;
-} = q
+const searchPageNode: SearchResultsPage | WebPage = q
   ? {
-      item: {
-        '@context': 'https://schema.org',
-        '@type': 'SearchResultsPage',
-        name: `Search: ${q}`,
-        url: pageUrl,
-        description,
-        breadcrumb,
-        mainEntity: {
-          '@type': 'ItemList',
-          numberOfItems: totalResults,
-          itemListElement: [
-            ...posts.map((post, i) => ({
-              '@type': 'ListItem' as const,
-              position: i + 1,
-              url: `${WEBSITE_ROOT}/posts/${post.slug}`,
-              name: post.title,
-            })),
-            ...memes.map((meme, i) => ({
-              '@type': 'ListItem' as const,
-              position: posts.length + i + 1,
-              url: `${WEBSITE_ROOT}/memes/${meme.slug}/`,
-              name: meme.title,
-            })),
-          ],
-        },
+      '@type': 'SearchResultsPage',
+      '@id': pageUrl,
+      name: `Search: ${q}`,
+      url: pageUrl,
+      description,
+      inLanguage: 'en',
+      isPartOf: { '@id': `${WEBSITE_ROOT}/#website` },
+      breadcrumb: { '@id': `${pageUrl}#breadcrumb` },
+      mainEntity: {
+        '@type': 'ItemList',
+        '@id': `${pageUrl}#results`,
+        numberOfItems: totalResults,
+        itemListElement: [
+          ...posts.map((post, i) => ({
+            '@type': 'ListItem' as const,
+            position: i + 1,
+            url: `${WEBSITE_ROOT}/posts/${post.slug}`,
+            name: post.title,
+          })),
+          ...memes.map((meme, i) => ({
+            '@type': 'ListItem' as const,
+            position: posts.length + i + 1,
+            url: `${WEBSITE_ROOT}/memes/${meme.slug}/`,
+            name: meme.title,
+          })),
+        ],
       },
     }
   : {
-      item: {
-        '@context': 'https://schema.org',
-        '@type': 'WebPage',
-        name: 'Search',
-        url: `${WEBSITE_ROOT}/search`,
-        description: 'Search posts and memes on DuckyCoding.',
-        breadcrumb,
-      },
+      '@type': 'WebPage',
+      '@id': `${WEBSITE_ROOT}/search`,
+      name: 'Search',
+      url: `${WEBSITE_ROOT}/search`,
+      description: 'Search posts and memes on DuckyCoding.',
+      inLanguage: 'en',
+      isPartOf: { '@id': `${WEBSITE_ROOT}/#website` },
+      breadcrumb: { '@id': `${pageUrl}#breadcrumb` },
     };
+
+const searchJsonLd = {
+  item: buildGraph([
+    DuckyCodingWebsite,
+    DuckyCodingPublisher,
+    DuckyCodingPerson,
+    searchPageNode,
+    breadcrumb,
+  ]),
+};
 ---
 
 <HolyGrailLayout seoProps={seoProps} jsonLd={searchJsonLd}>

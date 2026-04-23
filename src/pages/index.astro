@@ -3,13 +3,16 @@ import '@styles/markdown.css';
 
 import type { ComponentProps } from 'astro/types';
 import { Image } from 'astro:assets';
-import type { Person, WithContext } from 'schema-dts';
 
 import headshotDavide from '@assets/images/head-shot-davide.jpg';
 import Card from '@components/card/Card.astro';
 import HolyGrailLayout from '@layouts/holy-grail-layout/HolyGrailLayout.astro';
-import { WEBSITE_FIRST_PUBLISHING_DATE } from '@utils/globals';
+import { WEBSITE_FIRST_PUBLISHING_DATE, WEBSITE_ROOT } from '@utils/globals';
+import { buildGraph } from '@utils/json-ld/graph';
+import { SiteNavigation } from '@utils/json-ld/nav';
 import { DuckyCodingPerson } from '@utils/json-ld/person';
+import { DuckyCodingPublisher } from '@utils/json-ld/publisher';
+import { buildWebPage } from '@utils/json-ld/webpage';
 import { DuckyCodingWebsite } from '@utils/json-ld/website';
 import { buildPageSeo } from '@utils/seo/page-seo';
 import FunfactCard from '../components/card/FunfactCard.astro';
@@ -100,13 +103,20 @@ const funFacts: ComponentProps<typeof FunfactCard>[] = [
 
 const pageUrl = Astro.url.href;
 
-// JSON-LD structured data for homepage
-const homepageJsonLd: { item: WithContext<Person> } = {
-  item: {
-    '@context': 'https://schema.org',
-    ...DuckyCodingPerson,
-    mainEntityOfPage: DuckyCodingWebsite,
-  },
+// JSON-LD @graph for homepage: site identity + publisher + person + homepage + nav
+const homepageJsonLd = {
+  item: buildGraph([
+    DuckyCodingWebsite,
+    DuckyCodingPublisher,
+    DuckyCodingPerson,
+    buildWebPage({
+      pageUrl: WEBSITE_ROOT,
+      name: 'DuckyCoding',
+      description:
+        "Hi, I'm Davide — aka DuckyCoding. A web developer from Italy sharing tutorials, guides, and memes about modern web development.",
+    }),
+    SiteNavigation(),
+  ]),
 };
 ---
 
@@ -153,8 +163,8 @@ const homepageJsonLd: { item: WithContext<Person> } = {
         </h1>
         <p class='text-secondary text-lg leading-relaxed md:text-xl'>
           <span
-            >I'm Davide, aka DuckyCoding, a passionate web developer from Italy
-            🇮🇹 who loves building modern, user-friendly digital experiences.</span
+            >I'm Davide, a passionate web developer from Italy 🇮🇹 who loves
+            building modern, user-friendly digital experiences.</span
           >
           <br />
           <span

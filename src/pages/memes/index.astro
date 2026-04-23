@@ -1,12 +1,16 @@
 ---
 import { Image } from 'astro:assets';
 import { getCollection } from 'astro:content';
-import type { CollectionPage, WithContext } from 'schema-dts';
+import type { ItemList } from 'schema-dts';
 
 import Link from '@components/link/Link.astro';
 import HolyGrailLayout from '@layouts/holy-grail-layout/HolyGrailLayout.astro';
 import { getImageWidths } from '@utils/images/images';
 import { buildBreadcrumb } from '@utils/json-ld/breadcrumb';
+import { buildGraph } from '@utils/json-ld/graph';
+import { DuckyCodingPublisher } from '@utils/json-ld/publisher';
+import { buildCollectionPage } from '@utils/json-ld/webpage';
+import { DuckyCodingWebsite } from '@utils/json-ld/website';
 import { buildPageSeo } from '@utils/seo/page-seo';
 import CalendarIcon from '../../components/icons/CalendarIcon.astro';
 import PersonIcon from '../../components/icons/PersonIcon.astro';
@@ -15,7 +19,7 @@ import {
   WEBSITE_ROOT,
 } from '../../utils/globals';
 import { matchImageFromGlobImport } from '../../utils/images/images';
-import { AuthorPerson, DuckyCodingPerson } from '../../utils/json-ld/person';
+import { DuckyCodingPerson } from '../../utils/json-ld/person';
 import { serverLogger } from '../../utils/logs/logger';
 
 // TODO: add a separate RSS feed for memes
@@ -49,45 +53,43 @@ const memesWithProcessedImage = (
 })[]; // Ensure processedImage is defined, type inference is not working correctly with filter
 const pageUrl = Astro.url.href;
 
-const memesJsonLd: { item: WithContext<CollectionPage> } = {
-  item: {
-    '@context': 'https://schema.org',
-    '@type': 'CollectionPage',
-    url: pageUrl,
-    name: "DuckyCoding's memes",
-    headline: 'Tech memes by DuckyCoding',
-    description:
-      'A collection of programming memes and developer humor by DuckyCoding. Relatable content for anyone who writes code.',
-    creator: DuckyCodingPerson,
-    author: DuckyCodingPerson,
-    publisher: DuckyCodingPerson,
-    dateCreated: WEBSITE_FIRST_PUBLISHING_DATE,
-    datePublished: WEBSITE_FIRST_PUBLISHING_DATE,
-    dateModified: memes[0]?.data?.createdAt
-      ? new Date(memes[0].data.createdAt).toISOString()
-      : WEBSITE_FIRST_PUBLISHING_DATE,
-    mainEntity: {
-      '@type': 'ItemList',
-      name: "DuckyCoding's Memes",
-      '@id': pageUrl,
-      url: pageUrl,
-      description:
-        'A collection of programming memes and developer humor by DuckyCoding.',
-      itemListElement: memesWithProcessedImage.map((meme, index) => ({
-        '@type': 'ListItem' as const,
-        position: index + 1,
-        item: {
-          '@type': 'CreativeWork' as const,
-          name: meme.data.title,
-          author: AuthorPerson(meme.data.author, WEBSITE_ROOT),
-          image: new URL(meme.processedImage.src, WEBSITE_ROOT).href,
-        },
-      })),
-    },
-    breadcrumb: buildBreadcrumb([
-      { name: 'Memes', url: `${WEBSITE_ROOT}/memes` },
-    ]),
-  },
+const memesDescription =
+  'A collection of programming memes and developer humor by DuckyCoding. Relatable content for anyone who writes code.';
+
+const memesLastModified = memes[0]?.data?.createdAt
+  ? new Date(memes[0].data.createdAt).toISOString()
+  : WEBSITE_FIRST_PUBLISHING_DATE;
+
+const memesItemList: ItemList = {
+  '@type': 'ItemList',
+  '@id': `${pageUrl}#memes`,
+  name: "DuckyCoding's Memes",
+  numberOfItems: memesWithProcessedImage.length,
+  itemListElement: memesWithProcessedImage.map((meme, index) => ({
+    '@type': 'ListItem' as const,
+    position: index + 1,
+    url: new URL(`/memes/${meme.id}/`, WEBSITE_ROOT).href,
+    name: meme.data.title,
+  })),
+};
+
+const memesJsonLd = {
+  item: buildGraph([
+    DuckyCodingWebsite,
+    DuckyCodingPublisher,
+    DuckyCodingPerson,
+    buildCollectionPage({
+      pageUrl,
+      name: "DuckyCoding's memes",
+      description: memesDescription,
+      datePublished: WEBSITE_FIRST_PUBLISHING_DATE,
+      dateModified: memesLastModified,
+      hasBreadcrumb: true,
+      mainEntityId: `${pageUrl}#memes`,
+    }),
+    memesItemList,
+    buildBreadcrumb([{ name: 'Memes', url: `${WEBSITE_ROOT}/memes` }], pageUrl),
+  ]),
 };
 ---
 
