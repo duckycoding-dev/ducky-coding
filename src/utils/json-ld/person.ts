@@ -60,14 +60,18 @@ export const DuckyCodingPersonRef = personRef;
  * Build a Person node for a guest/community author. For DuckyCoding
  * himself, prefer `DuckyCodingPersonRef()` (an @id stub) instead — this
  * function returns a fresh Person for non-canonical authors.
+ *
+ * `url` is optional and only emitted when provided — do not pass
+ * WEBSITE_ROOT for guests, that would misattribute the guest to the
+ * site's canonical URL.
  */
-export function AuthorPerson(authorName: string, url: string): Person {
+export function AuthorPerson(authorName: string, url?: string): Person {
   if (authorName.toLowerCase() === 'duckycoding') {
     return { '@id': PERSON_ID } as Person;
   }
   return {
     '@type': 'Person',
     name: authorName,
-    url,
+    ...(url && { url }),
   };
 }

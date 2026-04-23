@@ -4,6 +4,7 @@ import { Image } from 'astro:assets';
 import { getCollection } from 'astro:content';
 import type { BlogPosting } from 'schema-dts';
 
+import DuckyCodingLogo from '@assets/images/DuckyCoding_logo.png';
 import Link from '@components/link/Link.astro';
 import ScrollToTopButton from '@components/scroll-to-top-button/ScrollToTopButton.astro';
 import Tag from '@components/tag/Tag.astro';
@@ -83,13 +84,15 @@ const modifiedAt = new Date(
     WEBSITE_FIRST_PUBLISHING_DATE,
 ).toISOString();
 
-const author = AuthorPerson(entry.data.author, WEBSITE_ROOT);
-const imageContentUrl = processedImage
-  ? new URL(processedImage.src, WEBSITE_ROOT).href
-  : undefined;
-const imageAlt =
-  bannerImageFromDb?.alt ||
-  `Post banner cover related to "${entry.data.topicTitle}"`;
+const author = AuthorPerson(entry.data.author);
+
+const imageSource = processedImage ?? DuckyCodingLogo;
+const imageIsBanner = processedImage !== undefined;
+const imageContentUrl = new URL(imageSource.src, WEBSITE_ROOT).href;
+const imageAlt = imageIsBanner
+  ? bannerImageFromDb?.alt ||
+    `Post banner cover related to "${entry.data.topicTitle}"`
+  : "DuckyCoding's logo";
 
 const blogPosting: BlogPosting = {
   '@type': 'BlogPosting',
@@ -102,16 +105,14 @@ const blogPosting: BlogPosting = {
   publisher: orgRef(),
   datePublished: publishedAt,
   dateModified: modifiedAt,
-  ...(processedImage && {
-    image: {
-      '@type': 'ImageObject' as const,
-      url: imageContentUrl!,
-      contentUrl: imageContentUrl!,
-      width: `${processedImage.width}`,
-      height: `${processedImage.height}`,
-      description: imageAlt,
-    },
-  }),
+  image: {
+    '@type': 'ImageObject',
+    url: imageContentUrl,
+    contentUrl: imageContentUrl,
+    width: `${imageSource.width}`,
+    height: `${imageSource.height}`,
+    description: imageAlt,
+  },
   keywords: entry.data.tags.join(', '),
   articleSection: entry.data.topicTitle,
   inLanguage: entry.data.language || 'en',
@@ -138,7 +139,7 @@ const blogPostJsonLd = {
       description: entry.data.summary,
       datePublished: publishedAt,
       dateModified: modifiedAt,
-      primaryImageUrl: imageContentUrl,
+      primaryImageUrl: imageIsBanner ? imageContentUrl : undefined,
       hasBreadcrumb: true,
       mainEntityId: `${pageUrl}#post`,
     }),

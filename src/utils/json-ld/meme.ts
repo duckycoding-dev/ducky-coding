@@ -33,7 +33,7 @@ export function MemeJsonLd(props: MemeJsonLdProps): Graph {
   const createdDate = new Date(createdAt).toISOString();
   const finalDescription =
     description || `A meme titled "${title}" created by ${author}`;
-  const creator = AuthorPerson(author, WEBSITE_ROOT);
+  const creator = AuthorPerson(author);
 
   const mediaObject: MediaObject = {
     '@type': 'MediaObject',
