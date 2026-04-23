@@ -7,9 +7,13 @@ interface BreadcrumbItem {
   url: string;
 }
 
-export function buildBreadcrumb(items: BreadcrumbItem[]): BreadcrumbList {
+export function buildBreadcrumb(
+  items: BreadcrumbItem[],
+  pageUrl?: string,
+): BreadcrumbList {
   return {
     '@type': 'BreadcrumbList',
+    ...(pageUrl && { '@id': `${pageUrl}#breadcrumb` }),
     itemListElement: [
       { '@type': 'ListItem', position: 1, name: 'Home', item: WEBSITE_ROOT },
       ...items.map((item, index) => ({

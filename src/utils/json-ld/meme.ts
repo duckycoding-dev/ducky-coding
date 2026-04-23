@@ -1,7 +1,11 @@
-import type { MediaObject, WithContext } from 'schema-dts';
+import type { Graph, MediaObject, WebPage } from 'schema-dts';
 
 import { WEBSITE_ROOT } from '@utils/globals';
-import { AuthorPerson } from './person';
+import { buildBreadcrumb } from './breadcrumb';
+import { buildGraph, orgRef, websiteRef } from './graph';
+import { AuthorPerson, DuckyCodingPerson } from './person';
+import { DuckyCodingPublisher } from './publisher';
+import { DuckyCodingWebsite } from './website';
 
 export interface MemeJsonLdProps {
   title: string;
@@ -14,7 +18,7 @@ export interface MemeJsonLdProps {
   pageUrl: string;
 }
 
-export function MemeJsonLd(props: MemeJsonLdProps): WithContext<MediaObject> {
+export function MemeJsonLd(props: MemeJsonLdProps): Graph {
   const {
     title,
     author,
@@ -27,68 +31,66 @@ export function MemeJsonLd(props: MemeJsonLdProps): WithContext<MediaObject> {
   } = props;
 
   const createdDate = new Date(createdAt).toISOString();
+  const finalDescription =
+    description || `A meme titled "${title}" created by ${author}`;
+  const creator = AuthorPerson(author, WEBSITE_ROOT);
 
-  return {
-    '@context': 'https://schema.org',
+  const mediaObject: MediaObject = {
     '@type': 'MediaObject',
-    '@id': pageUrl,
+    '@id': `${pageUrl}#meme`,
     url: pageUrl,
     name: title,
     headline: title,
-    description: description || `A meme titled "${title}" created by ${author}`,
-    creator: AuthorPerson(author, WEBSITE_ROOT),
-    author: AuthorPerson(author, WEBSITE_ROOT),
-    publisher: AuthorPerson(author, WEBSITE_ROOT),
+    description: finalDescription,
+    creator,
+    author: creator,
+    publisher: orgRef(),
     dateCreated: createdDate,
     datePublished: createdDate,
     dateModified: createdDate,
     image: {
       '@type': 'ImageObject',
       url: imageUrl,
-      description: imageAlt,
       contentUrl: imageUrl,
+      description: imageAlt,
     },
-    mainEntityOfPage: {
-      '@type': 'WebPage',
-      '@id': pageUrl,
-      url: pageUrl,
-      name: title,
-      breadcrumb: {
-        '@type': 'BreadcrumbList',
-        itemListElement: [
-          {
-            '@type': 'ListItem',
-            position: 1,
-            name: 'Home',
-            item: WEBSITE_ROOT,
-          },
-          {
-            '@type': 'ListItem',
-            position: 2,
-            name: 'Memes',
-            item: `${WEBSITE_ROOT}/memes`,
-          },
-          {
-            '@type': 'ListItem',
-            position: 3,
-            name: title,
-            item: pageUrl,
-          },
-        ],
-      },
-      description:
-        description || `A meme titled "${title}" created by ${author}`,
-      isPartOf: {
-        '@type': 'WebSite',
-        '@id': WEBSITE_ROOT,
-        url: WEBSITE_ROOT,
-        name: 'DuckyCoding',
-      },
-    },
+    mainEntityOfPage: { '@id': pageUrl },
     keywords: tags.join(', '),
     genre: 'Meme',
     inLanguage: 'en',
     isAccessibleForFree: true,
     usageInfo: 'Educational and entertainment purposes',
   };
+
+  const webPage: WebPage = {
+    '@type': 'WebPage',
+    '@id': pageUrl,
+    url: pageUrl,
+    name: title,
+    description: finalDescription,
+    inLanguage: 'en',
+    isPartOf: websiteRef(),
+    primaryImageOfPage: {
+      '@type': 'ImageObject',
+      url: imageUrl,
+    },
+    breadcrumb: { '@id': `${pageUrl}#breadcrumb` },
+  };
+
+  const breadcrumb = buildBreadcrumb(
+    [
+      { name: 'Memes', url: `${WEBSITE_ROOT}/memes` },
+      { name: title, url: pageUrl },
+    ],
+    pageUrl,
+  );
+
+  return buildGraph([
+    DuckyCodingWebsite,
+    DuckyCodingPerson,
+    DuckyCodingPublisher,
+    webPage,
+    mediaObject,
+    breadcrumb,
+  ]);
 }

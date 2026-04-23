@@ -1,7 +1,7 @@
 import type { SearchAction, WebSite } from 'schema-dts';
 
 import { WEBSITE_ROOT } from '@utils/globals';
-import { DuckyCodingPerson } from './person';
+import { orgRef, personRef, WEBSITE_ID } from './graph';
 
 // schema-dts lacks query-input — Google requires it for sitelinks searchbox
 type SearchActionWithQueryInput = SearchAction & {
@@ -10,11 +10,15 @@ type SearchActionWithQueryInput = SearchAction & {
 
 export const DuckyCodingWebsite: WebSite = {
   '@type': 'WebSite',
+  '@id': WEBSITE_ID,
   name: 'DuckyCoding',
+  alternateName: 'DuckyCoding - web development blog',
   url: WEBSITE_ROOT,
+  inLanguage: 'en',
   description:
     'DuckyCoding — a web development blog by Davide Milan. Tutorials, guides, and developer humor about modern web technologies.',
-  author: DuckyCodingPerson,
+  author: personRef(),
+  publisher: orgRef(),
   potentialAction: {
     '@type': 'SearchAction',
     target: {
