@@ -1,0 +1,54 @@
+---
+import type { HTMLAttributes } from 'astro/types';
+import { cn } from '@libs/cn';
+import { cva, type VariantProps } from 'cva';
+
+const toggleSwitchVariants = cva({
+  base: 'relative inline-block',
+  variants: {
+    variant: {
+      round: '[&>span]:before:rounded-full [&>span]:rounded-full',
+      square: '',
+    },
+    size: {
+      small: ['h-6 w-10'],
+      medium: ['h-9 w-14'],
+      large: ['h-11 w-20'],
+    },
+  },
+  defaultVariants: {
+    variant: 'round',
+    size: 'medium',
+  },
+  compoundVariants: [],
+});
+
+const innerSpanVariants = cva({
+  base: 'slider bg-accent-700 peer-checked:bg-accent border-comic before:border-comic before:border-secondary border-secondary absolute h-full w-full cursor-pointer duration-200 before:absolute before:aspect-square before:translate-x-1 before:translate-y-0.5 before:bg-white before:duration-200 peer-checked:before:translate-y-0.5',
+  variants: {
+    size: {
+      small: 'before:w-4 peer-checked:before:translate-x-4',
+      medium: 'before:w-7 peer-checked:before:translate-x-5',
+      large: 'before:w-9 peer-checked:before:translate-x-9',
+    },
+  },
+  defaultVariants: {
+    size: 'medium',
+  },
+  compoundVariants: [],
+});
+
+export type ToggleSwitchProps = VariantProps<typeof toggleSwitchVariants>;
+
+interface Props extends HTMLAttributes<'label'>, ToggleSwitchProps {}
+
+const { variant, size, class: className }: Props = Astro.props;
+---
+
+<label
+  class={cn(toggleSwitchVariants({ variant, size }), className)}
+  aria-label={Astro.props['aria-label'] ?? 'toggle switch'}
+>
+  <input type='checkbox' class='peer absolute h-0 w-0 opacity-0' />
+  <span class={cn(innerSpanVariants({ size }))}></span>
+</label>

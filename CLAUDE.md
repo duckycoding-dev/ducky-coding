@@ -8,7 +8,7 @@ Personal blog at [duckycoding.dev](https://duckycoding.dev), built with Astro 6 
 
 - Do **not** add `Co-Authored-By: Claude` or any AI co-author trailer to commits
 - Commit convention: `type(scope): subject` (lowercase, no trailing period)
-- Avoid running git commits after every step (unless in a dedicated git worktree with subagents); instead propose when it would be a good idea to commit
+- Avoid running git commits after every step (unless in a dedicated git worktree with subagents); instead propose when it would be a good idea to commit and suggest a title + body text
 
 ### TypeScript
 
@@ -25,7 +25,7 @@ Personal blog at [duckycoding.dev](https://duckycoding.dev), built with Astro 6 
 
 ### Naming
 
-- **file and dir names** — kebab-case
+- **file and dir names** — kebab-case; exception: `.astro` component filenames use PascalCase (Astro convention — filename must match the component tag name); their containing directories remain kebab-case
 - **constants** — UPPER_SNAKE_CASE for truly fixed values (fixed numbers, fixed strings)
 - **functions and variables** — camelCase
 - **TS types and interfaces** — PascalCase

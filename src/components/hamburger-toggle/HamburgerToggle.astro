@@ -1,0 +1,63 @@
+---
+import type { HTMLAttributes } from 'astro/types';
+import { cn } from '@libs/cn';
+import { cva, type VariantProps } from 'cva';
+
+const hamburgerToggleVariants = cva({
+  base: 'flex flex-col cursor-pointer z-1000 aspect-square justify-center',
+  variants: {
+    variant: {
+      small: 'w-8 gap-[7.5px]',
+      medium: 'w-10 gap-2',
+    },
+  },
+  defaultVariants: {
+    variant: 'medium',
+  },
+});
+
+const spanVariants = cva({
+  base: 'bg-secondary items-center transition-all',
+  variants: {
+    variant: {
+      small: 'h-0.5',
+      medium: 'h-1',
+    },
+  },
+  defaultVariants: {
+    variant: 'medium',
+  },
+});
+
+export type HamburgerToggleProps = VariantProps<typeof hamburgerToggleVariants>;
+
+interface Props extends HTMLAttributes<'button'>, HamburgerToggleProps {}
+
+const { variant, class: className, ...props }: Props = Astro.props;
+---
+
+<button
+  type='button'
+  class={cn(hamburgerToggleVariants({ variant }), className)}
+  aria-expanded='false'
+  aria-label='Toggle navigation menu'
+  {...props}
+>
+  <span class={cn(spanVariants({ variant }))}></span>
+  <span class={cn(spanVariants({ variant }))}></span>
+  <span class={cn(spanVariants({ variant }))}></span>
+</button>
+
+<style is:global>
+  #nav-toggle[aria-expanded='true'] span:nth-child(2) {
+    opacity: 0;
+  }
+  #nav-toggle[aria-expanded='true'] span:nth-child(1) {
+    transform-origin: left;
+    transform: rotate(37.5deg);
+  }
+  #nav-toggle[aria-expanded='true'] span:nth-child(3) {
+    transform-origin: left;
+    transform: rotate(-37deg);
+  }
+</style>

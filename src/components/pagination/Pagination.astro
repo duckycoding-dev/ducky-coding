@@ -1,0 +1,135 @@
+---
+import type { HTMLAttributes } from 'astro/types';
+import { cn } from '@libs/cn';
+
+export interface PaginationProps {
+  currentPage: number;
+  totalPages: number;
+  buildPageUrl: (page: number) => string;
+}
+
+interface Props extends HTMLAttributes<'nav'>, PaginationProps {}
+
+const {
+  currentPage,
+  totalPages,
+  buildPageUrl,
+  class: className,
+  ...props
+}: Props = Astro.props;
+
+/**
+ * Compute which page numbers to show.
+ * Always: first, last, current, ±1 neighbor.
+ * Ellipsis when gap > 1. Show all if ≤ 5 pages.
+ */
+function getVisiblePages(
+  current: number,
+  total: number,
+): (number | 'ellipsis')[] {
+  if (total <= 5) {
+    return Array.from({ length: total }, (_, i) => i + 1);
+  }
+
+  const pages = new Set<number>();
+  pages.add(1);
+  pages.add(total);
+  pages.add(current);
+  if (current > 1) pages.add(current - 1);
+  if (current < total) pages.add(current + 1);
+
+  const sorted = [...pages].sort((a, b) => a - b);
+  const result: (number | 'ellipsis')[] = [];
+
+  for (let i = 0; i < sorted.length; i++) {
+    const page = sorted[i]!;
+    const prev = sorted[i - 1];
+    if (prev !== undefined && page - prev > 1) {
+      result.push('ellipsis');
+    }
+    result.push(page);
+  }
+
+  return result;
+}
+
+const visiblePages = getVisiblePages(currentPage, totalPages);
+const hasPrev = currentPage > 1;
+const hasNext = currentPage < totalPages;
+---
+
+{
+  totalPages > 1 && (
+    <nav
+      aria-label='Pagination'
+      class={cn('flex flex-col items-center gap-1.5', className)}
+      {...props}
+    >
+      <div class='flex items-center gap-1.5 md:gap-2'>
+        {/* Previous arrow */}
+        {hasPrev ? (
+          <a
+            href={buildPageUrl(currentPage - 1)}
+            aria-label='Previous page'
+            class='border-comic border-secondary bg-primary-600 shadow-comic hover:shadow-comic-lg active:shadow-comic-pressed rounded-lg px-3 py-2 font-bold transition-all hover:-translate-y-0.5 active:translate-y-0.5'
+          >
+            ←
+          </a>
+        ) : (
+          <span
+            aria-hidden='true'
+            class='border-comic border-secondary bg-primary-600 rounded-lg px-3 py-2 font-bold opacity-35'
+          >
+            ←
+          </span>
+        )}
+
+        {/* Page numbers */}
+        {visiblePages.map((item) =>
+          item === 'ellipsis' ? (
+            <span aria-hidden='true' class='text-secondary px-1 opacity-50'>
+              …
+            </span>
+          ) : item === currentPage ? (
+            <span
+              aria-current='page'
+              class='border-comic border-secondary bg-accent rounded-lg px-3 py-2 text-sm font-bold md:text-base'
+            >
+              {item}
+            </span>
+          ) : (
+            <a
+              href={buildPageUrl(item)}
+              data-astro-prefetch
+              class='border-comic border-secondary bg-primary shadow-comic hover:shadow-comic-lg active:shadow-comic-pressed rounded-lg px-3 py-2 text-sm transition-all hover:-translate-y-0.5 active:translate-y-0.5 md:text-base'
+            >
+              {item}
+            </a>
+          ),
+        )}
+
+        {/* Next arrow */}
+        {hasNext ? (
+          <a
+            href={buildPageUrl(currentPage + 1)}
+            aria-label='Next page'
+            class='border-comic border-secondary bg-primary-600 shadow-comic hover:shadow-comic-lg active:shadow-comic-pressed rounded-lg px-3 py-2 font-bold transition-all hover:-translate-y-0.5 active:translate-y-0.5'
+          >
+            →
+          </a>
+        ) : (
+          <span
+            aria-hidden='true'
+            class='border-comic border-secondary bg-primary-600 rounded-lg px-3 py-2 font-bold opacity-35'
+          >
+            →
+          </span>
+        )}
+      </div>
+
+      <p class='text-secondary text-sm opacity-60'>
+        Page {currentPage} of {totalPages}
+      </p>
+    </nav>
+  )
+}

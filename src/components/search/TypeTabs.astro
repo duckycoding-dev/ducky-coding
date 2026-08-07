@@ -1,0 +1,47 @@
+---
+import type { HTMLAttributes } from 'astro/types';
+import { cn } from '@libs/cn';
+
+export type SearchType = 'all' | 'post' | 'meme';
+
+export interface TypeTabsProps {
+  activeType: SearchType;
+}
+
+interface Props extends HTMLAttributes<'div'>, TypeTabsProps {}
+
+const { activeType, class: className, ...props }: Props = Astro.props;
+
+const TYPES: { value: SearchType; label: string }[] = [
+  { value: 'all', label: 'All' },
+  { value: 'post', label: 'Posts' },
+  { value: 'meme', label: 'Memes' },
+];
+---
+
+<div
+  class={cn('flex gap-2', className)}
+  role='radiogroup'
+  aria-label='Content type'
+  {...props}
+>
+  {
+    TYPES.map(({ value, label }) => (
+      <button
+        type='button'
+        role='radio'
+        aria-checked={value === activeType ? 'true' : 'false'}
+        data-type-value={value}
+        data-active={value === activeType ? '' : undefined}
+        class={cn(
+          'border-comic border-secondary rounded-3xl px-4 py-1.5 text-sm font-bold transition-colors',
+          value === activeType
+            ? 'bg-accent text-secondary'
+            : 'bg-primary text-secondary hover:bg-primary-600',
+        )}
+      >
+        {label}
+      </button>
+    ))
+  }
+</div>

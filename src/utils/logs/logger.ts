@@ -248,7 +248,7 @@ let serverLoggerInstance: ReturnType<typeof createServerLogger>;
  *
  * @returns {ClientLogger} The singleton client logger instance.
  */
-export const getClientLogger = (): ReturnType<typeof createClientLogger> => {
+const getClientLogger = (): ReturnType<typeof createClientLogger> => {
   if (!clientLoggerInstance) {
     clientLoggerInstance = createClientLogger({
       showTimestamp: true,
@@ -265,7 +265,7 @@ export const getClientLogger = (): ReturnType<typeof createClientLogger> => {
  *
  * @returns {ServerLogger} The singleton server logger instance.
  */
-export const getServerLogger = (): ReturnType<typeof createServerLogger> => {
+const getServerLogger = (): ReturnType<typeof createServerLogger> => {
   if (!serverLoggerInstance) {
     serverLoggerInstance = createServerLogger({
       showTimestamp: true,

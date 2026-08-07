@@ -147,18 +147,6 @@ npm run db:migrate   # runs against production Turso via .env.production
 
 ---
 
-## API Endpoints (SSR, `prerender = false`)
-
-Both endpoints require a Bearer token in production (`TURSO_AUTH_TOKEN`). In dev,
-auth is skipped.
-
-| Endpoint | GET | POST |
-|----------|-----|------|
-| `/api/v1/topics` | List all topics from DB | Trigger `syncTopicsToDatabase()` |
-| `/api/v1/images` | Get image by path | Trigger `syncImages()` |
-
----
-
 ## Local DB Setup (first time)
 
 ```bash

@@ -1,18 +1,24 @@
 ---
 import { type ImageMetadata } from 'astro';
 import { getCollection } from 'astro:content';
+import type { ItemList } from 'schema-dts';
 
-import DuckyCodingLogo from '@assets/images/DuckyCoding_logo.png';
-import BriefPostCard from '@components/Card/BriefPostCard.astro';
-import PostCard from '@components/Card/PostCard.astro';
-import HolyGrailLayout from '@layouts/HolyGrailLayout/HolyGrailLayout.astro';
+import BriefPostCard from '@components/card/BriefPostCard.astro';
+import PostCard from '@components/card/PostCard.astro';
+import HolyGrailLayout from '@layouts/holy-grail-layout/HolyGrailLayout.astro';
 import { WEBSITE_FIRST_PUBLISHING_DATE, WEBSITE_ROOT } from '@utils/globals';
 import { matchImageFromGlobImport } from '@utils/images/images';
-import { AuthorPerson, DuckyCodingPerson } from '@utils/jsonld/person';
+import { DuckyCodingBlog } from '@utils/json-ld/blog';
+import { buildBreadcrumb } from '@utils/json-ld/breadcrumb';
+import { BLOG_ID, buildGraph } from '@utils/json-ld/graph';
+import { DuckyCodingPerson } from '@utils/json-ld/person';
+import { DuckyCodingPublisher } from '@utils/json-ld/publisher';
+import { buildCollectionPage } from '@utils/json-ld/webpage';
+import { DuckyCodingWebsite } from '@utils/json-ld/website';
 import { serverLogger } from '@utils/logs/logger';
-import DuckIcon from '../components/Icons/DuckIcon/DuckIcon.astro';
+import { buildPageSeo } from '@utils/seo/page-seo';
+import DuckIcon from '../components/icons/duck-icon/DuckIcon.astro';
 import { postsService } from '../db/features/posts/posts.service';
-import type { BaseHeadProps } from '../layouts/BaseHead/BaseHead.astro';
 
 const postsCollection = (await getCollection('posts'))
   .map((entry) => ({
@@ -75,128 +81,65 @@ const featuredPosts: typeof processedPostsWithImages = []; // todo implmement fe
 
 const pageUrl = Astro.url.href;
 
-// JSON-LD structured data for blog page
+const blogDescription =
+  'Browse articles on web development — from TypeScript and Astro to frontend patterns and developer tooling. New posts published regularly.';
+
+const postsItemList: ItemList = {
+  '@type': 'ItemList',
+  '@id': `${pageUrl}#posts`,
+  name: "DuckyCoding's posts",
+  numberOfItems: processedPostsWithImages.length,
+  itemListElement: processedPostsWithImages.map(({ post }, index) => ({
+    '@type': 'ListItem' as const,
+    position: index + 1,
+    url: `${WEBSITE_ROOT}/posts/${post.slug}`,
+    name: post.title,
+  })),
+};
+
 const blogPageJsonLd = {
-  item: {
-    '@context': 'https://schema.org',
-    '@type': 'CollectionPage',
-    '@id': pageUrl,
-    name: "DuckyCoding's Blog",
-    url: pageUrl,
-    description:
-      "Welcome to the section with my latests articles about web development - here you can find guides, opinions and tips and tricks which I've learned and I want to share with the community.",
-    mainEntity: {
-      '@type': 'Blog',
+  item: buildGraph([
+    DuckyCodingWebsite,
+    DuckyCodingPublisher,
+    DuckyCodingPerson,
+    DuckyCodingBlog,
+    buildCollectionPage({
+      pageUrl,
       name: "DuckyCoding's Blog",
-      '@id': pageUrl,
-      url: pageUrl,
-      description:
-        'Web development blog featuring tutorials, guides, and insights about modern web technologies.',
-      author: DuckyCodingPerson,
-      blogPost: processedPostsWithImages.map(
-        ({ post }) =>
-          ({
-            '@type': 'BlogPosting',
-            headline: post.title,
-            url: `${WEBSITE_ROOT}/posts/${post.slug}`,
-            datePublished: new Date(
-              post.publishedAt || WEBSITE_FIRST_PUBLISHING_DATE,
-            ).toISOString(),
-            dateModified: new Date(
-              post.updatedAt ||
-                post.publishedAt ||
-                WEBSITE_FIRST_PUBLISHING_DATE,
-            ).toISOString(),
-            author: AuthorPerson(post.author, WEBSITE_ROOT),
-          }) as const,
-      ),
-    },
-    breadcrumb: {
-      '@type': 'BreadcrumbList',
-      itemListElement: [
-        {
-          '@type': 'ListItem',
-          position: 1,
-          name: 'Home',
-          item: WEBSITE_ROOT,
-        },
-        {
-          '@type': 'ListItem',
-          position: 2,
-          name: 'Blog',
-          item: pageUrl,
-        },
-      ],
-    },
-  },
-} as const satisfies NonNullable<BaseHeadProps['jsonLd']>;
+      description: blogDescription,
+      dateModified: lastPostDateAsISOString,
+      hasBreadcrumb: true,
+      mainEntityId: BLOG_ID,
+    }),
+    postsItemList,
+    buildBreadcrumb([{ name: 'Blog', url: pageUrl }], pageUrl),
+  ]),
+};
 ---
 
 <HolyGrailLayout
-  seoProps={{
+  seoProps={buildPageSeo({
     title: 'Blog',
+    ogTitle: "DuckyCoding's blog",
     description:
-      "Welcome to the section with my latests articles about web development - here you can find guides, opinions and tips and tricks which I've learned and I want to share with the community.",
-    openGraph: {
-      basic: {
-        title: "DuckyCoding's blog",
-        type: 'website',
-        url: pageUrl,
-        image: new URL(DuckyCodingLogo.src, WEBSITE_ROOT).href,
-      },
-      optional: {
-        description:
-          "Welcome to the section with my latests articles about web development - here you can find guides, opinions and tips and tricks which I've learned and I want to share with the community.",
-        locale: 'en_US',
-        siteName: 'DuckyCoding',
-        localeAlternate: ['en_GB'],
-        determiner: '',
-        audio: undefined,
-        video: undefined,
-      },
-      image: {
-        url: new URL(DuckyCodingLogo.src, WEBSITE_ROOT).href,
-        secureUrl: new URL(DuckyCodingLogo.src, WEBSITE_ROOT).href,
-        height: DuckyCodingLogo.height,
-        width: DuckyCodingLogo.width,
-        type: `image/${DuckyCodingLogo.format}`,
-        alt: "DuckyCoding's logo",
-      },
-      article: {
-        publishedTime: WEBSITE_FIRST_PUBLISHING_DATE,
-        modifiedTime: lastPostDateAsISOString,
-        section: 'Web Development',
-        authors: ['DuckyCoding', 'Davide'],
-        tags: [
-          'DuckyCoding',
-          'web development',
-          'blog',
-          'articles',
-          'guides',
-          'posts',
-        ],
-      },
-    },
-    twitter: {
-      card: 'summary_large_image',
-      site: '@ducky_coding',
-      creator: '@ducky_coding',
-      title: "DuckyCoding's blog",
-      description:
-        "Welcome to the section with my latests articles about web development - here you can find guides, opinions and tips and tricks which I've learned and I want to share with the community.",
-      image: new URL(DuckyCodingLogo.src, WEBSITE_ROOT).href,
-      imageAlt: "DuckyCoding's logo",
-    },
-    extend: {
-      meta: [
-        {
-          name: 'keywords',
-          content:
-            'DuckyCoding, web development, blog, articles, guides, posts',
-        },
+      'Browse articles on web development — from TypeScript and Astro to frontend patterns and developer tooling. New posts published regularly.',
+    pageUrl,
+    keywords: 'DuckyCoding, web development, blog, articles, guides, posts',
+    article: {
+      publishedTime: WEBSITE_FIRST_PUBLISHING_DATE,
+      modifiedTime: lastPostDateAsISOString,
+      section: 'Web Development',
+      authors: ['DuckyCoding', 'Davide'],
+      tags: [
+        'DuckyCoding',
+        'web development',
+        'blog',
+        'articles',
+        'guides',
+        'posts',
       ],
     },
-  }}
+  })}
   jsonLd={blogPageJsonLd}
 >
   <h1

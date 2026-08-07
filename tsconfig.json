@@ -14,7 +14,8 @@
       "@assets/*": ["src/assets/*"],
       "@services/*": ["src/services/*"],
       "@typings/*": ["src/types/*"],
-      "@db/*": ["src/db/*"]
+      "@db/*": ["src/db/*"],
+      "@libs/*": ["src/libs/*"]
     },
     /* Emit */
     "declaration": true /* Generate .d.ts files from TypeScript and JavaScript files in your project.

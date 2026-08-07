@@ -1,0 +1,94 @@
+---
+import type { HTMLAttributes } from 'astro/types';
+import { cn } from '@libs/cn';
+
+import Link from '@components/link/Link.astro';
+import GitHubIcon from '../../components/icons/github-icon/GitHubIcon.astro';
+import InstagramIcon from '../../components/icons/instagram-icon/InstagramIcon.astro';
+import LinkedInIcon from '../../components/icons/linkedin-icon/LinkedInIcon.astro';
+import TikTokIcon from '../../components/icons/tiktok-icon/TikTokIcon.astro';
+import XIcon from '../../components/icons/x-icon/XIcon.astro';
+import YouTubeIcon from '../../components/icons/youtube-icon/YouTubeIcon.astro';
+
+export interface FooterProps {}
+
+interface Props extends HTMLAttributes<'footer'>, FooterProps {}
+
+const { class: className, ...props }: Props = Astro.props;
+---
+
+<footer
+  class={cn(
+    'grid gap-y-4 bg-primary-700 border-4 border-secondary py-8 [grid-area:footer] border-x-0 border-b-0 px-8',
+    className,
+  )}
+  {...props}
+>
+  <h2
+    class='decoration-accent text-center text-2xl font-extrabold wrap-anywhere underline underline-offset-6'
+  >
+    Stay in touch
+  </h2>
+
+  <nav class='mx-auto flex min-h-12 max-w-7xl flex-wrap items-center gap-x-6'>
+    <Link
+      target='_blank'
+      rel='noopener noreferrer'
+      href='https://github.com/duckycoding-dev'
+      variant={'default'}
+      class='text-secondary'
+    >
+      <GitHubIcon size={50} />
+    </Link>
+    <Link
+      target='_blank'
+      rel='noopener noreferrer'
+      href='https://x.com/ducky_coding'
+      variant={'default'}
+      class='text-secondary'
+    >
+      <XIcon size={50} />
+    </Link>
+    <Link
+      target='_blank'
+      rel='noopener noreferrer'
+      href='https://www.linkedin.com/in/davide-m-997874254/'
+      variant={'default'}
+      class='text-secondary'
+    >
+      <LinkedInIcon size={50} />
+    </Link>
+    <Link
+      target='_blank'
+      rel='noopener noreferrer'
+      href='https://www.instagram.com/ducky.coding/'
+      variant={'default'}
+      class='text-secondary'
+    >
+      <InstagramIcon size={50} />
+    </Link>
+    <Link
+      target='_blank'
+      rel='noopener noreferrer'
+      href='https://www.tiktok.com/@ducky.coding'
+      variant={'default'}
+      class='text-secondary'
+    >
+      <TikTokIcon size={50} />
+    </Link>
+    <Link
+      target='_blank'
+      rel='noopener noreferrer'
+      href='https://www.youtube.com/@ducky.coding'
+      variant={'default'}
+      class='text-secondary'
+    >
+      <YouTubeIcon size={50} />
+    </Link>
+  </nav>
+
+  <section class='flex flex-col items-center justify-center wrap-anywhere'>
+    <small>Copyright &copy; 2024 - DuckyCoding - All Rights Reserved</small>
+    <small>Built with Astro</small>
+  </section>
+</footer>

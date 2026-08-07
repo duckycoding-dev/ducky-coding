@@ -1,0 +1,113 @@
+---
+import type { HTMLAttributes } from 'astro/types';
+import { cn } from '@libs/cn';
+
+export interface TopicFilterProps {
+  topics: string[];
+  activeTopics: string[];
+}
+
+interface Props extends HTMLAttributes<'div'>, TopicFilterProps {}
+
+const { topics, activeTopics, class: className, ...props }: Props = Astro.props;
+
+const activeSet = new Set(activeTopics);
+---
+
+<div class={cn(className)} {...props}>
+  {/* Desktop: direct checkbox list (no card wrapper — parent handles that) */}
+  <div class='hidden md:block'>
+    <h3 class='text-secondary mb-3 text-base font-extrabold'>Topics</h3>
+    <div class='flex flex-col gap-2'>
+      {
+        topics.map((topic) => (
+          <label class='flex cursor-pointer items-center gap-2 text-sm'>
+            <input
+              type='checkbox'
+              data-topic-value={topic}
+              checked={activeSet.has(topic)}
+              class='border-comic border-secondary accent-accent h-4 w-4 rounded'
+            />
+            <span class='text-secondary'>{topic}</span>
+          </label>
+        ))
+      }
+    </div>
+  </div>
+
+  {/* Mobile: button + dialog */}
+  <div class='md:hidden'>
+    <button
+      id='topic-dialog-trigger'
+      type='button'
+      class='border-comic border-secondary bg-primary-100 text-secondary flex w-full items-center justify-between rounded-xl px-4 py-2.5 text-sm'
+    >
+      <span>
+        {
+          activeTopics.length > 0
+            ? `Topics (${activeTopics.length} selected)`
+            : 'Filter by topic...'
+        }
+      </span>
+      <span aria-hidden='true'>▼</span>
+    </button>
+
+    <dialog
+      id='topic-dialog'
+      class='border-comic border-secondary bg-primary shadow-comic-xl m-auto max-h-[80dvh] w-[90dvw] max-w-sm rounded-xl p-0'
+    >
+      <div
+        class='from-accent-200 to-accent2-200 border-secondary flex items-center justify-between border-b-2 bg-gradient-to-r px-4 py-3'
+      >
+        <h3 class='text-secondary text-base font-extrabold'>Topics</h3>
+        <button
+          id='topic-dialog-close'
+          type='button'
+          class='text-secondary text-xl leading-none font-bold'
+          aria-label='Close'
+        >
+          ✕
+        </button>
+      </div>
+      <div class='flex flex-col gap-3 p-4'>
+        {
+          topics.map((topic) => (
+            <label class='flex cursor-pointer items-center gap-2.5 text-sm'>
+              <input
+                type='checkbox'
+                data-topic-value={topic}
+                checked={activeSet.has(topic)}
+                class='border-comic border-secondary accent-accent h-5 w-5 rounded'
+              />
+              <span class='text-secondary'>{topic}</span>
+            </label>
+          ))
+        }
+      </div>
+    </dialog>
+  </div>
+</div>
+
+<script>
+  const trigger = document.getElementById('topic-dialog-trigger');
+  const dialog = document.getElementById(
+    'topic-dialog',
+  ) as HTMLDialogElement | null;
+  const closeBtn = document.getElementById('topic-dialog-close');
+
+  if (trigger && dialog) {
+    trigger.addEventListener('click', () => {
+      dialog.showModal();
+    });
+
+    closeBtn?.addEventListener('click', () => {
+      dialog.close();
+    });
+
+    dialog.addEventListener('click', (e) => {
+      if (e.target === dialog) {
+        dialog.close();
+      }
+    });
+  }
+</script>

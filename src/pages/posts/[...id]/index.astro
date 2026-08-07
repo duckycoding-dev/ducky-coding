@@ -2,22 +2,30 @@
 import type { ImageMetadata } from 'astro';
 import { Image } from 'astro:assets';
 import { getCollection } from 'astro:content';
+import type { BlogPosting } from 'schema-dts';
 
 import DuckyCodingLogo from '@assets/images/DuckyCoding_logo.png';
-import Link from '@components/Link/Link.astro';
-import ScrollToTopButton from '@components/ScrollToTopButton/ScrollToTopButton.astro';
-import Tag from '@components/Tag/Tag.astro';
+import Link from '@components/link/Link.astro';
+import ScrollToTopButton from '@components/scroll-to-top-button/ScrollToTopButton.astro';
+import Tag from '@components/tag/Tag.astro';
 import type { Image as BannerImage } from '@db/features/images/images.model';
 import { ImagesService } from '@db/features/images/images.service';
 import { postsService } from '@db/features/posts/posts.service';
-import HolyGrailLayout from '@layouts/HolyGrailLayout/HolyGrailLayout.astro';
-import MarkdownContent from '@layouts/MarkdownContent/MarkdownContent.astro';
+import { TopicsService } from '@db/features/topics/topics.service';
+import HolyGrailLayout from '@layouts/holy-grail-layout/HolyGrailLayout.astro';
+import MarkdownContent from '@layouts/markdown-content/MarkdownContent.astro';
 import { WEBSITE_FIRST_PUBLISHING_DATE, WEBSITE_ROOT } from '@utils/globals';
 import { getImageWidths, matchImageFromGlobImport } from '@utils/images/images';
-import { DuckyCodingBlog } from '@utils/jsonld/blog';
-import { AuthorPerson } from '@utils/jsonld/person';
-import { TopicThing } from '@utils/jsonld/thing';
+import { DuckyCodingBlog } from '@utils/json-ld/blog';
+import { buildBreadcrumb } from '@utils/json-ld/breadcrumb';
+import { blogRef, buildGraph, orgRef } from '@utils/json-ld/graph';
+import { AuthorPerson, DuckyCodingPerson } from '@utils/json-ld/person';
+import { DuckyCodingPublisher } from '@utils/json-ld/publisher';
+import { TopicThing } from '@utils/json-ld/thing';
+import { buildWebPage } from '@utils/json-ld/webpage';
+import { DuckyCodingWebsite } from '@utils/json-ld/website';
 import { serverLogger } from '@utils/logs/logger';
+import { buildPageSeo } from '@utils/seo/page-seo';
 
 // 1. Generate a new path for every collection entry
 export async function getStaticPaths() {
@@ -64,123 +72,130 @@ const bannerImageFromDb = imageToFindPath
   : undefined;
 const pageUrl = Astro.url.href;
 
-// Create comprehensive JSON-LD structured data for the blog post
-const blogPostJsonLd = {
-  item: {
-    '@context': 'https://schema.org',
-    '@type': 'BlogPosting',
-    '@id': pageUrl,
-    url: pageUrl,
-    headline: entry.data.title,
-    description: entry.data.summary,
-    articleBody: entry.data.content, // TODO: this should probably be entry.body; content is a field that does not match with the actual post content, it's basically a second summary
-    author: AuthorPerson(entry.data.author, WEBSITE_ROOT),
-    publisher: AuthorPerson(entry.data.author, WEBSITE_ROOT),
-    maintainer: AuthorPerson(entry.data.author, WEBSITE_ROOT),
-    datePublished: new Date(
-      postFromDb?.createdAt || WEBSITE_FIRST_PUBLISHING_DATE,
-    ).toISOString(),
-    dateModified: new Date(
-      postFromDb?.updatedAt ||
-        postFromDb?.createdAt ||
-        WEBSITE_FIRST_PUBLISHING_DATE,
-    ).toISOString(),
-    ...(processedImage && {
-      image: {
-        '@type': 'ImageObject',
-        contentUrl: new URL(processedImage.src, WEBSITE_ROOT).href,
-        description:
-          bannerImageFromDb?.alt ||
-          `Post banner cover related to "${entry.data.topicTitle}"`,
-      } as const,
-    }),
-    keywords: entry.data.tags.join(', '),
-    articleSection: entry.data.topicTitle,
-    inLanguage: entry.data.language || 'en',
-    wordCount: entry.data.content.split(' ').length,
-    about: TopicThing(entry.data.topicTitle),
-    isPartOf: DuckyCodingBlog,
-    potentialAction: {
-      '@type': 'ReadAction',
-      target: pageUrl,
+const topicFromDb = await TopicsService.getTopic(entry.data.topicTitle);
+const topicSlug = topicFromDb?.slug ?? entry.data.topicTitle.toLowerCase();
+
+const publishedAt = new Date(
+  postFromDb?.createdAt || WEBSITE_FIRST_PUBLISHING_DATE,
+).toISOString();
+const modifiedAt = new Date(
+  postFromDb?.updatedAt ||
+    postFromDb?.createdAt ||
+    WEBSITE_FIRST_PUBLISHING_DATE,
+).toISOString();
+
+const author = AuthorPerson(entry.data.author);
+
+const imageSource = processedImage ?? DuckyCodingLogo;
+const imageIsBanner = processedImage !== undefined;
+const imageContentUrl = new URL(imageSource.src, WEBSITE_ROOT).href;
+const imageAlt = imageIsBanner
+  ? bannerImageFromDb?.alt ||
+    `Post banner cover related to "${entry.data.topicTitle}"`
+  : "DuckyCoding's logo";
+
+const blogPosting: BlogPosting = {
+  '@type': 'BlogPosting',
+  '@id': `${pageUrl}#post`,
+  url: pageUrl,
+  mainEntityOfPage: { '@id': pageUrl },
+  headline: entry.data.title,
+  description: entry.data.summary,
+  author,
+  publisher: orgRef(),
+  datePublished: publishedAt,
+  dateModified: modifiedAt,
+  image: {
+    '@type': 'ImageObject',
+    url: imageContentUrl,
+    contentUrl: imageContentUrl,
+    width: `${imageSource.width}`,
+    height: `${imageSource.height}`,
+    description: imageAlt,
+  },
+  keywords: entry.data.tags.join(', '),
+  articleSection: entry.data.topicTitle,
+  inLanguage: entry.data.language || 'en',
+  about: TopicThing({ title: entry.data.topicTitle, slug: topicSlug }),
+  isPartOf: blogRef(),
+  potentialAction: {
+    '@type': 'ReadAction',
+    target: {
+      '@type': 'EntryPoint',
+      urlTemplate: pageUrl,
     },
   },
-} as const;
+};
+
+const blogPostJsonLd = {
+  item: buildGraph([
+    DuckyCodingWebsite,
+    DuckyCodingPublisher,
+    DuckyCodingPerson,
+    DuckyCodingBlog,
+    buildWebPage({
+      pageUrl,
+      name: entry.data.title,
+      description: entry.data.summary,
+      datePublished: publishedAt,
+      dateModified: modifiedAt,
+      primaryImageUrl: imageIsBanner ? imageContentUrl : undefined,
+      hasBreadcrumb: true,
+      mainEntityId: `${pageUrl}#post`,
+    }),
+    blogPosting,
+    buildBreadcrumb(
+      [
+        { name: 'Blog', url: `${WEBSITE_ROOT}/blog` },
+        { name: entry.data.title, url: pageUrl },
+      ],
+      pageUrl,
+    ),
+  ]),
+};
 ---
 
 <HolyGrailLayout
   class='relative'
-  seoProps={{
+  seoProps={buildPageSeo({
     title: entry.data.title,
     description: entry.data.summary,
-    openGraph: {
-      basic: {
-        title: entry.data.title,
-        type: 'article',
-        url: pageUrl,
-        image: new URL(processedImage?.src || DuckyCodingLogo.src, WEBSITE_ROOT)
-          .href,
-      },
-      optional: {
-        description: entry.data.summary,
-        locale: 'en_US',
-        siteName: 'DuckyCoding',
-        localeAlternate: ['en_GB'],
-        determiner: '',
-        audio: undefined,
-        video: undefined,
-      },
+    pageUrl,
+    keywords: entry.data.tags.join(', '),
+    ogType: 'article',
+    ...(processedImage && {
       image: {
-        url: new URL(processedImage?.src || DuckyCodingLogo.src, WEBSITE_ROOT)
-          .href,
-        secureUrl: new URL(
-          processedImage?.src || DuckyCodingLogo.src,
-          WEBSITE_ROOT,
-        ).href,
-        height: processedImage?.height || DuckyCodingLogo.height,
-        width: processedImage?.width || DuckyCodingLogo.width,
-        type: `image/${processedImage?.format || DuckyCodingLogo.format}`,
+        src: processedImage.src,
+        width: processedImage.width,
+        height: processedImage.height,
+        format: processedImage.format,
         alt:
           bannerImageFromDb?.alt ||
           `Post banner cover related to "${entry.data.topicTitle}"`,
       },
-      article: {
-        publishedTime: new Date(
-          postFromDb?.createdAt || WEBSITE_FIRST_PUBLISHING_DATE,
-        ).toISOString(),
-        modifiedTime: new Date(
-          postFromDb?.updatedAt ||
-            postFromDb?.createdAt ||
-            WEBSITE_FIRST_PUBLISHING_DATE,
-        ).toISOString(),
-        section: entry.data.topicTitle,
-        authors: [entry.data.author],
-        tags: entry.data.tags,
-      },
+    }),
+    author:
+      entry.data.author.toLowerCase() === 'duckycoding'
+        ? 'Davide Milan'
+        : entry.data.author,
+    article: {
+      publishedTime: new Date(
+        postFromDb?.createdAt || WEBSITE_FIRST_PUBLISHING_DATE,
+      ).toISOString(),
+      modifiedTime: new Date(
+        postFromDb?.updatedAt ||
+          postFromDb?.createdAt ||
+          WEBSITE_FIRST_PUBLISHING_DATE,
+      ).toISOString(),
+      section: entry.data.topicTitle,
+      authors: [entry.data.author],
+      tags: entry.data.tags,
     },
-    twitter: {
-      card: 'summary_large_image',
-      site: '@ducky_coding',
-      creator: '@ducky_coding',
-      title: entry.data.title,
-      description: entry.data.summary,
-      image: new URL(processedImage?.src || DuckyCodingLogo.src, WEBSITE_ROOT)
-        .href,
-      imageAlt: "DuckyCoding's logo",
-    },
-    extend: {
-      meta: [
-        {
-          name: 'keywords',
-          content: entry.data.tags.join(', '),
-        },
-      ],
-    },
-  }}
+  })}
   jsonLd={blogPostJsonLd}
 >
   <section
-    class='from-accent-300 to-accent2-300 shadow-comic mx-auto grid items-center border-4 bg-gradient-to-br px-4 py-4 lg:max-w-[80%]'
+    class='from-accent-300 to-accent2-300 shadow-comic mx-auto grid items-center border-4 bg-linear-to-br px-4 py-4 lg:max-w-[80%]'
   >
     {
       bannerImage && processedImage ? (
@@ -195,7 +210,7 @@ const blogPostJsonLd = {
           loading={'eager'}
           fetchpriority={'high'}
           decoding={'async'}
-          class='border-secondary aspect-[16/9] justify-self-center border-6 object-cover'
+          class='border-secondary aspect-video justify-self-center border-6 object-cover'
           widths={getImageWidths(processedImage.width)}
           sizes={`
             (max-width: 767px) calc(80vw - 4rem), 
@@ -242,7 +257,7 @@ const blogPostJsonLd = {
                 href={`/topics/${entry.data.topicTitle.toLowerCase()}`}
                 class='border-secondary rounded-full border-none p-0'
               >
-                <Tag class='bg-accent'>{entry.data.topicTitle}</Tag>
+                <Tag color='accent'>{entry.data.topicTitle}</Tag>
               </Link>
             )}
             {entry.data.tags

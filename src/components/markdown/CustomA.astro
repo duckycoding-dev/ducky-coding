@@ -1,0 +1,16 @@
+---
+import Link, { type LinkProps } from '@components/link/Link.astro';
+
+type Props = LinkProps;
+
+const { props }: { props: Props } = Astro;
+---
+
+<Link
+  class='text-accent-800 no-underline'
+  variant='default'
+  rel={'noopener noreferrer'}
+  {...props}
+>
+  <slot />
+</Link>

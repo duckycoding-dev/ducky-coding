@@ -1,4 +1,4 @@
-import { defineConfig, envField } from 'astro/config';
+import { defineConfig, envField, fontProviders } from 'astro/config';
 import icon from 'astro-icon';
 import mdx from '@astrojs/mdx';
 import netlify from '@astrojs/netlify';
@@ -6,7 +6,7 @@ import sitemap from '@astrojs/sitemap';
 import tailwindcss from '@tailwindcss/vite';
 import { loadEnv } from 'vite';
 
-import { buildSyncAllContent, buildSyncImages } from './src/db/sync/buildSync.ts';
+import { buildMigrate, buildSyncAllContent, buildSyncImages } from './src/db/sync/buildSync.ts';
 import { logLevels } from './src/utils/logs/logger';
 
 const modeArgIdx = process.argv.indexOf('--mode');
@@ -75,6 +75,7 @@ export default defineConfig({
     gfm: true, // --DEFAULT--
     smartypants: true, // --DEFAULT--
     shikiConfig: {
+      theme: 'github-dark-high-contrast',
       wrap: null,
     },
   },
@@ -109,6 +110,11 @@ export default defineConfig({
             url: buildEnv['TURSO_DATABASE_URL'] ?? '',
             authToken: buildEnv['TURSO_AUTH_TOKEN'],
           };
+          logger.info('Running DB migrations...');
+          const migrateResult = await buildMigrate(dbConfig);
+          if (!migrateResult.success) {
+            logger.warn(`Migration warning: ${migrateResult.error}`);
+          }
           logger.info('Starting DB sync...');
           await buildSyncImages(dbConfig);
           await buildSyncAllContent(dbConfig);
@@ -121,6 +127,15 @@ export default defineConfig({
     icon({
       iconDir: 'src/assets/icons', // user svgs stored in this path instead of src/icons
     }),
+  ],
+  fonts: [
+    {
+      provider: fontProviders.google(),
+      name: 'Inter',
+      cssVariable: '--font-inter',
+      weights: ['100 900'],
+      styles: ['normal', 'italic'],
+    },
   ],
   experimental: {
     contentIntellisense: true,

@@ -1,0 +1,22 @@
+---
+import type { ComponentProps } from 'astro/types';
+import { cn } from '@libs/cn';
+
+import BaseHtml from '@layouts/base-html/BaseHtml.astro';
+import Footer from '@layouts/footer/Footer.astro';
+import Header from '@layouts/header/Header.astro';
+import MainContent from '@layouts/main-content/MainContent.astro';
+
+interface Props extends ComponentProps<typeof BaseHtml> {}
+
+const { class: className, ...props }: Props = Astro.props;
+---
+
+<BaseHtml {...props}>
+  <Header />
+  <MainContent class={cn('px-4 py-8 md:px-8', className)}>
+    <slot />
+    <!-- your content is injected here -->
+  </MainContent>
+  <Footer />
+</BaseHtml>

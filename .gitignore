@@ -28,3 +28,4 @@ pnpm-debug.log*
 # sqlite files
 **/content.db-shm
 **/content.db-wal
+.superpowers/
