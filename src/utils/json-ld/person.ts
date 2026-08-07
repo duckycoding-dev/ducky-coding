@@ -22,8 +22,8 @@ export const DuckyCodingPerson = {
     caption: 'Davide Milan (DuckyCoding) — portrait',
   },
   description:
-    "I'm Davide, aka DuckyCoding, a passionate web developer who loves crafting modern digital experiences, sharing what I learn along my path with everyone online.",
-  jobTitle: 'Fullstack Web Developer',
+    "I'm Davide, aka DuckyCoding, a Frontend Engineer focused on React and TypeScript, with full-stack experience building Node.js services and REST APIs, sharing what I learn along my path with everyone online.",
+  jobTitle: 'Frontend Engineer',
   worksFor: WavelopOrganization,
   alumniOf: {
     '@type': 'CollegeOrUniversity',
@@ -31,14 +31,15 @@ export const DuckyCodingPerson = {
     url: 'https://informatica.math.unipd.it/en/bachelor/',
   },
   knowsAbout: [
-    'Web Development',
-    'JavaScript',
-    'TypeScript',
-    'React',
-    'Node.js',
     'Frontend Development',
-    'Backend Development',
-    'Full Stack Development',
+    'React',
+    'TypeScript',
+    'JavaScript',
+    'Astro',
+    'Next.js',
+    'Web Development',
+    'Node.js',
+    'REST APIs',
   ],
   sameAs: [
     MY_SOCIALS_LINKS.x,

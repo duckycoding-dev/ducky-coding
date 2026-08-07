@@ -142,7 +142,7 @@ export default defineConfig(
             //    See tsconfig.json "paths" for the source.
             //    Relative imports sort after aliases alphabetically (@ < .).
             [
-              '^@(components|layouts|content|utils|styles|assets|services|typings|db)/',
+              '^@(components|layouts|content|data|utils|styles|assets|services|typings|db)/',
               '^\\.',
             ],
           ],

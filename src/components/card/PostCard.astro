@@ -9,7 +9,6 @@ import Card from '@components/card/Card.astro';
 import Link from '@components/link/Link.astro';
 import Tag from '@components/tag/Tag.astro';
 import type { Post } from '@db/features/posts/posts.model';
-import { cn } from '@utils/cn';
 
 export interface PostCardProps extends HTMLAttributes<'a'> {
   post: Post;

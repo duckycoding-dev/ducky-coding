@@ -2,18 +2,15 @@
 import type { ComponentProps } from 'astro/types';
 import type { ItemList } from 'schema-dts';
 
-import pentaNewsLogo from '@assets/images/penta_news_logo.png';
-import leetCodeLogo from '@assets/images/topics/leetcode_logo.png';
 import Card from '@components/card/Card.astro';
-import ProjectCard, {
-  type ProjectCardProps,
-} from '@components/card/ProjectCard.astro';
+import ProjectGrid from '@components/card/ProjectGrid.astro';
 import TechnologyCard from '@components/card/TechnologyCard.astro';
 import LinkedInIcon from '@components/icons/linkedin-icon/LinkedInIcon.astro';
 import XIcon from '@components/icons/x-icon/XIcon.astro';
 import Link from '@components/link/Link.astro';
+import { ALL_PROJECTS, MAIN_PROJECTS, PAST_PROJECTS } from '@data/projects';
 import HolyGrailLayout from '@layouts/holy-grail-layout/HolyGrailLayout.astro';
-import { WEBSITE_FIRST_PUBLISHING_DATE, WEBSITE_ROOT } from '@utils/globals';
+import { WEBSITE_FIRST_PUBLISHING_DATE } from '@utils/globals';
 import { buildBreadcrumb } from '@utils/json-ld/breadcrumb';
 import { buildGraph } from '@utils/json-ld/graph';
 import { DuckyCodingPerson } from '@utils/json-ld/person';
@@ -22,38 +19,38 @@ import { buildCollectionPage } from '@utils/json-ld/webpage';
 import { DuckyCodingWebsite } from '@utils/json-ld/website';
 import { buildPageSeo } from '@utils/seo/page-seo';
 
-const thisWebsiteOrigin = Astro.url.origin;
-
 const FRONTEND_TECHNOLOGIES = [
+  'React',
+  'TypeScript',
+  'Astro',
+  'Next.js',
+  'Tailwind CSS',
+  'Styled Components',
+  'Material UI',
+  'Redux',
   'HTML',
   'Modern CSS',
-  'Astro',
-  'Tailwind CSS',
-  'React',
-  'Hooks',
-  'Context API',
-  'Redux',
-  'Next.js',
-  'Styled Components',
 ];
 
 const BACKEND_TECHNOLOGIES = [
   'Node.js',
   'Hono',
+  'REST APIs',
+  'AWS Lambda',
   'SQL',
   'Drizzle ORM',
-  'AWS Lambda',
+  'Zod',
 ];
 
 const TOOLS = [
   'Git',
-  'CLI',
-  'Zod',
-  'clean code',
-  'VSCode',
-  'Postman',
+  'Bun',
+  'Vite',
+  'Jest',
+  'Docker',
   'ESLint',
   'Prettier',
+  'VSCode',
 ];
 
 const TECHNOLOGIES: ComponentProps<typeof TechnologyCard>[] = [
@@ -83,92 +80,17 @@ const TECHNOLOGIES: ComponentProps<typeof TechnologyCard>[] = [
   },
 ];
 
-const PROJECTS: ProjectCardProps[] = [
-  {
-    title: 'duckycoding.dev (this website)',
-    summary:
-      'Fast, modern portfolio website showcasing projects and skills, built with Astro and optimized for performance, easy management and SEO.',
-    technologies: [
-      'Astro',
-      'Netlify',
-      'Tailwind',
-      'TypeScript',
-      'SEO',
-      'MDX',
-      'Drizzle ORM',
-      'SQLite',
-    ],
-    projectUrl: WEBSITE_ROOT,
-    linkActionTitle: 'Live Site',
-  },
-  {
-    title: 'Task Manager App',
-    summary:
-      'This is a monorepo which contains the code for the backend of a task manager app, which will be reused in many other frontend packages to test different frontend libraries while mantaining a standard backend logic: this will allow me to develop mini projects faster and experiment with new technologies.',
-    technologies: [
-      'Hono',
-      'Drizzle ORM',
-      'Zod',
-      'REST API',
-      'React',
-      'Shadcn/ui',
-      'more...',
-    ],
-    projectUrl:
-      'https://github.com/duckycoding-dev/reusable_task_manager_backend',
-    linkActionTitle: 'GitHub',
-  },
-  {
-    title: 'LeetCode solutions',
-    bannerImage: leetCodeLogo,
-    imageAlt: "LeetCode's platform logo",
-    summary:
-      "My repository of LeetCode problems solutions that I've written, showcasing problem-solving skills and algorithmic thinking.",
-    technologies: ['Algorithms', 'Data Structures', 'JavaScript', 'Python'],
-    projectUrl:
-      'https://github.com/duckycoding-dev/neecode-leetcode-roadmap-exercises',
-    linkActionTitle: 'GitHub',
-    bannerImageClass: 'from-danger to-accent2 bg-gradient-to-tl',
-  },
-  {
-    title: 'CLI Templater',
-    summary:
-      'Customizable and interactive CLI tool that aids in setting up repetitive files with a common structure.',
-    technologies: ['CLI', 'CommanderJS', 'inquirer', 'TypeScript', 'Bun'],
-    projectUrl: 'https://github.com/duckycoding-dev/cli-templater',
-    linkActionTitle: 'GitHub',
-  },
-  {
-    title: 'PentaNews',
-    bannerImage: pentaNewsLogo,
-    imageAlt: 'PentaNews logo',
-    summary:
-      "My first ever web development project, done for my web development course at Padua's university with three friends. It's an online journalism platform that allows users to read and comment on news articles, and admins to create such articles. It's built with PHP, bare minimum vanilla JavaScript, tons of CSS, MySQL and great emphasis on responsive design and accessibility. (unfortunately, the website is no longer online, but the code is still available on my friend's GitHub repo)",
-    technologies: ['PHP', 'JavaScript', 'CSS', 'MySQL'],
-    projectUrl: 'https://github.com/0xCaso/penta-news',
-    linkActionTitle: 'GitHub',
-  },
-  {
-    title: 'Chartpp',
-    summary:
-      "My first solo project, done for my OOP course at Padua's university. It's a GUI application built with Qt that allows you to create and edit charts, export them as CSV and JSON, with a focus on object-oriented programming principles.",
-    technologies: ['C++', 'OOP', 'Qt', 'JSON'],
-    projectUrl: 'https://github.com/Davide-Milan/Chartpp',
-    linkActionTitle: 'GitHub',
-  },
-];
-
 const pageUrl = Astro.url.href;
 
 const projectsDescription =
-  'Web development projects by Davide (DuckyCoding) — open-source tools, experiments, and applications built with modern technologies.';
+  'Projects by Davide (DuckyCoding), Frontend Engineer — products and technical experiments exploring frontend architecture, product ideas and modern web tooling.';
 
 const projectsItemList: ItemList = {
   '@type': 'ItemList',
   '@id': `${pageUrl}#projects`,
   name: "DuckyCoding's projects",
-  numberOfItems: PROJECTS.length,
-  itemListElement: PROJECTS.map((project, index) => ({
+  numberOfItems: ALL_PROJECTS.length,
+  itemListElement: ALL_PROJECTS.map((project, index) => ({
     '@type': 'ListItem' as const,
     position: index + 1,
     url: project.projectUrl,
@@ -198,11 +120,10 @@ const projectsPageJsonLd = {
   seoProps={buildPageSeo({
     title: 'My projects',
     ogTitle: "DuckyCoding's projects",
-    description:
-      'Web development projects by Davide (DuckyCoding) — open-source tools, experiments, and applications built with modern technologies.',
+    description: projectsDescription,
     pageUrl,
     keywords:
-      'DuckyCoding, projects, portfolio, web development, applications, GitHub',
+      'DuckyCoding, Davide Milan, projects, portfolio, frontend, React, TypeScript, Astro, PVVerdict, GitHub',
     article: {
       publishedTime: WEBSITE_FIRST_PUBLISHING_DATE,
       modifiedTime: WEBSITE_FIRST_PUBLISHING_DATE,
@@ -235,9 +156,8 @@ const projectsPageJsonLd = {
         🚀 Featured Work
       </h2>
       <p class='text-secondary mb-6'>
-        Here you will find a collection of projects that showcase my skills and
-        experience in web development, from frontend interfaces to full-stack
-        applications, CLI tools, scripts and much more.
+        A selection of products and technical experiments where I explore
+        frontend architecture, product ideas and modern web tooling.
       </p>
       <div class='flex flex-wrap justify-center gap-4'>
         <Link
@@ -253,43 +173,23 @@ const projectsPageJsonLd = {
     </Card>
   </section>
 
-  <!-- Projects Grid -->
+  <!-- Main Projects Grid -->
   <section id='projects' class='mb-16'>
     <h2 class='text-secondary mb-8 text-center text-3xl font-black md:text-4xl'>
       Project <span class='text-accent-700'>showcase</span>
     </h2>
-    <div class='grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3'>
-      {
-        PROJECTS.map((project, index) => (
-          <Link
-            href={project.projectUrl || '#'}
-            variant='unstyled'
-            class='group focus:shadow-comic-xl active:shadow-comic block rounded-xl transition-all duration-300 focus:-translate-y-0.5 active:translate-y-0.5'
-            target={
-              project.projectUrl === thisWebsiteOrigin ? '_self' : '_blank'
-            }
-            rel={
-              project.projectUrl === thisWebsiteOrigin
-                ? undefined
-                : 'noopener noreferrer'
-            }
-          >
-            <ProjectCard
-              title={project.title}
-              summary={project.summary}
-              technologies={project.technologies}
-              projectUrl={project.projectUrl}
-              linkActionTitle={project.linkActionTitle}
-              bannerImage={project.bannerImage}
-              bannerImageClass={project.bannerImageClass}
-              imageAlt={`Banner image for ${project.title}`}
-              loading={index < 3 ? 'eager' : 'lazy'}
-              fetchPriority={index < 3 ? 'high' : 'auto'}
-            />
-          </Link>
-        ))
-      }
-    </div>
+    <ProjectGrid projects={MAIN_PROJECTS} eagerCount={3} />
+  </section>
+
+  <!-- Earlier Projects Grid -->
+  <section id='past-projects' class='mb-16'>
+    <h2 class='text-secondary mb-4 text-center text-3xl font-black md:text-4xl'>
+      Earlier <span class='text-accent-700'>projects</span>
+    </h2>
+    <p class='text-secondary mx-auto mb-8 max-w-2xl text-center'>
+      Older experiments, university work and small tools I built along the way.
+    </p>
+    <ProjectGrid projects={PAST_PROJECTS} />
   </section>
 
   <!-- Technologies Section -->
@@ -339,76 +239,6 @@ const projectsPageJsonLd = {
 </HolyGrailLayout>
 
 <style>
-  /* Custom animations for project interactions */
-  @keyframes pulse-border {
-    0%,
-    100% {
-      border-color: var(--color-accent);
-      box-shadow: 0 0 0 0 rgba(255, 61, 233, 0.4);
-    }
-    50% {
-      border-color: var(--color-accent-700);
-      box-shadow: 0 0 0 8px rgba(255, 61, 233, 0);
-    }
-  }
-
-  /* Add subtle animations to filter buttons */
-  section:nth-of-type(2) button:hover {
-    animation: pulse-border 1.5s infinite;
-  }
-
-  /* Stagger animation for project cards on page load */
-  @media (min-width: 768px) {
-    section:nth-of-type(3) .grid > :nth-child(1) {
-      animation: slideInUp 0.6s ease-out;
-      animation-delay: 0.1s;
-      animation-fill-mode: both;
-    }
-    section:nth-of-type(3) .grid > :nth-child(2) {
-      animation: slideInUp 0.6s ease-out;
-      animation-delay: 0.2s;
-      animation-fill-mode: both;
-    }
-    section:nth-of-type(3) .grid > :nth-child(3) {
-      animation: slideInUp 0.6s ease-out;
-      animation-delay: 0.3s;
-      animation-fill-mode: both;
-    }
-    section:nth-of-type(3) .grid > :nth-child(4) {
-      animation: slideInUp 0.6s ease-out;
-      animation-delay: 0.4s;
-      animation-fill-mode: both;
-    }
-    section:nth-of-type(3) .grid > :nth-child(5) {
-      animation: slideInUp 0.6s ease-out;
-      animation-delay: 0.5s;
-      animation-fill-mode: both;
-    }
-    section:nth-of-type(3) .grid > :nth-child(6) {
-      animation: slideInUp 0.6s ease-out;
-      animation-delay: 0.6s;
-      animation-fill-mode: both;
-    }
-  }
-
-  @keyframes slideInUp {
-    from {
-      opacity: 0;
-      transform: translateY(30px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-
-  /* Responsive grid adjustments */
-  @media (max-width: 768px) {
-    section:nth-of-type(3) .grid {
-      grid-template-columns: 1fr;
-    }
-  }
-
   @keyframes float {
     0%,
     100% {
@@ -440,7 +270,7 @@ const projectsPageJsonLd = {
   }
 
   @media (prefers-reduced-motion) {
-    section:nth-of-type(3) .grid > :nth-child(n) {
+    #technologies > div > :nth-child(n) {
       animation: none;
     }
   }

@@ -6,8 +6,14 @@ import { Image } from 'astro:assets';
 
 import headshotDavide from '@assets/images/head-shot-davide.jpg';
 import Card from '@components/card/Card.astro';
+import ProjectGrid from '@components/card/ProjectGrid.astro';
+import { SELECTED_PROJECTS } from '@data/projects';
 import HolyGrailLayout from '@layouts/holy-grail-layout/HolyGrailLayout.astro';
-import { WEBSITE_FIRST_PUBLISHING_DATE, WEBSITE_ROOT } from '@utils/globals';
+import {
+  MY_SOCIALS_LINKS,
+  WEBSITE_FIRST_PUBLISHING_DATE,
+  WEBSITE_ROOT,
+} from '@utils/globals';
 import { buildGraph } from '@utils/json-ld/graph';
 import { SiteNavigation } from '@utils/json-ld/nav';
 import { DuckyCodingPerson } from '@utils/json-ld/person';
@@ -21,56 +27,47 @@ import Link from '../components/link/Link.astro';
 
 const timelineObjects: ComponentProps<typeof TimelineCard>[] = [
   {
-    roleTitle: 'Fullstack web developer',
+    roleTitle: 'Full-stack Web Developer',
     period: '2023 - Present',
     logo: '🏄‍♂️',
     place: 'Wavelop',
     link: 'https://wavelop.com/en',
     children: `
-    <p class='text-secondary'>
-      As a Junior fullstack developer, I worked on multiple web applications for one of our clients, including:</p>
-      <ul>
-      <li>B2B web applications</li>
-      <li>An IoT client web app</li>
-      <li>A corporate site</li>
-      </ul>
-
-<p>In my role, I’ve covered a variety of tasks, including:</p>
+<p>I work on multi-company B2B applications, IoT-related products and corporate websites, with a primary focus on React and TypeScript.</p>
+<p>My responsibilities span:</p>
 <ul>
-<li>Fixing bugs and improving existing features</li>
-<li>Analyzing client requests and planning implementations</li>
-<li>Developing new features based on client requirements</li>
-<li>Writing unit tests to ensure code reliability</li>
-<li>Reviewing merge requests and collaborating with teammates</li>
-<li>Managing manual deployments in DEV and PROD environments</li>
-<li>Communicating with clients when needed</li>
+<li>Requirements analysis and implementation planning</li>
+<li>Reusable frontend components and maintainable project structure</li>
+<li>API integration and Node.js business logic</li>
+<li>Unit tests, code reviews and technical documentation</li>
+<li>Direct collaboration with clients</li>
 </ul>
-
-<p>I've worked with monorepos, using mostly:</p>
+<p>Recent contributions include introducing Zod validation at AWS Lambda entry points, handling critical client-reported issues and defining the foundations of an ongoing corporate website rewrite from Next.js to Astro.</p>
+<p>The stack I use the most:</p>
 <ul>
-<li>Frontend: React ⚛️, Next.js, Styled Components, Redux</li>
-<li>Backend: Node.js with a controller-service-repository architecture, MySQL 🛢️, Jest for testing</li>
+<li>Frontend: React ⚛️, Next.js, Astro, Styled Components, Redux</li>
+<li>Backend: Node.js and AWS Lambda with a controller-service-repository architecture, MySQL 🛢️, Jest for testing</li>
 <li>Tools: TypeScript, Git</li>
 </ul>
-<p>I also laid the foundation for the company’s latest website using Next.js, Tailwind, and Strapi 🏗️ <br/>Throughout my work, I’ve used TypeScript extensively on both the frontend and backend.</p>`,
+<p>I also laid the foundation for the company’s latest website using Next.js, Tailwind and Strapi 🏗️</p>`,
   },
   {
-    roleTitle: 'Fullstack web developer - internship',
+    roleTitle: 'Full-stack Web Developer Intern',
     logo: '🏄‍♂️',
     period: 2023,
     place: 'Wavelop',
     link: 'https://wavelop.com/en',
     children:
-      "Internship as a fullstack web developer required by my university course in order to graduate. I've gained first hand experience in web development, working on a real project. This has been my first real job experience in the field, and I have had the chance to try out many different technologies and tools, such as React, TypeScript, Node.js and more.",
+      'During my university internship, I developed an Alexa Skill for an IoT application and contributed to existing React interfaces using TypeScript, Styled Components and Material UI.',
   },
   {
-    roleTitle: 'Bachelor degree in Computer Science',
+    roleTitle: "Bachelor's degree in Computer Science",
     logo: '📚',
     period: '2019 - 2023',
     place: 'University of Padua',
     link: 'https://informatica.math.unipd.it/en/bachelor/',
     children:
-      "During my Bachelor's degree in Computer Science at the University of Padua, I gained a solid foundation in programming, algorithms, data structures, and software engineering. I explored topics such as web development, databases, computer networks, and mathematics, and worked on a few group projects that strengthened my problem-solving and teamwork skills.",
+      'I studied computer science fundamentals including programming, algorithms, data structures, databases, networks and software engineering, and worked on a few group projects that strengthened my problem-solving and teamwork skills.',
   },
 ];
 
@@ -113,7 +110,7 @@ const homepageJsonLd = {
       pageUrl: WEBSITE_ROOT,
       name: 'DuckyCoding',
       description:
-        "Hi, I'm Davide — aka DuckyCoding. A web developer from Italy sharing tutorials, guides, and memes about modern web development.",
+        "Hi, I'm Davide — aka DuckyCoding. A Frontend Engineer from Italy building web applications with React and TypeScript, sharing articles, guides and memes about modern web development.",
     }),
     SiteNavigation(),
   ]),
@@ -125,10 +122,10 @@ const homepageJsonLd = {
     title: 'DuckyCoding',
     ogTitle: 'DuckyCoding',
     description:
-      "Hi, I'm Davide — aka DuckyCoding. A web developer from Italy sharing tutorials, guides, and memes about modern web development.",
+      "Hi, I'm Davide — aka DuckyCoding. A Frontend Engineer from Italy building web applications with React and TypeScript, sharing articles, guides and memes about modern web development.",
     pageUrl,
     keywords:
-      'DuckyCoding, Davide, developer, web development, blog, frontend, backend, journey',
+      'DuckyCoding, Davide Milan, frontend engineer, React, TypeScript, web development, blog, projects, journey',
     article: {
       publishedTime: WEBSITE_FIRST_PUBLISHING_DATE,
       modifiedTime: WEBSITE_FIRST_PUBLISHING_DATE,
@@ -136,12 +133,13 @@ const homepageJsonLd = {
       authors: ['DuckyCoding', 'Davide'],
       tags: [
         'DuckyCoding',
-        'Davide',
-        'developer',
+        'Davide Milan',
+        'frontend engineer',
+        'React',
+        'TypeScript',
         'web development',
         'blog',
-        'frontend',
-        'backend',
+        'projects',
         'journey',
       ],
     },
@@ -155,24 +153,35 @@ const homepageJsonLd = {
     >
       <div>
         <h1
-          class='text-secondary mb-6 text-3xl leading-tight font-black md:text-4xl lg:text-6xl'
+          class='text-secondary mb-6 text-3xl leading-tight font-black md:text-4xl lg:text-5xl'
         >
-          Hi, I'm <span class='text-accent-700 wrap-break-word sm:wrap-normal'
-            >DuckyCoding!</span
+          Hi, I'm Davide — a <span class='text-accent-700'
+            >Frontend Engineer</span
+          > who writes as <span
+            class='text-accent-700 wrap-break-word sm:wrap-normal'
+            >DuckyCoding</span
           >
         </h1>
         <p class='text-secondary text-lg leading-relaxed md:text-xl'>
           <span
-            >I'm Davide, a passionate web developer from Italy 🇮🇹 who loves
-            building modern, user-friendly digital experiences.</span
+            >I build maintainable web applications with React and TypeScript,
+            with full-stack experience across Node.js services and REST APIs. 🇮🇹</span
           >
           <br />
           <span
-            >Whether you're here to learn more about my journey, read some
-            articles, explore my projects or are just passing by, I'm glad you
-            are here! 😃</span
+            >This is where I share what I learn, publish web-development
+            articles and memes, and document the projects I build along the way.
+            😃</span
           >
         </p>
+        <div class='mt-6 flex flex-wrap gap-4'>
+          <Link href='/my-projects' variant='contained'>
+            Explore my projects 🚀
+          </Link>
+          <Link href='/blog' variant='outlined' class='text-secondary'>
+            Read the blog 📝
+          </Link>
+        </div>
       </div>
       <div class='aspect-square md:h-80 lg:h-96'>
         <Card class='flex h-full w-full items-baseline md:items-baseline'>
@@ -203,41 +212,40 @@ const homepageJsonLd = {
     <h2 class='text-secondary mb-8 text-center text-3xl font-black md:text-4xl'>
       What I do
     </h2>
-    <div class='grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3'>
+    <div class='grid grid-cols-1 gap-6 md:grid-cols-2'>
+      <Card class='bg-accent-100 p-6 md:col-span-2'>
+        <span class='mb-4 block text-4xl font-bold text-white'>⚛️</span>
+        <h3 class='text-secondary mb-3 text-2xl font-bold md:text-3xl'>
+          Frontend Engineering
+        </h3>
+        <p class='text-secondary md:text-lg'>
+          I build responsive interfaces and reusable components with React and
+          TypeScript, focusing on clear responsibilities, maintainable structure
+          and a consistent user experience.
+        </p>
+      </Card>
+
       <Card class='bg-accent2-100 p-6'>
-        <span class='mb-4 block text-4xl font-bold text-white'>🎨</span>
+        <span class='mb-4 block text-4xl font-bold text-white'>⚙️</span>
         <h3 class='text-secondary mb-3 text-xl font-bold'>
-          Frontend Development
+          End-to-end Development
         </h3>
         <p class='text-secondary'>
-          I enjoy crafting beautiful, responsive user interfaces that provide a
-          seamless experience across devices.
-          <br />
-          Writing clean, maintainable code is my priority (...and I love using CSS!)
+          My full-stack experience helps me follow features beyond the
+          interface, from API integration to Node.js business logic and
+          serverless services with AWS Lambda.
         </p>
       </Card>
 
       <Card class='bg-accent3-100 p-6'>
-        <span class='mb-4 block text-4xl font-bold text-white'>⚙️</span>
-        <h3 class='text-secondary mb-3 text-xl font-bold'>
-          Backend Development
-        </h3>
-        <p class='text-secondary'>
-          I always strive to build robust and 100% typesafe backend systems that
-          power the applications I create.
-          <br />
-          I enjoy working with Node.js, TypeScript and modern libraries.
-        </p>
-      </Card>
-
-      <Card class='bg-accent-100 p-6 md:col-span-2 lg:col-span-1'>
         <span class='mb-4 block text-4xl font-bold text-white'>🚀</span>
         <h3 class='text-secondary mb-3 text-xl font-bold'>
-          Full Stack Solutions
+          Projects and Writing
         </h3>
         <p class='text-secondary'>
-          Be it frontend or backend, I love building full stack applications
-          that deliver a complete user experience, from start to finish.
+          I use personal projects to explore product ideas, frontend
+          architecture and modern web tooling, then share useful lessons through
+          DuckyCoding.
         </p>
       </Card>
     </div>
@@ -290,27 +298,61 @@ const homepageJsonLd = {
     </div>
   </section>
 
-  <!-- Get In Touch Section -->
+  <!-- Selected Projects -->
+  <section id='selected-projects' class='mb-16'>
+    <h2 class='text-secondary mb-8 text-center text-3xl font-black md:text-4xl'>
+      Selected <span class='text-accent-700'>projects</span>
+    </h2>
+    <ProjectGrid
+      projects={SELECTED_PROJECTS}
+      useHomeSummary
+      showSecondaryLinks
+      class='mx-auto max-w-4xl lg:grid-cols-2'
+    />
+  </section>
 
   <!-- CTA Section -->
   <section class='mb-16 text-center'>
     <Card class='from-accent2-100 to-accent3-100 bg-gradient-to-br p-8 md:p-12'>
       <h2 class='text-secondary mb-6 text-3xl font-black md:text-4xl'>
-        Let's work <span class='text-accent-700'>together!</span>
+        Explore what I'm <span class='text-accent-700'>building</span>
       </h2>
       <p class='text-secondary mx-auto mb-8 max-w-2xl text-lg md:text-xl'>
-        Ready to bring your ideas to life?
-        <br />
-        Check out my work and see if I'm a good fit for you and your team!
+        Browse my projects, read the latest articles or find me on GitHub and
+        LinkedIn.
       </p>
-      <div class='flex flex-wrap justify-center gap-4'>
+      <div class='flex flex-wrap items-center justify-center gap-4'>
         <Link
           href='/my-projects'
           variant='contained'
-          size='large'
-          class='px-8 py-4 text-xl text-balance sm:text-3xl'
+          class='px-6 py-3 text-lg text-balance sm:text-xl'
         >
           View my projects 🚀
+        </Link>
+        <Link
+          href='/blog'
+          variant='outlined'
+          class='text-secondary px-6 py-3 text-lg text-balance sm:text-xl'
+        >
+          Read the blog 📝
+        </Link>
+        <Link
+          href={MY_SOCIALS_LINKS.github}
+          target='_blank'
+          rel='noopener noreferrer'
+          variant='outlined'
+          class='text-secondary border-secondary px-6 py-3 text-lg sm:text-xl'
+        >
+          GitHub
+        </Link>
+        <Link
+          href={MY_SOCIALS_LINKS.linkedin}
+          target='_blank'
+          rel='noopener noreferrer'
+          variant='outlined'
+          class='text-secondary border-secondary px-6 py-3 text-lg sm:text-xl'
+        >
+          LinkedIn
         </Link>
       </div>
     </Card>
