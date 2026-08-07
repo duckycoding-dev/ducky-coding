@@ -1,0 +1,130 @@
+---
+import type { HTMLAttributes } from 'astro/types';
+import { Image } from 'astro:assets';
+import { cn } from '@libs/cn';
+
+import DuckyCodingLogo from '@assets/images/DuckyCoding_logo.png';
+import Link from '@components/link/Link.astro';
+
+export interface NavbarProps {}
+
+interface Props extends HTMLAttributes<'nav'>, NavbarProps {}
+
+const { class: className, ...props }: Props = Astro.props;
+
+const NAV_ITEMS = [
+  { href: '/', label: 'Home' },
+  { href: '/blog', label: 'Blog' },
+  { href: '/topics', label: 'Topics' },
+  { href: '/memes', label: 'Memes' },
+  { href: '/search', label: 'Search' },
+  { href: '/my-projects', label: 'My projects' },
+];
+---
+
+<!-- Backdrop overlay (managed via JS) -->
+<div id='nav-backdrop' class='nav-backdrop md:hidden'></div>
+
+<!-- Mobile: dialog-based sidebar (non-modal so header toggle stays on top) -->
+<dialog
+  id='nav-dialog'
+  class='nav-dialog bg-primary-700 border-comic border-secondary fixed top-0 left-0 z-10 m-0 h-dvh max-h-dvh w-full max-w-[90dvw] border-y-0 border-l-0 px-8 pt-16 pb-8 md:hidden'
+>
+  <nav
+    autofocus
+    tabindex='-1'
+    class={cn('flex h-full flex-col gap-y-4 outline-none', className)}
+    {...props}
+  >
+    <div class='flex shrink-0 items-center justify-start gap-4 font-semibold'>
+      <Image
+        format={'avif'}
+        alt={'DuckyCoding logo'}
+        title={'DuckyCoding'}
+        src={DuckyCodingLogo}
+        width={50}
+        densities={[1, 1.5, 2]}
+        class='max-w-none'
+      />
+      <h2 class='text-secondary text-3xl'>DuckyCoding</h2>
+    </div>
+    <ul class='flex h-full min-w-fit flex-col gap-4'>
+      {
+        NAV_ITEMS.map(({ href, label }) => (
+          <li>
+            <Link
+              href={href}
+              class='text-secondary w-full text-3xl font-medium'
+            >
+              {label}
+            </Link>
+          </li>
+        ))
+      }
+    </ul>
+    <p id='scroll-tip' class='text-center text-base italic'>
+      Did you know: You can swipe right to open the side menu and left to close
+      it.
+    </p>
+  </nav>
+</dialog>
+
+<!-- Desktop: static nav -->
+<nav
+  class={cn('hidden gap-x-8 md:flex md:justify-end md:min-w-fit', className)}
+  {...props}
+>
+  <ul class='flex items-center gap-4'>
+    {
+      NAV_ITEMS.map(({ href, label }) => (
+        <li>
+          <Link href={href} class='text-secondary text-base font-medium'>
+            {label}
+          </Link>
+        </li>
+      ))
+    }
+  </ul>
+</nav>
+
+<style>
+  /* Slide-in/out animation for mobile nav dialog */
+  .nav-dialog {
+    transform: translateX(-100%);
+    transition: transform 0.3s ease;
+  }
+
+  .nav-dialog[open] {
+    transform: translateX(0);
+  }
+
+  /* Slide out when closing class is added */
+  .nav-dialog[open].closing {
+    transform: translateX(-100%);
+  }
+
+  @starting-style {
+    .nav-dialog[open] {
+      transform: translateX(-100%);
+    }
+  }
+
+  /* Custom backdrop (non-modal dialog has no ::backdrop) */
+  .nav-backdrop {
+    position: fixed;
+    inset: 0;
+    z-index: 9;
+    background: rgb(0 0 0 / 0);
+    pointer-events: none;
+    transition:
+      background 0.3s ease,
+      visibility 0.3s ease;
+    visibility: hidden;
+  }
+
+  .nav-backdrop.active {
+    background: rgb(0 0 0 / 0.5);
+    pointer-events: auto;
+    visibility: visible;
+  }
+</style>

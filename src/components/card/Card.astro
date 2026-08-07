@@ -1,0 +1,34 @@
+---
+import type { HTMLAttributes } from 'astro/types';
+import { cn } from '@libs/cn';
+import { cva, type VariantProps } from 'cva';
+
+const cardVariants = cva({
+  base: 'border-comic border-secondary overflow-hidden rounded-xl transition-all duration-300',
+  variants: {
+    shadow: {
+      sm: 'shadow-comic',
+      lg: 'shadow-comic-lg',
+      xl: 'shadow-comic-xl',
+    },
+    hover: {
+      lift: 'hover:-translate-y-1 hover:shadow-comic-xl active:shadow-comic active:translate-y-0.5',
+      none: '',
+    },
+  },
+  defaultVariants: {
+    shadow: 'lg',
+    hover: 'lift',
+  },
+});
+
+export type CardVariants = VariantProps<typeof cardVariants>;
+
+interface Props extends HTMLAttributes<'div'>, CardVariants {}
+
+const { class: className, shadow, hover, ...props }: Props = Astro.props;
+---
+
+<div class={cn(cardVariants({ shadow, hover }), className)} {...props}>
+  <slot />
+</div>
