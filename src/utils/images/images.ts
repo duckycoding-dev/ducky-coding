@@ -13,7 +13,11 @@ export async function matchImageFromGlobImport(
   relativePath?: string | undefined | null,
   logger?: ServerLogger | ClientLogger,
 ): Promise<ImageMetadata | undefined> {
-  if (!relativePath === undefined || relativePath === null) {
+  if (
+    relativePath === undefined ||
+    relativePath === null ||
+    relativePath === ''
+  ) {
     logger?.warn('A relative path is required to match an image');
     return undefined;
   }
