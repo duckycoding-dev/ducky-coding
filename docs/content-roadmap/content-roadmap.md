@@ -170,8 +170,11 @@ built from; **additions must do the same.**
    durable-cache semantics — a year-long `s-maxage` that is correct only because
    deploys invalidate.
 3. **"I let an AI audit my blog and it found a bug that deletes my database rows"**
-   *Failure narrative.* Evidence: the `plans/` audit; orphan cleanup keyed on
-   "synced" rather than "seen", so a typo in frontmatter deleted the row.
+   *Failure narrative.* Evidence: the audit plans and their execution, in git
+   history on the `chore/advisor-plans` branch (the `plans/` folder was deleted
+   once executed); orphan cleanup keyed on "synced" rather than "seen", so a
+   typo in frontmatter deleted the row. Fix: `fix(db): keep posts whose
+   frontmatter fails validation`.
 4. **"noUncheckedIndexedAccess: the strict flag that finds real bugs"** ← *funds TypeScript*
    *Test report.* Evidence: `tsconfig.json`, and `getVisiblePages` where
    `sorted[i]!` silenced the exact check that flag exists to raise.
