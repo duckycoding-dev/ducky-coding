@@ -10,7 +10,7 @@ import ScrollToTopButton from '@components/scroll-to-top-button/ScrollToTopButto
 import Tag from '@components/tag/Tag.astro';
 import type { Image as BannerImage } from '@db/features/images/images.model';
 import { ImagesService } from '@db/features/images/images.service';
-import { postsService } from '@db/features/posts/posts.service';
+import { PostsService } from '@db/features/posts/posts.service';
 import { TopicsService } from '@db/features/topics/topics.service';
 import HolyGrailLayout from '@layouts/holy-grail-layout/HolyGrailLayout.astro';
 import MarkdownContent from '@layouts/markdown-content/MarkdownContent.astro';
@@ -33,21 +33,31 @@ export async function getStaticPaths() {
     (post) => post.data.status === 'published',
   );
 
-  const bannerImagesPromises = postsEntries.map((entry) => {
-    const imagePath = entry.data.bannerImagePath;
-    if (imagePath) {
-      return ImagesService.getImageByPath(imagePath);
-    }
-    return Promise.resolve(undefined);
+  // One query for every banner instead of one per post — each is a network
+  // round trip against remote Turso during a production build.
+  const bannerPaths = postsEntries
+    .map((entry) => entry.data.bannerImagePath)
+    .filter((imagePath): imagePath is string => imagePath !== undefined);
+
+  const bannerImages: BannerImage[] =
+    bannerPaths.length > 0
+      ? await ImagesService.getImagesByPaths(bannerPaths)
+      : [];
+
+  const bannerImageByPath = new Map<string, BannerImage>(
+    bannerImages.map((image) => [image.path, image]),
+  );
+
+  return postsEntries.map((entry) => {
+    const bannerPath = entry.data.bannerImagePath;
+    return {
+      params: { id: decodeURI(entry.id) },
+      props: {
+        entry,
+        bannerImage: bannerPath ? bannerImageByPath.get(bannerPath) : undefined,
+      },
+    };
   });
-
-  const bannerImages: (BannerImage | undefined)[] =
-    await Promise.all(bannerImagesPromises);
-
-  return postsEntries.map((entry, id) => ({
-    params: { id: decodeURI(entry.id) },
-    props: { entry, bannerImage: bannerImages[id] },
-  }));
 }
 // 2. For your template, you can get the entry directly from the prop
 const { entry, bannerImage } = Astro.props;
@@ -65,11 +75,8 @@ if (imageToFindPath) {
   );
 }
 
-const postFromDb = await postsService.getPostBySlug(entry.id); // in astro 5 "slug" became "id", which corresponds to the filename of the content file
+const postFromDb = await PostsService.getPostBySlug(entry.id); // in astro 5 "slug" became "id", which corresponds to the filename of the content file
 
-const bannerImageFromDb = imageToFindPath
-  ? await ImagesService.getImageByPath(imageToFindPath)
-  : undefined;
 const pageUrl = Astro.url.href;
 
 const topicFromDb = await TopicsService.getTopic(entry.data.topicTitle);
@@ -90,7 +97,7 @@ const imageSource = processedImage ?? DuckyCodingLogo;
 const imageIsBanner = processedImage !== undefined;
 const imageContentUrl = new URL(imageSource.src, WEBSITE_ROOT).href;
 const imageAlt = imageIsBanner
-  ? bannerImageFromDb?.alt ||
+  ? bannerImage?.alt ||
     `Post banner cover related to "${entry.data.topicTitle}"`
   : "DuckyCoding's logo";
 
@@ -170,7 +177,7 @@ const blogPostJsonLd = {
         height: processedImage.height,
         format: processedImage.format,
         alt:
-          bannerImageFromDb?.alt ||
+          bannerImage?.alt ||
           `Post banner cover related to "${entry.data.topicTitle}"`,
       },
     }),

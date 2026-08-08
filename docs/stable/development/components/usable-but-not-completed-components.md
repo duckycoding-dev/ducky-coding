@@ -1,6 +1,11 @@
 ---
-updated: 2026-04-01
+created: 2026-04-01
+updated: 2026-08-08
+summary: Marking components that are usable but intentionally incomplete
 ---
+
+> No component in `src/` currently carries the marker. The convention is still
+> declared in CLAUDE.md and applies to the next one that needs it.
 
 ### Fast progress for a working result
 

@@ -41,7 +41,7 @@ Personal blog at [duckycoding.dev](https://duckycoding.dev), built with Astro 6 
 - **utils vs libs** — `utils/` for generic reusable utilities, `libs/` for wrappers of external libraries
 - **No React** — use pure `.astro` components only; provide clear justification if something else is needed
 - **prefer discriminated union responses over throws** — service layers return `{ success: true, data } | { success: false, error }`, caller handles via `success` field
-- **components: base vs feature** — `components/base/` for domain-agnostic primitives, `<feature>/` folders for feature-scoped components
+- **components** — one folder per component under `src/components/<name>/`; domain-agnostic primitives (Button, Card, Link, Tag, Pagination) live at the same level as feature components (memes, search, navbar)
 - **props** — minimum viable interface needed; working with Tailwind almost always requires `class`
 - **CVA** — use for multi-variant components; prefer `class:list` for 1-2 conditional classes
 - **data fetching** — all DB access goes through the service layer (`*.service.ts`), only in `.astro` frontmatter; ESLint enforces this

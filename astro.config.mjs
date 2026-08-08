@@ -106,6 +106,15 @@ export default defineConfig({
       name: 'db-sync',
       hooks: {
         'astro:build:start': async ({ logger }) => {
+          // Every build migrates and rewrites the DB the loaded env points at.
+          // `DB_SYNC=skip npm run astro:build:local` builds the site without
+          // touching any database at all. Default stays 'run' so Netlify
+          // production builds are unchanged.
+          if ((buildEnv['DB_SYNC'] ?? 'run') === 'skip') {
+            logger.info('DB_SYNC=skip — skipping migrations and content sync.');
+            return;
+          }
+
           const dbConfig = {
             url: buildEnv['TURSO_DATABASE_URL'] ?? '',
             authToken: buildEnv['TURSO_AUTH_TOKEN'],
@@ -113,11 +122,16 @@ export default defineConfig({
           logger.info('Running DB migrations...');
           const migrateResult = await buildMigrate(dbConfig);
           if (!migrateResult.success) {
+            // Non-fatal: tables may already exist (e.g. drizzle-kit push).
             logger.warn(`Migration warning: ${migrateResult.error}`);
           }
           logger.info('Starting DB sync...');
           await buildSyncImages(dbConfig);
-          await buildSyncAllContent(dbConfig);
+          const syncResult = await buildSyncAllContent(dbConfig);
+          if (!syncResult.success) {
+            // Abort rather than ship a build whose search index is half-written.
+            throw new Error(`DB content sync failed: ${syncResult.error}`);
+          }
           logger.info('DB sync complete.');
         },
       },
@@ -169,6 +183,14 @@ export default defineConfig({
         context: 'server',
         access: 'secret',
         optional: true,
+      }),
+      // Build-time only: 'skip' makes the db-sync integration a no-op, so a
+      // build never migrates or rewrites the database it points at.
+      DB_SYNC: envField.enum({
+        context: 'server',
+        access: 'public',
+        values: ['run', 'skip'],
+        default: 'run',
       }),
     },
   },

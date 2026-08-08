@@ -5,7 +5,10 @@ export const MemeContentSchema = z.object({
   author: z.string().min(1), // Author of the meme
   imagePath: z.string(), // Path to the image file in src/assets/images (ex: 'memes/my-meme.jpg')
   imageAlt: z.string().min(1), // Alt text for the image
-  createdAt: z.number().default(Date.now), // Unix timestamp
+  // Required, and accepts both a YAML date (2025-06-10) and a millis number.
+  // Was `z.number().default(Date.now)`, which rejected YAML dates outright and
+  // re-evaluated the default on every parse, rewriting the DB row each build.
+  createdAt: z.coerce.date().transform((d) => d.getTime()), // Unix millis
   tags: z.array(z.string()).optional(),
   externalLinks: z
     .object({

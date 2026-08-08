@@ -173,6 +173,11 @@ export async function buildSyncAllContent(
     let topicsSyncedCount = 0;
     let topicsSkippedCount = 0;
     const syncedTitles: string[] = [];
+    // A topic's identity is its title, which lives INSIDE the JSON — so an
+    // unreadable file cannot be recorded as "seen". Orphan cleanup is skipped
+    // entirely for that run instead, trading staleness for never deleting a
+    // topic whose file is still on disk.
+    let hadUnreadableTopicFile = false;
 
     for await (const topicFilePath of glob(topicGlobPattern)) {
       try {
@@ -183,6 +188,7 @@ export async function buildSyncAllContent(
             `  Skipping topic ${topicFilePath}: ${parsed.error.message}`,
           );
           topicsSkippedCount++;
+          hadUnreadableTopicFile = true;
           continue;
         }
         const topicData = parsed.data;
@@ -243,6 +249,7 @@ export async function buildSyncAllContent(
         topicsSyncedCount++;
       } catch (err) {
         topicsSkippedCount++;
+        hadUnreadableTopicFile = true;
         console.log(`  Failed to sync topic ${topicFilePath}:`, err);
       }
     }
@@ -261,8 +268,25 @@ export async function buildSyncAllContent(
     let postsSyncedCount = 0;
     let postsSkippedCount = 0;
     const syncedSlugs: string[] = [];
+    // Every post file whose slug could be derived, whether or not it validated.
+    // Orphan cleanup keys off THIS list: a row is deleted only when its file is
+    // truly gone from disk, never merely because its frontmatter is broken.
+    const seenSlugs: string[] = [];
 
     for await (const postFilePath of glob(postGlobPattern)) {
+      // Derive slug from file path relative to src/content/posts/. Done before
+      // reading or validating the file so a broken post still counts as seen.
+      const postsMarker = `src/content/posts/`;
+      const postsIdx = postFilePath.indexOf(postsMarker);
+      const slugWithExt =
+        postsIdx !== -1
+          ? postFilePath.slice(postsIdx + postsMarker.length)
+          : path.basename(postFilePath);
+      const slug = slugWithExt
+        .replace(/\.(md|mdx)$/, '')
+        .replace(/\/index$/, '');
+      seenSlugs.push(slug);
+
       try {
         const fileContent = await readFile(postFilePath, 'utf-8');
         const { frontmatter: rawFrontmatter, body } =
@@ -276,17 +300,6 @@ export async function buildSyncAllContent(
           continue;
         }
         const postData = parsed.data;
-
-        // Derive slug from file path relative to src/content/posts/
-        const postsMarker = `src/content/posts/`;
-        const postsIdx = postFilePath.indexOf(postsMarker);
-        const slugWithExt =
-          postsIdx !== -1
-            ? postFilePath.slice(postsIdx + postsMarker.length)
-            : path.basename(postFilePath);
-        const slug = slugWithExt
-          .replace(/\.(md|mdx)$/, '')
-          .replace(/\/index$/, '');
 
         const existingPost = await db
           .select()
@@ -348,12 +361,12 @@ export async function buildSyncAllContent(
               .set({
                 ...postContentData,
                 createdAt: existingPost.createdAt,
+                // Stamp on the transition into 'deleted', preserve it while
+                // the post stays deleted, clear it only when it leaves.
                 deletedAt:
-                  postContentData.status === 'deleted' &&
-                  existingPost.status !== 'deleted' &&
-                  !existingPost.deletedAt
-                    ? Date.now()
-                    : null,
+                  postContentData.status !== 'deleted'
+                    ? null
+                    : (existingPost.deletedAt ?? Date.now()),
                 publishedAt:
                   postContentData.status === 'published' &&
                   existingPost.status !== 'published' &&
@@ -435,8 +448,21 @@ export async function buildSyncAllContent(
     let memesSyncedCount = 0;
     let memesSkippedCount = 0;
     const syncedMemeSlugs: string[] = [];
+    // Same seen-vs-synced split as posts — see the comment there.
+    const seenMemeSlugs: string[] = [];
 
     for await (const memeFilePath of glob(memeGlobPattern)) {
+      const memesMarker = `src/content/memes/`;
+      const memesIdx = memeFilePath.indexOf(memesMarker);
+      const slugWithExt =
+        memesIdx !== -1
+          ? memeFilePath.slice(memesIdx + memesMarker.length)
+          : path.basename(memeFilePath);
+      const slug = slugWithExt
+        .replace(/\.(md|mdx)$/, '')
+        .replace(/\/index$/, '');
+      seenMemeSlugs.push(slug);
+
       try {
         const fileContent = await readFile(memeFilePath, 'utf-8');
         const { frontmatter: rawFrontmatter } = extractFrontmatter(fileContent);
@@ -449,16 +475,6 @@ export async function buildSyncAllContent(
           continue;
         }
         const memeData = parsed.data;
-
-        const memesMarker = `src/content/memes/`;
-        const memesIdx = memeFilePath.indexOf(memesMarker);
-        const slugWithExt =
-          memesIdx !== -1
-            ? memeFilePath.slice(memesIdx + memesMarker.length)
-            : path.basename(memeFilePath);
-        const slug = slugWithExt
-          .replace(/\.(md|mdx)$/, '')
-          .replace(/\/index$/, '');
 
         const existingMeme = await db
           .select()
@@ -512,59 +528,89 @@ export async function buildSyncAllContent(
     // 4. Orphan cleanup --------------------------------------------------------
     console.log('Cleaning up orphaned records...');
 
-    // Hard-delete posts whose content file no longer exists
-    if (syncedSlugs.length > 0) {
-      const orphanedPosts = await db
-        .select({ id: postsTable.id, slug: postsTable.slug })
-        .from(postsTable)
-        .where(notInArray(postsTable.slug, syncedSlugs));
-      if (orphanedPosts.length > 0) {
-        const orphanedIds = orphanedPosts.map((r) => r.id);
-        const orphanedSlugs = orphanedPosts.map((r) => r.slug);
-        // Explicitly remove post-tag relations before deleting posts,
-        // since libsql does not reliably trigger ON DELETE CASCADE.
-        await db
-          .delete(postsTagsTable)
-          .where(inArray(postsTagsTable.postId, orphanedIds));
-        await db
-          .delete(postsTable)
-          .where(notInArray(postsTable.slug, syncedSlugs));
-        console.log(
-          `  Removed ${orphanedSlugs.length} orphaned post(s): ${orphanedSlugs.join(', ')}`,
+    // The destructive phase runs in a single transaction so a crash between
+    // the deletes cannot leave posts removed but their tag links dangling.
+    // Deliberately scoped to cleanup only, NOT the whole sync: hosted Turso
+    // aborts an interactive transaction after ~5s, and the per-item sync above
+    // makes one network round trip per statement.
+    await db.transaction(async (tx) => {
+      // Hard-delete posts whose content file no longer exists.
+      // Keyed on seenSlugs, NOT syncedSlugs: a post that failed validation
+      // still has a file on disk and must survive.
+      if (seenSlugs.length > 0) {
+        const orphanedPosts = await tx
+          .select({ id: postsTable.id, slug: postsTable.slug })
+          .from(postsTable)
+          .where(notInArray(postsTable.slug, seenSlugs));
+        if (orphanedPosts.length > 0) {
+          const orphanedIds = orphanedPosts.map((r) => r.id);
+          const orphanedSlugs = orphanedPosts.map((r) => r.slug);
+          // Explicitly remove post-tag relations before deleting posts,
+          // since libsql does not reliably trigger ON DELETE CASCADE.
+          await tx
+            .delete(postsTagsTable)
+            .where(inArray(postsTagsTable.postId, orphanedIds));
+          await tx
+            .delete(postsTable)
+            .where(notInArray(postsTable.slug, seenSlugs));
+          console.log(
+            `  Removed ${orphanedSlugs.length} orphaned post(s): ${orphanedSlugs.join(', ')}`,
+          );
+        }
+      }
+
+      // Hard-delete memes whose content file no longer exists
+      if (seenMemeSlugs.length > 0) {
+        const deletedMemes = await tx
+          .delete(memesTable)
+          .where(notInArray(memesTable.slug, seenMemeSlugs));
+        if (deletedMemes.rowsAffected > 0) {
+          console.log(
+            `  Removed ${deletedMemes.rowsAffected} orphaned meme(s).`,
+          );
+        }
+      }
+
+      // Hard-delete topics whose JSON file no longer exists.
+      // Unlike posts and memes, a topic is identified by a field inside the
+      // file, so an unreadable topic file cannot be matched to its row — skip
+      // the whole cleanup rather than risk deleting a topic that still exists.
+      if (hadUnreadableTopicFile) {
+        console.warn(
+          '  Skipping topic orphan cleanup: at least one topic file could not be read or validated.',
         );
+      } else if (syncedTitles.length > 0) {
+        const deletedTopics = await tx
+          .delete(topicsTable)
+          .where(notInArray(topicsTable.title, syncedTitles));
+        if (deletedTopics.rowsAffected > 0) {
+          console.log(
+            `  Removed ${deletedTopics.rowsAffected} orphaned topic(s).`,
+          );
+        }
       }
-    }
 
-    // Hard-delete memes whose content file no longer exists
-    if (syncedMemeSlugs.length > 0) {
-      const deletedMemes = await db
-        .delete(memesTable)
-        .where(notInArray(memesTable.slug, syncedMemeSlugs));
-      if (deletedMemes.rowsAffected > 0) {
-        console.log(`  Removed ${deletedMemes.rowsAffected} orphaned meme(s).`);
-      }
-    }
-
-    // Hard-delete topics whose JSON file no longer exists
-    if (syncedTitles.length > 0) {
-      const deletedTopics = await db
-        .delete(topicsTable)
-        .where(notInArray(topicsTable.title, syncedTitles));
-      if (deletedTopics.rowsAffected > 0) {
-        console.log(
-          `  Removed ${deletedTopics.rowsAffected} orphaned topic(s).`,
-        );
-      }
-    }
-
-    // Delete tags not referenced by any post-tag relation and not a topic title.
-    // posts_tags rows are already cascade-deleted when their post was deleted above.
-    const deletedTags = await db.delete(tagsTable).where(
-      sql`${tagsTable.name} NOT IN (SELECT DISTINCT tag_name FROM posts_tags)
+      // Delete tags not referenced by any post-tag relation and not a topic
+      // title. posts_tags rows for deleted posts are removed just above.
+      const deletedTags = await tx.delete(tagsTable).where(
+        sql`${tagsTable.name} NOT IN (SELECT DISTINCT tag_name FROM posts_tags)
           AND ${tagsTable.name} NOT IN (SELECT title FROM topics)`,
-    );
-    if (deletedTags.rowsAffected > 0) {
-      console.log(`  Removed ${deletedTags.rowsAffected} orphaned tag(s).`);
+      );
+      if (deletedTags.rowsAffected > 0) {
+        console.log(`  Removed ${deletedTags.rowsAffected} orphaned tag(s).`);
+      }
+    });
+
+    if (postsSkippedCount > 0) {
+      console.warn(
+        `  ${postsSkippedCount} post file(s) failed to sync but were KEPT in the database (their files still exist).`,
+      );
+    }
+
+    if (memesSkippedCount > 0) {
+      console.warn(
+        `  ${memesSkippedCount} meme file(s) failed to sync but were KEPT in the database (their files still exist).`,
+      );
     }
 
     console.log('Orphan cleanup complete.');

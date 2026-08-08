@@ -1,14 +1,11 @@
-import { and, eq, inArray, like, or, sql } from 'drizzle-orm';
+import { and, eq, inArray, or, sql } from 'drizzle-orm';
 
 import { db } from '../../client';
-import { memesTable } from '../memes/memes.model';
+import { MemesRepository } from '../memes/memes.repository';
 import { postsTable } from '../posts/posts.model';
 import { postsTagsTable } from '../posts/posts_tags.model';
-import type {
-  MemeSearchResult,
-  PostSearchResult,
-  SearchParams,
-} from './search.types';
+import { likeContains } from './search.sql';
+import type { PostSearchResult, SearchParams } from './search.types';
 
 // ---------------------------------------------------------------------------
 // Posts
@@ -32,9 +29,9 @@ const searchPosts = async (
     eq(postsTable.status, 'published'),
     params.q
       ? or(
-          like(postsTable.title, `%${params.q}%`),
-          like(postsTable.summary, `%${params.q}%`),
-          like(postsTable.content, `%${params.q}%`),
+          likeContains(postsTable.title, params.q),
+          likeContains(postsTable.summary, params.q),
+          likeContains(postsTable.content, params.q),
         )
       : undefined,
     params.topics && params.topics.length > 0
@@ -90,78 +87,9 @@ const searchPosts = async (
   return { results, total: countRow?.count ?? 0 };
 };
 
-// ---------------------------------------------------------------------------
-// Memes
-// ---------------------------------------------------------------------------
-
-const searchMemes = async (
-  params: SearchParams,
-): Promise<{ results: MemeSearchResult[]; total: number }> => {
-  const { page, pageSize } = params;
-  const offset = (page - 1) * pageSize;
-
-  const tagFilter =
-    params.tags && params.tags.length > 0
-      ? sql`EXISTS (
-          SELECT 1 FROM json_each(${memesTable.tags}) je
-          WHERE je.value IN (${sql.join(
-            params.tags.map((t) => sql`${t}`),
-            sql`, `,
-          )})
-        )`
-      : undefined;
-
-  const whereClause = and(
-    params.q ? like(memesTable.title, `%${params.q}%`) : undefined,
-    tagFilter,
-  );
-
-  const [countRow, rows] = await Promise.all([
-    db
-      .select({ count: sql<number>`COUNT(*)` })
-      .from(memesTable)
-      .where(whereClause)
-      .get(),
-    db
-      .select()
-      .from(memesTable)
-      .where(whereClause)
-      .orderBy(sql`${memesTable.createdAt} DESC`)
-      .limit(pageSize)
-      .offset(offset)
-      .all(),
-  ]);
-
-  const results: MemeSearchResult[] = rows.map((row) => ({
-    id: row.id,
-    slug: row.slug,
-    title: row.title,
-    author: row.author,
-    imagePath: row.imagePath,
-    imageAlt: row.imageAlt,
-    createdAt: row.createdAt,
-    tags: parseTags(row.tags),
-  }));
-
-  return { results, total: countRow?.count ?? 0 };
-};
-
-// ---------------------------------------------------------------------------
-// Helpers
-// ---------------------------------------------------------------------------
-
-function parseTags(tagsJson: string): string[] {
-  try {
-    const parsed: unknown = JSON.parse(tagsJson);
-    return Array.isArray(parsed)
-      ? parsed.filter((t): t is string => typeof t === 'string')
-      : [];
-  } catch {
-    return [];
-  }
-}
-
-export const searchRepository = {
+export const SearchRepository = {
   searchPosts,
-  searchMemes,
+  // Memes own their queries; search composes them rather than reaching into
+  // the memes table itself.
+  searchMemes: MemesRepository.searchMemes,
 };

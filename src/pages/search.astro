@@ -13,7 +13,7 @@ import TopicFilter from '@components/search/TopicFilter.astro';
 import type { SearchType } from '@components/search/TypeTabs.astro';
 import TypeTabs from '@components/search/TypeTabs.astro';
 import type { ContentStatus } from '@db/features/posts/posts.model';
-import { searchService } from '@db/features/search/search.service';
+import { SearchService } from '@db/features/search/search.service';
 import type { PostSearchResult } from '@db/features/search/search.types';
 import { TagsService } from '@db/features/tags/tags.service';
 import { TopicsService } from '@db/features/topics/topics.service';
@@ -32,6 +32,25 @@ export const prerender = false;
 
 // ---------------------------------------------------------------------------
 // CDN cache headers
+//
+// The year-long s-maxage below reads alarming but is correct, because the data
+// behind this route only changes at deploy time (the db-sync integration runs
+// at astro:build:start). Netlify invalidates the durable cache on every
+// deploy, so the effective lifetime is exactly "until the next deploy":
+//
+//   "To support atomic deploys, all new deploys invalidate the cache for the
+//    given deploy context by default. [...] This override guarantees that we
+//    never accidentally serve stale content."
+//   https://docs.netlify.com/build/caching/caching-overview/
+//
+// Two things this depends on — check them before changing anything here:
+//   1. `durable` only applies to Netlify Function responses, not Edge
+//      Functions. This route is a Function (no edgeMiddleware configured).
+//   2. Netlify-Vary keys the cache per query-string combination, so distinct
+//      searches never share an entry.
+//
+// If the DB ever gains a runtime writer, this is wrong and the lifetime must
+// drop to something bounded (or move to Netlify-Cache-Tag plus a purge call).
 // ---------------------------------------------------------------------------
 
 Astro.response.headers.set(
@@ -64,7 +83,7 @@ const activeTopics =
 // ---------------------------------------------------------------------------
 
 const [searchResult, allTags, allTopics] = await Promise.all([
-  searchService.search(rawParams),
+  SearchService.search(rawParams),
   TagsService.getAllTags(),
   TopicsService.getAllTopics(),
 ]);

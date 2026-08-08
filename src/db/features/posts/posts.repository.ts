@@ -38,7 +38,7 @@ const getPostTagsById = async (id: number): Promise<string[]> => {
   return tags.map((tag) => tag.tagName);
 };
 
-export const postsRepository = {
+export const PostsRepository = {
   getPostsBySlugs,
   getPostsWithBannerBySlugs,
   getPostTagsById,
