@@ -2,6 +2,8 @@
 import type { HTMLAttributes } from 'astro/types';
 import { cn } from '@libs/cn';
 
+import { getVisiblePages } from './get-visible-pages';
+
 export interface PaginationProps {
   currentPage: number;
   totalPages: number;
@@ -17,41 +19,6 @@ const {
   class: className,
   ...props
 }: Props = Astro.props;
-
-/**
- * Compute which page numbers to show.
- * Always: first, last, current, ±1 neighbor.
- * Ellipsis when gap > 1. Show all if ≤ 5 pages.
- */
-function getVisiblePages(
-  current: number,
-  total: number,
-): (number | 'ellipsis')[] {
-  if (total <= 5) {
-    return Array.from({ length: total }, (_, i) => i + 1);
-  }
-
-  const pages = new Set<number>();
-  pages.add(1);
-  pages.add(total);
-  pages.add(current);
-  if (current > 1) pages.add(current - 1);
-  if (current < total) pages.add(current + 1);
-
-  const sorted = [...pages].sort((a, b) => a - b);
-  const result: (number | 'ellipsis')[] = [];
-
-  for (let i = 0; i < sorted.length; i++) {
-    const page = sorted[i]!;
-    const prev = sorted[i - 1];
-    if (prev !== undefined && page - prev > 1) {
-      result.push('ellipsis');
-    }
-    result.push(page);
-  }
-
-  return result;
-}
 
 const visiblePages = getVisiblePages(currentPage, totalPages);
 const hasPrev = currentPage > 1;
