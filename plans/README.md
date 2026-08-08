@@ -23,7 +23,7 @@ partially resolved by unrelated work; see "Changes since the audit" below.
 | 004 | Dependency security bumps + declare phantom `yaml` dep | P1 | S | — (001 recommended first) | DONE — 59 → 21 advisories, 0 critical; rest blocked on the Astro 7 major (DEP-003) |
 | 005 | Fix corrupted .gitignore, untrack content.db/-wal | P2 | S | — | DONE |
 | 006 | Five small confirmed correctness fixes | P2 | S | 002 recommended | DONE — Fix C had a second occurrence in `topics/index.astro`; all 3 memes already had `createdAt` |
-| 007 | Docs truth sweep (SSR search, dead API docs, CLAUDE.md) | P2 | S | — (coordinate w/ 003, 006) | TODO — plus new `src/data/` to document |
+| 007 | Docs truth sweep (SSR search, dead API docs, CLAUDE.md) | P2 | S | — (coordinate w/ 003, 006) | DONE — includes 003's `DB_SYNC` paragraph; unaudited component docs left to CLEANUP-003 |
 | 008 | /search CDN cache: investigate durable semantics, right-size | P2 | S | — | DONE — Branch B: Netlify invalidates durable cache on every deploy, so the 1y `s-maxage` is correct; documented in code, headers unchanged |
 | 009 | DX hygiene (.env.example, README, engines, packageManager) | P2 | S | — | DONE — `DB_SYNC` line added to `.env.example` by 003 |
 | 010 | Perf smalls (batch image queries, glob hoist, dead public images) | P3 | S | — | DONE |

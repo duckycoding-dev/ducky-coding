@@ -1,6 +1,6 @@
 ---
 created: 2026-04-01
-updated: 2026-04-02
+updated: 2026-08-08
 summary: Build and dev execution order, DB sync chain, environment setup
 ---
 
@@ -22,7 +22,7 @@ flowchart TD
         B2[astro build]
         B3["astro:build:start hook fires"]
         B4["buildSyncImages() — scan src/assets/images/ → DB"]
-        B5["buildSyncAllContent() — topics, posts, analytics"]
+        B5["buildSyncAllContent() — topics, posts, memes, cleanup, analytics"]
         B6[Pages rendered]
         B7[Static HTML + serverless bundles output]
         B1 --> B2 --> B3 --> B4 --> B5 --> B6 --> B7
@@ -31,7 +31,7 @@ flowchart TD
     subgraph NETLIFY["Netlify Deployment"]
         N1["Build command: npm run astro:build"]
         N2[Static assets served from CDN]
-        N3["API routes as Netlify Functions"]
+        N3["One SSR route (/search) as a Netlify Function"]
         N1 --> N2
         N1 --> N3
     end
@@ -51,8 +51,11 @@ the correct place for build-time side effects:
   name: 'db-sync',
   hooks: {
     'astro:build:start': async ({ logger }) => {
+      if ((buildEnv['DB_SYNC'] ?? 'run') === 'skip') return;
+      await buildMigrate(dbConfig);
       await buildSyncImages(dbConfig);
-      await buildSyncAllContent(dbConfig);
+      const syncResult = await buildSyncAllContent(dbConfig);
+      if (!syncResult.success) throw new Error(/* aborts the build */);
     },
   },
 }
@@ -96,8 +99,19 @@ sequenceDiagram
     S->>S: extractFrontmatter + yaml.parse + PostContentSchema.safeParse
     S->>DB: upsert posts + post-tag relations
 
+    S->>FS: glob src/content/memes/**/*.mdx
+    S->>S: extractFrontmatter + yaml.parse + MemeContentSchema.safeParse
+    S->>DB: upsert memes
+
+    S->>DB: orphan cleanup in one transaction
     S->>DB: update postCount + lastPostDate per topic
 ```
+
+Orphan cleanup deletes rows whose files are gone from disk. It keys off which
+files were **seen**, not which parsed successfully, so a post with broken
+frontmatter keeps its row and its last good data; a topic file that cannot be
+parsed skips topic cleanup for that run entirely, because a topic is identified
+by a title stored inside the file.
 
 ---
 
@@ -109,18 +123,22 @@ sequenceDiagram
 |------|-------------|
 | 1 | Vite dev server starts on `:4321` |
 | 2 | Astro content collections loaded lazily per request |
-| 3 | API endpoints available at `/api/v1/*` (no auth required in dev) |
-| 4 | **No DB sync** — must trigger manually if needed |
+| 3 | `/search` runs server-side against the local DB; every other page is prerendered |
+| 4 | **No DB sync** — there is no dev-time sync trigger |
 
-DB operations in dev are all manual:
+Pages read whatever the local database already contains. There is no endpoint
+that syncs it — syncing happens on a build. DB operations in dev are all manual:
+
 ```bash
 npm run db:migrate:local   # apply schema migrations
 npm run drizzle:seed       # seed test data
 npm run drizzle:studio     # open DB GUI
+```
 
-# on-demand sync (no auth token needed in dev):
-curl -X POST http://localhost:4321/api/v1/topics
-curl -X POST http://localhost:4321/api/v1/images
+To refresh the local DB from `src/content/`, run a local build:
+
+```bash
+npm run astro:build:local  # migrates + syncs against .env.development
 ```
 
 ### `npm run astro:build` (production build)
@@ -133,8 +151,11 @@ curl -X POST http://localhost:4321/api/v1/images
 | 4 | **`astro:build:start` hook** → `buildSyncImages()` + `buildSyncAllContent()` |
 | 5 | All pages rendered (use `getCollection()` for data) |
 | 6 | Static output → `dist/` |
-| 7 | SSR/API bundles → `dist/.server_javascript/` |
+| 7 | SSR bundle (`/search`) → `dist/.server_javascript/` |
 | 8 | Client JS/CSS → `dist/client_javascript_and_css/` |
+
+Step 4 aborts the build if the content sync fails, rather than shipping a
+half-written search index.
 
 ### Netlify deployment
 
@@ -170,21 +191,25 @@ in `.env.development`). Production uses the hosted Turso instance.
 
 ```mermaid
 flowchart LR
-    MDX["MDX / JSON files\n(src/content/)"]
-    CC["Astro Content Collections\n(authoritative source)"]
-    BUILD["Static pages\n(getCollection)"]
-    SYNC["DB sync\n(404.astro at build time)"]
-    DB[("Turso DB\n(searchable index)")]
-    API["API endpoints\n(future: search, etc.)"]
+    MDX["MDX / JSON files in src/content/"]
+    CC["Astro Content Collections — authoritative source"]
+    BUILD["Static pages via getCollection"]
+    SYNC["DB sync — db-sync integration at astro:build:start"]
+    DB[("Turso DB — searchable index")]
+    SEARCH["/search — SSR route"]
 
     MDX --> CC
     CC --> BUILD
-    CC --> SYNC --> DB
-    DB --> API
+    MDX --> SYNC --> DB
+    DB --> SEARCH
 ```
 
 The files are always the source of truth. The DB is a derived index populated at
-build time — useful for future dynamic features like search.
+build time, and `/search` is its only runtime consumer.
+
+Note that the sync reads `src/content/` from disk directly (`node:fs/promises`
+glob + `yaml`), not through the content collections — it runs in a plain Node
+context where Astro's virtual modules are unavailable.
 
 ---
 
@@ -199,6 +224,19 @@ build time — useful for future dynamic features like search.
 populated from `loadEnv` in `astro.config.mjs` — it does not read `process.env`
 directly.
 
+### Building without touching a database
+
+Every build migrates and rewrites whatever database the loaded env points at.
+Set `DB_SYNC=skip` to make the `db-sync` integration a no-op:
+
+```bash
+DB_SYNC=skip npm run astro:build:local
+```
+
+The default is `run`, so production builds are unaffected. Use `skip` when you
+want to verify that the site builds without mutating your local DB — or, with
+`.env.production` loaded, without touching production.
+
 ---
 
 ## Environment Variables
@@ -210,5 +248,7 @@ directly.
 | `CLIENT_LOGS_LEVEL` | client | public | Client log verbosity |
 | `TURSO_DATABASE_URL` | server | secret | Database connection URL |
 | `TURSO_AUTH_TOKEN` | server | secret | Database auth (optional locally) |
+| `DB_SYNC` | server | public | `run` (default) or `skip` — gates the build-time sync |
 
 Local dev uses `.env.development`, production uses `.env.production`.
+`.env.example` at the repo root lists all of them with placeholder values.

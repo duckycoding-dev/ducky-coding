@@ -122,3 +122,34 @@ pure part in a client-free module so it can be covered.
 `src/db/features/**/*.repository.ts`
 
 ---
+
+### CLEANUP-003 — component docs still show PascalCase folders
+
+**Severity:** low
+**Status:** open
+
+`docs/stable/development/components/components-and-folders-organization.md`
+documents the folder convention as:
+
+```
+/ComponentName
+  |__ ComponentName.astro
+```
+
+with the import example `@components/Button/Button.astro`. The actual
+convention (CLAUDE.md, and every folder in `src/components/`) is a kebab-case
+directory holding a PascalCase file — `@components/button/Button.astro`.
+
+The doc also has frontmatter with only `updated:`, missing the `created:` and
+`summary:` keys the repo requires.
+
+Found during the plan-007 docs sweep but deliberately left alone: that plan
+scoped itself to `build-flow.md`, `architecture.md` and CLAUDE.md, and treats
+touching unaudited docs as scope creep. The rest of `docs/stable/development/`
+and `docs/stable/development/styling/` has not been audited for accuracy
+either.
+
+**Affected files:**
+`docs/stable/development/components/components-and-folders-organization.md`
+
+---
