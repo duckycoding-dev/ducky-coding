@@ -27,7 +27,7 @@ partially resolved by unrelated work; see "Changes since the audit" below.
 | 008 | /search CDN cache: investigate durable semantics, right-size | P2 | S | — | TODO |
 | 009 | DX hygiene (.env.example, README, engines, packageManager) | P2 | S | — | DONE — `DB_SYNC` line added to `.env.example` by 003 |
 | 010 | Perf smalls (batch image queries, glob hoist, dead public images) | P3 | S | — | TODO |
-| 011 | Delete 17 dead markdown Custom* wrappers | P3 | S | — | TODO |
+| 011 | Delete 17 dead markdown Custom* wrappers | P3 | S | — | DONE |
 | 012 | Memes repository/service + service naming consistency | P3 | M | 006 recommended first | TODO |
 | 013 | Content roadmap (direction — the highest-leverage item) | P2 | S doc / ongoing writing | topic pruning blocked on 003 | TODO — cross-linking evidence partly overtaken by `fb28acb` |
 
