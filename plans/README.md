@@ -29,7 +29,7 @@ partially resolved by unrelated work; see "Changes since the audit" below.
 | 010 | Perf smalls (batch image queries, glob hoist, dead public images) | P3 | S | — | DONE |
 | 011 | Delete 17 dead markdown Custom* wrappers | P3 | S | — | DONE |
 | 012 | Memes repository/service + service naming consistency | P3 | M | 006 recommended first | DONE — repositories PascalCased too; the suggested repo unit test is blocked by CLEANUP-002 |
-| 013 | Content roadmap (direction — the highest-leverage item) | P2 | S doc / ongoing writing | topic pruning blocked on 003 | TODO — cross-linking evidence partly overtaken by `fb28acb` |
+| 013 | Content roadmap (direction — the highest-leverage item) | P2 | S doc / ongoing writing | topic pruning blocked on 003 | DONE — all 6 topics KEEP (owner call), so no pruning; adds a friction log + distribution plan beyond the original scope |
 
 Status values: TODO | IN PROGRESS | PARTIAL | DONE | BLOCKED (with one-line
 reason) | REJECTED (with one-line rationale).
