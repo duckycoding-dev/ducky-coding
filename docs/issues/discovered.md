@@ -67,3 +67,28 @@ against a green test suite.
 **Affected files:** `package.json`, `package-lock.json`
 
 ---
+
+## Cleanup
+
+### CLEANUP-001 — two zod entry points used side by side
+
+**Severity:** low
+**Status:** open
+
+Three content-entity schemas import `astro/zod`
+(`src/types/entities/{post,topic,meme}Content.entity.ts`) while eight other
+modules import `zod` directly (`src/utils/env.ts`, the six
+`src/db/features/*/*.model.ts` files, `src/db/features/search/search.types.ts`).
+
+Both currently resolve to the same deduped `zod@4.3.6` instance, so nothing is
+broken today. It becomes a real problem if astro's bundled zod ever diverges
+from the declared one: schemas built with one instance and composed with the
+other fail `instanceof` checks inside zod.
+
+Pick one entry point for all of `src/` — `zod` is the better default now that
+it is a declared direct dependency.
+
+**Affected files:** `src/types/entities/*.entity.ts`, `src/db/features/**/*.ts`,
+`src/utils/env.ts`
+
+---
