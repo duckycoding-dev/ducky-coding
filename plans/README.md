@@ -24,7 +24,7 @@ partially resolved by unrelated work; see "Changes since the audit" below.
 | 005 | Fix corrupted .gitignore, untrack content.db/-wal | P2 | S | — | DONE |
 | 006 | Five small confirmed correctness fixes | P2 | S | 002 recommended | DONE — Fix C had a second occurrence in `topics/index.astro`; all 3 memes already had `createdAt` |
 | 007 | Docs truth sweep (SSR search, dead API docs, CLAUDE.md) | P2 | S | — (coordinate w/ 003, 006) | TODO — plus new `src/data/` to document |
-| 008 | /search CDN cache: investigate durable semantics, right-size | P2 | S | — | TODO |
+| 008 | /search CDN cache: investigate durable semantics, right-size | P2 | S | — | DONE — Branch B: Netlify invalidates durable cache on every deploy, so the 1y `s-maxage` is correct; documented in code, headers unchanged |
 | 009 | DX hygiene (.env.example, README, engines, packageManager) | P2 | S | — | DONE — `DB_SYNC` line added to `.env.example` by 003 |
 | 010 | Perf smalls (batch image queries, glob hoist, dead public images) | P3 | S | — | DONE |
 | 011 | Delete 17 dead markdown Custom* wrappers | P3 | S | — | DONE |
