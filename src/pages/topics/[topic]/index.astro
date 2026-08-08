@@ -23,7 +23,7 @@ import { DuckyCodingWebsite } from '@utils/json-ld/website';
 import { serverLogger } from '@utils/logs/logger';
 import { buildPageSeo } from '@utils/seo/page-seo';
 import DuckIcon from '../../../components/icons/duck-icon/DuckIcon.astro';
-import { postsService } from '../../../db/features/posts/posts.service';
+import { PostsService } from '../../../db/features/posts/posts.service';
 
 // 1. Generate a new path for every collection entry
 export async function getStaticPaths() {
@@ -69,7 +69,7 @@ const postsCollection = (await getCollection('posts'))
   )
   .map((entry) => ({ id: entry.id, tags: entry.data.tags })); // in astro 5 "slug" became "id", which corresponds to the filename of the content file
 const postsWithBannerImage = (
-  await postsService.getPostsWithBannerBySlugs(
+  await PostsService.getPostsWithBannerBySlugs(
     postsCollection.map((post) => post.id),
   )
 ).filter(

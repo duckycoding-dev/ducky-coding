@@ -1,4 +1,4 @@
-import { searchRepository } from './search.repository';
+import { SearchRepository } from './search.repository';
 import type { SearchResponse } from './search.types';
 import { SearchParamsSchema } from './search.types';
 
@@ -19,10 +19,10 @@ const search = async (rawParams: unknown): Promise<SearchResponse> => {
 
     const [postsResult, memesResult] = await Promise.all([
       includesPosts
-        ? searchRepository.searchPosts(params)
+        ? SearchRepository.searchPosts(params)
         : Promise.resolve({ results: [], total: 0 }),
       includesMemes
-        ? searchRepository.searchMemes({ ...params, topics: undefined })
+        ? SearchRepository.searchMemes({ ...params, topics: undefined })
         : Promise.resolve({ results: [], total: 0 }),
     ]);
 
@@ -43,6 +43,6 @@ const search = async (rawParams: unknown): Promise<SearchResponse> => {
   }
 };
 
-export const searchService = {
+export const SearchService = {
   search,
 };

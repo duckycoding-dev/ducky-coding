@@ -13,7 +13,7 @@ import TopicFilter from '@components/search/TopicFilter.astro';
 import type { SearchType } from '@components/search/TypeTabs.astro';
 import TypeTabs from '@components/search/TypeTabs.astro';
 import type { ContentStatus } from '@db/features/posts/posts.model';
-import { searchService } from '@db/features/search/search.service';
+import { SearchService } from '@db/features/search/search.service';
 import type { PostSearchResult } from '@db/features/search/search.types';
 import { TagsService } from '@db/features/tags/tags.service';
 import { TopicsService } from '@db/features/topics/topics.service';
@@ -83,7 +83,7 @@ const activeTopics =
 // ---------------------------------------------------------------------------
 
 const [searchResult, allTags, allTopics] = await Promise.all([
-  searchService.search(rawParams),
+  SearchService.search(rawParams),
   TagsService.getAllTags(),
   TopicsService.getAllTopics(),
 ]);

@@ -4,7 +4,7 @@ import rss from '@astrojs/rss';
 import MarkdownIt from 'markdown-it';
 import sanitizeHtml from 'sanitize-html';
 
-import { postsService } from '../db/features/posts/posts.service';
+import { PostsService } from '../db/features/posts/posts.service';
 import { matchImageFromGlobImport } from '../utils/images/images';
 import { serverLogger } from '../utils/logs/logger';
 
@@ -16,7 +16,7 @@ export const GET: APIRoute = async (context) => {
     `/src/assets/images/**/*.{jpeg,jpg,png,gif,webp,svg}`,
   );
 
-  const postsWithBannerImage = await postsService.getPostsWithBannerBySlugs(
+  const postsWithBannerImage = await PostsService.getPostsWithBannerBySlugs(
     postsCollection
       .filter((post) => post.data.status === 'published')
       .map((post) => post.id),

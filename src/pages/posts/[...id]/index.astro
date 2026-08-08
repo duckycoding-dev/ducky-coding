@@ -10,7 +10,7 @@ import ScrollToTopButton from '@components/scroll-to-top-button/ScrollToTopButto
 import Tag from '@components/tag/Tag.astro';
 import type { Image as BannerImage } from '@db/features/images/images.model';
 import { ImagesService } from '@db/features/images/images.service';
-import { postsService } from '@db/features/posts/posts.service';
+import { PostsService } from '@db/features/posts/posts.service';
 import { TopicsService } from '@db/features/topics/topics.service';
 import HolyGrailLayout from '@layouts/holy-grail-layout/HolyGrailLayout.astro';
 import MarkdownContent from '@layouts/markdown-content/MarkdownContent.astro';
@@ -75,7 +75,7 @@ if (imageToFindPath) {
   );
 }
 
-const postFromDb = await postsService.getPostBySlug(entry.id); // in astro 5 "slug" became "id", which corresponds to the filename of the content file
+const postFromDb = await PostsService.getPostBySlug(entry.id); // in astro 5 "slug" became "id", which corresponds to the filename of the content file
 
 const pageUrl = Astro.url.href;
 

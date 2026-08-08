@@ -1,6 +1,6 @@
 ---
 created: 2026-04-01
-updated: 2026-04-02
+updated: 2026-08-08
 summary: System architecture diagrams — content pipeline, build system, DB layer, theming
 ---
 
@@ -176,7 +176,15 @@ Files per entity in `src/db/features/`:
 - `*.repository.ts` — Database queries
 - `*.service.ts` — Business logic wrapper
 
-Entities: `posts`, `topics`, `tags`, `images`.
+Entities: `posts`, `topics`, `tags`, `images`, `memes` — each a full
+model/repository/service triple.
+
+Service and repository objects are exported in PascalCase
+(`PostsService`, `SearchRepository`, …) across every feature.
+
+`memes` is written by the build-time sync and read by search; the meme *pages*
+read the content collection directly, because the files are the source of
+truth and the database is only the search index.
 
 ## Data Fetching
 

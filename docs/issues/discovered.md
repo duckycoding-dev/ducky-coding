@@ -92,3 +92,33 @@ it is a declared direct dependency.
 `src/utils/env.ts`
 
 ---
+
+### CLEANUP-002 — repositories and services cannot be unit tested
+
+**Severity:** medium
+**Status:** open
+
+`src/db/client.ts` creates its libSQL client at module scope, and
+`src/utils/env.ts` calls `envVariables.parse(import.meta.env ?? process.env)`
+at module scope too. Importing *any* repository or service therefore builds a
+DB connection and throws on missing env before a single test runs — under
+Vitest `import.meta.env` exists but carries no `TURSO_DATABASE_URL`.
+
+Consequence: the test suite can only reach code that avoids the client
+entirely. `buildSync.ts` is testable because it takes its config as an
+argument and builds its own client; `search.sql.ts` is testable because it was
+deliberately split out with no client import. Everything under
+`src/db/features/**` is not.
+
+Fix options, cheapest first:
+1. Make `db` lazy (`getDb()` memoised) so importing a module does not connect.
+2. Let repositories accept an optional client argument defaulting to the
+   shared one, matching how `buildSync` already works.
+
+Until then, new query logic should follow the `search.sql.ts` pattern: put the
+pure part in a client-free module so it can be covered.
+
+**Affected files:** `src/db/client.ts`, `src/utils/env.ts`,
+`src/db/features/**/*.repository.ts`
+
+---
