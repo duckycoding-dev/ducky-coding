@@ -433,7 +433,7 @@ describe('buildSyncAllContent — orphan cleanup', () => {
 });
 
 describe('buildSyncAllContent — soft-delete timestamps', () => {
-  it('KNOWN BUG (plan 006): deletedAt reset on edit of deleted post', async () => {
+  it('preserves deletedAt when an already-deleted post is edited', async () => {
     await harness.writeTopic('astro', 'Astro');
     await harness.writePost('first', { status: 'published' });
     await harness.sync();
@@ -443,9 +443,9 @@ describe('buildSyncAllContent — soft-delete timestamps', () => {
     await harness.sync();
 
     const [deleted] = await harness.db.select().from(postsTable);
-    expect(deleted?.deletedAt).toBeTypeOf('number');
+    const stampedAt = deleted?.deletedAt;
+    expect(stampedAt).toBeTypeOf('number');
 
-    // Any further edit while still deleted wipes the timestamp.
     await harness.writePost('first', {
       status: 'deleted',
       title: 'A retitled fixture post',
@@ -454,8 +454,35 @@ describe('buildSyncAllContent — soft-delete timestamps', () => {
 
     const [edited] = await harness.db.select().from(postsTable);
     expect(edited?.status).toBe('deleted');
-    // Plan 006 flips this: the original timestamp should be PRESERVED.
-    expect(edited?.deletedAt).toBeNull();
+    expect(edited?.title).toBe('A retitled fixture post');
+    expect(edited?.deletedAt).toBe(stampedAt);
+  });
+
+  it('clears deletedAt when a post leaves the deleted status', async () => {
+    await harness.writeTopic('astro', 'Astro');
+    await harness.writePost('first', { status: 'deleted' });
+    await harness.sync();
+
+    // A brand-new post inserted as 'deleted' never gets a stamp; edit it so
+    // the update path runs and stamps it.
+    await harness.writePost('first', {
+      status: 'deleted',
+      title: 'Now deleted for real',
+    });
+    await harness.sync();
+
+    const [deleted] = await harness.db.select().from(postsTable);
+    expect(deleted?.deletedAt).toBeTypeOf('number');
+
+    await harness.writePost('first', {
+      status: 'published',
+      title: 'Now deleted for real',
+    });
+    await harness.sync();
+
+    const [restored] = await harness.db.select().from(postsTable);
+    expect(restored?.status).toBe('published');
+    expect(restored?.deletedAt).toBeNull();
   });
 });
 
@@ -487,9 +514,31 @@ describe('buildSyncAllContent — memes', () => {
     expect(remaining.map((m) => m.slug)).toEqual(['meme-one']);
   });
 
-  it('KNOWN BUG (plan 006): meme without createdAt is rewritten every sync', async () => {
+  it('accepts a YAML date for createdAt and stores it as millis', async () => {
+    await harness.writeTopic('astro', 'Astro');
+    await harness.writeMeme('meme-one', { createdAt: '2025-06-10' });
+
+    const result = await harness.sync();
+    expect(result.success).toBe(true);
+
+    const [meme] = await harness.db.select().from(memesTable);
+    expect(meme?.createdAt).toBe(Date.parse('2025-06-10'));
+  });
+
+  it('rejects a meme with no createdAt instead of inventing one', async () => {
     await harness.writeTopic('astro', 'Astro');
     await harness.writeMeme('meme-one', { omitCreatedAt: true });
+
+    await harness.sync();
+
+    // createdAt is required now, so the file is skipped rather than getting a
+    // fresh Date.now() on every parse and rewriting the row on every build.
+    expect(await harness.db.select().from(memesTable)).toHaveLength(0);
+  });
+
+  it('does not rewrite an unchanged meme on a second sync', async () => {
+    await harness.writeTopic('astro', 'Astro');
+    await harness.writeMeme('meme-one', { createdAt: '2025-06-10' });
 
     await harness.sync();
     const [first] = await harness.db.select().from(memesTable);
@@ -497,10 +546,7 @@ describe('buildSyncAllContent — memes', () => {
     await harness.sync();
     const [second] = await harness.db.select().from(memesTable);
 
-    // .default(Date.now) re-evaluates per parse, so the record never matches
-    // what is in the DB and the row churns on every build. Plan 006 flips
-    // this to expect equality.
-    expect(second?.createdAt).not.toBe(first?.createdAt);
+    expect(second).toEqual(first);
   });
 });
 

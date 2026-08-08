@@ -361,12 +361,12 @@ export async function buildSyncAllContent(
               .set({
                 ...postContentData,
                 createdAt: existingPost.createdAt,
+                // Stamp on the transition into 'deleted', preserve it while
+                // the post stays deleted, clear it only when it leaves.
                 deletedAt:
-                  postContentData.status === 'deleted' &&
-                  existingPost.status !== 'deleted' &&
-                  !existingPost.deletedAt
-                    ? Date.now()
-                    : null,
+                  postContentData.status !== 'deleted'
+                    ? null
+                    : (existingPost.deletedAt ?? Date.now()),
                 publishedAt:
                   postContentData.status === 'published' &&
                   existingPost.status !== 'published' &&
