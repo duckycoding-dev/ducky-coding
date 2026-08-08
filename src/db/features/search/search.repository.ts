@@ -1,9 +1,10 @@
-import { and, eq, inArray, like, or, sql } from 'drizzle-orm';
+import { and, eq, inArray, or, sql } from 'drizzle-orm';
 
 import { db } from '../../client';
 import { memesTable } from '../memes/memes.model';
 import { postsTable } from '../posts/posts.model';
 import { postsTagsTable } from '../posts/posts_tags.model';
+import { likeContains } from './search.sql';
 import type {
   MemeSearchResult,
   PostSearchResult,
@@ -32,9 +33,9 @@ const searchPosts = async (
     eq(postsTable.status, 'published'),
     params.q
       ? or(
-          like(postsTable.title, `%${params.q}%`),
-          like(postsTable.summary, `%${params.q}%`),
-          like(postsTable.content, `%${params.q}%`),
+          likeContains(postsTable.title, params.q),
+          likeContains(postsTable.summary, params.q),
+          likeContains(postsTable.content, params.q),
         )
       : undefined,
     params.topics && params.topics.length > 0
@@ -112,7 +113,7 @@ const searchMemes = async (
       : undefined;
 
   const whereClause = and(
-    params.q ? like(memesTable.title, `%${params.q}%`) : undefined,
+    params.q ? likeContains(memesTable.title, params.q) : undefined,
     tagFilter,
   );
 
