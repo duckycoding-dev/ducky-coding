@@ -25,7 +25,10 @@ pnpm-debug.log*
 
 .netlify/
 
-# sqlite files
+# sqlite files (build-derived, recreated by db:migrate:local + build sync)
+**/content.db
 **/content.db-shm
 **/content.db-wal
+
+# agent scratch
 .superpowers/
