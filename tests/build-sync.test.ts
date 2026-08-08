@@ -331,7 +331,7 @@ describe('buildSyncAllContent — orphan cleanup', () => {
     }
   });
 
-  it('KNOWN BUG (plan 003): validation-failed post is orphan-deleted', async () => {
+  it('keeps a validation-failed post whose file is still on disk', async () => {
     await harness.writeTopic('astro', 'Astro');
     await harness.writePost('first');
     await harness.writePost('second');
@@ -341,14 +341,34 @@ describe('buildSyncAllContent — orphan cleanup', () => {
 
     // The file still exists, it just fails PostContentSchema (no title).
     await harness.writePost('second', { omitTitle: true });
-    await harness.sync();
+    const result = await harness.sync();
+    expect(result.success).toBe(true);
 
+    // Cleanup keys off seenSlugs, so the row survives with its last good data.
     const remaining = await harness.db.select().from(postsTable);
-    // Plan 003 flips this: the row should SURVIVE, because the file is on disk.
-    expect(remaining.map((p) => p.slug)).toEqual(['first']);
+    expect(remaining.map((p) => p.slug).sort()).toEqual(['first', 'second']);
+
+    const stale = remaining.find((p) => p.slug === 'second');
+    expect(stale?.title).toBe('A fixture post');
   });
 
-  it('skips cleanup entirely when every post fails validation', async () => {
+  it('warns instead of deleting when a post fails validation', async () => {
+    const warn = vi.spyOn(console, 'warn');
+
+    await harness.writeTopic('astro', 'Astro');
+    await harness.writePost('first');
+    await harness.writePost('second');
+    await harness.sync();
+
+    warn.mockClear();
+    await harness.writePost('second', { omitTitle: true });
+    await harness.sync();
+
+    const messages = warn.mock.calls.map((call) => String(call[0]));
+    expect(messages.some((m) => m.includes('KEPT in the database'))).toBe(true);
+  });
+
+  it('keeps the row when every post fails validation', async () => {
     await harness.writeTopic('astro', 'Astro');
     await harness.writePost('only');
     await harness.sync();
@@ -356,9 +376,59 @@ describe('buildSyncAllContent — orphan cleanup', () => {
     await harness.writePost('only', { omitTitle: true });
     await harness.sync();
 
-    // syncedSlugs is empty, so the `length > 0` guard skips the delete —
-    // accidentally safe, unlike the single-failure case above.
     expect(await harness.db.select().from(postsTable)).toHaveLength(1);
+  });
+
+  it('skips topic cleanup when a topic file cannot be parsed', async () => {
+    await harness.writeTopic('astro', 'Astro');
+    await harness.writeTopic('css', 'CSS');
+    await harness.writePost('first');
+    await harness.sync();
+
+    expect(await harness.db.select().from(topicsTable)).toHaveLength(2);
+
+    // Corrupt one topic file: its title is unknowable, so cleanup must not run.
+    await writeFile(
+      path.join(harness.projectRoot, 'src/content/topics/css.json'),
+      '{ not valid json',
+      'utf-8',
+    );
+    await harness.sync();
+
+    const topics = await harness.db.select().from(topicsTable);
+    expect(topics.map((t) => t.title).sort()).toEqual(['Astro', 'CSS']);
+  });
+
+  it('still deletes a topic once its file is genuinely removed', async () => {
+    await harness.writeTopic('astro', 'Astro');
+    await harness.writeTopic('css', 'CSS');
+    await harness.writePost('first');
+    await harness.sync();
+
+    await rm(path.join(harness.projectRoot, 'src/content/topics/css.json'));
+    await harness.sync();
+
+    const topics = await harness.db.select().from(topicsTable);
+    expect(topics.map((t) => t.title)).toEqual(['Astro']);
+  });
+
+  it('keeps a meme whose frontmatter is broken but whose file exists', async () => {
+    await harness.writeTopic('astro', 'Astro');
+    await harness.writeMeme('meme-one');
+    await harness.writeMeme('meme-two');
+    await harness.sync();
+
+    expect(await harness.db.select().from(memesTable)).toHaveLength(2);
+
+    await writeFile(
+      path.join(harness.projectRoot, 'src/content/memes/meme-two.mdx'),
+      '---\ntitle: 42\n---\n',
+      'utf-8',
+    );
+    await harness.sync();
+
+    const memes = await harness.db.select().from(memesTable);
+    expect(memes.map((m) => m.slug).sort()).toEqual(['meme-one', 'meme-two']);
   });
 });
 
