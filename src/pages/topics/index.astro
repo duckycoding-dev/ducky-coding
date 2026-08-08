@@ -19,7 +19,7 @@ import { serverLogger } from '@utils/logs/logger';
 import { buildPageSeo } from '@utils/seo/page-seo';
 
 const topicsWithImages = (await TopicsService.getAllTopicsWithImage()).filter(
-  (topic) => topic.postCount ?? 0 > 0,
+  (topic) => (topic.postCount ?? 0) > 0,
 );
 // Process topics and match with images
 const images = import.meta.glob<{ default: ImageMetadata }>(

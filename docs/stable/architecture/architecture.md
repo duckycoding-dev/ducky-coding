@@ -193,7 +193,7 @@ Pages never query the database directly.
 // In .astro frontmatter
 import { TopicsService } from '@db/features/topics/topics.service';
 const topicsWithImages = (await TopicsService.getAllTopicsWithImage()).filter(
-  (topic) => topic.postCount ?? 0 > 0,
+  (topic) => (topic.postCount ?? 0) > 0,
 );
 ```
 
