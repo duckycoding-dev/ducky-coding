@@ -20,7 +20,7 @@ partially resolved by unrelated work; see "Changes since the audit" below.
 | 001 | CI workflow (check/lint/format on push+PR) | P1 | S | — | DONE |
 | 002 | Vitest harness + characterization tests | P1 | M | — (001 recommended first) | TODO — minor drift: `json-ld/person.ts` changed |
 | 003 | Make build-time DB sync non-destructive and gateable | P1 | M | 002 | TODO |
-| 004 | Dependency security bumps + declare phantom `yaml` dep | P1 | S | — (001 recommended first) | TODO — baseline worsened: 52 → 59 advisories |
+| 004 | Dependency security bumps + declare phantom `yaml` dep | P1 | S | — (001 recommended first) | DONE — 59 → 21 advisories, 0 critical; rest blocked on the Astro 7 major (DEP-003) |
 | 005 | Fix corrupted .gitignore, untrack content.db/-wal | P2 | S | — | DONE |
 | 006 | Five small confirmed correctness fixes | P2 | S | 002 recommended | TODO — all five unchanged |
 | 007 | Docs truth sweep (SSR search, dead API docs, CLAUDE.md) | P2 | S | — (coordinate w/ 003, 006) | TODO — plus new `src/data/` to document |

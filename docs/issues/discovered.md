@@ -1,5 +1,5 @@
 ---
-updated: 2026-04-02
+updated: 2026-08-08
 summary: Active issue and tech debt tracker
 ---
 
@@ -36,5 +36,34 @@ Unblocked once `@astrojs/check` updates its peer dep range.
 `schema-dts` is therefore pinned at `1.1.5` even though `2.0.0` is published.
 
 **Affected files:** `package.json`
+
+---
+
+### DEP-003 — 14 high advisories blocked behind the Astro 7 major
+
+**Severity:** high
+**Status:** open — needs a deliberate major upgrade
+
+After the same-major bumps (`astro@6.4.8`, `@astrojs/netlify@7.0.13`,
+`markdown-it@14.3.0`, `sanitize-html@2.17.6`) `npm audit` is down from 59 to 21
+advisories with zero critical. All 14 remaining high advisories sit in one
+chain that `npm audit` can only resolve by installing `astro@7.2.0`, a semver
+major:
+
+`astro` → `@netlify/vite-plugin` / `@netlify/dev` / `@netlify/runtime` →
+`@netlify/images` → `ipx` → `sharp` (`<0.35.0`, inherited libvips CVEs
+GHSA-f88m-g3jw-g9cj), plus `@netlify/blobs`, `@netlify/dev-utils`,
+`@netlify/edge-functions-dev`, `@netlify/functions-dev`, `@netlify/redirects`
+and `image-size`.
+
+Mitigation while blocked: `imageCDN: false` in `astro.config.mjs` keeps the
+Netlify image CDN path out of the deploy, and the whole chain is build-time
+tooling rather than shipped client code.
+
+Unblocked by upgrading to `astro@7.x` + `@astrojs/netlify@8.x` — a separate
+piece of work, deliberately scoped out of the patch-level sweep so it lands
+against a green test suite.
+
+**Affected files:** `package.json`, `package-lock.json`
 
 ---
