@@ -12,28 +12,24 @@ Problems found during development, audits, or deploys. Each issue has a unique I
 
 ## Dependency Migrations
 
-### DEP-001 — TypeScript 6 blocked by @astrojs/check peer dep
+### DEP-002 — schema-dts pinned at 1.1.5 by astro-seo-schema
 
 **Severity:** low
-**Status:** open — waiting on upstream
+**Status:** accepted — not worth acting on
 
-`@astrojs/check@0.9.8` declares `peerDependencies: { typescript: "^5.0.0" }`.
-TypeScript is therefore pinned at `5.9.3` (latest 5.x).
+`astro-seo-schema` declares `peerDependencies: { "schema-dts": "^1.1.0" }` in
+both `6.0.0` and `7.0.0`, so the Astro 7 major does not lift this.
 
-TS 6 is available (`6.0.2`) and would bring stricter type checking and new features.
-Unblocked once `@astrojs/check` updates its peer dep range.
+Deliberately accepted rather than worked around: `schema-dts` ships types only
+— no runtime code, no advisory, no build impact — and `2.0.0` brings nothing
+but newer Schema.org typings. The cost of the pin is zero.
 
-**Affected files:** `package.json`
-
----
-
-### DEP-002 — schema-dts 2.0 blocked by astro-seo-schema peer dep
-
-**Severity:** low
-**Status:** open — waiting on upstream
-
-`astro-seo-schema@6.0.0` declares `peerDependencies: { "schema-dts": "^1.1.0" }`.
-`schema-dts` is therefore pinned at `1.1.5` even though `2.0.0` is published.
+The escape hatch, if a future need justifies it: `astro-seo-schema` is used at
+exactly one site (`src/layouts/base-head/BaseHead.astro`) and is ~15 lines — a
+`<script type="application/ld+json">` plus a `JSON.stringify` replacer that
+entity-escapes string values to prevent `</script>` breakout. All the graph
+building already lives in `src/utils/json-ld/`, so inlining it would free
+`schema-dts` entirely.
 
 **Affected files:** `package.json`
 
@@ -44,8 +40,7 @@ Unblocked once `@astrojs/check` updates its peer dep range.
 **Severity:** high
 **Status:** open — needs a deliberate major upgrade
 
-After the same-major bumps (`astro@6.4.8`, `@astrojs/netlify@7.0.13`,
-`markdown-it@14.3.0`, `sanitize-html@2.17.6`) `npm audit` is down from 59 to 21
+After the same-major and tooling bumps `npm audit` is down from 59 to 20
 advisories with zero critical. All 14 remaining high advisories sit in one
 chain that `npm audit` can only resolve by installing `astro@7.2.0`, a semver
 major:
@@ -61,8 +56,14 @@ Netlify image CDN path out of the deploy, and the whole chain is build-time
 tooling rather than shipped client code.
 
 Unblocked by upgrading to `astro@7.x` + `@astrojs/netlify@8.x` — a separate
-piece of work, deliberately scoped out of the patch-level sweep so it lands
+piece of work, deliberately scoped out of the dependency sweep so it lands
 against a green test suite.
+
+Verified peer ranges for that upgrade: `astro@7.2.0` needs Node `>=22.12.0`
+(`.nvmrc` is `v24.14.1`, fine), `@astrojs/netlify@8.2.0` and `@astrojs/mdx@7.0.5`
+both require `astro@^7.0.0`, and `astro-seo-schema@7.0.0` supports it too.
+`@astrojs/mdx@7.0.5` also declares a peer on `@astrojs/markdown-satteri@^0.3.1`
+— verify that package before trusting the install.
 
 **Affected files:** `package.json`, `package-lock.json`
 
