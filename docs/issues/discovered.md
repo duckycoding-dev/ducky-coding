@@ -134,3 +134,22 @@ it in lockstep on every `.nvmrc` bump.
 **Affected files:** `.nvmrc`, Netlify site environment variables
 
 ---
+
+### CLEANUP-006 — the path alias map is defined in three places
+
+**Severity:** low
+**Status:** open — accepted for now
+
+The same aliases are declared in `tsconfig.json` (`paths`, for TypeScript),
+`vitest.config.ts` (`resolve.alias`, for tests) and now `astro.config.mjs`
+(`vite.resolve.alias`, for `@styles` only, so Tailwind's `@reference` resolves
+under Vite 8). Nothing enforces that the three agree; a new alias added to one
+silently fails in the others.
+
+Fixable by defining the map once — a plain `.ts`/`.mjs` module exporting the
+pairs — and deriving all three from it. Deliberately not done during the Astro
+7 upgrade to keep that change reviewable.
+
+**Affected files:** `tsconfig.json`, `vitest.config.ts`, `astro.config.mjs`
+
+---

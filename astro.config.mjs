@@ -95,10 +95,22 @@ export default defineConfig({
     },
   },
   vite: {
-    // Astro derives Vite aliases from tsconfig "paths", but as of Vite 8 those
-    // no longer reach the CSS resolver, so `@reference '@styles/global.css'`
-    // inside component <style> blocks fails to resolve. Declaring it here fixes
-    // CSS without affecting the tsconfig-driven aliases used by JS/TS imports.
+    // `@reference` is a Tailwind v4 directive, resolved by @tailwindcss/vite —
+    // not by Astro or by Vite's own CSS @import handling. On Astro 6 + Vite 7
+    // it resolved the tsconfig "paths" alias; on Astro 7 + Vite 8 it does not,
+    // and the build fails with "Can't resolve '@styles/global.css'".
+    //
+    // Which layer regressed (Vite, Astro's alias plumbing, or the Tailwind
+    // plugin) was NOT isolated. What is established: it is not the removal of
+    // tsconfig "baseUrl" — the build fails with baseUrl restored too.
+    //
+    // Declaring the alias here fixes CSS resolution and leaves the
+    // tsconfig-driven aliases used by JS/TS imports untouched. A relative
+    // `@reference '../../styles/global.css'` also works and needs no config,
+    // if this ever becomes more trouble than it is worth.
+    //
+    // Keep in sync with "paths" in tsconfig.json and the alias map in
+    // vitest.config.ts — see CLEANUP-006.
     resolve: {
       alias: {
         '@styles': fileURLToPath(new URL('./src/styles', import.meta.url)),
