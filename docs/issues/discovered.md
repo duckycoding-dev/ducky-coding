@@ -1,5 +1,5 @@
 ---
-updated: 2026-08-08
+updated: 2026-08-09
 summary: Active issue and tech debt tracker
 ---
 
@@ -93,63 +93,17 @@ it is a declared direct dependency.
 
 ---
 
-### CLEANUP-002 — repositories and services cannot be unit tested
-
-**Severity:** medium
-**Status:** open
-
-`src/db/client.ts` creates its libSQL client at module scope, and
-`src/utils/env.ts` calls `envVariables.parse(import.meta.env ?? process.env)`
-at module scope too. Importing *any* repository or service therefore builds a
-DB connection and throws on missing env before a single test runs — under
-Vitest `import.meta.env` exists but carries no `TURSO_DATABASE_URL`.
-
-Consequence: the test suite can only reach code that avoids the client
-entirely. `buildSync.ts` is testable because it takes its config as an
-argument and builds its own client; `search.sql.ts` is testable because it was
-deliberately split out with no client import. Everything under
-`src/db/features/**` is not.
-
-Fix options, cheapest first:
-1. Make `db` lazy (`getDb()` memoised) so importing a module does not connect.
-2. Let repositories accept an optional client argument defaulting to the
-   shared one, matching how `buildSync` already works.
-
-Until then, new query logic should follow the `search.sql.ts` pattern: put the
-pure part in a client-free module so it can be covered.
-
-**Affected files:** `src/db/client.ts`, `src/utils/env.ts`,
-`src/db/features/**/*.repository.ts`
-
----
-
-### CLEANUP-003 — component docs still show PascalCase folders
+### CLEANUP-004 — docs/stable/development not fully audited
 
 **Severity:** low
 **Status:** open
 
-`docs/stable/development/components/components-and-folders-organization.md`
-documents the folder convention as:
+The plan-007 docs sweep scoped itself to `build-flow.md`, `architecture.md` and
+CLAUDE.md. `components-and-folders-organization.md` was corrected afterwards
+(CLEANUP-003), but the rest of `docs/stable/development/` — `styling/`,
+`types/`, `tooling/`, `commit-conventions.md` — has never been checked against
+the code it describes.
 
-```
-/ComponentName
-  |__ ComponentName.astro
-```
-
-with the import example `@components/Button/Button.astro`. The actual
-convention (CLAUDE.md, and every folder in `src/components/`) is a kebab-case
-directory holding a PascalCase file — `@components/button/Button.astro`.
-
-The doc also has frontmatter with only `updated:`, missing the `created:` and
-`summary:` keys the repo requires.
-
-Found during the plan-007 docs sweep but deliberately left alone: that plan
-scoped itself to `build-flow.md`, `architecture.md` and CLAUDE.md, and treats
-touching unaudited docs as scope creep. The rest of `docs/stable/development/`
-and `docs/stable/development/styling/` has not been audited for accuracy
-either.
-
-**Affected files:**
-`docs/stable/development/components/components-and-folders-organization.md`
+**Affected files:** `docs/stable/development/**`
 
 ---

@@ -1,28 +1,48 @@
 ---
-updated: 2026-04-01
+created: 2026-04-02
+updated: 2026-08-09
+summary: Component folder naming, nesting, barrels and styling conventions
 ---
 
 ### Component folder structure
 
-Each component lives in its own folder:
+Each component lives in its own folder. The folder name is **kebab-case**; the
+`.astro` file inside is **PascalCase**, matching the component tag name:
 
 ```
-/ComponentName
-  |__ ComponentName.astro   (or .ts for non-UI modules)
-  |__ ComponentName.test.ts (if it has tests)
+/component-name
+  |__ ComponentName.astro
+  |__ helper-module.ts       (co-located non-UI module, kebab-case)
 ```
 
-No `index.ts` re-export file is needed. Import directly from the `.astro` file using path aliases:
+Import directly from the `.astro` file using path aliases:
 
 ```ts
-import Button from '@components/Button/Button.astro';
+import Button from '@components/button/Button.astro';
 ```
 
-When a folder logically groups multiple related components (e.g. `Card/`, `Icons/`, `Markdown/`), a barrel `index.ts` can be used to export all of them together — but only when that grouping is genuinely useful at the import site.
+Folders may nest when a component owns a family of related components — the same
+naming rule applies at every level:
+
+```
+@components/form/input/Input.astro
+@components/icons/github-icon/GitHubIcon.astro
+```
+
+No `index.ts` re-export file is needed for a single component. A barrel is used
+only when a folder groups things that are genuinely consumed together — today
+that is `icons/index.ts` (shared icon prop types) and `markdown/index.ts` (the
+`MarkdownComponents` map passed to `<Content />`).
+
+Tests do **not** live next to components. The suite is a top-level `tests/`
+folder run by Vitest; logic that needs coverage is extracted out of the
+`.astro` frontmatter into a co-located `.ts` module and imported from there —
+see `pagination/get-visible-pages.ts`, covered by `tests/pagination.test.ts`.
 
 ### Styling
 
-Use Astro's built-in `<style>` block for component-scoped styles. Astro scopes these automatically using the `attribute` strategy — no CSS modules needed.
+Use Astro's built-in `<style>` block for component-scoped styles. Astro scopes
+these automatically using the `attribute` strategy — no CSS modules needed.
 
 ```astro
 <style>
@@ -34,7 +54,9 @@ Use Astro's built-in `<style>` block for component-scoped styles. Astro scopes t
 </style>
 ```
 
-The `@reference` directive gives access to Tailwind utilities and theme tokens inside the style block without duplicating the stylesheet.
+The `@reference` directive gives access to Tailwind utilities and theme tokens
+inside the style block without duplicating the stylesheet.
 
-CSS modules (`.module.css` files) should be avoided unless you need to reference class names programmatically in TypeScript code. That case is rare — prefer `<style>` blocks by default.
-Probably a config in astro.config.mjs is needed for css modules to get back to work
+Avoid CSS modules (`.module.css`). They are not configured in
+`astro.config.mjs` and would need setup work to function; prefer `<style>`
+blocks.
