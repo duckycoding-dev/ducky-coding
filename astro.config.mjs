@@ -4,6 +4,7 @@ import mdx from '@astrojs/mdx';
 import netlify from '@astrojs/netlify';
 import sitemap from '@astrojs/sitemap';
 import tailwindcss from '@tailwindcss/vite';
+import { fileURLToPath } from 'node:url';
 import { loadEnv } from 'vite';
 
 import { buildMigrate, buildSyncAllContent, buildSyncImages } from './src/db/sync/buildSync.ts';
@@ -72,8 +73,10 @@ export default defineConfig({
     // remarkPlugins: , // TODO
     // rehypePlugins: , // TODO
     // remarkRehype: , // TODO
-    gfm: true, // --DEFAULT--
-    smartypants: true, // --DEFAULT--
+    // gfm and smartypants are deprecated config keys as of Astro 7: they now
+    // belong to the processor. Both were set to their default of true, and
+    // Sätteri (the new default processor) applies GitHub-Flavored Markdown and
+    // smart punctuation out of the box, so dropping them changes nothing.
     shikiConfig: {
       theme: 'github-dark-high-contrast',
       wrap: null,
@@ -92,6 +95,15 @@ export default defineConfig({
     },
   },
   vite: {
+    // Astro derives Vite aliases from tsconfig "paths", but as of Vite 8 those
+    // no longer reach the CSS resolver, so `@reference '@styles/global.css'`
+    // inside component <style> blocks fails to resolve. Declaring it here fixes
+    // CSS without affecting the tsconfig-driven aliases used by JS/TS imports.
+    resolve: {
+      alias: {
+        '@styles': fileURLToPath(new URL('./src/styles', import.meta.url)),
+      },
+    },
     css: {
       devSourcemap: true,
     },

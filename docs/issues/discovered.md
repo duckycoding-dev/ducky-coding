@@ -35,35 +35,40 @@ building already lives in `src/utils/json-ld/`, so inlining it would free
 
 ---
 
-### DEP-003 — 14 high advisories blocked behind the Astro 7 major
+### DEP-003 — high advisories in the Netlify adapter's dev tooling
 
-**Severity:** high
-**Status:** open — needs a deliberate major upgrade
+**Severity:** medium
+**Status:** open — no upstream fix available
 
-After the same-major and tooling bumps `npm audit` is down from 59 to 20
-advisories with zero critical. All 14 remaining high advisories sit in one
-chain that `npm audit` can only resolve by installing `astro@7.2.0`, a semver
-major:
+**This issue was previously mis-diagnosed.** It claimed the 14 high advisories
+were gated behind the Astro 7 major. That upgrade has now landed
+(`astro@7.2.0`, `@astrojs/netlify@8.2.0`) and the count went 20 → 17, with 13
+high remaining. Astro was never the root.
 
-`astro` → `@netlify/vite-plugin` / `@netlify/dev` / `@netlify/runtime` →
-`@netlify/images` → `ipx` → `sharp` (`<0.35.0`, inherited libvips CVEs
-GHSA-f88m-g3jw-g9cj), plus `@netlify/blobs`, `@netlify/dev-utils`,
-`@netlify/edge-functions-dev`, `@netlify/functions-dev`, `@netlify/redirects`
-and `image-size`.
+The chain roots in the adapter, not the framework:
 
-Mitigation while blocked: `imageCDN: false` in `astro.config.mjs` keeps the
-Netlify image CDN path out of the deploy, and the whole chain is build-time
-tooling rather than shipped client code.
+`@astrojs/netlify` → `@netlify/vite-plugin` → `@netlify/dev` →
+`@netlify/dev-utils` → `image-size` (DoS via infinite loops in the ICNS and
+JXL/HEIF parsers), plus `@netlify/blobs`, `@netlify/edge-functions-dev`,
+`@netlify/functions-dev`, `@netlify/redirects`, `@netlify/runtime`, and
+`@netlify/images` → `ipx` → `sharp` (inherited libvips CVEs,
+GHSA-f88m-g3jw-g9cj).
 
-Unblocked by upgrading to `astro@7.x` + `@astrojs/netlify@8.x` — a separate
-piece of work, deliberately scoped out of the dependency sweep so it lands
-against a green test suite.
+`npm audit` reports a "fix available" for `@astrojs/netlify`, but it resolves
+to version `6.4.1` — which requires `astro@^6`. That is a downgrade out of
+Astro 7, not a fix. The advisory range is `>=6.5.0`, so every adapter version
+compatible with Astro 7 carries it.
 
-Verified peer ranges for that upgrade: `astro@7.2.0` needs Node `>=22.12.0`
-(`.nvmrc` is `v24.14.1`, fine), `@astrojs/netlify@8.2.0` and `@astrojs/mdx@7.0.5`
-both require `astro@^7.0.0`, and `astro-seo-schema@7.0.0` supports it too.
-`@astrojs/mdx@7.0.5` also declares a peer on `@astrojs/markdown-satteri@^0.3.1`
-— verify that package before trusting the install.
+Why this is tolerable rather than urgent:
+
+- `@netlify/dev` is Netlify's local dev-server tooling. It is build- and
+  dev-time only; none of it is shipped to the browser.
+- `imageCDN: false` in `astro.config.mjs` keeps the `@netlify/images` → `ipx` →
+  `sharp` path out of the deploy.
+
+Resolved only when Netlify updates `@netlify/dev-utils` and `@netlify/blobs`
+upstream. Re-check with `npm audit` periodically; there is no local action that
+clears it.
 
 **Affected files:** `package.json`, `package-lock.json`
 
@@ -106,5 +111,26 @@ CLAUDE.md. `components-and-folders-organization.md` was corrected afterwards
 the code it describes.
 
 **Affected files:** `docs/stable/development/**`
+
+---
+
+### CLEANUP-005 — Netlify `NODE_VERSION` overrides and contradicts `.nvmrc`
+
+**Severity:** low
+**Status:** open — needs a decision
+
+`.nvmrc` pins `v24.19.0` (the current Node LTS), but the Netlify site defines a
+`NODE_VERSION` environment variable set to `24.1.0`, and that variable takes
+precedence over `.nvmrc`. Production therefore builds on a different Node patch
+than local and CI, and the pin is invisible from the repo — the same trap as
+the deploy topology, which also lives only in the Netlify UI.
+
+Both satisfy Astro 7's `>=22.12.0` requirement, so nothing is broken today.
+
+Fix by deleting the `NODE_VERSION` variable (`netlify env:unset NODE_VERSION`)
+so `.nvmrc` becomes the single source of truth, or by keeping it and updating
+it in lockstep on every `.nvmrc` bump.
+
+**Affected files:** `.nvmrc`, Netlify site environment variables
 
 ---
