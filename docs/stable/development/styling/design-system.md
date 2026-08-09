@@ -1,6 +1,6 @@
 ---
 created: 2026-04-08
-updated: 2026-04-08
+updated: 2026-08-09
 summary: Neo-brutalist design system — tokens, patterns, and usage rules
 ---
 
@@ -49,7 +49,11 @@ Use Tailwind's default spacing scale. Prefer these tiers for consistency:
 
 ## Typography
 
-Font: Inter (variable, self-hosted at `/public/fonts/Inter/`).
+Font: Inter (variable), configured through Astro's `fonts` API in
+`astro.config.mjs` with `fontProviders.google()`. Astro downloads it at build
+time and self-hosts the result under `dist/_astro/fonts/`, exposed as the
+`--font-inter` CSS variable — nothing is fetched from Google at runtime and
+there is no `public/fonts/` directory.
 
 | Level | Tailwind classes | Usage |
 |-------|-----------------|-------|

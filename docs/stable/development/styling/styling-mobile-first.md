@@ -1,5 +1,7 @@
 ---
-updated: 2026-05-11
+created: 2026-04-02
+updated: 2026-08-09
+summary: Write styles mobile-first to avoid override churn
 ---
 
 ### Styles should be written with a mobile first approach

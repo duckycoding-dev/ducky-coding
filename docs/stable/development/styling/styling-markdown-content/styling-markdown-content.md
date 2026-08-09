@@ -1,42 +1,73 @@
 ---
-updated: 2026-04-01
+created: 2026-04-02
+updated: 2026-08-09
+summary: How rendered Markdown is styled, via markdown.css and the MarkdownContent layout
 ---
 
 ## How to style content from Markdown
 
 Markdown content is styled using a dedicated stylesheet (`src/styles/markdown.css`) combined with custom Astro components for elements that need richer markup.
 
-### Custom stylesheet
+Both are wired up in one place — the `MarkdownContent` layout — so pages never
+assemble this themselves.
 
-`src/styles/markdown.css` applies styles by scoping them under the `.markdown-content` class. Add this class to the wrapper element around the rendered markdown content:
+### Rendering a collection entry
+
+`src/layouts/markdown-content/MarkdownContent.astro` imports the stylesheet,
+calls `render()` from `astro:content`, applies the `.markdown-content` class and
+passes the custom components:
 
 ```astro
-<!-- src/pages/posts/[...slug]/index.astro -->
 ---
-const { Content } = await entry.render();
+import '@styles/markdown.css';
+import { render } from 'astro:content';
+import { MarkdownComponents } from '@components/markdown';
+
+const { entry, class: className, ...props }: Props = Astro.props;
+const { Content } = await render(entry);
 ---
 
-<article class="markdown-content">
+<article class={cn('markdown-content', className)} {...props}>
   <Content components={MarkdownComponents} />
 </article>
 ```
 
-The stylesheet covers: headings, paragraphs, lists, code blocks, blockquotes, tables, inline elements (`mark`, `kbd`, `abbr`, `q`, `time`), `details`/`summary`, and `hr`.
+Pages just hand it an entry:
+
+```astro
+<!-- src/pages/posts/[...id]/index.astro -->
+<MarkdownContent entry={entry} />
+```
+
+Note that `render(entry)` is imported from `astro:content` — the older
+`entry.render()` method was removed in Astro 5.
+
+### Custom stylesheet
+
+`src/styles/markdown.css` scopes every rule under `.markdown-content`, which is
+why the wrapper class matters. It covers headings, paragraphs, lists, code
+blocks, blockquotes, tables, inline elements (`mark`, `kbd`, `abbr`, `q`,
+`time`), `details`/`summary`, and `hr`.
 
 ### Custom Markdown components
 
-For elements that require richer component markup beyond what CSS alone can express, custom Astro components live in `src/components/Markdown/`.
-
-They are exported from `src/components/Markdown/index.ts` as a single `MarkdownComponents` object:
+For elements that need richer markup than CSS alone can express, custom Astro
+components live in `src/components/markdown/` and are exported as a single
+`MarkdownComponents` map from its `index.ts`:
 
 ```ts
-import { MarkdownComponents } from '@components/Markdown';
+export const MarkdownComponents = {
+  a: CustomA,
+};
 ```
 
-And passed to the `<Content />` component:
+Only the anchor tag (`a`) currently has one — everything else is styled purely
+through the stylesheet. To override another element, write the component in
+that folder and add it to the map; prefer CSS and add a component only when the
+change cannot be expressed in CSS.
 
-```astro
-<Content components={MarkdownComponents} />
-```
+### Markdown processing
 
-Currently only the anchor tag (`a`) uses a custom component. All other elements are styled via the CSS stylesheet. To activate a custom component for another element, uncomment it in `src/components/Markdown/index.ts`.
+As of Astro 7 the pipeline is Sätteri rather than remark/rehype. GitHub-Flavored
+Markdown and smart punctuation are applied by default, so `astro.config.mjs`
+sets neither — see the comment in its `markdown` block.

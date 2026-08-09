@@ -1,5 +1,7 @@
 ---
-updated: 2026-04-01
+created: 2026-04-02
+updated: 2026-08-09
+summary: Colour roles, the 60-30-10 rule and Tailwind v4 colour tokens
 ---
 
 ### Color themes

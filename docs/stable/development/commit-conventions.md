@@ -1,6 +1,6 @@
 ---
 created: 2026-04-01
-updated: 2026-04-02
+updated: 2026-08-09
 summary: Conventional Commits format enforced by commitlint
 ---
 
@@ -48,6 +48,21 @@ The first line (`type(scope): subject`) is the **header** — the only required 
 | `refactor` | Restructuring code without changing what it does |
 | `revert` | Reverting a previous commit |
 
+### This list is narrower than standard Conventional Commits
+
+`commitlint.config.js` overrides `type-enum`, so several types that
+`@commitlint/config-conventional` normally allows are **rejected here**:
+
+| Rejected | Use instead |
+|----------|-------------|
+| `ci` | `chore(ci)` |
+| `test` | `chore(tests)`, or `refactor(<area>)` when restructuring code to be testable |
+| `perf` | `refactor(<area>)`, or `feat` if the improvement is user-visible |
+| `build` | `chore` |
+
+The commit is blocked outright, so this is worth remembering before writing a
+long body.
+
 ---
 
 ## Scope (optional)
@@ -64,7 +79,8 @@ content(astro): publish intro to content collections
 ```
 
 There is no enforced list of scopes — use your judgement. Good candidates:
-`db`, `deps`, `seo`, `navbar`, `card`, `memes`, `posts`, `topics`, `api`.
+`db`, `deps`, `ci`, `tests`, `seo`, `search`, `navbar`, `card`, `memes`,
+`posts`, `topics`, `components`.
 
 ---
 
@@ -97,7 +113,11 @@ causing unnecessary writes on every build even when nothing changed.
 
 ## Footer (optional)
 
-Used for breaking change notices. Separate from the body with a blank line.
+Used for breaking change notices. Separate from the body with a blank line —
+commitlint warns (`footer-leading-blank`) otherwise. Note that it treats a
+`Word: text` line anywhere near the end of the body as a footer, so a body
+paragraph that happens to start that way can trigger the warning. It is a
+warning, not an error, so the commit still succeeds.
 
 ```
 refactor(db): replace file URL with remote client interface

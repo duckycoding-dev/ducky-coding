@@ -99,18 +99,21 @@ it is a declared direct dependency.
 
 ---
 
-### CLEANUP-004 — docs/stable/development not fully audited
+### CLEANUP-007 — `iconDir` points at a directory that does not exist
 
 **Severity:** low
 **Status:** open
 
-The plan-007 docs sweep scoped itself to `build-flow.md`, `architecture.md` and
-CLAUDE.md. `components-and-folders-organization.md` was corrected afterwards
-(CLEANUP-003), but the rest of `docs/stable/development/` — `styling/`,
-`types/`, `tooling/`, `commit-conventions.md` — has never been checked against
-the code it describes.
+`astro.config.mjs` configures `icon({ iconDir: 'src/assets/icons' })`, but
+`src/assets/icons/` does not exist. Every icon in the project comes from the
+`@iconify-json/mdi` and `@iconify-json/ph` sets, so the option is inert and the
+build does not complain.
 
-**Affected files:** `docs/stable/development/**`
+Either drop the option, or create the directory if local SVGs are wanted. Left
+alone for now because removing it is a config change with no observable effect,
+and it was found during a docs audit rather than a code one.
+
+**Affected files:** `astro.config.mjs`
 
 ---
 

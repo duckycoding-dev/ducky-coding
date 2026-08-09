@@ -1,5 +1,7 @@
 ---
-updated: 2026-04-01
+created: 2026-04-02
+updated: 2026-08-09
+summary: CSS file layout, data-theme switching and Tailwind v4 token registration
 ---
 
 ## How CSS files are organized and how themes are handled

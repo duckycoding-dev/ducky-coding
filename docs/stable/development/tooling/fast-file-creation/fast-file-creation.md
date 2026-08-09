@@ -1,5 +1,7 @@
 ---
-updated: 2026-04-01
+created: 2026-04-02
+updated: 2026-08-09
+summary: Generating component boilerplate from VSCode file templates
 ---
 
 ## use template files for new files
@@ -7,9 +9,11 @@ updated: 2026-04-01
 When creating files with the same structures over and over again, it's handy to be able to generate some boilerplate code on file creation.\
 To do this, I use the extension [File Template](https://marketplace.visualstudio.com/items?itemName=rhangai.file-template) which allows exactly to do so.\
 
-The functionalities are limited as of v0.0.7, but it's enough for simple Astro Components boilerplate following the dir structure explained in [best practices 1 - components and folders organization](<1 - components and folders organization.md>).\
+The functionalities are limited as of v0.0.7, but it's enough for simple Astro Components boilerplate following the dir structure explained in [components and folders organization](../../components/components-and-folders-organization.md).\
 
-We need to define template files inside `.vscode/templates/` for single files templates, or a directory containing the template files to allow us to create multiple files at once.\
+We need to define template files inside `.vscode/templates/` for single files templates, or a directory containing the template files to allow us to create multiple files at once.
+The project currently ships three: `Astro component`, `CustomIconComponent` and
+`Database table`.\
 
 For a simple `Astro component` template this is the structure of the template\
 ![alt text](template-file-example.png)\

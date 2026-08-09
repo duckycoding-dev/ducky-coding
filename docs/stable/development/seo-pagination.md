@@ -1,6 +1,6 @@
 ---
 created: 2026-04-09
-updated: 2026-04-09
+updated: 2026-08-09
 summary: How to add rel=prev/next when implementing pagination
 ---
 
@@ -10,7 +10,10 @@ When adding pagination to blog or meme listing pages, include `rel=prev` and `re
 
 ## Pattern
 
-Meme detail pages (`src/pages/memes/[...id]/index.astro`) already demonstrate this using `astro-seo`'s `extend.link` option:
+Meme detail pages (`src/pages/memes/[...id]/index.astro`) — for prev/next
+between memes — and the search page (`src/pages/search.astro`) — for genuine
+result pagination — both already do this using `astro-seo`'s `extend.link`
+option:
 
 ```ts
 const seoProps = buildPageSeo({ ... });
@@ -25,6 +28,10 @@ seoProps.extend = {
 ```
 
 ## When to apply
+
+Still to do — none of these paginate yet, and none use Astro's `paginate()`
+helper. `/search` is the only paginated route, and it builds its own page links
+via `src/components/pagination/`.
 
 - Blog listing (`/blog`) — when paginated into `/blog`, `/blog/2`, etc.
 - Memes listing (`/memes`) — when paginated
