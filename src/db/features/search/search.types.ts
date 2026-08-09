@@ -61,5 +61,4 @@ export interface SearchData {
 }
 
 export type SearchResponse =
-  | { success: true; data: SearchData }
-  | { success: false; error: string };
+  { success: true; data: SearchData } | { success: false; error: string };
