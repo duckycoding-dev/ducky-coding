@@ -1,10 +1,14 @@
 import { eq, inArray } from 'drizzle-orm';
 
-import { db } from '../../client';
+import { getDb } from '../../client';
+import type { Db } from '../../create-db';
 import { type Image, imagesTable } from '../images/images.model';
 import { type Topic, topicsTable } from './topics.model';
 
-const getTopics = async (topicTitles: string[]): Promise<Topic[]> => {
+const getTopics = async (
+  topicTitles: string[],
+  db: Db = getDb(),
+): Promise<Topic[]> => {
   const topics = await db
     .select()
     .from(topicsTable)
@@ -13,15 +17,15 @@ const getTopics = async (topicTitles: string[]): Promise<Topic[]> => {
   return topics;
 };
 
-const getAllTopics = async (): Promise<Topic[]> => {
+const getAllTopics = async (db: Db = getDb()): Promise<Topic[]> => {
   const topics = await db.select().from(topicsTable).all();
 
   return topics;
 };
 
-const getAllTopicsWithImage = async (): Promise<
-  (Topic & { image: Image | null })[]
-> => {
+const getAllTopicsWithImage = async (
+  db: Db = getDb(),
+): Promise<(Topic & { image: Image | null })[]> => {
   const topicsWithImages = await db
     .select({
       topic: topicsTable,

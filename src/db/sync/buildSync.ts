@@ -7,9 +7,7 @@
  * Compatible with Node 22+ (native glob in node:fs/promises).
  */
 
-import { createClient } from '@libsql/client';
 import { eq, inArray, notInArray, sql } from 'drizzle-orm';
-import { drizzle } from 'drizzle-orm/libsql';
 import { migrate } from 'drizzle-orm/libsql/migrator';
 import { glob, readFile } from 'node:fs/promises';
 import path from 'node:path';
@@ -19,6 +17,7 @@ import { parse as parseYaml } from 'yaml';
 import { MemeContentSchema } from '../../types/entities/memeContent.entity.ts';
 import { PostContentSchema } from '../../types/entities/postContent.entity.ts';
 import { TopicContentSchema } from '../../types/entities/topicContent.entity.ts';
+import { createDb, type DbConfig } from '../create-db.ts';
 import { imagesTable } from '../features/images/images.model.ts';
 import { type InsertMeme, memesTable } from '../features/memes/memes.model.ts';
 import { type InsertPost, postsTable } from '../features/posts/posts.model.ts';
@@ -26,19 +25,9 @@ import { postsTagsTable } from '../features/posts/posts_tags.model.ts';
 import { tagsTable } from '../features/tags/tags.model.ts';
 import { topicsTable } from '../features/topics/topics.model.ts';
 
-// ---------------------------------------------------------------------------
-// Standalone DB client (no import.meta.env / Vite path aliases)
-// ---------------------------------------------------------------------------
-
-export interface BuildSyncDbConfig {
-  url: string;
-  authToken?: string;
-}
-
-function createDb(config: BuildSyncDbConfig) {
-  const turso = createClient({ url: config.url, authToken: config.authToken });
-  return drizzle({ client: turso, casing: 'snake_case' });
-}
+// The DB handle comes from `../create-db.ts`, which is deliberately free of
+// import.meta.env and Vite path aliases so it is safe to use from here (this
+// module runs inside astro.config.mjs, in plain Node before Vite).
 
 // ---------------------------------------------------------------------------
 // buildMigrate
@@ -46,7 +35,7 @@ function createDb(config: BuildSyncDbConfig) {
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
-export async function buildMigrate(dbConfig: BuildSyncDbConfig): Promise<{
+export async function buildMigrate(dbConfig: DbConfig): Promise<{
   success: boolean;
   error?: string;
 }> {
@@ -88,7 +77,7 @@ function extractFrontmatter(fileContent: string): {
 // buildSyncImages
 // ---------------------------------------------------------------------------
 
-export async function buildSyncImages(dbConfig: BuildSyncDbConfig): Promise<{
+export async function buildSyncImages(dbConfig: DbConfig): Promise<{
   imagesAdded: number;
   message?: string;
 }> {
@@ -151,9 +140,7 @@ export async function buildSyncImages(dbConfig: BuildSyncDbConfig): Promise<{
 // buildSyncAllContent
 // ---------------------------------------------------------------------------
 
-export async function buildSyncAllContent(
-  dbConfig: BuildSyncDbConfig,
-): Promise<{
+export async function buildSyncAllContent(dbConfig: DbConfig): Promise<{
   success: boolean;
   error?: string;
 }> {

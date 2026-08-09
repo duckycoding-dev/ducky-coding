@@ -2,13 +2,13 @@
 /// <reference types="astro/client" />
 */
 
-import type { envs } from '@utils/env';
+import type { Envs } from '@utils/env';
 
 declare global {
   // namespace NodeJS {
-  //   interface ProcessEnv extends typeof envs;
+  //   interface ProcessEnv extends Envs;
   // }
   interface ImportMeta {
-    readonly env: typeof envs;
+    readonly env: Envs;
   }
 }

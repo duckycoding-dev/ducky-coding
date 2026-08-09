@@ -1,11 +1,15 @@
 import { eq, inArray } from 'drizzle-orm';
 
-import { db } from '../../client';
+import { getDb } from '../../client';
+import type { Db } from '../../create-db';
 import { type Image, imagesTable } from '../images/images.model';
 import { type Post, postsTable } from './posts.model';
 import { postsTagsTable } from './posts_tags.model';
 
-const getPostsBySlugs = async (slugs: string[]): Promise<Post[]> => {
+const getPostsBySlugs = async (
+  slugs: string[],
+  db: Db = getDb(),
+): Promise<Post[]> => {
   const posts = await db
     .select()
     .from(postsTable)
@@ -16,6 +20,7 @@ const getPostsBySlugs = async (slugs: string[]): Promise<Post[]> => {
 
 const getPostsWithBannerBySlugs = async (
   slugs: string[],
+  db: Db = getDb(),
 ): Promise<{ post: Post; image: Image | null }[]> => {
   const postsWithBanner = await db
     .select({
@@ -29,7 +34,10 @@ const getPostsWithBannerBySlugs = async (
   return postsWithBanner;
 };
 
-const getPostTagsById = async (id: number): Promise<string[]> => {
+const getPostTagsById = async (
+  id: number,
+  db: Db = getDb(),
+): Promise<string[]> => {
   const tags = await db
     .select()
     .from(postsTagsTable)

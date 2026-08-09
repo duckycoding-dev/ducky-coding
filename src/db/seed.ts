@@ -4,7 +4,7 @@ import cssJSON from '../content/topics/css.json';
 import leetcodeJSON from '../content/topics/leetcode.json';
 import reactJSON from '../content/topics/react.json';
 import typescriptJSON from '../content/topics/typescript.json';
-import { db } from './client';
+import { getDb } from './client';
 import { imagesTable } from './features/images/images.model';
 import { postsTable } from './features/posts/posts.model';
 import { postsTagsTable } from './features/posts/posts_tags.model';
@@ -12,6 +12,8 @@ import { tagsTable } from './features/tags/tags.model';
 import { topicsTable } from './features/topics/topics.model';
 
 export default async function seed() {
+  const db = getDb();
+
   // TODO
   await db.insert(imagesTable).values([
     { path: 'topics/astro-icon-light-gradient.png', alt: 'Logo of AstroJS' },

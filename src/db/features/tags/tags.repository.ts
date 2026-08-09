@@ -1,9 +1,13 @@
 import { inArray } from 'drizzle-orm';
 
-import { db } from '../../client';
+import { getDb } from '../../client';
+import type { Db } from '../../create-db';
 import { type Tag, tagsTable } from './tags.model';
 
-const getTags = async (tagNames: string[]): Promise<Tag[]> => {
+const getTags = async (
+  tagNames: string[],
+  db: Db = getDb(),
+): Promise<Tag[]> => {
   const tags = await db
     .select()
     .from(tagsTable)
@@ -12,7 +16,7 @@ const getTags = async (tagNames: string[]): Promise<Tag[]> => {
   return tags;
 };
 
-const getAllTags = async (): Promise<Tag[]> => {
+const getAllTags = async (db: Db = getDb()): Promise<Tag[]> => {
   const tags = await db.select().from(tagsTable).all();
   return tags;
 };

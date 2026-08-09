@@ -3,7 +3,7 @@ import { dirname, join } from 'path';
 import { fileURLToPath } from 'url';
 
 import { serverLogger } from '@utils/logs/logger';
-import { db } from './client';
+import { getDb } from './client';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
@@ -12,7 +12,7 @@ async function main() {
   try {
     const migrationDirectory = join(__dirname, 'migrations');
     serverLogger.log('Migrations folder:', migrationDirectory);
-    await migrate(db, { migrationsFolder: migrationDirectory });
+    await migrate(getDb(), { migrationsFolder: migrationDirectory });
     serverLogger.info('✅⌛️ Migrated successfully');
   } catch (err) {
     serverLogger.error('❌⌛️ Migration failed');

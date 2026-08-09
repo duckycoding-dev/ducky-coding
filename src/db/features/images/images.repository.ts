@@ -1,9 +1,13 @@
 import { inArray, sql } from 'drizzle-orm';
 
-import { db } from '../../client';
+import { getDb } from '../../client';
+import type { Db } from '../../create-db';
 import { type Image, imagesTable, type InsertImage } from './images.model';
 
-const getImages = async (imagePaths: string[]): Promise<Image[]> => {
+const getImages = async (
+  imagePaths: string[],
+  db: Db = getDb(),
+): Promise<Image[]> => {
   const images = await db
     .select()
     .from(imagesTable)
@@ -12,7 +16,10 @@ const getImages = async (imagePaths: string[]): Promise<Image[]> => {
   return images;
 };
 
-const getImagesByPaths = async (paths: string[]): Promise<Image[]> => {
+const getImagesByPaths = async (
+  paths: string[],
+  db: Db = getDb(),
+): Promise<Image[]> => {
   const images = await db
     .select()
     .from(imagesTable)
@@ -21,13 +28,16 @@ const getImagesByPaths = async (paths: string[]): Promise<Image[]> => {
   return images;
 };
 
-const getAllImages = async (): Promise<Image[]> => {
+const getAllImages = async (db: Db = getDb()): Promise<Image[]> => {
   const images = await db.select().from(imagesTable).all();
 
   return images;
 };
 
-const upsertImage = async (images: InsertImage[]): Promise<InsertImage[]> => {
+const upsertImage = async (
+  images: InsertImage[],
+  db: Db = getDb(),
+): Promise<InsertImage[]> => {
   const upsertedImages = await db
     .insert(imagesTable)
     .values(images)

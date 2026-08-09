@@ -1,6 +1,7 @@
 import { and, sql } from 'drizzle-orm';
 
-import { db } from '../../client';
+import { getDb } from '../../client';
+import type { Db } from '../../create-db';
 import { likeContains } from '../search/search.sql';
 import type { MemeSearchResult, SearchParams } from '../search/search.types';
 import { memesTable } from './memes.model';
@@ -18,6 +19,7 @@ function parseTags(tagsJson: string): string[] {
 
 const searchMemes = async (
   params: SearchParams,
+  db: Db = getDb(),
 ): Promise<{ results: MemeSearchResult[]; total: number }> => {
   const { page, pageSize } = params;
   const offset = (page - 1) * pageSize;

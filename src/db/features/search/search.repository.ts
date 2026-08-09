@@ -1,6 +1,7 @@
 import { and, eq, inArray, or, sql } from 'drizzle-orm';
 
-import { db } from '../../client';
+import { getDb } from '../../client';
+import type { Db } from '../../create-db';
 import { MemesRepository } from '../memes/memes.repository';
 import { postsTable } from '../posts/posts.model';
 import { postsTagsTable } from '../posts/posts_tags.model';
@@ -13,6 +14,7 @@ import type { PostSearchResult, SearchParams } from './search.types';
 
 const searchPosts = async (
   params: SearchParams,
+  db: Db = getDb(),
 ): Promise<{ results: PostSearchResult[]; total: number }> => {
   const { page, pageSize } = params;
   const offset = (page - 1) * pageSize;

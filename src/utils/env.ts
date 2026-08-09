@@ -14,5 +14,13 @@ const envVariables = z.object({
   TURSO_AUTH_TOKEN: z.string().optional(),
 });
 
-// ensure that the env variables are defined correctly
-export const envs = envVariables.parse(import.meta.env ?? process.env);
+export type Envs = z.infer<typeof envVariables>;
+
+let cached: Envs | undefined;
+
+// Validated on first use rather than on import: importing a module should not
+// have side effects, otherwise anything that pulls in the db layer (a test, a
+// script, a type-only consumer) fails before it runs. astro.config.mjs still
+// validates the same variables up front via `envField` + validateSecrets.
+export const getEnvs = (): Envs =>
+  (cached ??= envVariables.parse(import.meta.env ?? process.env));
