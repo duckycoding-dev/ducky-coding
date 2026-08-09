@@ -3,20 +3,22 @@
   "include": ["src/**/*", ".astro/types.d.ts"],
   "exclude": ["dist"],
   "compilerOptions": {
-    "baseUrl": ".",
     "rootDir": "src",
+    // No "baseUrl": it is deprecated in TS 6 and stops working in TS 7. Since
+    // TS 4.4 "paths" entries resolve relative to this file, so they carry the
+    // "./" prefix instead. Keep in sync with the alias map in vitest.config.ts.
     "paths": {
-      "@components/*": ["src/components/*"],
-      "@layouts/*": ["src/layouts/*"],
-      "@content/*": ["src/content/*"],
-      "@data/*": ["src/data/*"],
-      "@utils/*": ["src/utils/*"],
-      "@styles/*": ["src/styles/*"],
-      "@assets/*": ["src/assets/*"],
-      "@services/*": ["src/services/*"],
-      "@typings/*": ["src/types/*"],
-      "@db/*": ["src/db/*"],
-      "@libs/*": ["src/libs/*"]
+      "@components/*": ["./src/components/*"],
+      "@layouts/*": ["./src/layouts/*"],
+      "@content/*": ["./src/content/*"],
+      "@data/*": ["./src/data/*"],
+      "@utils/*": ["./src/utils/*"],
+      "@styles/*": ["./src/styles/*"],
+      "@assets/*": ["./src/assets/*"],
+      "@services/*": ["./src/services/*"],
+      "@typings/*": ["./src/types/*"],
+      "@db/*": ["./src/db/*"],
+      "@libs/*": ["./src/libs/*"]
     },
     /* Emit */
     "declaration": true /* Generate .d.ts files from TypeScript and JavaScript files in your project.
