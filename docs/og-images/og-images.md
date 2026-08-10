@@ -192,8 +192,15 @@ of opt-in helpers.
 export interface OgRenderContext {
   readonly width: number;   // 1200
   readonly height: number;  // 630
-  /** Largest size at which `text` fits the given box, plus truncation backstop. */
-  fitTitle(text: string, box: { width: number; height: number }, opts?: FitOptions): FitResult;
+  /**
+   * Largest size at which `text` fits the given box, plus truncation backstop.
+   * Async because the underlying measurement is async — see below.
+   */
+  fitTitle(
+    text: string,
+    box: { width: number; height: number },
+    opts?: FitOptions,
+  ): Promise<FitResult>;
   /** Absolute path of the logo, for embedding as a watermark. */
   readonly logoPath: string;
 }
@@ -309,6 +316,35 @@ runner swap, not a rewrite.
 **Known risk:** `takumi-js` first published 2026-03-26 and has shipped 119
 versions since, currently 2.6.2. It is actively maintained but young and
 fast-moving, so pin the exact version and expect breaking changes between majors.
+
+### How the title is measured
+
+Takumi exposes `Renderer.measure(node, options)`, which returns a `MeasuredNode`
+with real `width` and `height` from the same layout engine that renders. So the
+bisection measures with the engine that will draw the card — there is no
+approximation error between measuring and rendering, and no font-metrics library
+is needed.
+
+`fit-title.ts` still takes the measurer as a parameter rather than importing the
+renderer. That keeps it a pure function, testable with a fake measurer, and
+keeps the native binding out of unit tests.
+
+The verified API surface used by the runner:
+
+```ts
+import { fromHtml } from 'takumi-js/helpers/html';
+import { Renderer } from 'takumi-js/node';
+
+// fromHtml also lifts <style> blocks out of the markup, so the card can be
+// authored with a real stylesheet instead of inline styles on every element.
+const { node, stylesheets } = fromHtml(html);
+
+const renderer = new Renderer();
+await renderer.registerFont({ name: 'Inter', data: woff2Buffer });
+
+const measured = await renderer.measure(node, { width, height, stylesheets });
+const png = await renderer.render(node, { width, height, format: 'png', stylesheets });
+```
 
 ### Fonts
 
