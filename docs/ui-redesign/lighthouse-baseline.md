@@ -51,6 +51,33 @@ Two consequences for the redesign:
    is the most heavily rewritten surface in the plan, so this is the tightest
    constraint in the whole change.
 
+## After the redesign — comparison
+
+Re-run on 2026-08-10 under identical conditions, after all eight tasks landed.
+
+| Page | Accessibility | Best Practices | SEO | Agentic | Failed | Passed audits |
+|------|---------------|----------------|-----|---------|--------|---------------|
+| `/` | 95 → **96** | 100 | 100 | 100 | 1 → 1 | 48 → 53 |
+| `/topics/astro` | 100 → **100** | 100 | 100 | 100 | 0 → 0 | 43 → 43 |
+| `/blog` | 100 → **100** | 100 | 100 | 100 | 0 → 0 | 48 → 53 |
+
+No regression. `/` improved by one point and gained five passing audits; the
+single remaining failure is the same pre-existing `color-contrast` on the two
+external project links.
+
+### One regression was caught and fixed
+
+The first post-change run flagged **four** `color-contrast` items on `/` — the
+two pre-existing links plus two `feature-card__numeral` spans. The score had
+still gone *up*, so the number alone would have hidden it; the acceptance
+criterion "must not add new `color-contrast` failures" is what caught it.
+
+The numerals are decoration at 7% alpha that nobody is meant to read, so axe was
+right to flag them as illegible visible text. Fixed by moving the digits out of a
+text node and into a `::before` with `content: attr(data-numeral)`. That is the
+more correct construction anyway: the digits are no longer part of the document's
+text content, so they cannot be selected or copied either.
+
 ## Before screenshots
 
 - `.superpowers/shots/before-topic-astro.png` — the current topic hero, showing

@@ -31,7 +31,8 @@ const numeral = String(index).padStart(2, '0');
 ---
 
 <Card class={cn('relative p-6', className)} {...props}>
-  <span class='feature-card__numeral' aria-hidden='true'>{numeral}</span>
+  <span class='feature-card__numeral' aria-hidden='true' data-numeral={numeral}
+  ></span>
 
   <BadgePlate class='relative z-10'>
     <Icon name={icon} title={iconTitle} aria-hidden='true' class='h-7 w-7' />
@@ -54,7 +55,13 @@ const numeral = String(index).padStart(2, '0');
 <style>
   /* Enormous, ghosted, bleeding off the bottom-right corner. Most of the glyph
      sits outside the card, so it reads as a texture wash rather than a number.
-     Clipped by Card's own overflow-hidden. */
+     Clipped by Card's own overflow-hidden.
+
+     The digits live in a pseudo-element, not a text node, on purpose. At 7%
+     alpha this is decoration that no one is meant to read, so it should not be
+     text: as a text node it failed the axe colour-contrast audit (correctly —
+     illegible visible text), and it landed in the DOM's text content where it
+     could be selected and copied. Pseudo-element content is excluded from both. */
   .feature-card__numeral {
     position: absolute;
     right: -2.2rem;
@@ -67,5 +74,9 @@ const numeral = String(index).padStart(2, '0');
     color: color-mix(in oklab, var(--color-secondary) 7%, transparent);
     pointer-events: none;
     user-select: none;
+  }
+
+  .feature-card__numeral::before {
+    content: attr(data-numeral);
   }
 </style>
