@@ -3,6 +3,6 @@
   "slug": "css",
   "imagePath": "topics/css_logo.png",
   "description": "Cascading Style Sheets for styling web applications",
-  "backgroundGradient": "",
+  "accentColor": "#663399",
   "externalLink": "https://www.w3.org/Style/CSS/"
 }

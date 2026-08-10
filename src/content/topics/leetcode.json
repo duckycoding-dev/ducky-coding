@@ -3,6 +3,6 @@
   "slug": "leetcode",
   "imagePath": "topics/leetcode_logo.png",
   "description": "A platform for preparing technical coding interviews",
-  "backgroundGradient": "",
+  "accentColor": "#ffa116",
   "externalLink": "https://leetcode.com"
 }

@@ -152,7 +152,7 @@ const topicsPageJsonLd = {
           imageAlt={topic.image?.alt ?? `${topic.title} representation`}
           title={topic.title}
           slug={topic.slug}
-          backgroundGradient={topic.backgroundGradient || undefined}
+          accentColor={topic.accentColor || undefined}
           loading={index < 4 ? 'eager' : 'lazy'}
           fetchPriority={index < 4 ? 'high' : 'auto'}
         />

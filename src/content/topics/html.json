@@ -3,6 +3,6 @@
   "slug": "html",
   "imagePath": "topics/html_logo.png",
   "description": "HyperText Markup Language for structuring web content",
-  "backgroundGradient": "",
+  "accentColor": "#e34f26",
   "externalLink": "https://html.spec.whatwg.org/multipage/"
 }

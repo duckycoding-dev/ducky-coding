@@ -68,12 +68,13 @@ function postFile(fixture: PostFixture = {}): string {
   return `${lines.join('\n')}\n`;
 }
 
-function topicFile(title: string, slug: string): string {
+function topicFile(title: string, slug: string, accentColor?: string): string {
   return `${JSON.stringify(
     {
       title,
       slug,
       description: `Everything about ${title}`,
+      ...(accentColor === undefined ? {} : { accentColor }),
     },
     null,
     2,
@@ -122,7 +123,11 @@ interface Harness {
   dbUrl: string;
   db: ReturnType<typeof drizzle>;
   writePost: (slug: string, fixture?: PostFixture) => Promise<void>;
-  writeTopic: (slug: string, title: string) => Promise<void>;
+  writeTopic: (
+    slug: string,
+    title: string,
+    accentColor?: string,
+  ) => Promise<void>;
   writeMeme: (slug: string, fixture?: MemeFixture) => Promise<void>;
   removePost: (slug: string) => Promise<void>;
   sync: () => Promise<{ success: boolean; error?: string }>;
@@ -174,10 +179,10 @@ beforeEach(async () => {
         postFile(fixture),
         'utf-8',
       ),
-    writeTopic: (slug, title) =>
+    writeTopic: (slug, title, accentColor) =>
       writeFile(
         path.join(projectRoot, 'src/content/topics', `${slug}.json`),
-        topicFile(title, slug),
+        topicFile(title, slug, accentColor),
         'utf-8',
       ),
     writeMeme: (slug, fixture) =>
@@ -558,5 +563,54 @@ describe('buildSyncAllContent — failure handling', () => {
 
     expect(result.success).toBe(false);
     expect(result.error).toBeTypeOf('string');
+  });
+});
+
+describe('buildSyncAllContent — topic accent colour', () => {
+  it('persists an accent colour and detects changes to it', async () => {
+    await harness.writeTopic('astro', 'Astro', '#ff5d01');
+    expect((await harness.sync()).success).toBe(true);
+
+    const inserted = await harness.db
+      .select()
+      .from(topicsTable)
+      .where(eq(topicsTable.title, 'Astro'))
+      .get();
+    expect(inserted?.accentColor).toBe('#ff5d01');
+
+    // Change only the accent colour — the sync must notice and update.
+    await harness.writeTopic('astro', 'Astro', '#61dafb');
+    expect((await harness.sync()).success).toBe(true);
+
+    const updated = await harness.db
+      .select()
+      .from(topicsTable)
+      .where(eq(topicsTable.title, 'Astro'))
+      .get();
+    expect(updated?.accentColor).toBe('#61dafb');
+  });
+
+  it('stores no accent colour when the topic omits one', async () => {
+    await harness.writeTopic('astro', 'Astro');
+    expect((await harness.sync()).success).toBe(true);
+
+    const row = await harness.db
+      .select()
+      .from(topicsTable)
+      .where(eq(topicsTable.title, 'Astro'))
+      .get();
+    expect(row?.accentColor).toBeNull();
+  });
+
+  it('skips a topic whose accent colour is not a six-digit hex', async () => {
+    await harness.writeTopic('broken', 'Broken', 'red');
+    await harness.sync();
+
+    const row = await harness.db
+      .select()
+      .from(topicsTable)
+      .where(eq(topicsTable.title, 'Broken'))
+      .get();
+    expect(row).toBeUndefined();
   });
 });
