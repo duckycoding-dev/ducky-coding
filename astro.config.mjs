@@ -162,9 +162,11 @@ export default defineConfig({
     },
     mdx(),
     sitemap(),
-    icon({
-      iconDir: 'src/assets/icons', // user svgs stored in this path instead of src/icons
-    }),
+    // Every icon on the site comes from @iconify-json/mdi or @iconify-json/ph.
+    // `iconDir` is deliberately not set: it previously pointed at
+    // src/assets/icons, which does not exist. Set it only when local SVGs are
+    // actually added, and create the directory in the same change.
+    icon(),
   ],
   fonts: [
     {

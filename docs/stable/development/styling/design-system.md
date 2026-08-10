@@ -1,6 +1,6 @@
 ---
 created: 2026-04-08
-updated: 2026-08-09
+updated: 2026-08-10
 summary: Neo-brutalist design system — tokens, patterns, and usage rules
 ---
 
@@ -128,6 +128,69 @@ px-2 py-1 text-sm font-medium
 ```
 bg-primary-200 border-comic-thick border-secondary p-6
 ```
+
+### Badge plate (icon, image or monogram mark)
+
+```
+bg-primary-100 border-comic border-secondary shadow-comic
+grid place-items-center overflow-hidden rounded-lg
+```
+
+Implemented as `src/components/badge-plate/BadgePlate.astro`. Variants:
+
+| Variant | Values |
+|---------|--------|
+| `size` | `sm` 40px · `md` 56px · `lg` 80px · `xl` 96px |
+| `shape` | `square` (`rounded-lg`) · `round` (`rounded-full`) |
+| `weight` | `default` (2px + `shadow-comic`) · `heavy` (4px + `shadow-comic-lg`) |
+
+Content is a `<slot>`, so the same plate holds an `astro-icon` glyph, an
+`<Image>`, or text. This is the shared mark primitive — the feature cards, the
+fun-fact stickers, the timeline entries and the topic hero all use it, which is
+what makes those surfaces read as one system.
+
+**The fill is not always `primary-100`.** Where the plate holds artwork whose
+colour is unknown, override it. The topic hero tints the plate with the topic's
+own accent because several topic logos are white artwork that vanishes on a
+white surface.
+
+### Sticker (playful inline fact)
+
+```
+bg-{accent-color} border-[3px] border-secondary shadow-comic-lg
+rounded-full py-2 pr-5 pl-3
+```
+
+Implemented as `src/components/sticker/Sticker.astro`. The tilt cycles with
+`:nth-child(4n + …)` rather than fixed indices, so any number of items keeps
+working. Prefer this over positional selectors anywhere a list can grow.
+
+### Ghosted numeral watermark
+
+```
+absolute right-[-2.2rem] bottom-[-5.5rem] z-0
+text-[16rem] font-black leading-none tracking-[-0.07em]
+color-mix(in oklab, var(--color-secondary) 7%, transparent)
+pointer-events-none select-none
+```
+
+Used by `FeatureCard`. Requires `overflow-hidden` on the container (`Card`
+already has it) and `aria-hidden='true'`, since it is decoration, not content.
+
+### Derived surface colour
+
+Where a surface colour comes from content rather than the palette, inject the
+base colour as a CSS custom property with `define:vars` and derive the surface
+with `color-mix`, rather than accepting raw Tailwind classes from content:
+
+```css
+background-color: color-mix(in oklab, var(--topicAccent) 20%, white);
+```
+
+A 20% mix keeps any input hex light enough for `secondary` text; 40–55% gives
+distinguishable nested surfaces. `define:vars` exposes the JS identifier
+verbatim, so the property is camelCase (`--topicAccent`). See
+`src/utils/topic-accent/topic-accent.ts` for the validation and fallback.
 
 ## CSS Scoping Conventions
 

@@ -1,5 +1,5 @@
 ---
-updated: 2026-08-09
+updated: 2026-08-10
 summary: Active issue and tech debt tracker
 ---
 
@@ -99,21 +99,40 @@ it is a declared direct dependency.
 
 ---
 
-### CLEANUP-007 — `iconDir` points at a directory that does not exist
+### BUG-001 — the standalone migration scripts cannot run
 
 **Severity:** low
-**Status:** open
+**Status:** open — not load-bearing
 
-`astro.config.mjs` configures `icon({ iconDir: 'src/assets/icons' })`, but
-`src/assets/icons/` does not exist. Every icon in the project comes from the
-`@iconify-json/mdi` and `@iconify-json/ph` sets, so the option is inert and the
-build does not complain.
+`npm run db:migrate` and `npm run db:migrate:local` both fail immediately:
 
-Either drop the option, or create the directory if local SVGs are wanted. Left
-alone for now because removing it is a config change with no observable effect,
-and it was found during a docs audit rather than a code one.
+```
+Error [ERR_MODULE_NOT_FOUND]: Cannot find package '@utils/logs'
+imported from src/db/migrate.ts
+```
 
-**Affected files:** `astro.config.mjs`
+`src/db/migrate.ts:5` imports `@utils/logs/logger`, but the scripts run it with
+bare `node --env-file=… ./src/db/migrate.ts`. Node strips the TypeScript but does
+not resolve `tsconfig.json` path aliases, so the import cannot be found.
+`src/db/client.ts:1` has the same problem with `@utils/env`, so fixing only
+`migrate.ts` is not enough.
+
+**Why it is tolerable:** migrations do not depend on these scripts. They run at
+build time through the `db-sync` integration in `astro.config.mjs`, which calls
+`buildMigrate` via Vite where aliases resolve — confirmed in build output:
+
+```
+[db-sync] Running DB migrations...
+Migrations completed successfully.
+```
+
+That is also how Netlify migrates on deploy. The scripts are vestigial.
+
+**Fix options:** switch the imports in `migrate.ts` and `client.ts` to relative
+paths, or run the script through a loader that honours the alias map. Removing
+the scripts entirely is also defensible, since nothing uses them.
+
+**Affected files:** `package.json`, `src/db/migrate.ts`, `src/db/client.ts`
 
 ---
 
