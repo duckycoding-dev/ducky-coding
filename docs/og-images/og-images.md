@@ -147,11 +147,11 @@ renderer, the fonts, the fitting or the route.
 
 ```mermaid
 graph TD
-    Route["pages/og/[...route].png.ts — generic, dispatches on kind"]
-    Registry["utils/og/kinds/index.ts — kind registry"]
+    Route["pages/og/[...route].png.ts — generic, knows no kind"]
+    Registry["utils/og/kinds/index.ts — registry"]
     PostKind["utils/og/kinds/post-card.ts — the only kind today"]
-    Shell["utils/og/card-shell.ts — frame, plate, watermark, dots"]
-    Types["utils/og/types.ts — OgCardSlots, OgCardKind"]
+    Shell["utils/og/card-shell.ts — opt-in plate frame"]
+    Types["utils/og/types.ts — OgCardKind, OgRenderContext"]
     Fit["utils/og/fit-title.ts"]
     Paths["utils/og/og-paths.ts"]
     Font["utils/og/inter-font.ts"]
@@ -159,69 +159,90 @@ graph TD
     Post["pages/posts/[...id]/index.astro"]
 
     Route --> Registry
-    Route --> Shell
+    Route --> Types
+    Route --> Fit
     Route --> Font
     Route --> Takumi
-    Registry --> PostKind
-    PostKind --> Types
-    Shell --> Types
-    Shell --> Fit
-    Post --> Paths
     Route --> Paths
+    Registry --> PostKind
+    PostKind -->|implements| Types
+    PostKind -->|chooses to use| Shell
+    Post --> Paths
 ```
+
+The route builds an `OgRenderContext` — width, height, `fitTitle`, logo path —
+and hands it to whichever kind owns the requested path. It never sees card
+content. `card-shell` sits off to the side with no dependency on the contract,
+which is what makes it optional.
 
 ### The seam
 
-Two types define the boundary. A card kind never emits HTML and never touches
-Takumi; it only turns one content entry into slots.
+**A kind owns its own HTML.** There is deliberately no shared content type: the
+fields a card needs are exactly the thing that varies between kinds, so fixing
+them up front would be the wrong abstraction. A meme card may want an embedded
+image and no chips; a generic page card may want only a title; a topic card may
+want a post count. None of them should be forced through a post-shaped hole.
+
+What *is* shared is the pipeline — enumerate, render, encode, write — plus a set
+of opt-in helpers.
 
 ```ts
-/** What any card can put in the shell. Kind-agnostic. */
-export interface OgCardSlots {
-  /** Small chip above the title — the post slug today. Omitted if absent. */
-  eyebrow?: string;
-  title: string;
-  /** Rendered left to right in the meta row. Max 2 by current design. */
-  chips: { label: string; tone: 'accent' | 'accent2' | 'accent3' }[];
-  /** Plain text at the end of the meta row — read time today. */
-  trailing?: string;
+/** Shared tools handed to a kind at render time. */
+export interface OgRenderContext {
+  readonly width: number;   // 1200
+  readonly height: number;  // 630
+  /** Largest size at which `text` fits the given box, plus truncation backstop. */
+  fitTitle(text: string, box: { width: number; height: number }, opts?: FitOptions): FitResult;
+  /** Absolute path of the logo, for embedding as a watermark. */
+  readonly logoPath: string;
 }
 
-/** One card type. `TEntry` is whatever that kind enumerates. */
+/** One card type. `TEntry` is whatever that kind enumerates — its own shape. */
 export interface OgCardKind<TEntry> {
   /** URL segment and output directory: /og/<kind>/<id>.png */
   readonly kind: string;
   listEntries(): Promise<TEntry[]>;
   entryId(entry: TEntry): string;
-  toSlots(entry: TEntry): OgCardSlots;
+  /** The complete HTML for this card. The kind decides its own layout. */
+  renderHtml(entry: TEntry, ctx: OgRenderContext): string;
 }
 ```
 
+`card-shell.ts` is then an **opt-in helper, not a contract**: a function that
+draws the neo-brutalist frame agreed in design — canvas, 28px margin, white
+plate, dot texture, watermark — and takes its own options type. The post card
+calls it. A future kind may call it with different options, or ignore it entirely
+and emit its own HTML. Nothing forces the frame.
+
 | File | Responsibility |
 |------|----------------|
-| `src/utils/og/types.ts` | `OgCardSlots` and `OgCardKind`. The whole extension contract. |
-| `src/utils/og/card-shell.ts` | Turns `OgCardSlots` into the card's HTML string: canvas, margin, plate, dot texture, watermark, the three rows. Shared by every kind. Escapes all interpolated text. Pure. |
+| `src/utils/og/types.ts` | `OgCardKind` and `OgRenderContext`. The whole extension contract — no content shape. |
+| `src/utils/og/card-shell.ts` | Opt-in helper that draws the approved plate frame from its **own** options type. Escapes all interpolated text. Pure. |
 | `src/utils/og/fit-title.ts` | Given text, a box and a measuring function, return the size and possibly-truncated text. Pure. |
-| `src/utils/og/kinds/post-card.ts` | `OgCardKind` for blog posts: lists published posts, ids them by `entry.id`, maps title/topic/tag/read time into slots. **All post-specific knowledge lives here and nowhere else.** |
+| `src/utils/og/kinds/post-card.ts` | `OgCardKind` for blog posts. Defines its own content shape internally, maps title/topic/tag/read time, and calls `card-shell`. **All post-specific knowledge lives here and nowhere else.** |
 | `src/utils/og/kinds/index.ts` | `OG_CARD_KINDS` — the registry. One entry today. |
 | `src/utils/og/og-paths.ts` | Single source of truth for `/og/<kind>/<id>.png`, URL and filesystem path. |
 | `src/utils/og/inter-font.ts` | Locate the Inter woff2 that Astro downloaded. Throws if absent. |
-| `src/pages/og/[...route].png.ts` | Generic: `getStaticPaths` walks the registry and yields one path per entry per kind; `GET` resolves the kind, builds slots, fits, renders. `prerender = true`. |
+| `src/pages/og/[...route].png.ts` | Generic: `getStaticPaths` walks the registry; `GET` resolves the kind, calls `renderHtml`, encodes the PNG. `prerender = true`. Knows nothing about posts. |
 
 A single generic route rather than one file per kind — the same shape
 `astro-og-canvas`'s `OGImageRoute` uses, where a `pages` map drives one route.
 
 ### What adding a kind actually costs
 
-To add topic cards later: write `kinds/topic-card.ts` implementing the three
-functions, add it to `OG_CARD_KINDS`, and point that page's `buildPageSeo` at
-`ogCardUrl('topics', slug)`. The shell, fitting, font loading, rendering, output
-paths and route are untouched.
+Write `kinds/<name>-card.ts` implementing four members, add it to
+`OG_CARD_KINDS`, and point that page's `buildPageSeo` at
+`ogCardUrl('<name>', id)`. Font loading, fitting, encoding, output paths and the
+route are untouched.
 
-If a future kind needs a genuinely different frame — say an image-composite card
-for memes — that is a second shell alongside `card-shell.ts`, selected by the
-kind. The registry entry would name its shell. Not built now, but the seam does
-not prevent it.
+Whether the new kind reuses `card-shell` is *its* decision. A meme card that
+composites the meme image behind the title would simply not call it — and would
+need no change anywhere else, because no shared type describes what a card
+contains.
+
+The cost of this looseness is that two kinds could drift visually. That is
+accepted: the alternative is a universal content type that would have to grow a
+field for every new idea, which is how these abstractions rot.
 
 ### Why an endpoint
 
@@ -320,15 +341,16 @@ build output get explicit verification.
   measurer: short text hits the max size, long text shrinks, pathological text
   truncates on a word boundary, a single unbreakable word does not loop forever,
   empty string is handled.
-- `card-shell.ts` — given slots, the eyebrow, title, chips and trailing text all
-  appear in the output; **HTML is escaped** (a title containing `<`, `&`, `"` must
-  not break the markup); the eyebrow is omitted when absent; chip tones map to the
-  right palette variables. Tested with hand-built slots, so it needs no post data
-  at all — which is the point of the seam.
-- `kinds/post-card.ts` — `toSlots` picks the topic as the first chip and **the
+- `card-shell.ts` — every supplied string appears in the output; **HTML is escaped**
+  (a title containing `<`, `&`, `"` must not break the markup); optional parts are
+  omitted when absent; chip tones map to the right palette variables. Tested by
+  calling it with its own options directly, so it needs no post data at all — if a
+  shell test ever needs a post, the seam is wrong.
+- `kinds/post-card.ts` — `renderHtml` picks the topic as the first chip and **the
   first tag that is not the topic** as the second; falls back to the topic chip
-  alone when no other tag exists; truncates a tag over 18 characters; puts
-  `timeToRead` in `trailing`; ids entries by `entry.id`.
+  alone when no other tag exists; truncates a tag over 18 characters; renders
+  `timeToRead`; ids entries by `entry.id`. Tested against real post-shaped
+  fixtures.
 - `og-paths.ts` — URL and filesystem path agree, are kind-aware
   (`/og/posts/<id>.png`), and handle ids with nested segments.
 
