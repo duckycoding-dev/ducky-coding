@@ -1368,7 +1368,9 @@ git commit -m "feat(og): generate post cards from a generic endpoint"
 
 ### Task 8: Point posts at the cards, and prove the weight drops
 
-The payoff. This is where the 4,808 KB leaves the build.
+The payoff. Note what it is and is not: the win is what third parties download,
+not the size of `dist` — Astro emits an original for every imported asset whether
+or not anything references it.
 
 **Files:**
 - Modify: `src/pages/posts/[...id]/index.astro`
@@ -1383,7 +1385,8 @@ The payoff. This is where the 4,808 KB leaves the build.
 ```bash
 find dist -name "*.png" -exec du -k {} + | awk '{s+=$1} END {print "png total:", s, "KB"}'
 ```
-Expected: around 6,864 KB before the change (the exact figure from the spec; note whatever it actually reports).
+Note whatever it reports. Expect it to be **unchanged** after the work: this
+figure is recorded to prove the build size is not the metric, not to show a drop.
 
 - [ ] **Step 2: Repoint `og:image` at the card**
 

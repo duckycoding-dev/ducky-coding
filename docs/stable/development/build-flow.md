@@ -252,3 +252,17 @@ want to verify that the site builds without mutating your local DB — or, with
 
 Local dev uses `.env.development`, production uses `.env.production`.
 `.env.example` at the repo root lists all of them with placeholder values.
+
+## OG card generation
+
+`src/pages/og/[...route].png.ts` is prerendered during `astro build`. It depends on
+two earlier build stages, so its position in the order is not incidental:
+
+- **fonts** — it reads the Inter woff2 from `.astro/fonts/`, which Astro's font
+  pipeline populates during the build. Missing font is a hard error, never a
+  silent fallback to another face.
+- **content** — it enumerates the `posts` collection, so content must be synced.
+
+Output lands at `dist/og/posts/<id>.png`, unhashed, one file per published post.
+Adding a card type means adding an entry to `OG_CARD_KINDS`; the route itself is
+kind-agnostic.

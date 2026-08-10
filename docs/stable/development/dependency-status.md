@@ -1,6 +1,6 @@
 ---
 created: 2026-04-01
-updated: 2026-08-09
+updated: 2026-08-10
 summary: Version ceilings, accepted advisories and deliberate non-upgrades
 ---
 
@@ -59,3 +59,13 @@ revisited unless the situation changes.
 
 Currently `v24.19.0` — the active LTS. Node 26 is released but does not enter
 LTS until October 2026. Astro 7 requires `>=22.12.0`.
+
+## takumi-js — pinned to an exact version
+
+`takumi-js` renders the build-time OG cards (`src/utils/og/`). It is pinned with
+`--save-exact`, no caret: the package first published on 2026-03-26 and had shipped
+119 versions by August, so a range would pull breaking changes into a build.
+
+Native bindings ship per platform; all eight variants are in `package-lock.json`,
+including `@takumi-rs/core-linux-x64-gnu` for Netlify. A WASM fallback is bundled
+in the same package. The dependency adds no new audit findings.
