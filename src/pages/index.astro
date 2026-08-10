@@ -8,6 +8,8 @@ import headshotDavide from '@assets/images/head-shot-davide.jpg';
 import Card from '@components/card/Card.astro';
 import FeatureCard from '@components/card/FeatureCard.astro';
 import ProjectGrid from '@components/card/ProjectGrid.astro';
+import Sticker from '@components/sticker/Sticker.astro';
+import { FUN_FACTS } from '@data/fun-facts';
 import { SELECTED_PROJECTS } from '@data/projects';
 import { WHAT_I_DO } from '@data/what-i-do';
 import HolyGrailLayout from '@layouts/holy-grail-layout/HolyGrailLayout.astro';
@@ -23,7 +25,6 @@ import { DuckyCodingPublisher } from '@utils/json-ld/publisher';
 import { buildWebPage } from '@utils/json-ld/webpage';
 import { DuckyCodingWebsite } from '@utils/json-ld/website';
 import { buildPageSeo } from '@utils/seo/page-seo';
-import FunfactCard from '../components/card/FunfactCard.astro';
 import TimelineCard from '../components/card/TimelineCard.astro';
 import Link from '../components/link/Link.astro';
 
@@ -70,33 +71,6 @@ const timelineObjects: ComponentProps<typeof TimelineCard>[] = [
     link: 'https://informatica.math.unipd.it/en/bachelor/',
     children:
       'I studied computer science fundamentals including programming, algorithms, data structures, databases, networks and software engineering, and worked on a few group projects that strengthened my problem-solving and teamwork skills.',
-  },
-];
-
-const funFacts: ComponentProps<typeof FunfactCard>[] = [
-  {
-    emoji: '👨‍🌾',
-    title: 'Gardener',
-    description: 'Hot peppers enjoyer',
-    class: 'bg-accent-100',
-  },
-  {
-    emoji: '🎮',
-    title: 'Gamer',
-    description: 'Since I was a little kid',
-    class: 'bg-accent2-100',
-  },
-  {
-    emoji: '📚',
-    title: 'Learner',
-    description: 'Always exploring new tech',
-    class: 'bg-accent3-100',
-  },
-  {
-    emoji: '🦆',
-    title: 'Duck lover',
-    description: 'Quack quack quack',
-    class: 'bg-primary-200',
   },
 ];
 
@@ -237,9 +211,19 @@ const homepageJsonLd = {
     <h2 class='text-secondary mb-8 text-center text-3xl font-black md:text-4xl'>
       <span class='text-accent-700'>Fun facts</span> about me
     </h2>
-    <div class='grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4'>
-      {funFacts.map((fact) => <FunfactCard {...fact} />)}
-    </div>
+    <ul class='flex list-none flex-wrap justify-center gap-4 p-0'>
+      {
+        FUN_FACTS.map((fact) => (
+          <Sticker
+            icon={fact.icon}
+            iconTitle={fact.iconTitle}
+            title={fact.title}
+            description={fact.description}
+            class={fact.surfaceClass}
+          />
+        ))
+      }
+    </ul>
   </section>
 
   <!-- Experience Timeline -->
@@ -339,42 +323,3 @@ const homepageJsonLd = {
     </Card>
   </section>
 </HolyGrailLayout>
-
-<style>
-  /* Custom animations for enhanced interactivity */
-  @keyframes float {
-    0%,
-    100% {
-      transform: translateY(0px);
-    }
-    50% {
-      transform: translateY(-10px);
-    }
-  }
-
-  /* Add floating animation to fun facts cards on larger screens */
-  @media (min-width: 768px) {
-    #fun-facts > div > :nth-child(1) {
-      animation: float 3s ease-in-out infinite;
-      animation-delay: 0s;
-    }
-    #fun-facts > div > :nth-child(2) {
-      animation: float 3s ease-in-out infinite;
-      animation-delay: 0.5s;
-    }
-    #fun-facts > div > :nth-child(3) {
-      animation: float 3s ease-in-out infinite;
-      animation-delay: 1s;
-    }
-    #fun-facts > div > :nth-child(4) {
-      animation: float 3s ease-in-out infinite;
-      animation-delay: 1.5s;
-    }
-  }
-
-  @media (prefers-reduced-motion) {
-    #fun-facts > div > :nth-child(n) {
-      animation: none;
-    }
-  }
-</style>
