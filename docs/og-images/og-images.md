@@ -197,16 +197,36 @@ export interface OgRenderContext {
   readonly logoPath: string;
 }
 
-/** One card type. `TEntry` is whatever that kind enumerates — its own shape. */
-export interface OgCardKind<TEntry> {
+/**
+ * One card type. Deliberately NOT generic.
+ *
+ * An earlier draft was `OgCardKind<TEntry>` with `listEntries` and
+ * `renderHtml(entry, ctx)`. That leaks the entry type to the caller: a registry
+ * holding several kinds with different `TEntry` collapses to `unknown` and needs
+ * a cast at the dispatch point — so the flow would not actually be independent of
+ * the card type. Closing over the data inside the kind removes the problem
+ * instead of casting around it.
+ */
+export interface OgCardKind {
   /** URL segment and output directory: /og/<kind>/<id>.png */
   readonly kind: string;
-  listEntries(): Promise<TEntry[]>;
-  entryId(entry: TEntry): string;
-  /** The complete HTML for this card. The kind decides its own layout. */
-  renderHtml(entry: TEntry, ctx: OgRenderContext): string;
+  /** Which cards this kind produces. The route only ever sees ids. */
+  listIds(): Promise<string[]>;
+  /** Fetch whatever this kind needs for `id`, pick its template, return HTML. */
+  renderById(id: string, ctx: OgRenderContext): Promise<string>;
 }
 ```
+
+So the route handles only two things it fully understands — a `kind` string and
+an `id` string — and the registry is the mapper that routes them:
+
+```ts
+const kind = OG_CARD_KINDS.find((k) => k.kind === params.kind);
+const html = await kind.renderById(id, ctx);
+```
+
+Each kind decides internally what data it loads, what shape that data has, and
+which template renders it. Nothing about that reaches the route or the registry.
 
 `card-shell.ts` is then an **opt-in helper, not a contract**: a function that
 draws the neo-brutalist frame agreed in design — canvas, 28px margin, white
@@ -216,24 +236,24 @@ and emit its own HTML. Nothing forces the frame.
 
 | File | Responsibility |
 |------|----------------|
-| `src/utils/og/types.ts` | `OgCardKind` and `OgRenderContext`. The whole extension contract — no content shape. |
+| `src/utils/og/types.ts` | `OgCardKind` and `OgRenderContext`. The whole extension contract — no content shape, no generics. |
 | `src/utils/og/card-shell.ts` | Opt-in helper that draws the approved plate frame from its **own** options type. Escapes all interpolated text. Pure. |
 | `src/utils/og/fit-title.ts` | Given text, a box and a measuring function, return the size and possibly-truncated text. Pure. |
-| `src/utils/og/kinds/post-card.ts` | `OgCardKind` for blog posts. Defines its own content shape internally, maps title/topic/tag/read time, and calls `card-shell`. **All post-specific knowledge lives here and nowhere else.** |
-| `src/utils/og/kinds/index.ts` | `OG_CARD_KINDS` — the registry. One entry today. |
+| `src/utils/og/kinds/post-card.ts` | `OgCardKind` for blog posts. Loads posts, defines its own content shape internally, maps title/topic/tag/read time, and calls `card-shell`. **All post-specific knowledge lives here and nowhere else.** |
+| `src/utils/og/kinds/index.ts` | `OG_CARD_KINDS` — the registry, and the mapper from `kind` string to implementation. One entry today. |
 | `src/utils/og/og-paths.ts` | Single source of truth for `/og/<kind>/<id>.png`, URL and filesystem path. |
 | `src/utils/og/inter-font.ts` | Locate the Inter woff2 that Astro downloaded. Throws if absent. |
-| `src/pages/og/[...route].png.ts` | Generic: `getStaticPaths` walks the registry; `GET` resolves the kind, calls `renderHtml`, encodes the PNG. `prerender = true`. Knows nothing about posts. |
+| `src/pages/og/[...route].png.ts` | Generic: `getStaticPaths` walks the registry calling `listIds`; `GET` resolves the kind by string, calls `renderById`, encodes the PNG. `prerender = true`. Handles only two strings and never sees card data. |
 
 A single generic route rather than one file per kind — the same shape
 `astro-og-canvas`'s `OGImageRoute` uses, where a `pages` map drives one route.
 
 ### What adding a kind actually costs
 
-Write `kinds/<name>-card.ts` implementing four members, add it to
-`OG_CARD_KINDS`, and point that page's `buildPageSeo` at
+Write `kinds/<name>-card.ts` implementing three members — `kind`, `listIds`,
+`renderById` — add it to `OG_CARD_KINDS`, and point that page's `buildPageSeo` at
 `ogCardUrl('<name>', id)`. Font loading, fitting, encoding, output paths and the
-route are untouched.
+route are untouched, and no existing type has to grow a field.
 
 Whether the new kind reuses `card-shell` is *its* decision. A meme card that
 composites the meme image behind the title would simply not call it — and would
