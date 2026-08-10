@@ -2,7 +2,9 @@ export const IMAGE_DENSITIES = [1.5, 2, 2.5, 3];
 
 export const IMAGE_COMMON_WIDTHS = [200, 400, 600, 800, 1000];
 
-export const IMAGE_COMMON_SIZES = '(max-width: 500px) 75vw, 100vw';
+// There is deliberately no shared `sizes` constant. `sizes` describes the box an
+// image renders into, which only the component owning that layout knows. The
+// previous shared value claimed `100vw` for cards a few hundred pixels wide.
 
 export const WEBSITE_FIRST_PUBLISHING_DATE = new Date(
   2025,

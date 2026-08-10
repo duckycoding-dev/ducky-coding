@@ -62,8 +62,24 @@ Re-run on 2026-08-10 under identical conditions, after all eight tasks landed.
 | `/blog` | 100 → **100** | 100 | 100 | 100 | 0 → 0 | 48 → 53 |
 
 No regression. `/` improved by one point and gained five passing audits; the
-single remaining failure is the same pre-existing `color-contrast` on the two
+single remaining failure was the same pre-existing `color-contrast` on the two
 external project links.
+
+## After the contrast fix
+
+Re-run on 2026-08-10 under identical conditions, after `Link`'s `default` variant
+moved from `accent-700` to `accent-800`.
+
+| Page | Accessibility | Failed audits | Passed audits |
+|------|---------------|---------------|---------------|
+| `/` | 96 → **100** | 1 → **0** | 53 → 54 |
+| `/topics` | **100** | 0 | 53 |
+| `/my-projects` | **100** | 0 | 53 |
+
+`accent-700` (`#d600be`) measured 4.56:1 on pure white but only 4.06:1 on
+`primary-500` — passing nowhere it was actually used. `accent-800` (`#a30091`)
+clears 6.30:1 against the whole primary ramp. Every page the site audits is now at
+100 with zero failures.
 
 ### One regression was caught and fixed
 

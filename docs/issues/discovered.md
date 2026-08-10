@@ -136,6 +136,32 @@ the scripts entirely is also defensible, since nothing uses them.
 
 ---
 
+### BUG-002 — the `outlined` link variant's own text colour fails contrast
+
+**Severity:** low
+**Status:** open — latent, nothing renders it today
+
+`Link`'s `outlined` variant sets `text-accent` (`#ff3de9`), which measures
+**2.96:1** against white — well under the 4.5:1 AA threshold for normal text and
+under 3:1 even for large text.
+
+It does not fail any audit today because all four call sites
+(`src/pages/index.astro:160,307,316,325`) override it with `text-secondary`. That
+is the tell: the variant's default colour is simultaneously dead and wrong, so the
+first call site that trusts it inherits a failure.
+
+Fix by making `text-accent-800` (`#a30091`, 7.08:1 on white) the variant's colour,
+matching what `default` now uses, then dropping the redundant `text-secondary`
+overrides — or by removing the colour from the variant so call sites must choose.
+
+Related: the `default` variant had the same defect and was fixed by moving from
+`accent-700` (4.06:1 on `primary-500`) to `accent-800`. `accent-700` remains in use
+on large headings, where 4.06:1 clears the 3:1 large-text threshold.
+
+**Affected files:** `src/components/link/Link.astro`, `src/pages/index.astro`
+
+---
+
 ### CLEANUP-005 — Netlify `NODE_VERSION` overrides and contradicts `.nvmrc`
 
 **Severity:** low
@@ -173,5 +199,98 @@ pairs — and deriving all three from it. Deliberately not done during the Astro
 7 upgrade to keep that change reviewable.
 
 **Affected files:** `tsconfig.json`, `vitest.config.ts`, `astro.config.mjs`
+
+---
+
+### CLEANUP-007 — the image glob is duplicated across nine modules
+
+**Severity:** low
+**Status:** open
+
+The same `import.meta.glob('/src/assets/images/**/*.{jpeg,jpg,png,gif,webp,svg}')`
+is written out in nine places: `src/db/sync/buildSync.ts`, `src/pages/blog.astro`,
+`src/pages/search.astro`, `src/pages/rss.xml.ts`, `src/pages/posts/[...id]/index.astro`,
+`src/pages/memes/index.astro`, `src/pages/memes/[...id]/index.astro`,
+`src/pages/topics/index.astro`, `src/pages/topics/[topic]/index.astro`.
+
+**This is not a performance issue** — measured, so it does not get re-litigated.
+Every call sits in prerendered frontmatter and resolves during the build; the
+whole `dist` ships a single 2.5 KB client script. The cost is duplication: the
+glob pattern has to be edited in nine places when a new image format is added,
+and a missed one fails silently by simply not matching.
+
+Fix by exporting the glob from one module (`src/utils/images/`) and importing the
+resulting record. Note `import.meta.glob` must appear literally in the calling
+module — Vite transforms it statically — so the shared module has to own the call
+and export its result, not accept a pattern argument.
+
+**Affected files:** the nine modules listed above
+
+---
+
+### CLEANUP-008 — production sourcemaps are emitted
+
+**Severity:** low
+**Status:** open — needs a decision, not a fix
+
+`astro.config.mjs:124` sets `vite.build.sourcemap: true`, so `dist` carries six
+`.map` files totalling **44 KB**.
+
+**No measurable performance cost** — browsers request a `.map` only when devtools
+is open, so no visitor downloads them. The only real question is whether the
+unminified source should be readable in production. Deliberately recorded as a
+decision rather than a defect: leaving it on is a legitimate choice for a
+personal blog whose source is public on GitHub anyway.
+
+**Affected files:** `astro.config.mjs`
+
+---
+
+### CLEANUP-009 — the SSR function bundles 31 MB to serve one route
+
+**Severity:** low
+**Status:** open
+
+`.netlify/v1/functions/ssr` is 31 MB, of which 22 MB is `node_modules` and 16 MB
+is `@img` (sharp's platform binaries). `/search` is the only route that reaches
+it — everything else is prerendered and the function config sets
+`preferStatic: true`, so the CDN answers from static files.
+
+Two contributors, both worth checking before acting:
+
+1. `includedFiles: ['**/*']` in the emitted function config pulls the whole
+   project in.
+2. `sharp` is Astro's build-time image processor. Whether the deployed function
+   genuinely needs it depends on whether any runtime route resolves an image;
+   `imageCDN: false` already keeps `@netlify/images` out.
+
+The only user-visible symptom is cold-start latency on `/search`. Also note the
+local build embeds `@img/sharp-darwin-arm64` — the host's own architecture — which
+is harmless because Netlify reinstalls for Linux, but makes local size figures
+unrepresentative.
+
+**Affected files:** `astro.config.mjs`, Netlify adapter output
+
+---
+
+### CLEANUP-010 — `dist` emits originals nothing references
+
+**Severity:** low
+**Status:** open
+
+`dist/_astro/` contains the full-size source PNGs (`image-srcset-and-sizes-attributes`
+2.1 MB, `welcome-to-duckycoding` 2.1 MB, `avoid-self-referencing-links` 484 KB)
+even though no HTML, RSS or JSON-LD output references them. Astro emits an
+original for every imported asset regardless of references.
+
+**No user-facing cost** — nothing requests these files, so no visitor downloads
+them. It affects deploy upload size only. Recorded because it was initially
+mistaken for a page-weight problem during the OG card work; it is not one.
+
+The two `.mp4` files in the same directory (8.6 MB combined) are **not** part of
+this — they are legitimately referenced by the srcset post, and `<video controls>`
+without `preload` fetches metadata only.
+
+**Affected files:** build output
 
 ---

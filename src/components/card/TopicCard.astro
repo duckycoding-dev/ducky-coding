@@ -8,8 +8,16 @@ import Card from '@components/card/Card.astro';
 import Link from '@components/link/Link.astro';
 import { getEnvs } from '@utils/env';
 import { resolveTopicAccent } from '@utils/topic-accent/topic-accent';
-import { IMAGE_COMMON_SIZES } from '../../utils/globals';
 import { getImageWidths } from '../../utils/images/images';
+
+// Matches the only grid this card renders in (`/topics`): one column, then two
+// from `xs`, then `auto-fill minmax(200px, 1fr)` inside a 1216px content box,
+// which settles at five ~227px cells. `p-4` takes 32px off each.
+const IMAGE_SIZES = `
+  (max-width: 479px) calc(100vw - 4rem),
+  (max-width: 639px) calc(50vw - 3.25rem),
+  200px
+`;
 
 export type TopicCardProps = HTMLAttributes<'a'> &
   (
@@ -92,7 +100,7 @@ const topicAccent = resolveTopicAccent(accentColor);
               width={200}
               height={200}
               widths={getImageWidths(200)}
-              sizes={IMAGE_COMMON_SIZES}
+              sizes={IMAGE_SIZES}
               fetchpriority={fetchPriority}
             />
           ) : (
@@ -104,7 +112,7 @@ const topicAccent = resolveTopicAccent(accentColor);
               decoding={decoding}
               class={`topic-card__image -z-1 aspect-square w-full object-contain p-4 transition-transform duration-300 group-hover:scale-110 group-focus:scale-110 group-active:scale-110`}
               widths={getImageWidths(imageSrc.width)}
-              sizes={IMAGE_COMMON_SIZES}
+              sizes={IMAGE_SIZES}
               fetchpriority={fetchPriority}
             />
           )}

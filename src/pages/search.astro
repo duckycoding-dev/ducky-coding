@@ -19,7 +19,7 @@ import { TagsService } from '@db/features/tags/tags.service';
 import { TopicsService } from '@db/features/topics/topics.service';
 import HolyGrailLayout from '@layouts/holy-grail-layout/HolyGrailLayout.astro';
 import { WEBSITE_ROOT } from '@utils/globals';
-import { matchImageFromGlobImport } from '@utils/images/images';
+import { getImageWidths, matchImageFromGlobImport } from '@utils/images/images';
 import { buildBreadcrumb } from '@utils/json-ld/breadcrumb';
 import { buildGraph } from '@utils/json-ld/graph';
 import { DuckyCodingPerson } from '@utils/json-ld/person';
@@ -410,6 +410,12 @@ const searchJsonLd = {
                         alt={meme.imageAlt || meme.title}
                         class='h-full w-full object-cover transition-transform duration-200 group-hover:scale-105'
                         loading={i < 4 ? 'eager' : 'lazy'}
+                        widths={getImageWidths(meme.processedImage.width)}
+                        sizes={`
+                          (max-width: 767px) calc(50vw - 2.5rem),
+                          (max-width: 1343px) calc(33vw - 2.5rem),
+                          374px
+                        `}
                       />
                     </div>
                     <p class='text-secondary text-sm font-bold'>{meme.title}</p>

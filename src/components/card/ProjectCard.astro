@@ -7,8 +7,19 @@ import { cn } from '@libs/cn';
 import DuckyCodingLogo from '@assets/images/DuckyCoding_logo.png';
 import Card from '@components/card/Card.astro';
 import Tag from '@components/tag/Tag.astro';
-import { IMAGE_COMMON_SIZES } from '@utils/globals';
 import { getImageWidths } from '../../utils/images/images';
+
+/**
+ * Default for `ProjectGrid`'s own breakpoints: one column, two from `md`, three
+ * from `lg` inside a 1216px content box (~384px cells). Pages that override the
+ * grid must pass their own `imageSizes` — a shared constant cannot describe a
+ * layout it does not know.
+ */
+const DEFAULT_IMAGE_SIZES = `
+  (max-width: 767px) calc(100vw - 2rem),
+  (max-width: 1023px) calc(50vw - 3rem),
+  384px
+`;
 
 export interface ProjectCardProps extends HTMLAttributes<'div'> {
   title: string;
@@ -21,6 +32,8 @@ export interface ProjectCardProps extends HTMLAttributes<'div'> {
   fetchPriority?: 'high' | 'low' | 'auto';
   projectUrl?: string;
   linkActionTitle?: string;
+  /** `sizes` for the banner. Required when the page overrides the grid. */
+  imageSizes?: string;
 }
 
 interface Props extends ProjectCardProps {}
@@ -37,6 +50,7 @@ const {
   projectUrl,
   fetchPriority = 'auto',
   linkActionTitle = 'View Project',
+  imageSizes = DEFAULT_IMAGE_SIZES,
   ...rest
 } = Astro.props;
 ---
@@ -59,7 +73,7 @@ const {
           height={(bannerImage ?? DuckyCodingLogo).height}
           alt={imageAlt ?? `${title} project banner`}
           widths={getImageWidths((bannerImage ?? DuckyCodingLogo).width)}
-          sizes={IMAGE_COMMON_SIZES}
+          sizes={imageSizes}
           loading={loading}
           decoding={'async'}
           fetchpriority={fetchPriority}
