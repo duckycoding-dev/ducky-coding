@@ -75,6 +75,16 @@ describe('renderCardShell', () => {
     expect(TITLE_BOX.height).toBeGreaterThan(0);
   });
 
+  it('derives the title box from the real frame geometry', () => {
+    // Pinned deliberately. A hand-written box that disagrees with the rendered
+    // layout makes the fitted title overflow and pushes the meta row out of the
+    // plate — which is exactly what happened with a 1080x326 guess.
+    // width:  1200 - 2*28 margin - 2*8 border - 2*52 padding
+    expect(TITLE_BOX.width).toBe(1024);
+    // height: 630 - 2*28 - 2*8 - 2*52, less eyebrow 58, meta 74, two 26 gaps
+    expect(TITLE_BOX.height).toBe(270);
+  });
+
   it('renders no chips at all when given an empty list', () => {
     const html = renderCardShell({ ...BASE, chips: [] });
     expect(html).not.toContain('class="chip"');

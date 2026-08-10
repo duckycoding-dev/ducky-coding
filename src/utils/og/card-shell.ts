@@ -26,14 +26,35 @@ const TONE_COLOURS: Record<CardChip['tone'], string> = {
   accent3: '#e9ff3d',
 };
 
+// Frame geometry. TITLE_BOX is derived from these rather than written by hand,
+// because a hand-written figure silently disagreed with the real layout: the
+// title was measured in a box 56px wider than it actually renders in, wrapped to
+// fewer lines than it really needed, and pushed the meta row out of the plate.
+const CANVAS_WIDTH = 1200;
+const CANVAS_HEIGHT = 630;
+const MARGIN = 28;
+const PLATE_BORDER = 8;
+const PLATE_PADDING = 52;
+const ROW_GAP = 26;
+/** Slug chip: 28px text, 7px padding, 5px border, top and bottom. */
+const EYEBROW_ROW_HEIGHT = 58;
+/** Chips: 32px text, 12px padding, 6px border, top and bottom. */
+const META_ROW_HEIGHT = 74;
+
+const CONTENT_WIDTH =
+  CANVAS_WIDTH - 2 * MARGIN - 2 * PLATE_BORDER - 2 * PLATE_PADDING;
+const CONTENT_HEIGHT =
+  CANVAS_HEIGHT - 2 * MARGIN - 2 * PLATE_BORDER - 2 * PLATE_PADDING;
+
 /**
  * The box the title occupies inside this frame, for `fitTitle`.
  *
- * 1200 − 2×28 margin − 2×8 border − 2×52 padding = 1080 wide.
- * 630 − 2×28 − 2×8 − 2×52 = 510 tall, less the eyebrow row (~58), the meta row
- * (~74) and two 26px gaps = 326.
+ * Must match what the title actually renders into, or the fitted size overflows.
  */
-export const TITLE_BOX = { width: 1080, height: 326 } as const;
+export const TITLE_BOX = {
+  width: CONTENT_WIDTH,
+  height: CONTENT_HEIGHT - EYEBROW_ROW_HEIGHT - META_ROW_HEIGHT - 2 * ROW_GAP,
+} as const;
 
 /**
  * Draws the approved neo-brutalist plate frame.

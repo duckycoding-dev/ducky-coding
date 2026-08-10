@@ -1,3 +1,4 @@
+import { readFile } from 'node:fs/promises';
 import path from 'node:path';
 import { fromHtml } from 'takumi-js/helpers/html';
 import { Renderer } from 'takumi-js/node';
@@ -31,7 +32,11 @@ export async function createOgRenderContext(): Promise<OgRenderer> {
     data: await loadInterWoff2(),
   });
 
-  const logoPath = path.join(process.cwd(), LOGO_PATH);
+  // Takumi does not read the filesystem from an <img src>: every image must be
+  // handed to it as bytes keyed by the exact src string used in the markup.
+  // Without this the watermark simply renders as nothing, silently.
+  const logoSrc = 'duckycoding-logo.png';
+  const logoData = await readFile(path.join(process.cwd(), LOGO_PATH));
 
   /**
    * Measures one wrapped paragraph inside `box`.
@@ -60,7 +65,7 @@ export async function createOgRenderContext(): Promise<OgRenderer> {
   const ctx: OgRenderContext = {
     width: OG_WIDTH,
     height: OG_HEIGHT,
-    logoPath,
+    logoPath: logoSrc,
     fitTitle: (
       text: string,
       box: { width: number; height: number },
@@ -75,6 +80,7 @@ export async function createOgRenderContext(): Promise<OgRenderer> {
       height: OG_HEIGHT,
       format: 'png',
       stylesheets,
+      images: [{ src: logoSrc, data: logoData }],
     });
     return Buffer.from(buffer);
   };
