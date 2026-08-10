@@ -140,33 +140,88 @@ or the layout silently breaks:
 Pure logic is separated from the runner, because the runner is the only part with
 technical uncertainty.
 
+Nothing about the post card is baked into the pipeline. There is **one shared
+shell** and **one card kind** that plugs into it; adding a kind later means
+implementing three small functions and adding a registry entry, not touching the
+renderer, the fonts, the fitting or the route.
+
 ```mermaid
 graph TD
-    Route["pages/og/posts/[...slug].png.ts"]
+    Route["pages/og/[...route].png.ts — generic, dispatches on kind"]
+    Registry["utils/og/kinds/index.ts — kind registry"]
+    PostKind["utils/og/kinds/post-card.ts — the only kind today"]
+    Shell["utils/og/card-shell.ts — frame, plate, watermark, dots"]
+    Types["utils/og/types.ts — OgCardSlots, OgCardKind"]
     Fit["utils/og/fit-title.ts"]
-    Card["utils/og/og-card.ts"]
     Paths["utils/og/og-paths.ts"]
     Font["utils/og/inter-font.ts"]
     Takumi["takumi-js"]
-    Seo["utils/seo/page-seo.ts"]
     Post["pages/posts/[...id]/index.astro"]
 
-    Route --> Fit
-    Route --> Card
+    Route --> Registry
+    Route --> Shell
     Route --> Font
     Route --> Takumi
-    Route --> Paths
+    Registry --> PostKind
+    PostKind --> Types
+    Shell --> Types
+    Shell --> Fit
     Post --> Paths
-    Post --> Seo
+    Route --> Paths
+```
+
+### The seam
+
+Two types define the boundary. A card kind never emits HTML and never touches
+Takumi; it only turns one content entry into slots.
+
+```ts
+/** What any card can put in the shell. Kind-agnostic. */
+export interface OgCardSlots {
+  /** Small chip above the title — the post slug today. Omitted if absent. */
+  eyebrow?: string;
+  title: string;
+  /** Rendered left to right in the meta row. Max 2 by current design. */
+  chips: { label: string; tone: 'accent' | 'accent2' | 'accent3' }[];
+  /** Plain text at the end of the meta row — read time today. */
+  trailing?: string;
+}
+
+/** One card type. `TEntry` is whatever that kind enumerates. */
+export interface OgCardKind<TEntry> {
+  /** URL segment and output directory: /og/<kind>/<id>.png */
+  readonly kind: string;
+  listEntries(): Promise<TEntry[]>;
+  entryId(entry: TEntry): string;
+  toSlots(entry: TEntry): OgCardSlots;
+}
 ```
 
 | File | Responsibility |
 |------|----------------|
+| `src/utils/og/types.ts` | `OgCardSlots` and `OgCardKind`. The whole extension contract. |
+| `src/utils/og/card-shell.ts` | Turns `OgCardSlots` into the card's HTML string: canvas, margin, plate, dot texture, watermark, the three rows. Shared by every kind. Escapes all interpolated text. Pure. |
 | `src/utils/og/fit-title.ts` | Given text, a box and a measuring function, return the size and possibly-truncated text. Pure. |
-| `src/utils/og/og-card.ts` | Given post data and a resolved title size, return the card's HTML string. Pure. Escapes all interpolated text. |
-| `src/utils/og/og-paths.ts` | Single source of truth for the card URL and output path, keyed off the post identifier. |
+| `src/utils/og/kinds/post-card.ts` | `OgCardKind` for blog posts: lists published posts, ids them by `entry.id`, maps title/topic/tag/read time into slots. **All post-specific knowledge lives here and nowhere else.** |
+| `src/utils/og/kinds/index.ts` | `OG_CARD_KINDS` — the registry. One entry today. |
+| `src/utils/og/og-paths.ts` | Single source of truth for `/og/<kind>/<id>.png`, URL and filesystem path. |
 | `src/utils/og/inter-font.ts` | Locate the Inter woff2 that Astro downloaded. Throws if absent. |
-| `src/pages/og/posts/[...slug].png.ts` | `getStaticPaths` over published posts, `GET` renders the PNG. `prerender = true`. |
+| `src/pages/og/[...route].png.ts` | Generic: `getStaticPaths` walks the registry and yields one path per entry per kind; `GET` resolves the kind, builds slots, fits, renders. `prerender = true`. |
+
+A single generic route rather than one file per kind — the same shape
+`astro-og-canvas`'s `OGImageRoute` uses, where a `pages` map drives one route.
+
+### What adding a kind actually costs
+
+To add topic cards later: write `kinds/topic-card.ts` implementing the three
+functions, add it to `OG_CARD_KINDS`, and point that page's `buildPageSeo` at
+`ogCardUrl('topics', slug)`. The shell, fitting, font loading, rendering, output
+paths and route are untouched.
+
+If a future kind needs a genuinely different frame — say an image-composite card
+for memes — that is a second shell alongside `card-shell.ts`, selected by the
+kind. The registry entry would name its shell. Not built now, but the seam does
+not prevent it.
 
 ### Why an endpoint
 
@@ -265,11 +320,17 @@ build output get explicit verification.
   measurer: short text hits the max size, long text shrinks, pathological text
   truncates on a word boundary, a single unbreakable word does not loop forever,
   empty string is handled.
-- `og-card.ts` — the title, topic and tag appear in the output; **HTML is escaped**
-  (a title containing `<`, `&`, `"` must not break the markup); the second chip is
-  the first non-topic tag; only the topic chip renders when no other tag exists; a
-  tag over 18 characters is truncated.
-- `og-paths.ts` — URL and filesystem path agree for slugs with nested segments.
+- `card-shell.ts` — given slots, the eyebrow, title, chips and trailing text all
+  appear in the output; **HTML is escaped** (a title containing `<`, `&`, `"` must
+  not break the markup); the eyebrow is omitted when absent; chip tones map to the
+  right palette variables. Tested with hand-built slots, so it needs no post data
+  at all — which is the point of the seam.
+- `kinds/post-card.ts` — `toSlots` picks the topic as the first chip and **the
+  first tag that is not the topic** as the second; falls back to the topic chip
+  alone when no other tag exists; truncates a tag over 18 characters; puts
+  `timeToRead` in `trailing`; ids entries by `entry.id`.
+- `og-paths.ts` — URL and filesystem path agree, are kind-aware
+  (`/og/posts/<id>.png`), and handle ids with nested segments.
 
 **Build verification (measured, not eyeballed):**
 1. `npm run astro:build:local` emits exactly one PNG per published post at
