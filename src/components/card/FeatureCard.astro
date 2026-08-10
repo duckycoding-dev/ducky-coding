@@ -10,11 +10,19 @@ interface Props extends ComponentProps<typeof Card> {
   /** Iconify name for the decorative mark. */
   icon: string;
   iconTitle: string;
-  /** 1-based position, rendered as the ghosted watermark. */
-  index: number;
+  /**
+   * 1-based position, rendered as the ghosted watermark.
+   *
+   * Omit it for sets that are not a sequence. Numbering a group that has no
+   * inherent order asserts one that does not exist — which is why the fun-fact
+   * stickers and the technology cards go without.
+   */
+  index?: number;
   heading: string;
   /** `true` renders the larger heading used by the column-spanning card. */
   isWide?: boolean;
+  /** `true` centres the mark and the text, for even multi-column grids. */
+  isCentred?: boolean;
 }
 
 const {
@@ -23,11 +31,13 @@ const {
   index,
   heading,
   isWide = false,
+  isCentred = false,
   class: className,
   ...props
 } = Astro.props;
 
-const numeral = String(index).padStart(2, '0');
+const numeral =
+  index === undefined ? undefined : String(index).padStart(2, '0');
 ---
 
 {
@@ -40,11 +50,21 @@ const numeral = String(index).padStart(2, '0');
   keeps the range local, so nothing here can ever outrank site chrome.
 */
 }
-<Card class={cn('relative isolate p-6', className)} {...props}>
-  <span class='feature-card__numeral' aria-hidden='true' data-numeral={numeral}
-  ></span>
+<Card
+  class={cn('relative isolate p-6', isCentred && 'text-center', className)}
+  {...props}
+>
+  {
+    numeral ? (
+      <span
+        class='feature-card__numeral'
+        aria-hidden='true'
+        data-numeral={numeral}
+      />
+    ) : null
+  }
 
-  <BadgePlate class='relative z-10'>
+  <BadgePlate class={cn('relative z-10', isCentred && 'mx-auto')}>
     <Icon name={icon} title={iconTitle} aria-hidden='true' class='h-7 w-7' />
   </BadgePlate>
 
@@ -57,7 +77,13 @@ const numeral = String(index).padStart(2, '0');
     {heading}
   </h3>
 
-  <p class={cn('text-secondary relative z-10', isWide && 'md:text-lg')}>
+  <p
+    class={cn(
+      'text-secondary relative z-10',
+      isWide && 'md:text-lg',
+      isCentred && 'text-sm',
+    )}
+  >
     <slot />
   </p>
 </Card>
