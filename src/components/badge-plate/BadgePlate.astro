@@ -1,0 +1,53 @@
+---
+import type { HTMLAttributes } from 'astro/types';
+import { cn } from '@libs/cn';
+import { cva, type VariantProps } from 'cva';
+
+/**
+ * The shared mark primitive for the whole site.
+ *
+ * Content is a slot rather than an icon prop, so the same plate holds an
+ * `astro-icon` glyph, an `<Image>`, or text (a monogram). That is what keeps
+ * the topic hero, the feature cards, the fun-fact stickers and the timeline
+ * reading as one system.
+ *
+ * See docs/ui-redesign/ui-redesign.md.
+ */
+const badgePlateVariants = cva({
+  base: 'bg-primary-100 border-secondary grid shrink-0 place-items-center overflow-hidden',
+  variants: {
+    size: {
+      sm: 'h-10 w-10',
+      md: 'h-14 w-14',
+      lg: 'h-20 w-20',
+      xl: 'h-24 w-24',
+    },
+    shape: {
+      square: 'rounded-lg',
+      round: 'rounded-full',
+    },
+    weight: {
+      default: 'border-comic shadow-comic',
+      heavy: 'border-comic-thick shadow-comic-lg',
+    },
+  },
+  defaultVariants: {
+    size: 'md',
+    shape: 'square',
+    weight: 'default',
+  },
+});
+
+export type BadgePlateVariants = VariantProps<typeof badgePlateVariants>;
+
+interface Props extends HTMLAttributes<'div'>, BadgePlateVariants {}
+
+const { class: className, size, shape, weight, ...props }: Props = Astro.props;
+---
+
+<div
+  class={cn(badgePlateVariants({ size, shape, weight }), className)}
+  {...props}
+>
+  <slot />
+</div>

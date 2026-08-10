@@ -1,0 +1,71 @@
+---
+import type { ComponentProps } from 'astro/types';
+import { Icon } from 'astro-icon/components';
+import { cn } from '@libs/cn';
+
+import BadgePlate from '@components/badge-plate/BadgePlate.astro';
+import Card from './Card.astro';
+
+interface Props extends ComponentProps<typeof Card> {
+  /** Iconify name for the decorative mark. */
+  icon: string;
+  iconTitle: string;
+  /** 1-based position, rendered as the ghosted watermark. */
+  index: number;
+  heading: string;
+  /** `true` renders the larger heading used by the column-spanning card. */
+  isWide?: boolean;
+}
+
+const {
+  icon,
+  iconTitle,
+  index,
+  heading,
+  isWide = false,
+  class: className,
+  ...props
+} = Astro.props;
+
+const numeral = String(index).padStart(2, '0');
+---
+
+<Card class={cn('relative p-6', className)} {...props}>
+  <span class='feature-card__numeral' aria-hidden='true'>{numeral}</span>
+
+  <BadgePlate class='relative z-10'>
+    <Icon name={icon} title={iconTitle} aria-hidden='true' class='h-7 w-7' />
+  </BadgePlate>
+
+  <h3
+    class={cn(
+      'text-secondary relative z-10 mt-4 mb-3 font-bold',
+      isWide ? 'text-2xl md:text-3xl' : 'text-xl',
+    )}
+  >
+    {heading}
+  </h3>
+
+  <p class={cn('text-secondary relative z-10', isWide && 'md:text-lg')}>
+    <slot />
+  </p>
+</Card>
+
+<style>
+  /* Enormous, ghosted, bleeding off the bottom-right corner. Most of the glyph
+     sits outside the card, so it reads as a texture wash rather than a number.
+     Clipped by Card's own overflow-hidden. */
+  .feature-card__numeral {
+    position: absolute;
+    right: -2.2rem;
+    bottom: -5.5rem;
+    z-index: 0;
+    font-size: 16rem;
+    font-weight: 900;
+    line-height: 1;
+    letter-spacing: -0.07em;
+    color: color-mix(in oklab, var(--color-secondary) 7%, transparent);
+    pointer-events: none;
+    user-select: none;
+  }
+</style>
