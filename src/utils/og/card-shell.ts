@@ -92,6 +92,12 @@ export function renderCardShell(opts: CardShellOptions): string {
       color: #00020a;
       display: flex;
     }
+    /* The plate carries no padding on purpose. Takumi resolves inset on an
+       absolutely positioned child against the CONTENT box, not the padding box
+       the CSS spec calls for, so any padding here would inset the dot layer and
+       the watermark by that amount, leaving a white band inside the border and
+       cropping the watermark differently than designed. Padding lives on
+       .content instead, which nothing is positioned against. */
     .plate {
       position: relative;
       width: 100%;
@@ -100,6 +106,12 @@ export function renderCardShell(opts: CardShellOptions): string {
       background: #ffffff;
       border: 8px solid #00020a;
       box-shadow: 12px 12px 0 0 #00020a;
+      display: flex;
+    }
+    .content {
+      position: relative;
+      width: 100%;
+      height: 100%;
       padding: 52px;
       display: flex;
       flex-direction: column;
@@ -149,9 +161,11 @@ export function renderCardShell(opts: CardShellOptions): string {
   <div class="plate">
     <div class="dots"></div>
     <img class="wm" src="${escapeHtml(opts.logoPath)}" />
-    ${eyebrow}
-    <div class="row-title"><div class="title">${escapeHtml(opts.title)}</div></div>
-    <div class="row-meta">${chips}${trailing}</div>
+    <div class="content">
+      ${eyebrow}
+      <div class="row-title"><div class="title">${escapeHtml(opts.title)}</div></div>
+      <div class="row-meta">${chips}${trailing}</div>
+    </div>
   </div>
 </div>`;
 }

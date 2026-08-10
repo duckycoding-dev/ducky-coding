@@ -94,6 +94,36 @@ describe('renderCardShell', () => {
     expect(html).toContain('mask-image');
   });
 
+  it('keeps padding off the positioned plate', () => {
+    // Takumi resolves `inset` on an absolutely positioned child against the
+    // CONTENT box, not the padding box the spec calls for. Padding on .plate
+    // therefore insets the dot layer and the watermark by that amount, leaving a
+    // white band inside the border. Padding must live on .content, which nothing
+    // is positioned against.
+    const html = renderCardShell(BASE);
+    const plateBlock = html.slice(
+      html.indexOf('.plate {'),
+      html.indexOf('.content {'),
+    );
+    expect(plateBlock).toContain('position: relative');
+    expect(plateBlock).not.toContain('padding');
+
+    const contentBlock = html.slice(html.indexOf('.content {'));
+    expect(contentBlock).toContain('padding: 52px');
+  });
+
+  it('puts the dots and watermark outside the padded content wrapper', () => {
+    const html = renderCardShell(BASE);
+    const dotsAt = html.indexOf('class="dots"');
+    const wmAt = html.indexOf('class="wm"');
+    const contentAt = html.indexOf('class="content"');
+    expect(dotsAt).toBeGreaterThan(-1);
+    expect(wmAt).toBeGreaterThan(-1);
+    expect(contentAt).toBeGreaterThan(-1);
+    expect(dotsAt).toBeLessThan(contentAt);
+    expect(wmAt).toBeLessThan(contentAt);
+  });
+
   it('renders no chips at all when given an empty list', () => {
     const html = renderCardShell({ ...BASE, chips: [] });
     expect(html).not.toContain('class="chip"');
