@@ -85,6 +85,15 @@ describe('renderCardShell', () => {
     expect(TITLE_BOX.height).toBe(270);
   });
 
+  it('includes the dot texture layer', () => {
+    const html = renderCardShell(BASE);
+    expect(html).toContain('radial-gradient');
+    expect(html).toContain('28px 28px');
+    // Takumi does support mask-image — verified by rendering. If a future version
+    // drops it, the fade must become a background-coloured overlay instead.
+    expect(html).toContain('mask-image');
+  });
+
   it('renders no chips at all when given an empty list', () => {
     const html = renderCardShell({ ...BASE, chips: [] });
     expect(html).not.toContain('class="chip"');

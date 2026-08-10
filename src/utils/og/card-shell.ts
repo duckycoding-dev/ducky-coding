@@ -113,6 +113,14 @@ export function renderCardShell(opts: CardShellOptions): string {
       height: 400px;
       opacity: 0.16;
     }
+    .dots {
+      position: absolute;
+      inset: 0;
+      background-image: radial-gradient(#808088 3px, transparent 3.2px);
+      background-size: 28px 28px;
+      mask-image: linear-gradient(to bottom, #000 0, #000 80px, transparent 290px);
+      -webkit-mask-image: linear-gradient(to bottom, #000 0, #000 80px, transparent 290px);
+    }
     .row-top { display: flex; }
     .slug {
       background: #e9ff3d;
@@ -139,6 +147,7 @@ export function renderCardShell(opts: CardShellOptions): string {
     .rt { font-size: 30px; font-weight: 800; }
   </style>
   <div class="plate">
+    <div class="dots"></div>
     <img class="wm" src="${escapeHtml(opts.logoPath)}" />
     ${eyebrow}
     <div class="row-title"><div class="title">${escapeHtml(opts.title)}</div></div>
