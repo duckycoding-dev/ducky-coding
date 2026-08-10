@@ -174,8 +174,21 @@ color-mix(in oklab, var(--color-secondary) 7%, transparent)
 pointer-events-none select-none
 ```
 
-Used by `FeatureCard`. Requires `overflow-hidden` on the container (`Card`
-already has it) and `aria-hidden='true'`, since it is decoration, not content.
+Used by `FeatureCard`, where it is **opt-in** via the `index` prop. Only number a
+set that genuinely has an order: the homepage's "What I do" cards are numbered,
+while the fun-fact stickers and the technology cards are not, because numbering
+an unordered group asserts a sequence that does not exist.
+
+Three requirements:
+
+- `overflow-hidden` on the container, so the glyph is clipped (`Card` has it).
+- `isolate` on the container. The numeral sits at `z-0` and the content at
+  `z-10`; without a stacking context those values escape into the root context
+  and can tie with the sticky header's `z-10`, letting card content scroll over
+  site chrome.
+- The digits live in a `::before` via `content: attr(data-numeral)`, not a text
+  node. At 7% alpha this is decoration nobody is meant to read, so as text it
+  fails the contrast audit and lands in the document's copyable text.
 
 ### Derived surface colour
 
