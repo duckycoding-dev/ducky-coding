@@ -118,8 +118,9 @@ Measured against the real font, this yields:
 | (synthetic stress test) | 163 | 52px |
 
 Even at 163 characters the backstop never fires, so with real content nothing is
-ever truncated. Fixed size steps were tried first and rejected: they overflowed,
-because they were tuned by eye.
+ever truncated. Do not replace this with fixed size steps per title length: sizes
+chosen by eye overflow, because the only reliable input is a measurement against
+the actual font.
 
 **Two constraints learned by getting this wrong during design.** Both must hold
 or the layout silently breaks:
@@ -198,14 +199,14 @@ export interface OgRenderContext {
 }
 
 /**
- * One card type. Deliberately NOT generic.
+ * One card type. Deliberately NOT generic — do not add a type parameter for the
+ * entry.
  *
- * An earlier draft was `OgCardKind<TEntry>` with `listEntries` and
- * `renderHtml(entry, ctx)`. That leaks the entry type to the caller: a registry
- * holding several kinds with different `TEntry` collapses to `unknown` and needs
- * a cast at the dispatch point — so the flow would not actually be independent of
- * the card type. Closing over the data inside the kind removes the problem
- * instead of casting around it.
+ * A parameterised `OgCardKind<TEntry>` would leak the entry type to the caller:
+ * a registry holding several kinds with different `TEntry` collapses to
+ * `unknown` and forces a cast at the dispatch point, which is exactly the
+ * type-dependence this seam exists to avoid. Keeping the data closed over inside
+ * the kind removes the problem rather than casting around it.
  */
 export interface OgCardKind {
   /** URL segment and output directory: /og/<kind>/<id>.png */
