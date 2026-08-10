@@ -1,6 +1,6 @@
 ---
 created: 2026-04-02
-updated: 2026-08-09
+updated: 2026-08-10
 summary: astro-icon setup, the MDI and Phosphor icon sets, and bundle-size caveats
 ---
 
@@ -27,6 +27,26 @@ component per icon (`GitHubIcon.astro`, `CalendarIcon.astro`, …) plus a shared
 `GenericIcon.astro` and an `index.ts` exporting the common `CustomIconProps`
 type. Import the wrapper, not `<Icon>` directly.
 
+### Exception: decorative icons
+
+`GenericIcon` requires a `title` prop — which renders an SVG `<title>`, giving
+the icon an accessible name — and always emits numeric `width`/`height`
+(defaulting to 50). Both are wrong for a purely decorative mark, which needs
+`aria-hidden='true'` and CSS sizing so it scales with its container.
+
+So decorative marks import `Icon` from `astro-icon/components` directly:
+
+```astro
+<Icon name='mdi:code-braces' aria-hidden='true' class='h-7 w-7' />
+```
+
+This applies to the marks inside `BadgePlate` — `FeatureCard`, `Sticker`,
+`TimelineCard` and `NavSearchForm`. The meaning is always carried by adjacent
+text, so the icon contributes nothing to the accessibility tree.
+
+`GenericIcon` remains correct for icons that are themselves meaningful and need
+a name, such as the footer's social links.
+
 **BE CAREFUL**: when using server-side rendering or hybrid rendering, every icon in the assets will be included in the final build.
 To avoid bloating the bundle, configure `astro.config.mjs` to include only the icons actually used:
 
@@ -35,9 +55,9 @@ the sprite symbols they actually use (verified: 8 symbols on a meme page), so
 it has not been needed — but `/search` is server-rendered, so revisit this if
 icon usage grows.
 
-Note also that the integration is configured with
-`iconDir: 'src/assets/icons'`, a directory that does not exist. Every icon
-comes from the iconify sets, so the option is inert — see CLEANUP-007.
+`iconDir` is deliberately unset. Every icon comes from the iconify sets, so
+there are no local SVGs to point it at. Set it — and create the directory in the
+same change — only when local SVGs are actually added.
 
 ```js
 /* astro.config.mjs */

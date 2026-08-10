@@ -277,218 +277,214 @@ const searchJsonLd = {
     <small class='mb-8 block text-center italic'
       >Find posts, memes, and everything in between.</small
     >
+  </p>
 
-    {/* Full-width grid: main + sidebar + pagination */}
-    <div class='search-grid'>
-      {/* Main content area */}
-      <div class='[grid-area:main]'>
-        <SearchInput initialQuery={q} searchHref={searchHref} class='mb-4' />
+  {/* Full-width grid: main + sidebar + pagination */}
+  <div class='search-grid'>
+    {/* Main content area */}
+    <div class='[grid-area:main]'>
+      <SearchInput initialQuery={q} searchHref={searchHref} class='mb-4' />
 
-        <TypeTabs activeType={activeType} class='mb-3' />
+      <TypeTabs activeType={activeType} class='mb-3' />
 
-        {/* Active tag pills (removable) */}
-        <div id='active-tags-container' class='mb-3 flex flex-wrap gap-2'>
-          {
-            activeTags.map((tag) => (
-              <button
-                type='button'
-                data-remove-tag={tag}
-                class='border-comic border-secondary bg-accent2 text-secondary hover:bg-accent2-700 shrink-0 rounded-3xl px-3 py-1 text-sm font-bold transition-colors'
-              >
-                {tag} ✕
-              </button>
-            ))
-          }
-        </div>
-
-        {/* Mobile: tag + topic dialog buttons */}
-        <div class='mb-4 flex flex-col gap-2 md:hidden'>
-          <TagFilter tags={tagNames} activeTags={activeTags} />
-          <TopicFilter topics={topicTitles} activeTopics={activeTopics} />
-        </div>
-
-        {/* Results summary + page size */}
-        <div class='mb-4 flex flex-wrap items-center justify-between gap-2'>
-          <p class='text-secondary text-sm opacity-60'>
-            {
-              totalResults > 0
-                ? `Found ${totalResults} result${totalResults !== 1 ? 's' : ''} (${totalPosts} post${totalPosts !== 1 ? 's' : ''}, ${totalMemes} meme${totalMemes !== 1 ? 's' : ''})`
-                : searchResult.success
-                  ? 'No results found. Try adjusting your search or filters.'
-                  : `Search error: ${searchResult.error}`
-            }
-          </p>
-          <label
-            class='text-secondary flex items-center gap-1.5 text-sm opacity-60'
-          >
-            Show:
-            <select
-              id='page-size-select'
-              class='border-comic border-secondary bg-primary rounded-lg px-2 py-1 text-sm opacity-100'
+      {/* Active tag pills (removable) */}
+      <div id='active-tags-container' class='mb-3 flex flex-wrap gap-2'>
+        {
+          activeTags.map((tag) => (
+            <button
+              type='button'
+              data-remove-tag={tag}
+              class='border-comic border-secondary bg-accent2 text-secondary hover:bg-accent2-700 shrink-0 rounded-3xl px-3 py-1 text-sm font-bold transition-colors'
             >
-              {
-                !pageSizeInList && (
-                  <option value={pageSize} selected>
-                    {pageSize}
-                  </option>
-                )
-              }
-              {
-                PAGE_SIZES.map((size) => (
-                  <option value={size} selected={size === pageSize}>
-                    {size}
-                  </option>
-                ))
-              }
-            </select>
-          </label>
-        </div>
-
-        {/* Posts section */}
-        {
-          postsWithImages.length > 0 && (
-            <section class='mb-8'>
-              <h2 class='text-secondary mb-4 text-2xl font-extrabold'>Posts</h2>
-              <ul class='grid grid-cols-1 gap-6 md:grid-cols-2'>
-                {postsWithImages.map((post, i) => (
-                  <li>
-                    <PostCard
-                      class='block h-full'
-                      widths={[300, 600, 900]}
-                      sizes='(max-width: 767px) calc(100vw - 2rem), calc(50vw - 2rem)'
-                      post={{
-                        id: post.id,
-                        slug: post.slug,
-                        title: post.title,
-                        summary: post.summary,
-                        author: post.author,
-                        topicTitle: post.topicTitle,
-                        bannerImagePath: post.bannerImagePath,
-                        timeToRead: post.timeToRead,
-                        createdAt: post.publishedAt ?? 0,
-                        updatedAt: post.publishedAt ?? 0,
-                        publishedAt: post.publishedAt,
-                        deletedAt: null,
-                        isFeatured: false,
-                        status: 'published' as ContentStatus,
-                        content: '',
-                        language: 'en',
-                      }}
-                      tags={post.tags}
-                      bannerImage={post.processedImage ?? null}
-                      imageAlt={`Banner for ${post.title}`}
-                      loading={i < 4 ? 'eager' : 'lazy'}
-                      fetchPriority={i < 4 ? 'high' : 'auto'}
-                    />
-                  </li>
-                ))}
-              </ul>
-            </section>
-          )
-        }
-
-        {/* Memes section */}
-        {
-          memesWithImages.length > 0 && (
-            <section class='mb-8'>
-              <h2 class='text-secondary mb-4 text-2xl font-extrabold'>Memes</h2>
-              <div class='grid grid-cols-2 gap-4 md:grid-cols-3'>
-                {memesWithImages.map((meme, i) =>
-                  meme.processedImage ? (
-                    <Link
-                      variant='unstyled'
-                      href={`/memes/${meme.slug}/`}
-                      class='group border-comic border-secondary bg-primary-100 shadow-comic-lg hover:shadow-comic-xl active:shadow-comic flex flex-col gap-2 overflow-hidden p-2 transition-all duration-300 hover:-translate-y-1 active:translate-y-0.5'
-                    >
-                      <div class='border-secondary aspect-square w-full overflow-hidden border-2'>
-                        <Image
-                          format='avif'
-                          src={meme.processedImage}
-                          width={meme.processedImage.width}
-                          height={meme.processedImage.height}
-                          alt={meme.imageAlt || meme.title}
-                          class='h-full w-full object-cover transition-transform duration-200 group-hover:scale-105'
-                          loading={i < 4 ? 'eager' : 'lazy'}
-                        />
-                      </div>
-                      <p class='text-secondary text-sm font-bold'>
-                        {meme.title}
-                      </p>
-                    </Link>
-                  ) : null,
-                )}
-              </div>
-            </section>
-          )
-        }
-
-        {/* Out-of-bounds page */}
-        {
-          isOutOfBounds && searchResult.success && totalResults > 0 && (
-            <div class='py-12 text-center'>
-              <p class='text-secondary text-xl font-bold'>
-                Page {page} doesn't exist
-              </p>
-              <p class='text-secondary mt-2 opacity-60'>
-                There {totalPages === 1 ? 'is' : 'are'} only {totalPages} page
-                {totalPages !== 1 ? 's' : ''} of results.
-              </p>
-              <a
-                href={buildPageUrl(1)}
-                class='text-accent-700 mt-4 inline-block font-semibold underline'
-              >
-                Go to page 1
-              </a>
-            </div>
-          )
-        }
-
-        {/* Empty state (no results at all) */}
-        {
-          !isOutOfBounds &&
-            postsWithImages.length === 0 &&
-            memesWithImages.length === 0 &&
-            searchResult.success && (
-              <div class='py-12 text-center'>
-                <p class='text-secondary text-xl font-bold'>No results found</p>
-                <p class='text-secondary mt-2 opacity-60'>
-                  Try a different search term or adjust your filters.
-                </p>
-              </div>
-            )
+              {tag} ✕
+            </button>
+          ))
         }
       </div>
 
-      {/* Sidebar: tag selector + topic filter (desktop only) */}
-      <aside
-        class='sticky top-20 hidden self-start [grid-area:sidebar] md:block'
-      >
-        <Card hover='none' class='w-60 p-4'>
-          {/* Tag selector dialog button */}
-          <TagFilter tags={tagNames} activeTags={activeTags} class='mb-4' />
+      {/* Mobile: tag + topic dialog buttons */}
+      <div class='mb-4 flex flex-col gap-2 md:hidden'>
+        <TagFilter tags={tagNames} activeTags={activeTags} />
+        <TopicFilter topics={topicTitles} activeTopics={activeTopics} />
+      </div>
 
-          {/* Divider */}
-          <hr class='border-secondary mb-4 border-t' />
+      {/* Results summary + page size */}
+      <div class='mb-4 flex flex-wrap items-center justify-between gap-2'>
+        <p class='text-secondary text-sm opacity-60'>
+          {
+            totalResults > 0
+              ? `Found ${totalResults} result${totalResults !== 1 ? 's' : ''} (${totalPosts} post${totalPosts !== 1 ? 's' : ''}, ${totalMemes} meme${totalMemes !== 1 ? 's' : ''})`
+              : searchResult.success
+                ? 'No results found. Try adjusting your search or filters.'
+                : `Search error: ${searchResult.error}`
+          }
+        </p>
+        <label
+          class='text-secondary flex items-center gap-1.5 text-sm opacity-60'
+        >
+          Show:
+          <select
+            id='page-size-select'
+            class='border-comic border-secondary bg-primary rounded-lg px-2 py-1 text-sm opacity-100'
+          >
+            {
+              !pageSizeInList && (
+                <option value={pageSize} selected>
+                  {pageSize}
+                </option>
+              )
+            }
+            {
+              PAGE_SIZES.map((size) => (
+                <option value={size} selected={size === pageSize}>
+                  {size}
+                </option>
+              ))
+            }
+          </select>
+        </label>
+      </div>
 
-          {/* Topic checkboxes */}
-          <TopicFilter topics={topicTitles} activeTopics={activeTopics} />
-        </Card>
-      </aside>
-
-      {/* Pagination (hidden when out of bounds) */}
+      {/* Posts section */}
       {
-        !isOutOfBounds && (
-          <div class='mt-4 [grid-area:pagination]'>
-            <Pagination
-              currentPage={page}
-              totalPages={totalPages}
-              buildPageUrl={buildPageUrl}
-            />
+        postsWithImages.length > 0 && (
+          <section class='mb-8'>
+            <h2 class='text-secondary mb-4 text-2xl font-extrabold'>Posts</h2>
+            <ul class='grid grid-cols-1 gap-6 md:grid-cols-2'>
+              {postsWithImages.map((post, i) => (
+                <li>
+                  <PostCard
+                    class='block h-full'
+                    widths={[300, 600, 900]}
+                    sizes='(max-width: 767px) calc(100vw - 2rem), calc(50vw - 2rem)'
+                    post={{
+                      id: post.id,
+                      slug: post.slug,
+                      title: post.title,
+                      summary: post.summary,
+                      author: post.author,
+                      topicTitle: post.topicTitle,
+                      bannerImagePath: post.bannerImagePath,
+                      timeToRead: post.timeToRead,
+                      createdAt: post.publishedAt ?? 0,
+                      updatedAt: post.publishedAt ?? 0,
+                      publishedAt: post.publishedAt,
+                      deletedAt: null,
+                      isFeatured: false,
+                      status: 'published' as ContentStatus,
+                      content: '',
+                      language: 'en',
+                    }}
+                    tags={post.tags}
+                    bannerImage={post.processedImage ?? null}
+                    imageAlt={`Banner for ${post.title}`}
+                    loading={i < 4 ? 'eager' : 'lazy'}
+                    fetchPriority={i < 4 ? 'high' : 'auto'}
+                  />
+                </li>
+              ))}
+            </ul>
+          </section>
+        )
+      }
+
+      {/* Memes section */}
+      {
+        memesWithImages.length > 0 && (
+          <section class='mb-8'>
+            <h2 class='text-secondary mb-4 text-2xl font-extrabold'>Memes</h2>
+            <div class='grid grid-cols-2 gap-4 md:grid-cols-3'>
+              {memesWithImages.map((meme, i) =>
+                meme.processedImage ? (
+                  <Link
+                    variant='unstyled'
+                    href={`/memes/${meme.slug}/`}
+                    class='group border-comic border-secondary bg-primary-100 shadow-comic-lg hover:shadow-comic-xl active:shadow-comic flex flex-col gap-2 overflow-hidden p-2 transition-all duration-300 hover:-translate-y-1 active:translate-y-0.5'
+                  >
+                    <div class='border-secondary aspect-square w-full overflow-hidden border-2'>
+                      <Image
+                        format='avif'
+                        src={meme.processedImage}
+                        width={meme.processedImage.width}
+                        height={meme.processedImage.height}
+                        alt={meme.imageAlt || meme.title}
+                        class='h-full w-full object-cover transition-transform duration-200 group-hover:scale-105'
+                        loading={i < 4 ? 'eager' : 'lazy'}
+                      />
+                    </div>
+                    <p class='text-secondary text-sm font-bold'>{meme.title}</p>
+                  </Link>
+                ) : null,
+              )}
+            </div>
+          </section>
+        )
+      }
+
+      {/* Out-of-bounds page */}
+      {
+        isOutOfBounds && searchResult.success && totalResults > 0 && (
+          <div class='py-12 text-center'>
+            <p class='text-secondary text-xl font-bold'>
+              Page {page} doesn't exist
+            </p>
+            <p class='text-secondary mt-2 opacity-60'>
+              There {totalPages === 1 ? 'is' : 'are'} only {totalPages} page
+              {totalPages !== 1 ? 's' : ''} of results.
+            </p>
+            <a
+              href={buildPageUrl(1)}
+              class='text-accent-700 mt-4 inline-block font-semibold underline'
+            >
+              Go to page 1
+            </a>
           </div>
         )
       }
+
+      {/* Empty state (no results at all) */}
+      {
+        !isOutOfBounds &&
+          postsWithImages.length === 0 &&
+          memesWithImages.length === 0 &&
+          searchResult.success && (
+            <div class='py-12 text-center'>
+              <p class='text-secondary text-xl font-bold'>No results found</p>
+              <p class='text-secondary mt-2 opacity-60'>
+                Try a different search term or adjust your filters.
+              </p>
+            </div>
+          )
+      }
     </div>
-  </p>
+
+    {/* Sidebar: tag selector + topic filter (desktop only) */}
+    <aside class='sticky top-20 hidden self-start [grid-area:sidebar] md:block'>
+      <Card hover='none' class='w-60 p-4'>
+        {/* Tag selector dialog button */}
+        <TagFilter tags={tagNames} activeTags={activeTags} class='mb-4' />
+
+        {/* Divider */}
+        <hr class='border-secondary mb-4 border-t' />
+
+        {/* Topic checkboxes */}
+        <TopicFilter topics={topicTitles} activeTopics={activeTopics} />
+      </Card>
+    </aside>
+
+    {/* Pagination (hidden when out of bounds) */}
+    {
+      !isOutOfBounds && (
+        <div class='mt-4 [grid-area:pagination]'>
+          <Pagination
+            currentPage={page}
+            totalPages={totalPages}
+            buildPageUrl={buildPageUrl}
+          />
+        </div>
+      )
+    }
+  </div>
 
   <script>
     // ---------------------------------------------------------------------------

@@ -191,7 +191,7 @@ export async function buildSyncAllContent(dbConfig: DbConfig): Promise<{
           slug: topicData.slug,
           imagePath: topicData.imagePath ?? null,
           description: topicData.description,
-          backgroundGradient: topicData.backgroundGradient ?? null,
+          accentColor: topicData.accentColor ?? null,
           externalLink: topicData.externalLink ?? null,
           updatedAt: Date.now(),
         };
@@ -201,8 +201,7 @@ export async function buildSyncAllContent(dbConfig: DbConfig): Promise<{
             existingTopic.slug !== topicRecord.slug ||
             existingTopic.imagePath !== topicRecord.imagePath ||
             existingTopic.description !== topicRecord.description ||
-            existingTopic.backgroundGradient !==
-              topicRecord.backgroundGradient ||
+            existingTopic.accentColor !== topicRecord.accentColor ||
             existingTopic.externalLink !== topicRecord.externalLink;
 
           if (changed) {

@@ -1,0 +1,69 @@
+---
+import type { HTMLAttributes } from 'astro/types';
+import { Icon } from 'astro-icon/components';
+import { cn } from '@libs/cn';
+
+import BadgePlate from '@components/badge-plate/BadgePlate.astro';
+
+interface Props extends HTMLAttributes<'li'> {
+  /** Iconify name for the decorative mark. */
+  icon: string;
+  iconTitle: string;
+  title: string;
+  description: string;
+}
+
+const {
+  icon,
+  iconTitle,
+  title,
+  description,
+  class: className,
+  ...props
+} = Astro.props;
+---
+
+<li
+  class={cn(
+    'sticker border-secondary shadow-comic-lg flex items-center gap-3',
+    'rounded-full border-[3px] py-2 pr-5 pl-3 transition-transform',
+    className,
+  )}
+  {...props}
+>
+  <BadgePlate size='sm' shape='round'>
+    <Icon name={icon} title={iconTitle} aria-hidden='true' class='h-5 w-5' />
+  </BadgePlate>
+  <div class='min-w-0'>
+    <b class='text-secondary block text-base leading-tight font-extrabold'>
+      {title}
+    </b>
+    <span class='text-secondary block text-sm leading-tight'>
+      {description}
+    </span>
+  </div>
+</li>
+
+<style>
+  /* Cosmetic tilt. Cycles every four items rather than targeting fixed indices,
+     so adding a fifth fact keeps working — unlike the float animation this
+     replaces, which was keyed to :nth-child(1..4) and silently died at five. */
+  .sticker:nth-child(4n + 1) {
+    transform: rotate(-3deg);
+  }
+  .sticker:nth-child(4n + 2) {
+    transform: rotate(2deg);
+  }
+  .sticker:nth-child(4n + 3) {
+    transform: rotate(-1.5deg);
+  }
+  .sticker:nth-child(4n) {
+    transform: rotate(3deg);
+  }
+
+  /* Straightens slightly on hover. A static transform, so it needs no
+     prefers-reduced-motion exception. */
+  .sticker:hover {
+    transform: rotate(-1deg);
+  }
+</style>

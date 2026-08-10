@@ -5,21 +5,14 @@ import { cn } from '@libs/cn';
 
 import DuckyCodingLogo from '@assets/images/DuckyCoding_logo.png';
 import Link from '@components/link/Link.astro';
+import NavSearchForm from '@components/search/NavSearchForm.astro';
+import { NAV_ITEMS } from '@data/nav-items';
 
 export interface NavbarProps {}
 
 interface Props extends HTMLAttributes<'nav'>, NavbarProps {}
 
 const { class: className, ...props }: Props = Astro.props;
-
-const NAV_ITEMS = [
-  { href: '/', label: 'Home' },
-  { href: '/blog', label: 'Blog' },
-  { href: '/topics', label: 'Topics' },
-  { href: '/memes', label: 'Memes' },
-  { href: '/search', label: 'Search' },
-  { href: '/my-projects', label: 'My projects' },
-];
 ---
 
 <!-- Backdrop overlay (managed via JS) -->
@@ -48,7 +41,7 @@ const NAV_ITEMS = [
       />
       <h2 class='text-secondary text-3xl'>DuckyCoding</h2>
     </div>
-    <ul class='flex h-full min-w-fit flex-col gap-4'>
+    <ul class='flex min-w-fit flex-col gap-4'>
       {
         NAV_ITEMS.map(({ href, label }) => (
           <li>
@@ -62,6 +55,9 @@ const NAV_ITEMS = [
         ))
       }
     </ul>
+    {/* Spacer pushes search low, inside the one-handed thumb arc. */}
+    <div class='grow'></div>
+    <NavSearchForm variant='drawer' />
     <p id='scroll-tip' class='text-center text-base italic'>
       Did you know: You can swipe right to open the side menu and left to close
       it.
@@ -69,12 +65,15 @@ const NAV_ITEMS = [
   </nav>
 </dialog>
 
-<!-- Desktop: static nav -->
+<!-- Desktop: static nav. Links sit left beside the brand; search is the only
+     action, isolated on the far right. No separator glyph between links, and no
+     divider before the field — the crowding was a spacing problem, and the gap
+     does all the separating that is needed. -->
 <nav
-  class={cn('hidden gap-x-8 md:flex md:justify-end md:min-w-fit', className)}
+  class={cn('hidden min-w-0 grow items-center md:flex', className)}
   {...props}
 >
-  <ul class='flex items-center gap-4'>
+  <ul class='flex items-center gap-x-[1.6rem]'>
     {
       NAV_ITEMS.map(({ href, label }) => (
         <li>
@@ -85,6 +84,12 @@ const NAV_ITEMS = [
       ))
     }
   </ul>
+  {
+    /* The gap alone separates the links from the search field; a divider was
+      only needed while the two sat adjacent. */
+  }
+  <div class='grow'></div>
+  <NavSearchForm variant='bar' />
 </nav>
 
 <style>

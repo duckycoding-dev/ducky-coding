@@ -23,7 +23,7 @@ export const topicsTable = sqliteTable('topics', {
   imagePath: text().references(() => imagesTable.path),
   // Enhanced metadata fields
   description: text(),
-  backgroundGradient: text(), // Tailwind gradient classes
+  accentColor: text(), // six-digit hex from the topic's brand colour
   externalLink: text(),
   // Analytics fields
   postCount: integer().notNull().default(0),

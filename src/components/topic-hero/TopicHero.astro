@@ -1,0 +1,196 @@
+---
+import type { ImageMetadata } from 'astro';
+import { Image } from 'astro:assets';
+
+import BadgePlate from '@components/badge-plate/BadgePlate.astro';
+import { resolveTopicAccent } from '@utils/topic-accent/topic-accent';
+
+interface Props {
+  title: string;
+  description?: string;
+  /** Six-digit hex from the topic's brand colour; falls back to accent2. */
+  accentColor?: string;
+  image?: ImageMetadata;
+  imageAlt?: string;
+  postCount: number;
+  /** Unix millis of the most recent post in this topic. */
+  lastPostDate?: number;
+}
+
+const {
+  title,
+  description,
+  accentColor,
+  image,
+  imageAlt,
+  postCount,
+  lastPostDate,
+} = Astro.props;
+
+const topicAccent = resolveTopicAccent(accentColor);
+
+const postLabel = `${postCount} ${postCount === 1 ? 'post' : 'posts'}`;
+
+const lastUpdatedLabel =
+  lastPostDate === undefined
+    ? undefined
+    : `updated ${new Date(lastPostDate).toLocaleDateString('en', {
+        month: 'short',
+        year: 'numeric',
+      })}`;
+---
+
+<section
+  class='topic-hero border-comic-thick border-secondary shadow-comic-lg mb-4 p-6'
+>
+  <div class='topic-hero__dots' aria-hidden='true'></div>
+
+  <div
+    class='relative flex flex-col items-start gap-5 sm:flex-row sm:items-center'
+  >
+    {
+      /*
+      The plate is a fixed 96px and the logo is capped on BOTH axes at 62px, so
+      any aspect ratio scales down to fit rather than widening anything. That is
+      what keeps the text start — and therefore the dot mask below — at a
+      constant 144px whatever shape a topic's logo happens to be.
+    */
+    }
+    {
+      image ? (
+        <BadgePlate
+          size='xl'
+          weight='heavy'
+          class='topic-hero__plate -rotate-3'
+        >
+          <Image
+            format='avif'
+            loading='eager'
+            decoding='async'
+            fetchpriority='high'
+            src={image}
+            alt={imageAlt ?? `${title} logo`}
+            title={title}
+            width={62}
+            densities={[1, 2, 3]}
+            class='max-h-[62px] max-w-[62px] object-contain'
+          />
+        </BadgePlate>
+      ) : null
+    }
+
+    <div class='min-w-0'>
+      <h1
+        class='text-secondary text-4xl font-extrabold text-balance md:text-5xl'
+      >
+        {title}
+      </h1>
+      {
+        description ? (
+          <p class='text-secondary mt-2 max-w-[60ch] font-semibold'>
+            {description}
+          </p>
+        ) : null
+      }
+      <ul class='mt-3 flex list-none flex-wrap gap-2 p-0'>
+        <li
+          class='topic-hero__pill border-comic border-secondary shadow-comic rounded-full px-3 py-0.5 text-sm font-bold'
+        >
+          {postLabel}
+        </li>
+        {
+          lastUpdatedLabel ? (
+            <li class='topic-hero__pill border-comic border-secondary shadow-comic rounded-full px-3 py-0.5 text-sm font-bold'>
+              {lastUpdatedLabel}
+            </li>
+          ) : null
+        }
+      </ul>
+    </div>
+  </div>
+</section>
+
+<style define:vars={{ topicAccent }}>
+  .topic-hero {
+    position: relative;
+    overflow: hidden;
+    /* 20% keeps the surface light enough for `secondary` text to clear
+       contrast at any input hex. */
+    background-color: color-mix(in oklab, var(--topicAccent) 20%, white);
+
+    /* Where the dot texture stops, measured from the hero's own edge.
+       These are deterministic, not guesses — the plate is a fixed 96px
+       (BadgePlate size="xl") and the spacing around it is fixed too:
+
+         border 4 + padding 24 = 28   plate starts
+         + plate 96            = 124  plate ends
+         + gap 20              = 144  text starts
+
+       Only the text's *length* varies, never its start, so the fade can be
+       anchored exactly. Identical on both axes: the stacked mobile layout puts
+       the plate above the text with the same padding and gap. */
+    --dots-solid-until: 100px;
+    --dots-gone-by: 144px;
+  }
+
+  .topic-hero__pill {
+    background-color: color-mix(in oklab, var(--topicAccent) 55%, white);
+  }
+
+  /* Deliberately NOT white. Several topic logos are white artwork on a
+     transparent background (Astro, HTML), which disappears entirely on a white
+     plate. A deeper tint of the topic's own colour keeps both white and dark
+     logos legible, and still reads as distinct from the 20% band behind it. */
+  .topic-hero__plate {
+    background-color: color-mix(in oklab, var(--topicAccent) 40%, white);
+  }
+
+  /* Pure-CSS dot texture on its own layer: masking .topic-hero itself would
+     clip its border and its children. Dots sit solid over the logo plate and
+     fade out before the text begins. */
+  .topic-hero__dots {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    /* Softened rather than pure `secondary`: at full strength these read as hard
+       black specks on a light band instead of paper texture. */
+    background-image: radial-gradient(
+      color-mix(in oklab, var(--color-secondary) 55%, transparent) 1.6px,
+      transparent 1.7px
+    );
+    background-size: 14px 14px;
+    /* Stacked layout (plate above text): fade downward, gone before the copy
+       starts. Stops are absolute lengths, not percentages, so the fade stays
+       anchored to the plate at any container size. */
+    -webkit-mask-image: linear-gradient(
+      to bottom,
+      #000 0,
+      #000 var(--dots-solid-until),
+      transparent var(--dots-gone-by)
+    );
+    mask-image: linear-gradient(
+      to bottom,
+      #000 0,
+      #000 var(--dots-solid-until),
+      transparent var(--dots-gone-by)
+    );
+  }
+
+  /* Side-by-side layout: wipe left to right instead, same stops. */
+  @media (width >= 480px) {
+    .topic-hero__dots {
+      -webkit-mask-image: linear-gradient(
+        to right,
+        #000 0,
+        #000 var(--dots-solid-until),
+        transparent var(--dots-gone-by)
+      );
+      mask-image: linear-gradient(
+        to right,
+        #000 0,
+        #000 var(--dots-solid-until),
+        transparent var(--dots-gone-by)
+      );
+    }
+  }
+</style>

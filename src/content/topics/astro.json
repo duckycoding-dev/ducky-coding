@@ -3,6 +3,6 @@
   "slug": "astro",
   "imagePath": "topics/astro_logo.png",
   "description": "Modern web framework for building fast, content-focused websites",
-  "backgroundGradient": "from-accent to-accent2 bg-gradient-to-br",
+  "accentColor": "#bc52ee",
   "externalLink": "https://astro.build"
 }

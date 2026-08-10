@@ -3,6 +3,6 @@
   "slug": "react",
   "imagePath": "topics/react_logo.png",
   "description": "A JavaScript library for building user interfaces",
-  "backgroundGradient": "",
+  "accentColor": "#61dafb",
   "externalLink": "https://react.dev"
 }

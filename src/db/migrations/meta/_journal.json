@@ -15,6 +15,20 @@
       "when": 1776353513814,
       "tag": "0001_oval_blue_shield",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "6",
+      "when": 1786348738455,
+      "tag": "0002_sharp_black_tarantula",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "6",
+      "when": 1786348754373,
+      "tag": "0003_careful_dreadnoughts",
+      "breakpoints": true
     }
   ]
 }

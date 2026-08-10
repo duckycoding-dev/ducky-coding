@@ -7,6 +7,7 @@ import { cn } from '@libs/cn';
 import Card from '@components/card/Card.astro';
 import Link from '@components/link/Link.astro';
 import { getEnvs } from '@utils/env';
+import { resolveTopicAccent } from '@utils/topic-accent/topic-accent';
 import { IMAGE_COMMON_SIZES } from '../../utils/globals';
 import { getImageWidths } from '../../utils/images/images';
 
@@ -21,7 +22,7 @@ export type TopicCardProps = HTMLAttributes<'a'> &
         loading?: undefined;
         decoding?: undefined;
         slug: string;
-        backgroundGradient?: string;
+        accentColor?: string;
       }
     | {
         title?: undefined;
@@ -32,7 +33,7 @@ export type TopicCardProps = HTMLAttributes<'a'> &
         loading?: 'eager' | 'lazy';
         decoding?: 'async' | 'auto' | 'sync';
         slug: string;
-        backgroundGradient?: string;
+        accentColor?: string;
       }
     | {
         title: string;
@@ -43,7 +44,7 @@ export type TopicCardProps = HTMLAttributes<'a'> &
         loading?: 'eager' | 'lazy';
         decoding?: 'async' | 'auto' | 'sync';
         slug: string;
-        backgroundGradient?: string;
+        accentColor?: string;
       }
   );
 
@@ -59,9 +60,11 @@ const {
   imageSrc,
   imageAlt,
   slug,
-  backgroundGradient = 'from-accent-100 to-accent3-100 bg-gradient-to-br',
+  accentColor,
   ...props
 }: Props = Astro.props;
+
+const topicAccent = resolveTopicAccent(accentColor);
 ---
 
 <Link
@@ -85,7 +88,7 @@ const {
               alt={imageAlt}
               loading={loading}
               decoding={decoding}
-              class={`${backgroundGradient} -z-1 aspect-square w-full object-contain p-4 transition-transform duration-300 group-hover:scale-110 group-focus:scale-110 group-active:scale-110`}
+              class={`topic-card__image -z-1 aspect-square w-full object-contain p-4 transition-transform duration-300 group-hover:scale-110 group-focus:scale-110 group-active:scale-110`}
               width={200}
               height={200}
               widths={getImageWidths(200)}
@@ -99,7 +102,7 @@ const {
               alt={imageAlt}
               loading={loading}
               decoding={decoding}
-              class={`${backgroundGradient} -z-1 aspect-square w-full object-contain p-4 transition-transform duration-300 group-hover:scale-110 group-focus:scale-110 group-active:scale-110`}
+              class={`topic-card__image -z-1 aspect-square w-full object-contain p-4 transition-transform duration-300 group-hover:scale-110 group-focus:scale-110 group-active:scale-110`}
               widths={getImageWidths(imageSrc.width)}
               sizes={IMAGE_COMMON_SIZES}
               fetchpriority={fetchPriority}
@@ -118,8 +121,14 @@ const {
   </Card>
 </Link>
 
-<style define:vars={{ titleBackgroundColor }}>
+<style define:vars={{ titleBackgroundColor, topicAccent }}>
   h2 {
     background-color: var(--titleBackgroundColor);
+  }
+
+  /* Derived from the topic's own brand colour. The 20% mix keeps the surface
+     light enough for the black title bar and the logo to read against it. */
+  .topic-card__image {
+    background-color: color-mix(in oklab, var(--topicAccent) 20%, white);
   }
 </style>

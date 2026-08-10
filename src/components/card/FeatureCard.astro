@@ -1,0 +1,118 @@
+---
+import type { ComponentProps } from 'astro/types';
+import { Icon } from 'astro-icon/components';
+import { cn } from '@libs/cn';
+
+import BadgePlate from '@components/badge-plate/BadgePlate.astro';
+import Card from './Card.astro';
+
+interface Props extends ComponentProps<typeof Card> {
+  /** Iconify name for the decorative mark. */
+  icon: string;
+  iconTitle: string;
+  /**
+   * 1-based position, rendered as the ghosted watermark.
+   *
+   * Omit it for sets that are not a sequence. Numbering a group that has no
+   * inherent order asserts one that does not exist — which is why the fun-fact
+   * stickers and the technology cards go without.
+   */
+  index?: number;
+  heading: string;
+  /** `true` renders the larger heading used by the column-spanning card. */
+  isWide?: boolean;
+  /** `true` centres the mark and the text, for even multi-column grids. */
+  isCentred?: boolean;
+}
+
+const {
+  icon,
+  iconTitle,
+  index,
+  heading,
+  isWide = false,
+  isCentred = false,
+  class: className,
+  ...props
+} = Astro.props;
+
+const numeral =
+  index === undefined ? undefined : String(index).padStart(2, '0');
+---
+
+{
+  /*
+  `isolate` is load-bearing. The numeral sits at z-0 and the content at z-10 so
+  the content paints over it — but `relative` alone leaves z-index: auto, which
+  creates no stacking context, so those values leaked into the root context and
+  tied with the sticky header's own z-10. DOM order then broke the tie in the
+  card's favour and the content scrolled over the header. `isolation: isolate`
+  keeps the range local, so nothing here can ever outrank site chrome.
+*/
+}
+<Card
+  class={cn('relative isolate p-6', isCentred && 'text-center', className)}
+  {...props}
+>
+  {
+    numeral ? (
+      <span
+        class='feature-card__numeral'
+        aria-hidden='true'
+        data-numeral={numeral}
+      />
+    ) : null
+  }
+
+  <BadgePlate class={cn('relative z-10', isCentred && 'mx-auto')}>
+    <Icon name={icon} title={iconTitle} aria-hidden='true' class='h-7 w-7' />
+  </BadgePlate>
+
+  <h3
+    class={cn(
+      'text-secondary relative z-10 mt-4 mb-3 font-bold',
+      isWide ? 'text-2xl md:text-3xl' : 'text-xl',
+    )}
+  >
+    {heading}
+  </h3>
+
+  <p
+    class={cn(
+      'text-secondary relative z-10',
+      isWide && 'md:text-lg',
+      isCentred && 'text-sm',
+    )}
+  >
+    <slot />
+  </p>
+</Card>
+
+<style>
+  /* Enormous, ghosted, bleeding off the bottom-right corner. Most of the glyph
+     sits outside the card, so it reads as a texture wash rather than a number.
+     Clipped by Card's own overflow-hidden.
+
+     The digits live in a pseudo-element, not a text node, on purpose. At 7%
+     alpha this is decoration that no one is meant to read, so it should not be
+     text: as a text node it failed the axe colour-contrast audit (correctly —
+     illegible visible text), and it landed in the DOM's text content where it
+     could be selected and copied. Pseudo-element content is excluded from both. */
+  .feature-card__numeral {
+    position: absolute;
+    right: -2.2rem;
+    bottom: -5.5rem;
+    z-index: 0;
+    font-size: 16rem;
+    font-weight: 900;
+    line-height: 1;
+    letter-spacing: -0.07em;
+    color: color-mix(in oklab, var(--color-secondary) 7%, transparent);
+    pointer-events: none;
+    user-select: none;
+  }
+
+  .feature-card__numeral::before {
+    content: attr(data-numeral);
+  }
+</style>

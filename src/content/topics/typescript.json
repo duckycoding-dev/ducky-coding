@@ -3,6 +3,6 @@
   "slug": "typescript",
   "imagePath": "topics/typescript_logo.png",
   "description": "Typed superset of JavaScript that compiles to plain JavaScript",
-  "backgroundGradient": "",
+  "accentColor": "#3178c6",
   "externalLink": "https://www.typescriptlang.org"
 }
