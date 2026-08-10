@@ -30,7 +30,17 @@ const {
 const numeral = String(index).padStart(2, '0');
 ---
 
-<Card class={cn('relative p-6', className)} {...props}>
+{
+  /*
+  `isolate` is load-bearing. The numeral sits at z-0 and the content at z-10 so
+  the content paints over it — but `relative` alone leaves z-index: auto, which
+  creates no stacking context, so those values leaked into the root context and
+  tied with the sticky header's own z-10. DOM order then broke the tie in the
+  card's favour and the content scrolled over the header. `isolation: isolate`
+  keeps the range local, so nothing here can ever outrank site chrome.
+*/
+}
+<Card class={cn('relative isolate p-6', className)} {...props}>
   <span class='feature-card__numeral' aria-hidden='true' data-numeral={numeral}
   ></span>
 
