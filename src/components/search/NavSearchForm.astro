@@ -1,0 +1,56 @@
+---
+import type { HTMLAttributes } from 'astro/types';
+import { Icon } from 'astro-icon/components';
+import { cn } from '@libs/cn';
+
+/**
+ * The header's search entry point.
+ *
+ * A plain GET form with no JavaScript, which is exactly what the backend
+ * expects: `src/pages/search.astro` is `prerender = false`, reads `q` from the
+ * query string, and every query is a full page navigation. It therefore works
+ * with scripting disabled.
+ */
+interface Props extends HTMLAttributes<'form'> {
+  /**
+   * `bar` is the desktop header (responsive width);
+   * `drawer` is the mobile menu (full width).
+   */
+  variant?: 'bar' | 'drawer';
+}
+
+const { variant = 'bar', class: className, ...props } = Astro.props;
+
+// Both variants render in the same document, so the ids must not collide —
+// otherwise the <label for> association silently binds to the wrong input.
+const inputId = `nav-search-${variant}`;
+---
+
+<form
+  action='/search'
+  method='get'
+  role='search'
+  class={cn(
+    'bg-primary-100 border-comic border-secondary shadow-comic',
+    'flex items-center gap-2 rounded-lg px-2 py-1.5',
+    variant === 'bar' ? 'w-[120px] lg:w-[180px] xl:w-[250px]' : 'w-full',
+    className,
+  )}
+  {...props}
+>
+  <Icon
+    name='mdi:magnify'
+    title='Search'
+    aria-hidden='true'
+    class='text-secondary h-[18px] w-[18px] shrink-0'
+  />
+  <label class='sr-only' for={inputId}>Search posts and memes</label>
+  <input
+    id={inputId}
+    name='q'
+    type='search'
+    autocomplete='off'
+    placeholder={variant === 'bar' ? 'Search…' : 'Search posts and memes…'}
+    class='text-secondary placeholder:text-secondary/50 w-full min-w-0 border-0 bg-transparent text-sm outline-none'
+  />
+</form>
