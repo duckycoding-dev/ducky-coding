@@ -18,4 +18,11 @@ jobs:
       - run: npm run astro:check
       - run: npm run lint
       - run: npm run format:check
+      # Builds before testing because `tests/og-output.test.ts` asserts on the
+      # generated OG cards in `dist`. Without this the suite silently had nothing
+      # to read on CI, and two cold-checkout build failures went unnoticed while
+      # local runs stayed green. `--mode development` uses the tracked
+      # `.env.development`, which points at a local SQLite file and needs no
+      # secrets.
+      - run: npm run astro:build:local
       - run: npm test

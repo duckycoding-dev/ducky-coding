@@ -258,7 +258,7 @@ and emit its own HTML. Nothing forces the frame.
 | `src/utils/og/kinds/post-card.ts` | `OgCardKind` for blog posts. Loads posts, defines its own content shape internally, maps title/topic/tag/read time, and calls `card-shell`. **All post-specific knowledge lives here and nowhere else.** |
 | `src/utils/og/kinds/index.ts` | `OG_CARD_KINDS` — the registry, and the mapper from `kind` string to implementation. One entry today. |
 | `src/utils/og/og-paths.ts` | Single source of truth for `/og/<kind>/<id>.png`, URL and filesystem path. |
-| `src/utils/og/inter-font.ts` | Locate the Inter woff2 that Astro downloaded. Throws if absent. |
+| `src/utils/og/inter-font.ts` | Read the Inter woff2 tracked at `src/assets/fonts/`. Throws if absent — never falls back to another face. |
 | `src/pages/og/[...route].png.ts` | Generic: `getStaticPaths` walks the registry calling `listIds`; `GET` resolves the kind by string, calls `renderById`, encodes the PNG. `prerender = true`. Handles only two strings and never sees card data. |
 
 A single generic route rather than one file per kind — the same shape
@@ -307,10 +307,14 @@ runner swap, not a rewrite.
 
 ### Why Takumi
 
-- **Consumes woff2 directly**, which is exactly what Astro's font pipeline
-  produces (`.astro/fonts/font-inter-100-900-normal-latin-*.woff2`). Satori
-  cannot read woff2, so it would force vendoring a separate Inter TTF and risk
-  drifting from the site's actual font.
+- **Consumes woff2 directly**, the same format Astro's font pipeline uses, so the
+  cards render in the site's actual typeface. Satori cannot read woff2 and would
+  force vendoring a separate Inter TTF.
+
+  The woff2 is nevertheless a tracked copy at
+  `src/assets/fonts/inter-latin-variable.woff2`, not one taken from Astro's
+  pipeline. Reading `.astro/fonts` — a gitignored download cache — worked locally
+  and failed every cold checkout; see `docs/stable/development/build-flow.md`.
 - **Accepts HTML strings**, so no JSX or React toolchain — which the project's
   "no React" rule would otherwise make awkward.
 - Single engine: JSX/HTML in, encoded PNG out, with no separate SVG rasterisation
@@ -356,15 +360,27 @@ const png = await renderer.render(node, { width, height, format: 'png', styleshe
 
 ### Fonts
 
-`inter-font.ts` globs `.astro/fonts/font-inter-*-normal-latin-*.woff2` and
-**throws if it finds nothing**. No silent fallback: a fallback to a different
-font would produce off-brand cards that nobody notices. The filename carries a
-hash, hence the glob rather than a literal path.
+`inter-font.ts` reads `src/assets/fonts/inter-latin-variable.woff2`, tracked in
+git, and **throws if it is absent**. No silent fallback: a fallback to a different
+font would produce off-brand cards that nobody notices.
 
-`.astro/` is a gitignored build cache, so this depends on Astro's internal
-layout. That is an accepted risk, mitigated by the hard failure — and the
-alternative, vendoring a second copy of Inter, risks silent drift from the font
-the site actually serves.
+The font must not be taken from Astro's pipeline. Two candidate sources were
+tried and both are wrong:
+
+- `.astro/fonts/` is a **download cache**. It is gitignored and contains only
+  generated type files on a cold checkout, so reading from it made local builds
+  succeed and every cold build fail with `No Inter woff2 found`. CI and Netlify
+  both start cold.
+- `dist/_astro/fonts/<hash>.woff2` is the real build output, written before
+  prerendering, but the hashed filenames carry no family, weight or style —
+  selecting the right face means guessing.
+
+The tracked copy costs 48 KB in the repo and is byte-identical to what Astro
+downloads (verified: cards rendered from either source have identical sizes). Its
+one risk is drifting from the served font if the `astro:fonts` config changes
+family or subset; that is a deliberate trade against a build that cannot run at
+all. CI builds before running the test suite so the cards are exercised on every
+push.
 
 ### Two rendering risks with defined fallbacks
 

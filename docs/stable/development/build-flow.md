@@ -157,7 +157,7 @@ Order taken from a real build log, not from intent.
 | 4 | `[db-sync] Running DB migrations...` | **`astro:build:start` hook** → `buildMigrate()` |
 | 5 | `[db-sync] Starting DB sync...` | `buildSyncImages()` then `buildSyncAllContent()` — topics, posts, memes |
 | 6 | `[build] Building server entrypoints...` | Vite builds the prerender, ssr and client environments |
-| 7 | `[assets] Copying fonts` | Inter woff2 written from `.astro/fonts` into `dist` |
+| 7 | `[assets] Copying fonts` | Inter woff2 written into `dist/_astro/fonts` for the site's `@font-face` |
 | 8 | `prerendering static routes` | Every static page **and `/og/posts/*.png`** rendered |
 | 9 | `▶ /_astro/*.avif` | sharp generates the optimised image variants |
 | 10 | `[@astrojs/netlify]` | `_redirects` emitted, SSR function bundled for `/search` |
@@ -173,7 +173,7 @@ flowchart TD
     Migrate["db-sync hook: buildMigrate"]
     Sync["db-sync hook: buildSyncImages + buildSyncAllContent"]
     Vite["vite builds prerender, ssr, client"]
-    Fonts["Inter woff2 into .astro/fonts and dist"]
+    Fonts["Inter woff2 into dist for @font-face"]
     Prerender["prerender static routes"]
     OG["og/[...route].png.ts renders the cards"]
     Images["sharp emits avif variants"]
@@ -201,7 +201,7 @@ flowchart LR
     Posts["posts collection"]
     Shell["card-shell.ts"]
     Fit["fit-title.ts"]
-    Font[".astro/fonts Inter woff2"]
+    Font["src/assets/fonts Inter woff2 (tracked)"]
     Measure["Renderer.measure"]
     Render["Renderer.render"]
     Out["dist/og/posts/id.png"]
@@ -218,10 +218,18 @@ flowchart LR
     Render --> Out
 ```
 
-- **Fonts** — the route reads the Inter woff2 from `.astro/fonts`. A missing font
-  is a hard error, never a silent fallback to another face. `.astro/` is
-  gitignored, so CI starts cold; verified that Astro populates it before
-  prerendering, so a cold cache still produces cards.
+- **Fonts** — the route reads `src/assets/fonts/inter-latin-variable.woff2`, which
+  is tracked in git. A missing font is a hard error, never a silent fallback to
+  another face.
+
+  It must not come from `.astro/fonts`: that directory is Astro's *download
+  cache*, is gitignored, and holds only generated type files on a cold checkout.
+  Reading from it made the build succeed locally and fail with
+  `No Inter woff2 found` on CI and Netlify, which both start cold. Astro's own
+  output (`dist/_astro/fonts/<hash>.woff2`) is unusable here too — the hashed
+  filenames carry no family, weight or style. Astro still downloads Inter
+  separately for the site's `@font-face` rules; the tracked copy serves only the
+  card renderer and is never sent to a browser.
 - **Content** — the kind enumerates the `posts` collection, so content must be
   synced first.
 - **Measurement and rendering use the same engine.** `Renderer.measure` gives the
