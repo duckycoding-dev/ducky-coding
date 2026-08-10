@@ -281,6 +281,25 @@ describe('fitTitle', () => {
     expect(r.truncated).toBe(false);
   });
 
+  it('reaches the exact boundary size, not one pixel under', async () => {
+    // Regression guard for the continuous-bisection off-by-one described in
+    // fit-title.ts. This measurer fits at exactly 100 and not at 101.
+    const measure: MeasureText = (_text, fontSize) =>
+      Promise.resolve({ width: 10, height: fontSize <= 100 ? 10 : 10_000 });
+
+    const r = await fitTitle('anything', BOX, measure, {
+      minFontSize: 40,
+      maxFontSize: 136,
+    });
+    expect(r.fontSize).toBe(100);
+  });
+
+  it('returns the ceiling when the text fits at every size', async () => {
+    const measure: MeasureText = () => Promise.resolve({ width: 1, height: 1 });
+    const r = await fitTitle('tiny', BOX, measure, { maxFontSize: 136 });
+    expect(r.fontSize).toBe(136);
+  });
+
   it('returns an integer font size', async () => {
     const r = await fitTitle('x'.repeat(70), BOX, fakeMeasurer(BOX.width));
     expect(Number.isInteger(r.fontSize)).toBe(true);
@@ -355,8 +374,6 @@ import type { FitOptions, FitResult, MeasureText } from './types.ts';
 
 const DEFAULT_MIN_FONT_SIZE = 40;
 const DEFAULT_MAX_FONT_SIZE = 136;
-/** Enough halvings to settle a ~100px range to sub-pixel precision. */
-const BISECTION_STEPS = 16;
 /** Never truncate below this many words, so a card is never a bare ellipsis. */
 const MIN_WORDS = 4;
 
@@ -380,7 +397,7 @@ export async function fitTitle(
   const max = opts.maxFontSize ?? DEFAULT_MAX_FONT_SIZE;
 
   if (text.length === 0) {
-    return { text, fontSize: max, truncated: false };
+    return { text, fontSize: Math.floor(max), truncated: false };
   }
 
   const fits = async (candidate: string, size: number): Promise<boolean> => {
@@ -388,22 +405,28 @@ export async function fitTitle(
     return m.width <= box.width + 1 && m.height <= box.height + 1;
   };
 
-  let low = min;
-  let high = max;
-  let best = min;
-  for (let i = 0; i < BISECTION_STEPS; i++) {
-    const mid = (low + high) / 2;
+  // Integer bisection over [min, max]. Do NOT rewrite this as a continuous
+  // bisection followed by Math.floor: that variant never evaluates the upper
+  // bound itself, so a title that fits at `max` converges to `max - ε` and floors
+  // to `max - 1`, making every short title render a pixel smaller than it could.
+  // Searching integers directly reaches both endpoints exactly and needs no
+  // correction step.
+  let low = Math.ceil(min);
+  let high = Math.floor(max);
+  let best: number | undefined;
+
+  while (low <= high) {
+    const mid = Math.floor((low + high) / 2);
     if (await fits(text, mid)) {
       best = mid;
-      low = mid;
+      low = mid + 1;
     } else {
-      high = mid;
+      high = mid - 1;
     }
   }
 
-  const fontSize = Math.floor(best);
-  if (await fits(text, fontSize)) {
-    return { text, fontSize, truncated: false };
+  if (best !== undefined) {
+    return { text, fontSize: best, truncated: false };
   }
 
   // Backstop: shed whole words at the floor size until it fits.
@@ -427,7 +450,7 @@ export async function fitTitle(
 - [ ] **Step 5: Run the test to verify it passes**
 
 Run: `npx vitest run src/utils/og/fit-title.test.ts`
-Expected: PASS, 7 tests.
+Expected: PASS, 9 tests.
 
 - [ ] **Step 6: Lint, format, type check**
 
@@ -1345,7 +1368,9 @@ git commit -m "feat(og): generate post cards from a generic endpoint"
 
 ### Task 8: Point posts at the cards, and prove the weight drops
 
-The payoff. This is where the 4,808 KB leaves the build.
+The payoff. Note what it is and is not: the win is what third parties download,
+not the size of `dist` — Astro emits an original for every imported asset whether
+or not anything references it.
 
 **Files:**
 - Modify: `src/pages/posts/[...id]/index.astro`
@@ -1360,7 +1385,8 @@ The payoff. This is where the 4,808 KB leaves the build.
 ```bash
 find dist -name "*.png" -exec du -k {} + | awk '{s+=$1} END {print "png total:", s, "KB"}'
 ```
-Expected: around 6,864 KB before the change (the exact figure from the spec; note whatever it actually reports).
+Note whatever it reports. Expect it to be **unchanged** after the work: this
+figure is recorded to prove the build size is not the metric, not to show a drop.
 
 - [ ] **Step 2: Repoint `og:image` at the card**
 

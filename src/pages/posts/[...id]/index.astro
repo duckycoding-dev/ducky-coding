@@ -1,6 +1,6 @@
 ---
 import type { ImageMetadata } from 'astro';
-import { Image } from 'astro:assets';
+import { getImage, Image } from 'astro:assets';
 import { getCollection } from 'astro:content';
 import type { BlogPosting } from 'schema-dts';
 
@@ -25,6 +25,7 @@ import { TopicThing } from '@utils/json-ld/thing';
 import { buildWebPage } from '@utils/json-ld/webpage';
 import { DuckyCodingWebsite } from '@utils/json-ld/website';
 import { serverLogger } from '@utils/logs/logger';
+import { ogCardUrl } from '@utils/og/og-paths';
 import { buildPageSeo } from '@utils/seo/page-seo';
 
 // 1. Generate a new path for every collection entry
@@ -93,8 +94,33 @@ const modifiedAt = new Date(
 
 const author = AuthorPerson(entry.data.author);
 
-const imageSource = processedImage ?? DuckyCodingLogo;
-const imageIsBanner = processedImage !== undefined;
+// Structured data keeps the banner illustration — it is a better representative
+// image for a BlogPosting than a title card — but must reference an optimised
+// derivative, not `processedImage.src`. Referencing the original is what makes
+// Astro emit the full-size source PNG purely to satisfy a metadata URL.
+const STRUCTURED_DATA_IMAGE_WIDTH = 1200;
+
+// `getImage` returns a GetImageResult, which carries `src` but not `width` and
+// `height`, so the dimensions are derived from the source's aspect ratio at the
+// width requested above.
+const optimisedBanner = processedImage
+  ? {
+      src: (
+        await getImage({
+          src: processedImage,
+          width: STRUCTURED_DATA_IMAGE_WIDTH,
+          format: 'webp',
+        })
+      ).src,
+      width: STRUCTURED_DATA_IMAGE_WIDTH,
+      height: Math.round(
+        (STRUCTURED_DATA_IMAGE_WIDTH * processedImage.height) /
+          processedImage.width,
+      ),
+    }
+  : undefined;
+const imageSource = optimisedBanner ?? DuckyCodingLogo;
+const imageIsBanner = optimisedBanner !== undefined;
 const imageContentUrl = new URL(imageSource.src, WEBSITE_ROOT).href;
 const imageAlt = imageIsBanner
   ? bannerImage?.alt ||
@@ -170,17 +196,16 @@ const blogPostJsonLd = {
     pageUrl,
     keywords: entry.data.tags.join(', '),
     ogType: 'article',
-    ...(processedImage && {
-      image: {
-        src: processedImage.src,
-        width: processedImage.width,
-        height: processedImage.height,
-        format: processedImage.format,
-        alt:
-          bannerImage?.alt ||
-          `Post banner cover related to "${entry.data.topicTitle}"`,
-      },
-    }),
+    // Always the generated card: purpose-built at 1200x630, tens of KB rather
+    // than the megabytes an unoptimised banner costs, and correctly proportioned
+    // for social previews.
+    image: {
+      src: ogCardUrl('posts', entry.id),
+      width: 1200,
+      height: 630,
+      format: 'png',
+      alt: entry.data.title,
+    },
     author:
       entry.data.author.toLowerCase() === 'duckycoding'
         ? 'Davide Milan'

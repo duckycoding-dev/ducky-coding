@@ -21,17 +21,25 @@ Every page currently serves an unoptimised source image as its social card:
 | `/`, `/blog`, `/memes` | the site logo PNG | 420 KB |
 | `/topics/astro` | the topic logo PNG | — |
 
-Measured on the production build: **6,864 KB of PNG ships in `dist`, of which
-4,808 KB — 70% — is the three post banners**, referenced only because
-`og:image` points at the original asset. Every visible `<img>` on the site
-already uses optimised avif; these originals exist purely for social scrapers.
+Two problems. What a social scraper downloads is **495–2,237 KB per post**, and it
+is also the *wrong shape*: a 3:2 banner or a square logo is not a 1.91:1 social
+card, so previews get letterboxed or cropped. Every visible `<img>` on the site
+already uses optimised avif; these originals are served only to scrapers and feed
+readers.
 
-Two problems, then. The cards are heavy, and they are also *wrong*: a 3:2 banner
-or a square logo is not a 1.91:1 social card, so previews get letterboxed or
-cropped.
+**The win is on the wire, not in the build.** An earlier reading of the same
+measurements assumed the 6,864 KB of PNG in `dist` would shrink once `og:image`
+stopped pointing at the originals. It does not: Astro emits an original for every
+*imported* asset regardless of whether anything references it. Verified by a clean
+rebuild in which no file in `dist` mentions the three originals and all three are
+still emitted. So `dist` stays the same size; what changes is what third parties
+actually fetch.
 
-This spec covers **blog posts only**. That captures 70% of the waste and is the
-content people actually share. Other page types keep the logo until a later pass.
+Removing unreferenced originals from the build is a separate concern and belongs
+to workstream C.
+
+This spec covers **blog posts only** — the content people actually share. Other
+page types keep the logo until a later pass.
 
 ## Scope
 
@@ -385,8 +393,16 @@ card's content can change when a title is edited, so `immutable` would be wrong.
   instead of the banner's `.src`, with `width: 1200, height: 630` and the post
   title as `og:image:alt`.
 - The banner image itself is untouched as the visible hero.
-- Because nothing then references the banner original's `.src`, Astro stops
-  emitting those three PNGs — which is where the 4,808 KB goes.
+- **Three places reference the original, not one.** `og:image` is the obvious one,
+  but `BlogPosting.image` / `primaryImageUrl` in the post page's JSON-LD and the
+  `enclosure` in `src/pages/rss.xml.ts` both use `.src` too. All three must move to
+  an optimised derivative, or a 2 MB source file is still handed to consumers.
+  Structured data and the feed keep the banner illustration — a better
+  representative image than a title card — via `getImage(..., { width: 1200,
+  format: 'webp' })`. Only `og:image` becomes the generated card.
+- `getImage` returns a `GetImageResult` carrying `src` but **not** `width`/`height`,
+  so the dimensions those consumers need are derived from the source's aspect
+  ratio at the requested width.
 
 ## Testing
 
@@ -418,9 +434,14 @@ build output get explicit verification.
    `sharp` is already available.
 3. Built HTML: `og:image` on each post points at its card, and `og:image:width`
    is 1200.
-4. **Total PNG weight in `dist` drops by roughly 4,800 KB** against the 6,864 KB
-   baseline. This is the headline claim of the spec and it is directly measurable.
-5. Open one generated card and confirm against the approved mockup: no label
+4. **What a scraper downloads drops by ~97%** — measured: 2,184 KB → 65 KB,
+   2,237 KB → 70 KB, 495 KB → 71 KB. `dist` itself does not shrink, and asserting
+   that it does would fail.
+5. No output file references the three originals any more — check `index.html`,
+   `rss.xml` and a post page. This is what proves all three consumer sites were
+   found, not just `og:image`.
+6. Every `enclosure` in `rss.xml` ends in `.webp`.
+7. Open one generated card and confirm against the approved mockup: no label
    overlaps the title, nothing is clipped except the watermark.
 
 ## Follow-ups, deliberately not here

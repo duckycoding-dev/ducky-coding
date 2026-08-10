@@ -1,6 +1,6 @@
 ---
 created: 2026-04-01
-updated: 2026-08-08
+updated: 2026-08-10
 summary: Build and dev execution order, DB sync chain, environment setup
 ---
 
@@ -124,16 +124,20 @@ by a title stored inside the file.
 | 1 | Vite dev server starts on `:4321` |
 | 2 | Astro content collections loaded lazily per request |
 | 3 | `/search` runs server-side against the local DB; every other page is prerendered |
-| 4 | **No DB sync** — there is no dev-time sync trigger |
+| 4 | `/og/posts/<id>.png` renders a card on request — see below |
+| 5 | **No DB sync** — there is no dev-time sync trigger |
 
 Pages read whatever the local database already contains. There is no endpoint
 that syncs it — syncing happens on a build. DB operations in dev are all manual:
 
 ```bash
-npm run db:migrate:local   # apply schema migrations
 npm run drizzle:seed       # seed test data
 npm run drizzle:studio     # open DB GUI
 ```
+
+`npm run db:migrate:local` is currently broken (BUG-001) — run
+`npm run astro:build:local` instead, which migrates through the `db-sync`
+integration.
 
 To refresh the local DB from `src/content/`, run a local build:
 
@@ -143,38 +147,129 @@ npm run astro:build:local  # migrates + syncs against .env.development
 
 ### `npm run astro:build` (production build)
 
-| Step | What happens |
-|------|-------------|
-| 1 | `astro check` — full TypeScript type-check |
-| 2 | Vite bundles assets, Tailwind processes CSS |
-| 3 | Content collections validated against Zod schemas |
-| 4 | **`astro:build:start` hook** → `buildSyncImages()` + `buildSyncAllContent()` |
-| 5 | All pages rendered (use `getCollection()` for data) |
-| 6 | Static output → `dist/` |
-| 7 | SSR bundle (`/search`) → `dist/.server_javascript/` |
-| 8 | Client JS/CSS → `dist/client_javascript_and_css/` |
+Order taken from a real build log, not from intent.
 
-Step 4 aborts the build if the content sync fails, rather than shipping a
+| Step | Log line | What happens |
+|------|----------|-------------|
+| 1 | — | `astro check` — full TypeScript type-check |
+| 2 | `[content] Syncing content` | Content collections read and validated against Zod schemas |
+| 3 | `[types] Generated` | `.astro/types.d.ts` regenerated |
+| 4 | `[db-sync] Running DB migrations...` | **`astro:build:start` hook** → `buildMigrate()` |
+| 5 | `[db-sync] Starting DB sync...` | `buildSyncImages()` then `buildSyncAllContent()` — topics, posts, memes |
+| 6 | `[build] Building server entrypoints...` | Vite builds the prerender, ssr and client environments |
+| 7 | `[assets] Copying fonts` | Inter woff2 written from `.astro/fonts` into `dist` |
+| 8 | `prerendering static routes` | Every static page **and `/og/posts/*.png`** rendered |
+| 9 | `▶ /_astro/*.avif` | sharp generates the optimised image variants |
+| 10 | `[@astrojs/netlify]` | `_redirects` emitted, SSR function bundled for `/search` |
+| 11 | `[@astrojs/sitemap]` | `sitemap-index.xml` written |
+
+Step 5 aborts the build if the content sync fails, rather than shipping a
 half-written search index.
+
+```mermaid
+flowchart TD
+    Check["astro check"]
+    Content["content collections validated"]
+    Migrate["db-sync hook: buildMigrate"]
+    Sync["db-sync hook: buildSyncImages + buildSyncAllContent"]
+    Vite["vite builds prerender, ssr, client"]
+    Fonts["Inter woff2 into .astro/fonts and dist"]
+    Prerender["prerender static routes"]
+    OG["og/[...route].png.ts renders the cards"]
+    Images["sharp emits avif variants"]
+    Adapter["netlify: redirects + ssr function"]
+    Sitemap["sitemap"]
+    Done["dist ready"]
+
+    Check --> Content --> Migrate --> Sync --> Vite --> Fonts --> Prerender
+    Prerender --> OG
+    Prerender --> Images
+    OG --> Images
+    Images --> Adapter --> Sitemap --> Done
+```
+
+### OG card generation
+
+The cards are prerendered like any other route, and depend on two earlier stages,
+which is why their position in the order is not incidental:
+
+```mermaid
+flowchart LR
+    Route["pages/og/[...route].png.ts"]
+    Registry["OG_CARD_KINDS registry"]
+    Kind["kinds/post-card.ts"]
+    Posts["posts collection"]
+    Shell["card-shell.ts"]
+    Fit["fit-title.ts"]
+    Font[".astro/fonts Inter woff2"]
+    Measure["Renderer.measure"]
+    Render["Renderer.render"]
+    Out["dist/og/posts/id.png"]
+
+    Route --> Registry --> Kind
+    Kind --> Posts
+    Kind --> Shell
+    Route --> Fit
+    Fit --> Measure
+    Route --> Font
+    Font --> Measure
+    Font --> Render
+    Shell --> Render
+    Render --> Out
+```
+
+- **Fonts** — the route reads the Inter woff2 from `.astro/fonts`. A missing font
+  is a hard error, never a silent fallback to another face. `.astro/` is
+  gitignored, so CI starts cold; verified that Astro populates it before
+  prerendering, so a cold cache still produces cards.
+- **Content** — the kind enumerates the `posts` collection, so content must be
+  synced first.
+- **Measurement and rendering use the same engine.** `Renderer.measure` gives the
+  title's real wrapped height, so the fitted size cannot disagree with the drawn
+  card.
+
+Output is one unhashed PNG per published post at `dist/og/posts/<id>.png`. Adding
+a card type means adding an entry to `OG_CARD_KINDS`; the route itself is
+kind-agnostic.
+
+#### Triggering it by hand
+
+The route is a normal Astro endpoint, so the dev server renders it live:
+
+```bash
+npm run astro:dev
+# then open, or curl:
+open http://localhost:4321/og/posts/avoid-self-referencing-links.png
+```
+
+Each request re-renders from current content, so editing a post title and
+reloading shows the new card immediately — no build needed. To produce the files
+on disk instead:
+
+```bash
+npm run astro:build:local && open dist/og/posts/
+```
 
 ### Netlify deployment
 
-Netlify runs `npm run astro:build` as its build command. DB migrations are **not
-automatic** — they must be run manually when the schema changes:
+Netlify runs `npm run astro:build` as its build command.
 
-```bash
-npm run db:migrate   # runs against production Turso via .env.production
-```
+**Migrations are automatic.** `buildMigrate()` runs in the `astro:build:start`
+hook on every build, against whatever database the loaded env points at — so
+deploying `main` migrates production Turso. There is nothing to run by hand.
 
----
+The standalone `npm run db:migrate` and `db:migrate:local` scripts are currently
+broken and are not part of this flow — see BUG-001 in `docs/issues/discovered.md`.
 
 ## Local DB Setup (first time)
 
 ```bash
-# 1. Apply the schema
-npm run db:migrate:local
+# 1. Create and migrate the local DB, and sync content into it.
+#    Not db:migrate:local — that script is broken (BUG-001). A local build
+#    migrates through the db-sync integration and seeds from src/content/.
+npm run astro:build:local
 
-# 2. (Optional) seed test data
+# 2. (Optional) seed extra test data
 npm run drizzle:seed
 
 # 3. Start dev server — connects directly to database/content.db
@@ -252,3 +347,4 @@ want to verify that the site builds without mutating your local DB — or, with
 
 Local dev uses `.env.development`, production uses `.env.production`.
 `.env.example` at the repo root lists all of them with placeholder values.
+

@@ -1,4 +1,5 @@
 import type { APIRoute } from 'astro';
+import { getImage } from 'astro:assets';
 import { getCollection } from 'astro:content';
 import rss from '@astrojs/rss';
 import MarkdownIt from 'markdown-it';
@@ -9,6 +10,9 @@ import { matchImageFromGlobImport } from '../utils/images/images';
 import { serverLogger } from '../utils/logs/logger';
 
 const parser = new MarkdownIt();
+
+/** Width of the optimised banner used as the RSS enclosure. */
+const RSS_ENCLOSURE_WIDTH = 1200;
 
 export const GET: APIRoute = async (context) => {
   const postsCollection = await getCollection('posts');
@@ -37,9 +41,30 @@ export const GET: APIRoute = async (context) => {
       const postTags =
         postsCollection.find((p) => p.id === post.slug)?.data?.tags || [];
 
+      // The enclosure must not reference `processedImage.src`: that is the
+      // original asset, and referencing it makes Astro emit the full-size source
+      // file — megabytes shipped purely for a feed URL.
+      const enclosureImage = processedImage
+        ? {
+            src: (
+              await getImage({
+                src: processedImage,
+                width: RSS_ENCLOSURE_WIDTH,
+                format: 'webp',
+              })
+            ).src,
+            width: RSS_ENCLOSURE_WIDTH,
+            height: Math.round(
+              (RSS_ENCLOSURE_WIDTH * processedImage.height) /
+                processedImage.width,
+            ),
+            format: 'webp',
+          }
+        : null;
+
       return {
         ...post,
-        processedBannerImage: processedImage ?? null,
+        processedBannerImage: enclosureImage,
         tags: postTags,
       };
     }),
