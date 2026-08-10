@@ -66,8 +66,9 @@ const { class: className, ...props }: Props = Astro.props;
 </dialog>
 
 <!-- Desktop: static nav. Links sit left beside the brand; search is the only
-     action, isolated on the right behind a divider. No separator glyph between
-     links — the crowding was a spacing problem, not a missing divider. -->
+     action, isolated on the far right. No separator glyph between links, and no
+     divider before the field — the crowding was a spacing problem, and the gap
+     does all the separating that is needed. -->
 <nav
   class={cn('hidden min-w-0 grow items-center md:flex', className)}
   {...props}
@@ -83,8 +84,11 @@ const { class: className, ...props }: Props = Astro.props;
       ))
     }
   </ul>
+  {
+    /* The gap alone separates the links from the search field; a divider was
+      only needed while the two sat adjacent. */
+  }
   <div class='grow'></div>
-  <div class='bg-secondary mx-4 h-6 w-[2px] shrink-0' aria-hidden='true'></div>
   <NavSearchForm variant='bar' />
 </nav>
 
