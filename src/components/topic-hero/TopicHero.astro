@@ -49,6 +49,14 @@ const lastUpdatedLabel =
     class='relative flex flex-col items-start gap-5 sm:flex-row sm:items-center'
   >
     {
+      /*
+      The plate is a fixed 96px and the logo is capped on BOTH axes at 62px, so
+      any aspect ratio scales down to fit rather than widening anything. That is
+      what keeps the text start — and therefore the dot mask below — at a
+      constant 144px whatever shape a topic's logo happens to be.
+    */
+    }
+    {
       image ? (
         <BadgePlate
           size='xl'
@@ -65,7 +73,7 @@ const lastUpdatedLabel =
             title={title}
             width={62}
             densities={[1, 2, 3]}
-            class='max-h-[62px] w-auto object-contain'
+            class='max-h-[62px] max-w-[62px] object-contain'
           />
         </BadgePlate>
       ) : null
@@ -109,6 +117,20 @@ const lastUpdatedLabel =
     /* 20% keeps the surface light enough for `secondary` text to clear
        contrast at any input hex. */
     background-color: color-mix(in oklab, var(--topicAccent) 20%, white);
+
+    /* Where the dot texture stops, measured from the hero's own edge.
+       These are deterministic, not guesses — the plate is a fixed 96px
+       (BadgePlate size="xl") and the spacing around it is fixed too:
+
+         border 4 + padding 24 = 28   plate starts
+         + plate 96            = 124  plate ends
+         + gap 20              = 144  text starts
+
+       Only the text's *length* varies, never its start, so the fade can be
+       anchored exactly. Identical on both axes: the stacked mobile layout puts
+       the plate above the text with the same padding and gap. */
+    --dots-solid-until: 100px;
+    --dots-gone-by: 144px;
   }
 
   .topic-hero__pill {
@@ -130,45 +152,44 @@ const lastUpdatedLabel =
     position: absolute;
     inset: 0;
     pointer-events: none;
+    /* Softened rather than pure `secondary`: at full strength these read as hard
+       black specks on a light band instead of paper texture. */
     background-image: radial-gradient(
-      var(--color-secondary) 1.6px,
+      color-mix(in oklab, var(--color-secondary) 55%, transparent) 1.6px,
       transparent 1.7px
     );
     background-size: 14px 14px;
-    /* Stacked layout (plate above text): fade downward, so the dots never land
-       on the copy.
-
-       Stops are absolute lengths, not percentages, so the fade stays anchored
-       to the plate at any container width. A percentage fade looked right in a
-       600px mockup and left two thirds of a 1270px band flat and empty. */
+    /* Stacked layout (plate above text): fade downward, gone before the copy
+       starts. Stops are absolute lengths, not percentages, so the fade stays
+       anchored to the plate at any container size. */
     -webkit-mask-image: linear-gradient(
       to bottom,
       #000 0,
-      #000 130px,
-      transparent 260px
+      #000 var(--dots-solid-until),
+      transparent var(--dots-gone-by)
     );
     mask-image: linear-gradient(
       to bottom,
       #000 0,
-      #000 130px,
-      transparent 260px
+      #000 var(--dots-solid-until),
+      transparent var(--dots-gone-by)
     );
   }
 
-  /* Side-by-side layout: wipe left to right instead. */
+  /* Side-by-side layout: wipe left to right instead, same stops. */
   @media (width >= 480px) {
     .topic-hero__dots {
       -webkit-mask-image: linear-gradient(
         to right,
         #000 0,
-        #000 150px,
-        transparent 460px
+        #000 var(--dots-solid-until),
+        transparent var(--dots-gone-by)
       );
       mask-image: linear-gradient(
         to right,
         #000 0,
-        #000 150px,
-        transparent 460px
+        #000 var(--dots-solid-until),
+        transparent var(--dots-gone-by)
       );
     }
   }
