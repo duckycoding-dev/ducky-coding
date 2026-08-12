@@ -15,11 +15,18 @@ export interface FooterProps {}
 interface Props extends HTMLAttributes<'footer'>, FooterProps {}
 
 const { class: className, ...props }: Props = Astro.props;
+
+const FIRST_PUBLICATION_YEAR = 2024;
+const currentYear = new Date().getUTCFullYear();
+const copyrightYears =
+  currentYear === FIRST_PUBLICATION_YEAR
+    ? `${FIRST_PUBLICATION_YEAR}`
+    : `${FIRST_PUBLICATION_YEAR}–${currentYear}`;
 ---
 
 <footer
   class={cn(
-    'grid gap-y-4 bg-primary-700 border-4 border-secondary py-8 [grid-area:footer] border-x-0 border-b-0 px-8',
+    'bg-primary-700 border-secondary grid gap-y-4 border-4 border-x-0 border-b-0 px-4 py-8 [grid-area:footer] md:px-8',
     className,
   )}
   {...props}
@@ -30,65 +37,96 @@ const { class: className, ...props }: Props = Astro.props;
     Stay in touch
   </h2>
 
-  <nav class='mx-auto flex min-h-12 max-w-7xl flex-wrap items-center gap-x-6'>
-    <Link
-      target='_blank'
-      rel='noopener noreferrer'
-      href='https://github.com/duckycoding-dev'
-      variant={'default'}
-      class='text-secondary'
+  <nav aria-label='DuckyCoding on social media' class='mx-auto'>
+    <ul
+      class='grid min-h-12 grid-cols-[repeat(3,50px)] place-items-center gap-x-6 gap-y-4 sm:grid-cols-[repeat(6,50px)]'
     >
-      <GitHubIcon size={50} />
-    </Link>
-    <Link
-      target='_blank'
-      rel='noopener noreferrer'
-      href='https://x.com/ducky_coding'
-      variant={'default'}
-      class='text-secondary'
-    >
-      <XIcon size={50} />
-    </Link>
-    <Link
-      target='_blank'
-      rel='noopener noreferrer'
-      href='https://www.linkedin.com/in/davide-m-997874254/'
-      variant={'default'}
-      class='text-secondary'
-    >
-      <LinkedInIcon size={50} />
-    </Link>
-    <Link
-      target='_blank'
-      rel='noopener noreferrer'
-      href='https://www.instagram.com/ducky.coding/'
-      variant={'default'}
-      class='text-secondary'
-    >
-      <InstagramIcon size={50} />
-    </Link>
-    <Link
-      target='_blank'
-      rel='noopener noreferrer'
-      href='https://www.tiktok.com/@ducky.coding'
-      variant={'default'}
-      class='text-secondary'
-    >
-      <TikTokIcon size={50} />
-    </Link>
-    <Link
-      target='_blank'
-      rel='noopener noreferrer'
-      href='https://www.youtube.com/@ducky.coding'
-      variant={'default'}
-      class='text-secondary'
-    >
-      <YouTubeIcon size={50} />
-    </Link>
+      <li>
+        <Link
+          aria-label='DuckyCoding on GitHub'
+          target='_blank'
+          rel='noopener noreferrer'
+          href='https://github.com/duckycoding-dev'
+          variant='default'
+          class='text-secondary'
+        >
+          <GitHubIcon size={50} aria-hidden='true' />
+        </Link>
+      </li>
+      <li>
+        <Link
+          aria-label='DuckyCoding on X'
+          target='_blank'
+          rel='noopener noreferrer'
+          href='https://x.com/ducky_coding'
+          variant='default'
+          class='text-secondary'
+        >
+          <XIcon size={50} aria-hidden='true' />
+        </Link>
+      </li>
+      <li>
+        <Link
+          aria-label='Davide on LinkedIn'
+          target='_blank'
+          rel='noopener noreferrer'
+          href='https://www.linkedin.com/in/davide-m-997874254/'
+          variant='default'
+          class='text-secondary'
+        >
+          <LinkedInIcon size={50} aria-hidden='true' />
+        </Link>
+      </li>
+      <li>
+        <Link
+          aria-label='DuckyCoding on Instagram'
+          target='_blank'
+          rel='noopener noreferrer'
+          href='https://www.instagram.com/ducky.coding/'
+          variant='default'
+          class='text-secondary'
+        >
+          <InstagramIcon size={50} aria-hidden='true' />
+        </Link>
+      </li>
+      <li>
+        <Link
+          aria-label='DuckyCoding on TikTok'
+          target='_blank'
+          rel='noopener noreferrer'
+          href='https://www.tiktok.com/@ducky.coding'
+          variant='default'
+          class='text-secondary'
+        >
+          <TikTokIcon size={50} aria-hidden='true' />
+        </Link>
+      </li>
+      <li>
+        <Link
+          aria-label='DuckyCoding on YouTube'
+          target='_blank'
+          rel='noopener noreferrer'
+          href='https://www.youtube.com/@ducky.coding'
+          variant='default'
+          class='text-secondary'
+        >
+          <YouTubeIcon size={50} aria-hidden='true' />
+        </Link>
+      </li>
+    </ul>
   </nav>
 
-  <section class='flex flex-col items-center justify-center wrap-anywhere'>
-    <small>Copyright &copy; 2024 - DuckyCoding - All Rights Reserved</small>
-    <small>Built with Astro</small>
-  </section>
+  <div class='flex flex-col items-center justify-center wrap-anywhere'>
+    <p><small>&copy; {copyrightYears} DuckyCoding</small></p>
+    <p>
+      <small>
+        Built with
+        <Link
+          href='https://astro.build/'
+          target='_blank'
+          rel='noopener noreferrer'>Astro</Link
+        >
+      </small>
+    </p>
+  </div>
 </footer>
