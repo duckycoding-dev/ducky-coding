@@ -12,6 +12,7 @@ import { DuckyCodingPublisher } from '@utils/json-ld/publisher';
 import { buildCollectionPage } from '@utils/json-ld/webpage';
 import { DuckyCodingWebsite } from '@utils/json-ld/website';
 import { buildPageSeo } from '@utils/seo/page-seo';
+import { memeImageTransitionName } from '@utils/view-transitions/view-transition-name';
 import CalendarIcon from '../../components/icons/CalendarIcon.astro';
 import PersonIcon from '../../components/icons/PersonIcon.astro';
 import {
@@ -138,6 +139,7 @@ const memesJsonLd = {
             </small>
             <div class='border-secondary aspect-square h-auto w-full overflow-hidden border-2'>
               <Image
+                style={`view-transition-name: ${memeImageTransitionName(meme.id)}`}
                 format={'avif'}
                 src={meme.processedImage}
                 widths={getImageWidths(meme.processedImage.width)}

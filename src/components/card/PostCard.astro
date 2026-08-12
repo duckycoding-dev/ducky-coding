@@ -9,6 +9,7 @@ import Card from '@components/card/Card.astro';
 import Link from '@components/link/Link.astro';
 import Tag from '@components/tag/Tag.astro';
 import type { Post } from '@db/features/posts/posts.model';
+import { postImageTransitionName } from '@utils/view-transitions/view-transition-name';
 import { getPostCardPresentation } from './post-card';
 
 export interface PostCardProps extends HTMLAttributes<'a'> {
@@ -67,6 +68,7 @@ const {
       class='post-card-media bg-primary-700 border-secondary aspect-video overflow-hidden border-b-4'
     >
       <Image
+        style={`view-transition-name: ${postImageTransitionName(post.slug)}`}
         format='avif'
         src={bannerImage ?? DuckyCodingLogo}
         width={bannerImage ? bannerImage.width : DuckyCodingLogo.width}

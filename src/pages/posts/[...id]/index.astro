@@ -27,6 +27,7 @@ import { DuckyCodingWebsite } from '@utils/json-ld/website';
 import { serverLogger } from '@utils/logs/logger';
 import { ogCardUrl } from '@utils/og/og-paths';
 import { buildPageSeo } from '@utils/seo/page-seo';
+import { postImageTransitionName } from '@utils/view-transitions/view-transition-name';
 
 // 1. Generate a new path for every collection entry
 export async function getStaticPaths() {
@@ -232,6 +233,7 @@ const blogPostJsonLd = {
     {
       bannerImage && processedImage ? (
         <Image
+          style={`view-transition-name: ${postImageTransitionName(entry.id)}`}
           format='avif'
           src={processedImage}
           alt={

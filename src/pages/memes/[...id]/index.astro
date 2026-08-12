@@ -14,6 +14,7 @@ import { IMAGE_DENSITIES, WEBSITE_ROOT } from '@utils/globals';
 import { getImageWidths, matchImageFromGlobImport } from '@utils/images/images';
 import { MemeJsonLd } from '@utils/json-ld/meme';
 import { buildPageSeo } from '@utils/seo/page-seo';
+import { memeImageTransitionName } from '@utils/view-transitions/view-transition-name';
 
 const memesImages = import.meta.glob<{ default: ImageMetadata }>(
   `/src/assets/images/memes/**/*.{jpeg,jpg,png,gif,webp,svg}`,
@@ -146,6 +147,7 @@ const memeJsonLd = {
     processedImage ? (
       <MemeContainer class='mb-6'>
         <Image
+          style={`view-transition-name: ${memeImageTransitionName(entry.id)}`}
           format='avif'
           src={processedImage}
           alt={imageAlt}

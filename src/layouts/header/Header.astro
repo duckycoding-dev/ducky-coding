@@ -19,6 +19,7 @@ const currentPath = Astro.url.pathname;
 ---
 
 <header
+  style='view-transition-name: site-header'
   class={cn(
     'bg-primary-700 border-comic-thick border-secondary sticky top-0 z-10 [grid-area:header] border-x-0 border-t-0',
     className,

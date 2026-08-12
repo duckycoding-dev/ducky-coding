@@ -27,6 +27,7 @@ import { DuckyCodingPublisher } from '@utils/json-ld/publisher';
 import { DuckyCodingWebsite } from '@utils/json-ld/website';
 import { serverLogger } from '@utils/logs/logger';
 import { buildPageSeo } from '@utils/seo/page-seo';
+import { memeImageTransitionName } from '@utils/view-transitions/view-transition-name';
 
 export const prerender = false;
 
@@ -403,6 +404,7 @@ const searchJsonLd = {
                   >
                     <div class='border-secondary aspect-square w-full overflow-hidden border-2'>
                       <Image
+                        style={`view-transition-name: ${memeImageTransitionName(meme.slug)}`}
                         format='avif'
                         src={meme.processedImage}
                         width={meme.processedImage.width}
@@ -553,7 +555,8 @@ const searchJsonLd = {
       document
         .querySelectorAll<HTMLInputElement>('[data-tag-value]')
         .forEach((el) => {
-          if (el.checked) checkedTags.add(el.getAttribute('data-tag-value')!);
+          const dataTagValue = el.getAttribute('data-tag-value');
+          if (el.checked && dataTagValue) checkedTags.add(dataTagValue);
         });
       if (checkedTags.size > 0) params.set('tags', [...checkedTags].join(','));
 
@@ -562,8 +565,8 @@ const searchJsonLd = {
       document
         .querySelectorAll<HTMLInputElement>('[data-topic-value]')
         .forEach((el) => {
-          if (el.checked)
-            checkedTopics.add(el.getAttribute('data-topic-value')!);
+          const dataTopicValue = el.getAttribute('data-topic-value');
+          if (el.checked && dataTopicValue) checkedTopics.add(dataTopicValue);
         });
       if (checkedTopics.size > 0)
         params.set('topics', [...checkedTopics].join(','));
@@ -592,13 +595,14 @@ const searchJsonLd = {
       document
         .querySelectorAll<HTMLInputElement>('[data-tag-value]')
         .forEach((el) => {
-          if (el.checked) checkedTags.add(el.getAttribute('data-tag-value')!);
+          const dataTagValue = el.getAttribute('data-tag-value');
+          if (el.checked && dataTagValue) checkedTags.add(dataTagValue);
         });
 
       // Remove pills for unchecked tags
       container.querySelectorAll('[data-remove-tag]').forEach((pill) => {
-        const tag = pill.getAttribute('data-remove-tag')!;
-        if (!checkedTags.has(tag)) pill.remove();
+        const tag = pill.getAttribute('data-remove-tag');
+        if (tag && !checkedTags.has(tag)) pill.remove();
       });
 
       // Add pills for newly checked tags
@@ -674,8 +678,8 @@ const searchJsonLd = {
     // Removable tag pills (server-rendered ones)
     document.querySelectorAll('[data-remove-tag]').forEach((pill) => {
       pill.addEventListener('click', () => {
-        const tag = pill.getAttribute('data-remove-tag')!;
-        removePill(tag);
+        const tag = pill.getAttribute('data-remove-tag');
+        if (tag) removePill(tag);
       });
     });
 
@@ -684,13 +688,17 @@ const searchJsonLd = {
       .querySelectorAll<HTMLInputElement>('[data-topic-value]')
       .forEach((checkbox) => {
         checkbox.addEventListener('change', () => {
-          const topic = checkbox.getAttribute('data-topic-value')!;
-          document
-            .querySelectorAll<HTMLInputElement>(`[data-topic-value="${topic}"]`)
-            .forEach((cb) => {
-              cb.checked = checkbox.checked;
-            });
-          updateSearchHref();
+          const topic = checkbox.getAttribute('data-topic-value');
+          if (topic) {
+            document
+              .querySelectorAll<HTMLInputElement>(
+                `[data-topic-value="${topic}"]`,
+              )
+              .forEach((cb) => {
+                cb.checked = checkbox.checked;
+              });
+            updateSearchHref();
+          }
         });
       });
 

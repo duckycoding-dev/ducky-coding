@@ -27,6 +27,42 @@ const { theme = 'default', seoProps, jsonLd, ...props }: Props = Astro.props;
   </body>
 </html>
 
+<style is:global>
+  @view-transition {
+    navigation: auto;
+  }
+
+  ::view-transition-old(site-header),
+  ::view-transition-old(site-footer) {
+    animation: none;
+    opacity: 0;
+  }
+
+  ::view-transition-new(site-header),
+  ::view-transition-new(site-footer) {
+    animation: none;
+  }
+
+  ::view-transition-group(site-header) {
+    z-index: 1;
+  }
+
+  ::view-transition-group(site-header),
+  ::view-transition-group(site-footer),
+  ::view-transition-group(root) {
+    animation-duration: 220ms;
+    animation-timing-function: ease-out;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    ::view-transition-group(*),
+    ::view-transition-old(*),
+    ::view-transition-new(*) {
+      animation-duration: 0.001ms !important;
+    }
+  }
+</style>
+
 <style>
   /* https://www.digitalocean.com/community/tutorials/css-css-grid-holy-grail-layout */
 
