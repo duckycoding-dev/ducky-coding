@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { pickChips, readTimeLabel } from './post-rules.ts';
+import { pickChips } from './post-rules.ts';
 
 describe('pickChips', () => {
   it('uses the topic first and the first tag that differs from it', () => {
@@ -45,15 +45,5 @@ describe('pickChips', () => {
       { label: 'HTML', tone: 'accent' },
       { label: 'a18y', tone: 'accent2' },
     ]);
-  });
-});
-
-describe('readTimeLabel', () => {
-  it('formats minutes', () => {
-    expect(readTimeLabel(5)).toBe('5 min read');
-  });
-
-  it('uses the singular for one minute', () => {
-    expect(readTimeLabel(1)).toBe('1 min read');
   });
 });

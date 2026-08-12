@@ -207,26 +207,33 @@ const topicPageJsonLd = {
   />
   {
     processedPostsWithImages.length > 0 ? (
-      <ul class='grid-container mt-8 grid gap-8'>
-        {processedPostsWithImages.map(
-          ({ post, tags, processedBannerImage }, index) => {
-            return (
-              <li class='mb-8 last-of-type:mb-0 md:last-of-type:mb-8'>
-                <PostCard
-                  class='block h-full'
-                  post={post}
-                  tags={tags}
-                  bannerImage={
-                    processedBannerImage || processedTopic.imageSrc || null
-                  }
-                  loading={index < 4 ? 'eager' : 'lazy'}
-                  fetchPriority={index < 4 ? 'high' : 'auto'}
-                />
-              </li>
-            );
-          },
-        )}
-      </ul>
+      <section class='mt-8' aria-labelledby='topic-posts-heading'>
+        <h2 id='topic-posts-heading' class='sr-only'>
+          Posts about {processedTopic.title}
+        </h2>
+        <ul class='grid gap-6'>
+          {processedPostsWithImages.map(
+            ({ post, tags, processedBannerImage }, index) => {
+              return (
+                <li>
+                  <PostCard
+                    class='block'
+                    widths={[300, 600, 900, 1200, 1500]}
+                    sizes='(max-width: 511px) calc(100vw - 2rem), (max-width: 1300px) 36vw, 460px'
+                    post={post}
+                    tags={tags}
+                    bannerImage={
+                      processedBannerImage || processedTopic.imageSrc || null
+                    }
+                    loading={index < 4 ? 'eager' : 'lazy'}
+                    fetchPriority={index < 4 ? 'high' : 'auto'}
+                  />
+                </li>
+              );
+            },
+          )}
+        </ul>
+      </section>
     ) : (
       <>
         <h2 class='mt-8 text-center text-2xl font-extrabold text-balance md:text-left'>
@@ -242,11 +249,3 @@ const topicPageJsonLd = {
     )
   }
 </HolyGrailLayout>
-
-<style>
-  @media (width >= 768px) {
-    .grid-container {
-      grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-    }
-  }
-</style>

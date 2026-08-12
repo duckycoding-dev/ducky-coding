@@ -24,11 +24,19 @@ const cardVariants = cva({
 
 export type CardVariants = VariantProps<typeof cardVariants>;
 
-interface Props extends HTMLAttributes<'div'>, CardVariants {}
+interface Props extends HTMLAttributes<'div'>, CardVariants {
+  as?: 'article' | 'div' | 'section';
+}
 
-const { class: className, shadow, hover, ...props }: Props = Astro.props;
+const {
+  as: Element = 'div',
+  class: className,
+  shadow,
+  hover,
+  ...props
+}: Props = Astro.props;
 ---
 
-<div class={cn(cardVariants({ shadow, hover }), className)} {...props}>
+<Element class={cn(cardVariants({ shadow, hover }), className)} {...props}>
   <slot />
-</div>
+</Element>

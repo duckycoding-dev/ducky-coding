@@ -29,7 +29,3 @@ function truncateTag(tag: string): string {
   if (tag.length <= MAX_TAG_LENGTH) return tag;
   return `${tag.slice(0, MAX_TAG_LENGTH - 1)}…`;
 }
-
-export function readTimeLabel(minutes: number): string {
-  return `${minutes} min read`;
-}

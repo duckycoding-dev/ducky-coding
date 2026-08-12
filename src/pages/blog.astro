@@ -148,11 +148,11 @@ const blogPageJsonLd = {
   >
     Welcome to my blog
   </h1>
-  <p class='mb-8 text-center text-lg'>
-    In my blog you will find articles and guides about web development, coding
-    concepts, the latest techs and much more.
-    <br />
-    Enjoy!
+  <p class='mb-8 text-center'>
+    <small class='block italic'>
+      Practical articles and guides about software development, with a focus on
+      the web.
+    </small>
   </p>
   {
     processedPostsWithImages.length > 0 ? (
@@ -161,16 +161,16 @@ const blogPageJsonLd = {
           <h2 class='border-comic border-secondary from-accent-200 to-accent2-200 shadow-comic mb-4 rounded-xl border-4 bg-gradient-to-br px-4 py-2 text-2xl font-extrabold'>
             Latest posts
           </h2>
-          <ul class='latest-grid-layout grid gap-8'>
+          <ul class='grid gap-6'>
             {processedPostsWithImages.map(
               ({ post, image, tags, processedBannerImage }, i) => {
                 return (
                   <li>
                     <PostCard
-                      class='block h-full'
+                      class='block'
                       widths={[300, 600, 900, 1200, 1500]}
                       sizes={
-                        '(max-width: 767px) calc(100vw - 2rem), calc(33vw - 2rem)'
+                        '(max-width: 511px) calc(100vw - 2rem), (max-width: 976px) 36vw, (max-width: 1300px) 24vw, 310px'
                       }
                       post={post}
                       tags={tags}
@@ -232,23 +232,6 @@ const blogPageJsonLd = {
     grid-template-columns: minmax(0, 2fr) var(--showFeaturedPosts);
     grid-template-rows: auto 1fr;
   }
-  .latest-grid-layout {
-    display: grid;
-    grid-template-areas:
-      'last-post'
-      'latest';
-  }
-  @media (width >= 768px) {
-    .latest-grid-layout {
-      grid-template-areas:
-        'last-post last-post'
-        'latest latest';
-
-      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-      grid-template-rows: auto 1fr;
-    }
-  }
-
   @media (max-width: 976px) {
     .grid-layout {
       grid-template-columns: 1fr;

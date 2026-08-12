@@ -9,6 +9,7 @@ import Card from '@components/card/Card.astro';
 import Link from '@components/link/Link.astro';
 import Tag from '@components/tag/Tag.astro';
 import type { Post } from '@db/features/posts/posts.model';
+import { getPostCardPresentation } from './post-card';
 
 export interface PostCardProps extends HTMLAttributes<'a'> {
   post: Post;
@@ -34,76 +35,149 @@ const {
   sizes,
   widths,
 }: Props = Astro.props;
+
+const {
+  publicationDate,
+  publicationDateLabel,
+  readTimeLabel,
+  visibleTags,
+  hiddenTags,
+  hiddenTagCount,
+  hiddenTagsLabel,
+  authorLabel,
+} = getPostCardPresentation({
+  publishedAt: post.publishedAt,
+  createdAt: post.createdAt,
+  timeToRead: post.timeToRead,
+  tags,
+  author: post.author,
+});
 ---
 
 <Link
   variant='unstyled'
   href={`/posts/${post.slug}`}
   class={cn(
-    'rounded-xl transition-all duration-300 focus:shadow-comic-xl active:shadow-comic focus:-translate-y-0.5 active:translate-y-0.5',
+    'post-card-link block rounded-xl transition-all duration-300 focus:-translate-y-0.5 focus:shadow-comic-xl active:translate-y-0.5 active:shadow-comic',
     className,
   )}
 >
-  <Card hover='none' class='card flex h-full flex-col'>
-    <Image
-      format={'avif'}
-      src={bannerImage ?? DuckyCodingLogo}
-      width={bannerImage ? bannerImage.width : DuckyCodingLogo.width}
-      height={bannerImage ? bannerImage.height : DuckyCodingLogo.height}
-      alt={imageAlt ?? 'Post banner image'}
-      widths={widths}
-      sizes={sizes}
-      loading={loading}
-      decoding={'async'}
-      class='bg-primary-700 aspect-[16/9] w-full object-cover'
-      fetchpriority={fetchPriority}
-    />
-    <footer
-      class='border-secondary flex grow flex-col gap-2 border-t-4 pt-2.5 pb-4'
+  <Card as='article' hover='none' class='post-card grid'>
+    <div
+      class='post-card-media bg-primary-700 border-secondary aspect-video overflow-hidden border-b-4'
     >
-      <h2 class='px-5 text-2xl font-black'>
+      <Image
+        format='avif'
+        src={bannerImage ?? DuckyCodingLogo}
+        width={bannerImage ? bannerImage.width : DuckyCodingLogo.width}
+        height={bannerImage ? bannerImage.height : DuckyCodingLogo.height}
+        alt={imageAlt ?? `Banner for ${post.title}`}
+        widths={widths}
+        sizes={sizes}
+        loading={loading}
+        decoding='async'
+        class='post-card-image h-full w-full object-cover'
+        fetchpriority={fetchPriority}
+      />
+    </div>
+
+    <div class='post-card-content flex min-w-0 flex-col gap-3 px-4 pt-3 pb-4'>
+      <h3 class='post-card-title text-xl leading-tight font-black'>
         {post.title}
-      </h2>
-      <section>
-        <p class='border-secondary px-5 text-base font-semibold'>
-          <span
-            >Written by: {
-              post.author.toLowerCase() === 'duckycoding'
-                ? 'DuckyCoding (me)'
-                : post.author
-            }</span
-          >
-        </p>
-        <p class='px-5 text-sm italic'>
-          Read time: {post.timeToRead}
-          {post.timeToRead > 1 ? 'minutes' : 'minute'}
-        </p>
+      </h3>
+      <p class='post-card-summary hidden text-sm leading-snug'>
+        {post.summary}
+      </p>
+
+      <footer class='mt-auto flex flex-col items-end gap-2'>
         {
-          post.createdAt ? (
-            <p class='px-5 text-sm italic'>
-              {new Date(post.createdAt).toLocaleDateString()}
-            </p>
+          authorLabel ? (
+            <p class='text-right text-xs font-semibold'>{authorLabel}</p>
           ) : null
         }
-      </section>
-      <section
-        class='tags border-secondary mt-auto flex flex-wrap justify-end gap-2 px-5 text-sm font-semibold'
-      >
-        {tags.map((tag) => <Tag color='alternating'>{tag}</Tag>)}
-      </section>
-    </footer>
+        <p
+          class='flex flex-wrap justify-end gap-x-1.5 text-right text-xs font-semibold italic'
+        >
+          <time datetime={publicationDate.toISOString()}>
+            {publicationDateLabel}
+          </time>
+          <span aria-hidden='true'>·</span>
+          <span>{readTimeLabel}</span>
+        </p>
+
+        {
+          visibleTags.length > 0 ? (
+            <ul
+              class='flex flex-wrap justify-end gap-1.5'
+              aria-label='Post tags'
+            >
+              {visibleTags.map((tag, index) => (
+                <li>
+                  <Tag size='sm' color={index % 2 === 0 ? 'accent' : 'accent2'}>
+                    {tag}
+                  </Tag>
+                </li>
+              ))}
+              {hiddenTagCount > 0 ? (
+                <li>
+                  <Tag size='sm' color='accent3' title={hiddenTags.join(', ')}>
+                    <span aria-hidden='true'>+{hiddenTagCount}</span>
+                    <span class='sr-only'>{hiddenTagsLabel}</span>
+                  </Tag>
+                </li>
+              ) : null}
+            </ul>
+          ) : null
+        }
+      </footer>
+    </div>
   </Card>
 </Link>
 
 <style>
-  @reference '@styles/global.css';
-  .card {
-    container-name: card;
+  .post-card-link {
+    container-name: post-card;
     container-type: inline-size;
+    height: fit-content;
   }
-  @container card (width > 400px) {
-    .tags {
-      @apply text-xl;
+
+  .post-card-title {
+    display: -webkit-box;
+    overflow: hidden;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+  }
+
+  @container post-card (width >= 32rem) {
+    .post-card {
+      grid-template-columns: minmax(12rem, 36%) minmax(0, 1fr);
+      gap: 1rem;
+      padding: 0.75rem;
+    }
+
+    .post-card-media {
+      align-self: center;
+      border: 2px solid var(--color-secondary);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-comic);
+    }
+
+    .post-card-content {
+      gap: 0.5rem;
+      padding: 0.25rem;
+    }
+
+    .post-card-title {
+      font-size: var(--text-2xl);
+      line-height: var(--text-2xl--line-height);
+      -webkit-line-clamp: 2;
+    }
+
+    .post-card-summary {
+      display: -webkit-box;
+      overflow: hidden;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 2;
     }
   }
 </style>

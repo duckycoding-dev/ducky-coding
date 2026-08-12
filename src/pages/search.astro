@@ -273,8 +273,8 @@ const searchJsonLd = {
   >
     Search
   </h1>
-  <p class='mb-8 text-center text-lg'>
-    <small class='mb-8 block text-center italic'
+  <p class='mb-8 text-center'>
+    <small class='block italic'
       >Find posts, memes, and everything in between.</small
     >
   </p>
@@ -350,13 +350,13 @@ const searchJsonLd = {
         postsWithImages.length > 0 && (
           <section class='mb-8'>
             <h2 class='text-secondary mb-4 text-2xl font-extrabold'>Posts</h2>
-            <ul class='grid grid-cols-1 gap-6 md:grid-cols-2'>
+            <ul class='grid gap-6'>
               {postsWithImages.map((post, i) => (
                 <li>
                   <PostCard
-                    class='block h-full'
-                    widths={[300, 600, 900]}
-                    sizes='(max-width: 767px) calc(100vw - 2rem), calc(50vw - 2rem)'
+                    class='block'
+                    widths={[300, 600, 900, 1200]}
+                    sizes='(max-width: 511px) calc(100vw - 2rem), (max-width: 1300px) 32vw, 360px'
                     post={{
                       id: post.id,
                       slug: post.slug,

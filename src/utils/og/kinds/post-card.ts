@@ -1,10 +1,11 @@
 import { getCollection } from 'astro:content';
 
+import { formatReadTime } from '../../read-time/read-time.ts';
 import { renderCardShell, TITLE_BOX } from '../card-shell.ts';
 import type { OgCardKind, OgRenderContext } from '../types.ts';
-import { pickChips, readTimeLabel } from './post-rules.ts';
+import { pickChips } from './post-rules.ts';
 
-export { pickChips, readTimeLabel };
+export { pickChips };
 
 /**
  * Published posts only.
@@ -51,7 +52,7 @@ export const postCardKind: OgCardKind = {
       title: fitted.text,
       titleFontSize: fitted.fontSize,
       chips: pickChips(topicTitle, tags),
-      trailing: readTimeLabel(timeToRead),
+      trailing: formatReadTime(timeToRead),
       logoPath: ctx.logoPath,
       width: ctx.width,
       height: ctx.height,
